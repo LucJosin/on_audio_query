@@ -1,41 +1,41 @@
 # on_audio_query
 
-`on_audio_query` is a [Flutter](https://flutter.dev/) Plugin used to query audios/songs infos [title, artist, album, etc..] from device storage. <br>
+`on_audio_query` é um [Flutter](https://flutter.dev/) Plugin usado para adquirir informações de áudios/músicas [título, artista, album, etc..] do celular. <br>
 
-## Help:
+## Ajuda:
 
-**Any problem? [Issues](https://github.com/LucasPJS/on_audio_query/issues)** <br>
-**Any suggestion? [Pull request](https://github.com/LucasPJS/on_audio_query/pulls)**
+**Algum problema? [Issues](https://github.com/LucasPJS/on_audio_query/issues)** <br>
+**Alguma sugestão? [Pull request](https://github.com/LucasPJS/on_audio_query/pulls)**
 
-### Translations:
+### Traduções:
 
-NOTE: Feel free to help with readme translations
+NOTE: Fique à vontade para ajudar nas traduções
 
-* [English](README.md)
-* [Portuguese](README.pt-BR.md)
+* [Inglês](README.md)
+* [Português](README.pt-BR.md)
 
-### Topics:
+## Tópicos:
 
-* [Gif Examples](#gif-examples)
-* [How to Install](#how-to-install)
-* [How to use](#how-to-use)
-* [Examples](#examples)
-* [License](#license)
+* [Exemplos em Gif](#exemplos-em-gif)
+* [Como instalar](#como-instalar)
+* [Como usar](#como-usar)
+* [Exemplos](#exemplos)
+* [Licença](#licença)
 
-## Gif Examples:
+## Exemplos em Gif:
 | <img src="https://user-images.githubusercontent.com/76869974/112378123-522c1a00-8cc5-11eb-880d-ba67706c415d.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378181-62dc9000-8cc5-11eb-8cb3-c8db71372fa9.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378214-6e2fbb80-8cc5-11eb-996a-d61bb8a620ca.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378250-7687f680-8cc5-11eb-94a1-ea91868d119c.gif"/> |
 |:---:|:---:|:---:|:---:|
-| Songs | Albums | Playlists | Artists |
+| Músicas | Albums | Playlists | Artistas |
 
-## How to Install:
-Add the following code to your `pubspec.yaml`:
+## Como instalar:
+Adicione o seguinte codigo para seu `pubspec.yaml`:
 ```yaml
 dependencies:
   on_audio_query: ^0.0.0
 ```
 
-#### Request Permission:
-If you want to use the built-in request permission, will need add the following code to your `AndroidManifest.xml`
+#### Solicitar Permissões:
+Se você quer usar a solicitação de permissões interna, irá precisar adicionar os seguintes codigos para seu `AndroidManifest.xml`
 ```xml
 <manifest> ...
 
@@ -45,34 +45,34 @@ If you want to use the built-in request permission, will need add the following 
 </manifest>
 ```
 
-## Some Features:
+## Algumas qualidades:
 
-* Optional and Built-in storage `READ` and `WRITE` permission request
-* Get all audios and audios classified with `is_music`.
-* Get all albums and album-specific audios.
-* Get all artists and artist-specific audios.
-* Get all playlists and playlists-specific audios.
-* Get all genres and genres-specific audios.
-* Create/Delete/Rename playlists.
-* Add/Remove/Move specific audios to playlists.
-* Specific sort types for all query methods.
+* Opcional e Interna solicitação de permissão para `LER` e `ESCREVER`.
+* Pega todos os áudios e áudios classificados como `is_music`.
+* Pega todos os albums e áudios específicos dos albums.
+* Pega todos os artistas e áudios específicos dos artistas.
+* Pega todas as playlists e áudios específicos das playlists.
+* Pega todos os gêneros e áudios específicos dos gêneros.
+* Criar/Deletar/Renomear playlists.
+* Adicionar/Remover/Mover específicos áudios para playlists.
+* Específicos tipos de classificação para todos os métodos.
 
-## TODO:
+## Para fazer:
 
-* Add better performance for all plugin.
-* Add method to edit audio tag.
-* Create methods for IOS.
-* Option to remove songs.
-* Fix bugs.
+* Adicionar uma melhor performace para todo o plugin.
+* Adicionar método para editar tag dos audios.
+* Criar métodos para IOS.
+* Opção para remover músicas.
+* Arrumar erros.
 
-## How to use:
+## Como usar:
 
 ```dart
-OnAudioQuery() // The main method to start using the plugin.
+OnAudioQuery() // O comando principal para usar o plugin.
 ```
-All types of methods on this plugin:
+Todos os tipos de métodos nesse plugin:
 
-|  Methods  |   Parameters   |   Return   |
+|  Métodos  |   Parâmetros   |   Return   |
 |--------------|-----------------|-----------------|
 | [`querySongs`](#querysongs) | `(SortType, OrderType, RequestPermission)` | `List<SongModel>` | <br>
 | [`queryAudio`]() | `(SortType, OrderType, RequestPermission)`. | `List<SongModel>` | <br>
@@ -95,12 +95,13 @@ All types of methods on this plugin:
 | [`getDeviceRelease`]() |  | `String` | <br>
 | [`getDeviceCode`]() |  | `String` | <br>
 
-**Note: Some query methods require the `SortType` and `RequestPermisson`, by default, will be set `DEFAULT` and `false`**
-**See all defaults sorttypes in [Examples](#examples)**
+**Note: Albuns dos métodos para adquirir exigem o `SortType` e `RequestPermisson`, por padrão, irão ser setados como `DEFAULT` and `false`**
 
-**[NT]** -> Need Tests
+**Veja todos os tipos de classificação em [Exemplos](#exemplos)**
 
-## Examples:
+**[NT]** -> Precisa de testes
+
+## Exemplos:
 
 #### querySongs
 ```dart
@@ -150,7 +151,7 @@ All types of methods on this plugin:
     var something = await OnAudioQuery().queryArtworks(SongId, ArtworkType.AUDIO ...)
   }
 
-  //Or you can use a basic and custom Widget
+  //Ou você pode usar um Widget básico e customizável
   Widget someOtherName() async {
     var version = await OnAudioQuery().getDeviceSDK();
     if (version >= 29) {
@@ -163,8 +164,8 @@ All types of methods on this plugin:
   }
 ```
 
-## LICENSE:
+## LICENÇA:
 
 * [LICENSE](https://github.com/LucasPJS/on_audio_query/blob/main/LICENSE)
 
-> * [Back to top](#on_audio_query)
+> * [Voltar ao Topo](#on_audio_query)
