@@ -20,6 +20,8 @@ class OnAudiosFromQuery : ViewModel() {
 
     //Main parameters
     private val uri: Uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+    private var pId = 0
+    private var pUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
     private lateinit var where: String
     private lateinit var whereVal: String
     private lateinit var resolver: ContentResolver
@@ -36,10 +38,10 @@ class OnAudiosFromQuery : ViewModel() {
             MediaStore.Audio.Media.ALBUM,
             MediaStore.Audio.Media.ALBUM_ARTIST,
             MediaStore.Audio.Media.ALBUM_ID,
-            MediaStore.Audio.Media.ALBUM_KEY, //
+//            MediaStore.Audio.Media.ALBUM_KEY,
             MediaStore.Audio.Media.ARTIST,
             MediaStore.Audio.Media.ARTIST_ID,
-            MediaStore.Audio.Media.ARTIST_KEY, //
+//            MediaStore.Audio.Media.ARTIST_KEY,
             MediaStore.Audio.Media.BOOKMARK,
             MediaStore.Audio.Media.COMPOSER,
             MediaStore.Audio.Media.DATE_ADDED,
@@ -59,17 +61,20 @@ class OnAudiosFromQuery : ViewModel() {
         this.context = context ; resolver = context.contentResolver
 
         //where -> Album/Artist/Genre/Playlist ; where -> uri
-        whereVal = call.argument<String>("where")!!
-        where = checkAudiosFromType(call.argument<Int>("type")!!)
+        if (call.argument<Int>("type")!! != 2) {
+            whereVal = call.argument<String>("where")!!
+            where = checkAudiosFromType(call.argument<Int>("type")!!)
 
-        //Query everything in the Background it's necessary for better performance
-        viewModelScope.launch {
-            //Start querying
-            val resultSongList = loadSongsFrom()
+            //Query everything in the Background it's necessary for better performance
+            viewModelScope.launch {
+                //Start querying
+                val resultSongList = loadSongsFrom()
 
-            //Flutter UI will start, but, information still loading
-            result.success(resultSongList)
-        }
+                //Flutter UI will start, but, information still loading
+                result.success(resultSongList)
+            }
+        } else querySongsFromPlaylist(result, call)
+
     }
 
     //Loading in Background
@@ -92,6 +97,53 @@ class OnAudiosFromQuery : ViewModel() {
         }
         cursor?.close()
         return@withContext songsFromList
+    }
+
+    private fun querySongsFromPlaylist(result: MethodChannel.Result, call: MethodCall) {
+        val playlistName = call.argument<String>("where")!!
+
+        //Check if Playlist exists based in Id
+        if (!checkPlaylistName(playlistName)) result.success(false)
+        else {
+            pUri = MediaStore.Audio.Playlists.Members.getContentUri("external", pId.toLong())
+
+            //Query everything in the Background it's necessary for better performance
+            viewModelScope.launch {
+                //Start querying
+                val resultSongsFromPl = loadSongsFromPlaylist()
+
+                //Flutter UI will start, but, information still loading
+                result.success(resultSongsFromPl)
+            }
+        }
+    }
+
+    private suspend fun loadSongsFromPlaylist() : ArrayList<MutableMap<String, Any>> = withContext(Dispatchers.IO) {
+        val songsFromPlaylist: ArrayList<MutableMap<String, Any>> = ArrayList()
+        val cursor = resolver.query(pUri, projection, null, null, null)
+        while (cursor != null && cursor.moveToNext()) {
+            val songFromPlData: MutableMap<String, Any> = HashMap()
+            for (playlistMedia in cursor.columnNames) {
+                if (cursor.getString(cursor.getColumnIndex(playlistMedia)) != null) {
+                    songFromPlData[playlistMedia] = cursor.getString(cursor.getColumnIndex(playlistMedia))
+                } else songFromPlData[playlistMedia] = ""
+            }
+            songsFromPlaylist.add(songFromPlData)
+        }
+        cursor?.close()
+        return@withContext songsFromPlaylist
+    }
+
+    //Return true if playlist already exist, false if don't exist
+    private fun checkPlaylistName(plName: String) : Boolean {
+        val uri = MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
+        val cursor = resolver.query(uri, arrayOf(MediaStore.Audio.Playlists.NAME, MediaStore.Audio.Playlists._ID), null, null, null)
+        while (cursor != null && cursor.moveToNext()) {
+            val playListName = cursor.getString(0) //Id
+            if (playListName == plName) return true ; pId = cursor.getInt(1)
+        }
+        cursor?.close()
+        return false
     }
 }
 

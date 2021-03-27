@@ -2,9 +2,8 @@ package com.lucasjosino.on_audio_query.query
 
 import android.annotation.SuppressLint
 import android.content.ContentResolver
+import android.content.ContentUris
 import android.content.Context
-import android.graphics.BitmapFactory
-import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
@@ -39,10 +38,10 @@ class OnAudiosQuery : ViewModel() {
             MediaStore.Audio.Media.ALBUM,
             MediaStore.Audio.Media.ALBUM_ARTIST,
             MediaStore.Audio.Media.ALBUM_ID,
-            MediaStore.Audio.Media.ALBUM_KEY, //
+//            MediaStore.Audio.Media.ALBUM_KEY,
             MediaStore.Audio.Media.ARTIST,
             MediaStore.Audio.Media.ARTIST_ID,
-            MediaStore.Audio.Media.ARTIST_KEY, //
+//            MediaStore.Audio.Media.ARTIST_KEY,
             MediaStore.Audio.Media.BOOKMARK,
             MediaStore.Audio.Media.COMPOSER,
             MediaStore.Audio.Media.DATE_ADDED,
@@ -51,7 +50,7 @@ class OnAudiosQuery : ViewModel() {
             MediaStore.Audio.Media.TRACK,
             MediaStore.Audio.Media.YEAR,
             MediaStore.Audio.Media.IS_ALARM,
-            MediaStore.Audio.Media.IS_MUSIC, // 19
+            MediaStore.Audio.Media.IS_MUSIC, // 17
             MediaStore.Audio.Media.IS_NOTIFICATION,
             MediaStore.Audio.Media.IS_PODCAST,
             MediaStore.Audio.Media.IS_RINGTONE
@@ -76,7 +75,7 @@ class OnAudiosQuery : ViewModel() {
 
     //Loading in Background
     private suspend fun loadSongs() : ArrayList<MutableMap<String, Any>> = withContext(Dispatchers.IO) {
-        val cursor = resolver.query(uri, projection, projection[19], null, sortType)
+        val cursor = resolver.query(uri, projection, projection[17], null, sortType)
         val songList: ArrayList<MutableMap<String, Any>> = ArrayList()
         while (cursor != null && cursor.moveToNext()) {
             val songData: MutableMap<String, Any> = HashMap()
@@ -85,7 +84,7 @@ class OnAudiosQuery : ViewModel() {
                     songData[audioMedia] = cursor.getString(cursor.getColumnIndex(audioMedia))
                 } else songData[audioMedia] = ""
             }
-
+            
             //Artwork
             val art = loadArtwork(context, songData["album"].toString())
             if (art.isNotEmpty()) songData["artwork"] = art
