@@ -1,3 +1,26 @@
+## [1.0.2] - [03.27.2021]
+### Fixes
+#### Dart
+- Fixed flutter example.
+
+#### Kotlin
+- Fixed `[audiosFromPlaylist]` [**Now this method is part of queryAudiosFrom**]
+- Fixed `"count(*)"` error from `[addToPlaylist]`. [**Permission bug on Android 10 still happening**]
+
+### Documentation
+- Updated `README` documentation.
+
+### Changes
+#### Dart
+- Now `[Id]` in models return `[int]` instead `[String]`.
+
+### ⚠ Important Changes
+#### Dart/Kotlin
+- Removed `[ALBUM_KEY]`, `[ARTIST_KEY]` from all query audio methods.
+
+#### Kotlin
+- Moved `[audiosFromPlaylist]` to `[queryAudiosFrom]`.
+
 ## [1.0.0] - [03.24.2021]
 ### Release
 
@@ -108,5 +131,8 @@
 - TODO
 
 ### Changes
+- TODO
+
+### Important Changes
 - TODO
  -->
