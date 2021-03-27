@@ -1,6 +1,11 @@
 # on_audio_query
+<!-- https://img.shields.io/badge/Platform-Android%20%7C%20IOS-9cf?&style=flat-square -->
+[![Pub.dev](https://img.shields.io/pub/v/on_audio_query?color=9cf&label=Pub.dev&style=flat-square)](https://pub.dev/packages/on_audio_query)
+[![Platform](https://img.shields.io/badge/Platform-Android-9cf?&style=flat-square)](https://www.android.com/)
+[![Flutter](https://img.shields.io/badge/Language-Flutter-9cf?logo=flutter&style=flat-square)](https://www.flutter.dev/)
+[![Kotlin](https://img.shields.io/badge/Language-Kotlin-9cf?logo=kotlin&style=flat-square)](https://kotlinlang.org/)
 
-`on_audio_query` é um [Flutter](https://flutter.dev/) Plugin usado para adquirir informações de áudios/músicas [título, artista, album, etc..] do celular. <br>
+`on_audio_query` é um [Flutter](https://flutter.dev/) Plugin usado para adquirir informações de áudios/músicas 🎶 [título, artista, album, etc..] do celular. <br>
 
 ## Ajuda:
 
@@ -31,7 +36,7 @@ NOTE: Fique à vontade para ajudar nas traduções
 Adicione o seguinte codigo para seu `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^1.0.0
+  on_audio_query: ^1.0.2
 ```
 
 #### Solicitar Permissões:
@@ -84,9 +89,8 @@ Todos os tipos de métodos nesse plugin:
 | [`queryArtworks`]() | `(Id, Type, Format, Size, RequestPermission)` | `Uint8List` | <br>
 | [`createPlaylist`]() | `(PlaylistName, RequestPermission)` | `bool` | <br>
 | [`removePlaylist`]() | `(PlaylistId, RequestPermission)` | `bool` | <br>
-| [`addToPlaylist`]() | **[NT]**`(PlaylistId, AudioId, RequestPermission)` | `bool` | <br>
+| [`addToPlaylist`]() | **[NT-BG]**`(PlaylistId, AudioId, RequestPermission)` | `bool` | <br>
 | [`removeFromPlaylist`]() | **[NT]**`(PlaylistId, AudioId, RequestPermission)` | `bool` | <br>
-| [`audiosFromPlaylist`]() | **[NT]**`(PlaylistId, RequestPermission)` | `List<SongModel>` | <br>
 | [`renamePlaylist`]() | `(PlaylistId, NewName, RequestPermission)` | `bool` | <br>
 | [`moveItemTo`]() | **[NT]**`(PlaylistId, From, To, RequestPermission)` | `bool` | <br>
 | [`permissionsRequest`]() | `(retryRequest)` | `bool` | <br>
@@ -99,7 +103,8 @@ Todos os tipos de métodos nesse plugin:
 
 **Veja todos os tipos de classificação em [Exemplos](#exemplos)**
 
-**[NT]** -> Precisa de testes
+**[NT]** -> Precisa de testes <br>
+**[BG]** -> Bug on Android 10/Q
 
 ## Exemplos:
 
@@ -144,7 +149,7 @@ Todos os tipos de métodos nesse plugin:
 ```
 
 #### queryArtworks
-**Note: Only in Android >= Q/10**
+⚠ **Note: Only in Android >= Q/10**
 ```dart
   someName() async {
     //DEFAULT: ArtworkFormat.JPEG, 200 and false

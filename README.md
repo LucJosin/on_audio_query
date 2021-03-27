@@ -1,6 +1,11 @@
 # on_audio_query
+<!-- https://img.shields.io/badge/Platform-Android%20%7C%20IOS-9cf?&style=flat-square -->
+[![Pub.dev](https://img.shields.io/pub/v/on_audio_query?color=9cf&label=Pub.dev&style=flat-square)](https://pub.dev/packages/on_audio_query)
+[![Platform](https://img.shields.io/badge/Platform-Android-9cf?&style=flat-square)](https://www.android.com/)
+[![Flutter](https://img.shields.io/badge/Language-Flutter-9cf?logo=flutter&style=flat-square)](https://www.flutter.dev/)
+[![Kotlin](https://img.shields.io/badge/Language-Kotlin-9cf?logo=kotlin&style=flat-square)](https://kotlinlang.org/)
 
-`on_audio_query` is a [Flutter](https://flutter.dev/) Plugin used to query audios/songs infos [title, artist, album, etc..] from device storage. <br>
+`on_audio_query` is a [Flutter](https://flutter.dev/) Plugin used to query audios/songs 🎶 infos [title, artist, album, etc..] from device storage. <br>
 
 ## Help:
 
@@ -31,7 +36,7 @@ NOTE: Feel free to help with readme translations
 Add the following code to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^1.0.0
+  on_audio_query: ^1.0.2
 ```
 
 #### Request Permission:
@@ -84,9 +89,8 @@ All types of methods on this plugin:
 | [`queryArtworks`]() | `(Id, Type, Format, Size, RequestPermission)` | `Uint8List` | <br>
 | [`createPlaylist`]() | `(PlaylistName, RequestPermission)` | `bool` | <br>
 | [`removePlaylist`]() | `(PlaylistId, RequestPermission)` | `bool` | <br>
-| [`addToPlaylist`]() | **[NT]**`(PlaylistId, AudioId, RequestPermission)` | `bool` | <br>
+| [`addToPlaylist`]() | **[NT-BG]**`(PlaylistId, AudioId, RequestPermission)` | `bool` | <br>
 | [`removeFromPlaylist`]() | **[NT]**`(PlaylistId, AudioId, RequestPermission)` | `bool` | <br>
-| [`audiosFromPlaylist`]() | **[NT]**`(PlaylistId, RequestPermission)` | `List<SongModel>` | <br>
 | [`renamePlaylist`]() | `(PlaylistId, NewName, RequestPermission)` | `bool` | <br>
 | [`moveItemTo`]() | **[NT]**`(PlaylistId, From, To, RequestPermission)` | `bool` | <br>
 | [`permissionsRequest`]() | `(retryRequest)` | `bool` | <br>
@@ -98,7 +102,8 @@ All types of methods on this plugin:
 **Note: Some query methods require the `SortType` and `RequestPermisson`, by default, will be set `DEFAULT` and `false`**
 **See all defaults sorttypes in [Examples](#examples)**
 
-**[NT]** -> Need Tests
+**[NT]** -> Need Tests <br>
+**[BG]** -> Bug on Android 10/Q
 
 ## Examples:
 
@@ -143,7 +148,7 @@ All types of methods on this plugin:
 ```
 
 #### queryArtworks
-**Note: Only in Android >= Q/10**
+⚠ **Note: Only in Android >= Q/10**
 ```dart
   someName() async {
     //DEFAULT: ArtworkFormat.JPEG, 200 and false
