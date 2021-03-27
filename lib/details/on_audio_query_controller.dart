@@ -328,26 +328,6 @@ class OnAudioQuery {
     return resultRemoveFromPl;
   }
 
-  /// Used to query song/audio from a specific Playlist
-  ///
-  /// Parameters:
-  ///
-  /// * [requestPermission] is used for request or no Android STORAGE PERMISSION
-  /// * [playlistId] is used to check if Playlist exist.
-  ///
-  /// Important:
-  ///
-  /// * If [requestPermission] is null, will be set to [false].
-  Future<bool> audiosFromPlaylist(int playlistId,
-      [bool requestPermission]) async {
-    final bool resultAudiosFromPl =
-        await _channel.invokeMethod("audiosFromPlaylist", {
-      "requestPermission": _checkPermission(requestPermission),
-      "playlistId": playlistId,
-    });
-    return resultAudiosFromPl;
-  }
-
   /// Used to change song/audio position from a specific Playlist
   ///
   /// Parameters:

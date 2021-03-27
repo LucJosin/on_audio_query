@@ -4,26 +4,19 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.ContentValues
 import android.content.Context
-import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 /** OnPlaylistsController */
-class OnPlaylistsController : ViewModel() {
+class OnPlaylistsController {
 
     //Main parameters
     private val uri = MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
     private val contentValues = ContentValues()
     private val channelError = "on_audio_error"
-    private var sUri: Uri = MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
-    private val projection = arrayOf("max(" + MediaStore.Audio.Playlists.Members.PLAY_ORDER + ")")
     private lateinit var resolver: ContentResolver
 
     //Query projection
@@ -64,19 +57,23 @@ class OnPlaylistsController : ViewModel() {
         val playlistId = call.argument<Int>("playlistId")!!
         val audioId = call.argument<Int>("audioId")!!
 
+
         //Check if Playlist exists based in Id
         if (!checkPlaylistId(playlistId)) result.success(false)
         else {
             val uri = MediaStore.Audio.Playlists.Members.getContentUri("external", playlistId.toLong())
-            val cursor = resolver.query(uri, projection, null, null, null)
-            var count = 0
+            Log.i("Uri", uri.toString())
+            //If Android is Q/10 or above "count(*)" don't count, so, we use other method.
+            val columnsBasedOnVersion = if (Build.VERSION.SDK_INT < 29) columns else null
+            val cursor = resolver.query(uri, columnsBasedOnVersion, null, null, null)
+            var count = -1
             while (cursor != null && cursor.moveToNext()) {
-                count = cursor.getInt(0) + 1
+                count += if (Build.VERSION.SDK_INT < 29) cursor.count else cursor.getInt(0)
             }
             cursor?.close()
             //
             try {
-                contentValues.put(MediaStore.Audio.Playlists.Members.PLAY_ORDER, count)
+                contentValues.put(MediaStore.Audio.Playlists.Members.PLAY_ORDER, count + 1)
                 contentValues.put(MediaStore.Audio.Playlists.Members.AUDIO_ID, audioId.toLong())
                 resolver.insert(uri, contentValues)
                 result.success(true)
@@ -97,43 +94,6 @@ class OnPlaylistsController : ViewModel() {
             resolver.delete(uri, MediaStore.Audio.Playlists.Members.AUDIO_ID + " = " + audioId.toLong(), null)
             result.success(true)
         }
-    }
-
-    fun audiosFromPlaylist(context: Context, result: MethodChannel.Result, call: MethodCall) {
-        this.resolver = context.contentResolver
-        val playlistId = call.argument<Int>("playlistId")!!
-
-        //Check if Playlist exists based in Id
-        if (!checkPlaylistId(playlistId)) result.success(false)
-        else {
-            sUri = MediaStore.Audio.Playlists.Members.getContentUri("external", playlistId.toLong())
-
-            //Query everything in the Background it's necessary for better performance
-            viewModelScope.launch {
-                //Start querying
-                val resultSongsFromPl = loadSongsInPlaylist()
-
-                //Flutter UI will start, but, information still loading
-                result.success(resultSongsFromPl)
-            }
-        }
-    }
-
-    private suspend fun loadSongsInPlaylist() : ArrayList<MutableMap<String, Any>> = withContext(Dispatchers.IO) {
-        val cursor = resolver.query(sUri, columns, null, null, null)
-        val songsFromPlaylist: ArrayList<MutableMap<String, Any>> = ArrayList()
-        while (cursor != null && cursor.moveToNext()) {
-            val songFromPlData: MutableMap<String, Any> = HashMap()
-            for (playlistMedia in cursor.columnNames) {
-                if (cursor.getString(cursor.getColumnIndex(playlistMedia)) != null) {
-                    songFromPlData[playlistMedia] = cursor.getString(cursor.getColumnIndex(playlistMedia))
-                } else songFromPlData[playlistMedia] = ""
-            }
-            songsFromPlaylist.add(songFromPlData)
-        }
-        cursor?.close()
-        Log.i("Pl", songsFromPlaylist.size.toString())
-        return@withContext songsFromPlaylist
     }
 
     //TODO("Need tests")
