@@ -30,7 +30,6 @@ class OnAudioController(
             "addToPlaylist" -> OnPlaylistsController().addToPlaylist(context, result, call)
             "removeFromPlaylist" -> OnPlaylistsController().removeFromPlaylist(context, result, call)
             "renamePlaylist" -> OnPlaylistsController().renamePlaylist(context, result, call)
-            "audiosFromPlaylist" -> OnPlaylistsController().audiosFromPlaylist(context, result, call)
             "moveItemTo" -> OnPlaylistsController().moveItemTo(context, result, call)
         }
     }
