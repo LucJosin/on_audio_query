@@ -8,7 +8,7 @@ class ArtistModel {
   Map<dynamic, dynamic> _info;
 
   /// Return artist [id]
-  String get id => _info["_id"];
+  int get id => int.parse(_info["_id"]);
 
   /// Return artist [artistName]
   String get artistName => _info["artist"];

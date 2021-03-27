@@ -8,7 +8,7 @@ class PlaylistModel {
   Map<dynamic, dynamic> _info;
 
   ///Return playlist [id]
-  String get id => _info["_id"];
+  int get id => int.parse(_info["_id"]);
 
   ///Return playlist [name]
   String get playlistName => _info["name"];

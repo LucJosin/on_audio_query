@@ -8,7 +8,7 @@ class AlbumModel {
   Map<dynamic, dynamic> _info;
 
   /// Return album [id]
-  String get id => _info["_id"];
+  int get id => int.parse(_info["_id"]);
 
   /// Return album [albumName]
   String get albumName => _info["album"];

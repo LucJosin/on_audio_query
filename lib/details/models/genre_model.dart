@@ -8,7 +8,7 @@ class GenreModel {
   Map<dynamic, dynamic> _info;
 
   /// Return genre [id]
-  String get id => _info["_id"];
+  int get id => int.parse(_info["_id"]);
 
   /// Return genre [name]
   String get genreName => _info["name"];
