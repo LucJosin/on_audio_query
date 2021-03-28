@@ -34,7 +34,7 @@ class SongModel {
   String get artist => _info["artist"];
 
   /// Return song [artistId]
-  String get artistId => _info["artist_id"];
+  String? get artistId => _info["artist_id"];
 
   // /// Return song [artistKey]
   // ///
@@ -44,17 +44,17 @@ class SongModel {
   /// Return song [bookmark]
   ///
   /// Some times [bookmark] is returned null
-  String get bookmark => _info["bookmark"];
+  String? get bookmark => _info["bookmark"];
 
   /// Return song [composer]
   ///
   /// Some times [composer] is returned null
-  String get composer => _info["composer"];
+  String? get composer => _info["composer"];
 
   /// Return song [dataAdded]
   ///
   /// Some times [dataAdded] is returned null
-  String get dataAdded => _info["date_added"];
+  String? get dataAdded => _info["date_added"];
 
   /// Return song [duration]
   ///
@@ -65,12 +65,12 @@ class SongModel {
   String get title => _info["title"];
 
   /// Return song [track]
-  String get track => _info["track"];
+  String? get track => _info["track"];
 
   /// Return song [year]
   ///
   /// Some times [year] is returned null
-  String get year => _info["year"];
+  String? get year => _info["year"];
 
   // /// Return song [uri]
   // String get uri;
@@ -80,32 +80,32 @@ class SongModel {
   /// Important:
   ///
   /// * If Android >= Q/10 this method will return null, in this case it's necessary use [queryArtworks]
-  String get artwork => _info["artwork"];
+  String? get artwork => _info["artwork"];
 
   // Bool methods
 
   /// Return song type: [isAlarm]
   ///
   /// Will always return true or false
-  bool get isAlarm => _info["is_alarm"];
+  bool? get isAlarm => _info["is_alarm"];
 
   /// Return song type: [isMusic]
   ///
   /// Will always return true or false
-  bool get isMusic => _info["is_music"];
+  bool? get isMusic => _info["is_music"];
 
   /// Return song type: [isNotification]
   ///
   /// Will always return true or false
-  bool get isNotification => _info["is_notification"];
+  bool? get isNotification => _info["is_notification"];
 
   /// Return song type: [isPodcast]
   ///
   /// Will always return true or false
-  bool get isPodcast => _info["is_podcast"];
+  bool? get isPodcast => _info["is_podcast"];
 
   /// Return song type: [isRingtone]
   ///
   /// Will always return true or false
-  bool get isRingtone => _info["is_ringtone"];
+  bool? get isRingtone => _info["is_ringtone"];
 }

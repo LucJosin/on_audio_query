@@ -1,3 +1,8 @@
+## [1.0.3] - [03.28.2021]
+### ⚠ Important Changes
+#### Dart
+- Migrate to null safety.
+
 ## [1.0.2] - [03.27.2021]
 ### Fixes
 #### Dart

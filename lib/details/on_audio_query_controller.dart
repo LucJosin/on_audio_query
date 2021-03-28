@@ -7,13 +7,13 @@ class OnAudioQuery {
   static const MethodChannel _channel = const MethodChannel(_CHANNEL_ID);
 
   // Check if [requestPermission] is null or not, if true, will set to [false].
-  static bool _checkPermission(bool requestPermission) {
+  static bool _checkPermission(bool? requestPermission) {
     if (requestPermission != null) return requestPermission;
     return false;
   }
 
   // Check if [order] is null or not, if true, will set to [ASC_OR_SMALLER].
-  static int _checkOrder(OrderType order) {
+  static int _checkOrder(OrderType? order) {
     if (order != null) return order.index;
     return OrderType.ASC_OR_SMALLER.index;
   }
@@ -33,9 +33,9 @@ class OnAudioQuery {
   /// * If [sortType] is null, will be set to [title].
   /// * If Android >= Q/10 [artwork] will return null, in this case, it's necessary use [queryArtworks]
   Future<List<SongModel>> querySongs(
-      [SongSortType sortType,
-      OrderType orderType,
-      bool requestPermission]) async {
+      [SongSortType? sortType,
+      OrderType? orderType,
+      bool? requestPermission]) async {
     final List<dynamic> resultSongs =
         await _channel.invokeMethod("querySongs", {
       "requestPermission": _checkPermission(requestPermission),
@@ -63,9 +63,9 @@ class OnAudioQuery {
   /// * If [sortType] is null, will be set to [title].
   /// * If Android >= Q/10 [artwork] will return null, in this case, it's necessary use [queryArtworks]
   Future<List<SongModel>> queryAudios(
-      [SongSortType sortType,
-      OrderType orderType,
-      bool requestPermission]) async {
+      [SongSortType? sortType,
+      OrderType? orderType,
+      bool? requestPermission]) async {
     final List<dynamic> resultSongs =
         await _channel.invokeMethod("queryAudios", {
       "requestPermission": _checkPermission(requestPermission),
@@ -91,9 +91,9 @@ class OnAudioQuery {
   /// * If [sortType] is null, will be set to [AlbumName].
   /// * If Android >= Q/10 [artwork] will return null, in this case, it's necessary use [queryArtworks]
   Future<List<AlbumModel>> queryAlbums(
-      [AlbumSortType sortType,
-      OrderType orderType,
-      bool requestPermission]) async {
+      [AlbumSortType? sortType,
+      OrderType? orderType,
+      bool? requestPermission]) async {
     final List<dynamic> resultAlbums =
         await _channel.invokeMethod("queryAlbums", {
       "requestPermission": _checkPermission(requestPermission),
@@ -119,9 +119,9 @@ class OnAudioQuery {
   /// * If [sortType] is null, will be set to [ArtistName].
   /// * Mp3 only support one image, artist image don't exist.
   Future<List<ArtistModel>> queryArtists(
-      [ArtistSortType sortType,
-      OrderType orderType,
-      bool requestPermission]) async {
+      [ArtistSortType? sortType,
+      OrderType? orderType,
+      bool? requestPermission]) async {
     final List<dynamic> resultArtists =
         await _channel.invokeMethod("queryArtists", {
       "requestPermission": _checkPermission(requestPermission),
@@ -146,9 +146,9 @@ class OnAudioQuery {
   /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
   /// * If [sortType] is null, will be set to [PlaylistName].
   Future<List<PlaylistModel>> queryPlaylists(
-      [PlaylistSortType sortType,
-      OrderType orderType,
-      bool requestPermission]) async {
+      [PlaylistSortType? sortType,
+      OrderType? orderType,
+      bool? requestPermission]) async {
     final List<dynamic> resultPlaylists =
         await _channel.invokeMethod("queryPlaylists", {
       "requestPermission": _checkPermission(requestPermission),
@@ -175,9 +175,9 @@ class OnAudioQuery {
   /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
   /// * If [sortType] is null, will be set to [GenreName].
   Future<List<GenreModel>> queryGenres(
-      [GenreSortType sortType,
-      OrderType orderType,
-      bool requestPermission]) async {
+      [GenreSortType? sortType,
+      OrderType? orderType,
+      bool? requestPermission]) async {
     final List<dynamic> resultGenres =
         await _channel.invokeMethod("queryGenres", {
       "requestPermission": _checkPermission(requestPermission),
@@ -200,7 +200,7 @@ class OnAudioQuery {
   ///
   /// * If [requestPermission] is null, will be set to [false].
   Future<List<SongModel>> queryAudiosFrom(AudiosFromType type, String where,
-      [bool requestPermission]) async {
+      [bool? requestPermission]) async {
     final List<dynamic> resultSongsFrom =
         await _channel.invokeMethod("queryAudiosFrom", {
       "requestPermission": _checkPermission(requestPermission),
@@ -233,7 +233,7 @@ class OnAudioQuery {
   /// * If [size] is null, will be set to [200] for better performance
   /// * We need this method separated from [querySongs/queryAudios] because return [Uint8List] and using inside query causes a slow performance.
   Future<Uint8List> queryArtworks(int id, ArtworkType type,
-      [ArtworkFormat format, int size, bool requestPermission]) async {
+      [ArtworkFormat? format, int? size, bool? requestPermission]) async {
     final Uint8List finalArtworks =
         await _channel.invokeMethod("queryArtworks", {
       "requestPermission": _checkPermission(requestPermission),
@@ -259,7 +259,7 @@ class OnAudioQuery {
   /// * If [requestPermission] is null, will be set to [false].
   /// * This method create a playlist using [External Storage], all apps will be able to see this playlist
   Future<bool> createPlaylist(String playlistName,
-      [bool requestPermission]) async {
+      [bool? requestPermission]) async {
     final bool resultCreatePl = await _channel.invokeMethod("createPlaylist", {
       "requestPermission": _checkPermission(requestPermission),
       "playlistName": playlistName
@@ -277,7 +277,7 @@ class OnAudioQuery {
   /// Important:
   ///
   /// * If [requestPermission] is null, will be set to [false].
-  Future<bool> removePlaylist(int playlistId, [bool requestPermission]) async {
+  Future<bool> removePlaylist(int playlistId, [bool? requestPermission]) async {
     final bool resultRemovePl = await _channel.invokeMethod("removePlaylist", {
       "requestPermission": _checkPermission(requestPermission),
       "playlistId": playlistId
@@ -297,7 +297,7 @@ class OnAudioQuery {
   ///
   /// * If [requestPermission] is null, will be set to [false].
   Future<bool> addToPlaylist(int playlistId, int audioId,
-      [bool requestPermission]) async {
+      [bool? requestPermission]) async {
     final bool resultAddToPl = await _channel.invokeMethod("addToPlaylist", {
       "requestPermission": _checkPermission(requestPermission),
       "playlistId": playlistId,
@@ -318,7 +318,7 @@ class OnAudioQuery {
   ///
   /// * If [requestPermission] is null, will be set to [false].
   Future<bool> removeFromPlaylist(int playlistId, int audioId,
-      [bool requestPermission]) async {
+      [bool? requestPermission]) async {
     final bool resultRemoveFromPl =
         await _channel.invokeMethod("removeFromPlaylist", {
       "requestPermission": _checkPermission(requestPermission),
@@ -341,7 +341,7 @@ class OnAudioQuery {
   ///
   /// * If [requestPermission] is null, will be set to [false].
   Future<bool> moveItemTo(int playlistId, int from, int to,
-      [bool requestPermission]) async {
+      [bool? requestPermission]) async {
     final bool resultMoveItem = await _channel.invokeMethod("moveItemTo", {
       "requestPermission": _checkPermission(requestPermission),
       "playlistId": playlistId,
@@ -363,7 +363,7 @@ class OnAudioQuery {
   ///
   /// * If [requestPermission] is null, will be set to [false].
   Future<bool> renamePlaylist(int playlistId, String newName,
-      [bool requestPermission]) async {
+      [bool? requestPermission]) async {
     final bool resultRenamePl = await _channel.invokeMethod("renamePlaylist", {
       "renamePlaylist": _checkPermission(requestPermission),
       "playlistId": playlistId,

@@ -18,5 +18,5 @@ class GenreModel {
   /// Important:
   ///
   /// * If Android >= Q/10 this method will return null, in this case it's necessary use [queryArtworks]
-  String get artwork => _info["artwork"];
+  String? get artwork => _info["artwork"];
 }

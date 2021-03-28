@@ -27,24 +27,24 @@ class AlbumModel {
   String get artist => _info["artist"];
 
   /// Return album [artistId]
-  String get artistId => _info["artist_id"];
+  String? get artistId => _info["artist_id"];
 
   /// Return album [lastYear]
-  String get lastYear => _info["maxyear"];
+  String? get lastYear => _info["maxyear"];
 
   /// Return album [firstYear]
-  String get firstYear => _info["minyear"];
+  String? get firstYear => _info["minyear"];
 
   /// Return album [numOfSongs]
   String get numOfSongs => _info["numsongs"];
 
   /// Return album [numOfSongsArtists]
-  String get numOfSongsArtists => _info["numsongs_by_artist"];
+  String? get numOfSongsArtists => _info["numsongs_by_artist"];
 
   /// Return album [artwork]
   ///
   /// Important:
   ///
   /// * If Android >= Q/10 this method will return null, in this case it's necessary use [queryArtworks]
-  String get artwork => _info["album_art"];
+  String? get artwork => _info["album_art"];
 }

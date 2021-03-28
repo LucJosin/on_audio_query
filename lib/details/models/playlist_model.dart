@@ -14,13 +14,13 @@ class PlaylistModel {
   String get playlistName => _info["name"];
 
   ///Return playlist [data]
-  String get data => _info["_data"];
+  String? get data => _info["_data"];
 
   ///Return playlist [dateAdded]
-  String get dateAdded => _info["date_added"];
+  String? get dateAdded => _info["date_added"];
 
   ///Return playlist [dateModified]
   ///
   /// Some times [dateModified] is returned null
-  String get dateModified => _info["date_modified"];
+  String? get dateModified => _info["date_modified"];
 }

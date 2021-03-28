@@ -3,20 +3,20 @@ part of on_audio_query;
 class QueryArtworkWidget extends StatelessWidget {
   final int id;
   final ArtworkType type;
-  final ArtworkFormat format;
-  final int size;
-  final bool requestPermission;
-  final BorderRadius artworkBorder;
-  final FilterQuality artworkQuality;
-  final double artworkWidth;
-  final double artworkHeight;
-  final BoxFit artworkFit;
-  final Widget nullArtworkWidget;
+  final ArtworkFormat? format;
+  final int? size;
+  final bool? requestPermission;
+  final BorderRadius? artworkBorder;
+  final FilterQuality? artworkQuality;
+  final double? artworkWidth;
+  final double? artworkHeight;
+  final BoxFit? artworkFit;
+  final Widget? nullArtworkWidget;
 
   const QueryArtworkWidget(
-      {Key key,
-      @required this.id,
-      @required this.type,
+      {Key? key,
+      required this.id,
+      required this.type,
       this.format,
       this.size,
       this.requestPermission,
@@ -36,12 +36,12 @@ class QueryArtworkWidget extends StatelessWidget {
           format ?? ArtworkFormat.JPEG,
           size ?? 200,
           requestPermission ?? false),
-      builder: (context, item) {
+      builder: (context, AsyncSnapshot<Uint8List?> item) {
         if (item.data != null) {
           return ClipRRect(
             borderRadius: artworkBorder ?? BorderRadius.circular(50),
             child: Image.memory(
-              item.data,
+              item.data!,
               width: artworkWidth ?? 50,
               height: artworkHeight ?? 50,
               fit: artworkFit ?? BoxFit.cover,

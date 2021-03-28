@@ -23,7 +23,7 @@ class Songs extends StatefulWidget {
 
 class _SongsState extends State<Songs> {
   List<SongModel> songList = [];
-  int version;
+  int? version;
 
   @override
   void initState() {
@@ -46,9 +46,9 @@ class _SongsState extends State<Songs> {
         body: FutureBuilder(
           future: OnAudioQuery()
               .querySongs(SongSortType.DEFAULT, OrderType.ASC_OR_SMALLER, true),
-          builder: (context, item) {
+          builder: (context, AsyncSnapshot<List<SongModel>> item) {
             if (item.data != null) {
-              songList = item.data;
+              songList = item.data!;
               return ListView.builder(
                 itemCount: songList.length,
                 itemBuilder: (context, index) {
@@ -56,7 +56,7 @@ class _SongsState extends State<Songs> {
                     title: Text(songList[index].title),
                     subtitle: Text(songList[index].artist),
                     trailing: Icon(Icons.arrow_forward_rounded),
-                    leading: version >= 29
+                    leading: version! >= 29
                         ? QueryArtworkWidget(
                             id: songList[index].id,
                             type: ArtworkType.AUDIO,
@@ -65,7 +65,7 @@ class _SongsState extends State<Songs> {
                             borderRadius: BorderRadius.circular(50),
                             child: Image(
                               image: FileImage(
-                                File(songList[index].artwork),
+                                File(songList[index].artwork!),
                               ),
                               height: 50,
                               width: 50,

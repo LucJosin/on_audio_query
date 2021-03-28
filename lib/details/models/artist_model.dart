@@ -20,7 +20,7 @@ class ArtistModel {
   String get numberOfAlbums => _info["number_of_albums"];
 
   /// Return artist [numberOfTracks]
-  String get numberOfTracks => _info["number_of_tracks"];
+  String? get numberOfTracks => _info["number_of_tracks"];
 
   /// Mp3 only support one image type, so, Artist Image don't exist.
   ///
