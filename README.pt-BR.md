@@ -36,7 +36,7 @@ NOTE: Fique à vontade para ajudar nas traduções
 Adicione o seguinte codigo para seu `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^1.0.2
+  on_audio_query: ^1.0.5
 ```
 
 #### Solicitar Permissões:
@@ -58,6 +58,7 @@ Se você quer usar a solicitação de permissões interna, irá precisar adicion
 * Pega todos os artistas e áudios específicos dos artistas.
 * Pega todas as playlists e áudios específicos das playlists.
 * Pega todos os gêneros e áudios específicos dos gêneros.
+* Pega todos os métodos de query com keys específicas [Search/Busca].
 * Criar/Deletar/Renomear playlists.
 * Adicionar/Remover/Mover específicos áudios para playlists.
 * Específicos tipos de classificação para todos os métodos.
@@ -79,13 +80,15 @@ Todos os tipos de métodos nesse plugin:
 
 |  Métodos  |   Parâmetros   |   Return   |
 |--------------|-----------------|-----------------|
-| [`querySongs`](#querysongs) | `(SortType, OrderType, RequestPermission)` | `List<SongModel>` | <br>
-| [`queryAudio`]() | `(SortType, OrderType, RequestPermission)`. | `List<SongModel>` | <br>
-| [`queryAlbums`](#queryalbums) | `(SortType, OrderType, RequestPermission)` | `List<AlbumModel>` | <br>
-| [`queryArtists`](#queryartists) | `(SortType, OrderType, RequestPermission)` | `List<ArtistModel>` | <br>
-| [`queryPlaylists`](#queryplaylists) | `(SortType, OrderType, RequestPermission)` | `List<PlaylistModel>` | <br>
-| [`queryGenres`](#querygenres) | `(SortType, OrderType, RequestPermission)` | `List<GenreModel>` | <br>
+| [`querySongs`](#querysongs) | `(SortType, OrderType, UriType,RequestPermission)` | `List<SongModel>` | <br>
+| [`queryAudio`]() | `(SortType, OrderType, UriType, RequestPermission)`. | `List<SongModel>` | <br>
+| [`queryAlbums`](#queryalbums) | `(SortType, OrderType, UriType, RequestPermission)` | `List<AlbumModel>` | <br>
+| [`queryArtists`](#queryartists) | `(SortType, OrderType, UriType, RequestPermission)` | `List<ArtistModel>` | <br>
+| [`queryPlaylists`](#queryplaylists) | `(SortType, OrderType, UriType, RequestPermission)` | `List<PlaylistModel>` | <br>
+| [`queryGenres`](#querygenres) | `(SortType, OrderType, UriType, RequestPermission)` | `List<GenreModel>` | <br>
 | [`queryAudiosFrom`]() | `(Type, Where, RequestPermission)` | `List<SongModel>` | <br>
+| [`queryAudiosOnly`]() | **[Novo]**`(Type, Where, isOnly, RequestPermission)` | `List<SongModel>` | <br>
+| [`queryWithFilters`]() | **[Novo]**`(ArgsVal, WithFiltersType, Args, RequestPermission)` | `List<dynamic>` | <br>
 | [`queryArtworks`]() | `(Id, Type, Format, Size, RequestPermission)` | `Uint8List` | <br>
 | [`createPlaylist`]() | `(PlaylistName, RequestPermission)` | `bool` | <br>
 | [`removePlaylist`]() | `(PlaylistId, RequestPermission)` | `bool` | <br>
@@ -104,7 +107,7 @@ Todos os tipos de métodos nesse plugin:
 **Veja todos os tipos de classificação em [Exemplos](#exemplos)**
 
 **[NT]** -> Precisa de testes <br>
-**[BG]** -> Bug on Android 10/Q
+**[BG]** -> Bug no Android 10/Q
 
 ## Exemplos:
 
@@ -149,7 +152,7 @@ Todos os tipos de métodos nesse plugin:
 ```
 
 #### queryArtworks
-⚠ **Note: Only in Android >= Q/10**
+⚠ **Note: Apenas em Android >= Q/10**
 ```dart
   someName() async {
     //DEFAULT: ArtworkFormat.JPEG, 200 and false
@@ -166,6 +169,32 @@ Todos os tipos de métodos nesse plugin:
       );
     }
     return Icon(Icons.image_not_supported)
+  }
+```
+
+#### queryAudiosOnly
+⚠ **Note: Algumas classificações apenas existem no Android >= Q/10, Se você tentar chamar com Android abaixo de Q/10 retornará todos os tipos.** <br>
+⚠ **Veja mais em [Documentation](https://pub.dev/documentation/on_audio_query/latest/on_audio_query/OnAudioQuery/queryAudiosOnly.html)**
+```dart
+  someName() async {
+    //DEFAULT: SongSortType.TITLE, OrderType.ASC_OR_SMALLER and false
+    var something = await OnAudioQuery().queryAudiosOnly(AudiosOnlyType.IS_AUDIOBOOK);
+  }
+
+  someOtherName() async {
+    //DEFAULT: SongSortType.TITLE, OrderType.ASC_OR_SMALLER and false
+    var something = await OnAudioQuery().queryAudiosOnly(AudiosOnlyType.IS_PODCAST);
+  }
+```
+
+#### queryWithFilters
+⚠ **Note: Args é definido como `[dynamic]` mas, só irá fucionar se você usar as classificações corretas.** <br>
+⚠ **Veja mais em [Documentation](https://pub.dev/documentation/on_audio_query/latest/on_audio_query/on_audio_query-library.html) -> Enums**
+```dart
+  someName() async {
+    //DEFAULT: Args.TITLE and false
+    //ArgsTypes: AudiosArgs, AlbumsArgs, PlaylistsArgs, ArtistsArgs, GenresArgs
+    var something = await OnAudioQuery().queryAudiosOnly("Sam Smith", WithFiltersType.ARTISTS);
   }
 ```
 
