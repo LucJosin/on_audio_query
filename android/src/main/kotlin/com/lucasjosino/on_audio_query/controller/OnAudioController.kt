@@ -24,6 +24,8 @@ class OnAudioController(
             "queryGenres" -> OnGenresQuery().queryGenres(context, result, call)
             "queryArtworks" -> OnArtworksQuery().queryArtworks(context, result, call)
             "queryAudiosFrom" -> OnAudiosFromQuery().querySongsFrom(context, result, call)
+            "queryAudiosOnly" -> OnAudiosOnlyQuery().queryAudiosOnly(context, result, call)
+            "queryWithFilters" -> OnWithFiltersQuery().queryWithFilters(context, result, call)
             //Playlists methods
             "createPlaylist" -> OnPlaylistsController().createPlaylist(context, result, call)
             "removePlaylist" -> OnPlaylistsController().removePlaylist(context, result, call)
