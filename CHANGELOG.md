@@ -1,3 +1,22 @@
+## [1.0.5] - [03.31.2021]
+### Features
+#### Dart/Kotlin
+- Added `[queryAudiosOnly]`.
+- Added `[queryWithFilters]`.
+- Added `[AudiosOnlyType]` and `[WithFiltersType]`.
+- Added `[SongsArgs]`, `[AlbumsArgs]`, `[PlaylistsArgs]`, `[ArtistsArgs]`, `[GenresArgs]`.
+- Added `[EXTERNAL]` and `[INTERNAL]` parameters for some query methods.
+
+### Documentation
+- Updated `README` documentation.
+
+### Changes
+#### Dart/Kotlin
+- Now `[querySongs]`, `[queryAlbums]`, `[queryArtists]`, `[queryPlaylists]` and `[queryGenres]` have `[UriType]` as parameter.
+
+#### Kotlin
+- Updated some `[Kotlin]` dependencies.
+
 ## [1.0.3] - [03.28.2021]
 ### ⚠ Important Changes
 #### Dart

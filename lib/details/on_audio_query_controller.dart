@@ -6,13 +6,13 @@ class OnAudioQuery {
   static const String _CHANNEL_ID = "com.lucasjosino.on_audio_query";
   static const MethodChannel _channel = const MethodChannel(_CHANNEL_ID);
 
-  // Check if [requestPermission] is null or not, if true, will set to [false].
+  /// Check if [requestPermission] is null or not, if true, will set to [false].
   static bool _checkPermission(bool? requestPermission) {
     if (requestPermission != null) return requestPermission;
     return false;
   }
 
-  // Check if [order] is null or not, if true, will set to [ASC_OR_SMALLER].
+  /// Check if [order] is null or not, if true, will set to [ASC_OR_SMALLER].
   static int _checkOrder(OrderType? order) {
     if (order != null) return order.index;
     return OrderType.ASC_OR_SMALLER.index;
@@ -25,53 +25,61 @@ class OnAudioQuery {
   /// * [requestPermission] is used for request or no Android STORAGE PERMISSION.
   /// * [orderType] is used to define if order will be Ascending or Descending.
   /// * [sortType] is used to define list sort.
+  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
   ///
   /// Important:
   ///
   /// * If [requestPermission] is null, will be set to [false].
   /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
   /// * If [sortType] is null, will be set to [title].
-  /// * If Android >= Q/10 [artwork] will return null, in this case, it's necessary use [queryArtworks]
+  /// * If [uriType] is null, will be set to [EXTERNAL].
+  /// * If Android >= Q/10 [artwork] will return null, in this case, it's necessary use [queryArtworks].
   Future<List<SongModel>> querySongs(
       [SongSortType? sortType,
       OrderType? orderType,
+      UriType? uriType,
       bool? requestPermission]) async {
     final List<dynamic> resultSongs =
         await _channel.invokeMethod("querySongs", {
       "requestPermission": _checkPermission(requestPermission),
       "sortType":
           sortType != null ? sortType.index : SongSortType.DEFAULT.index,
-      "orderType": _checkOrder(orderType)
+      "orderType": _checkOrder(orderType),
+      "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index
     });
     return resultSongs.map((songInfo) => SongModel(songInfo)).toList();
   }
 
   /// Used to return Songs Info based in [SongModel].
   ///
-  /// This method is similar to [querySongs], but, will return all audio types. For example: WhatsApp Audios
+  /// This method is similar to [querySongs], but, will return all audio types. For example: WhatsApp Audios.
   ///
   /// Parameters:
   ///
   /// * [requestPermission] is used for request or no Android STORAGE PERMISSION.
   /// * [orderType] is used to define if order will be Ascending or Descending.
   /// * [sortType] is used to define list sort.
+  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
   ///
   /// Important:
   ///
   /// * If [requestPermission] is null, will be set to [false].
   /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
   /// * If [sortType] is null, will be set to [title].
-  /// * If Android >= Q/10 [artwork] will return null, in this case, it's necessary use [queryArtworks]
+  /// * If [uriType] is null, will be set to [EXTERNAL].
+  /// * If Android >= Q/10 [artwork] will return null, in this case, it's necessary use [queryArtworks].
   Future<List<SongModel>> queryAudios(
       [SongSortType? sortType,
       OrderType? orderType,
+      UriType? uriType,
       bool? requestPermission]) async {
     final List<dynamic> resultSongs =
         await _channel.invokeMethod("queryAudios", {
       "requestPermission": _checkPermission(requestPermission),
       "sortType":
           sortType != null ? sortType.index : SongSortType.DEFAULT.index,
-      "orderType": _checkOrder(orderType)
+      "orderType": _checkOrder(orderType),
+      "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index
     });
     return resultSongs.map((songInfo) => SongModel(songInfo)).toList();
   }
@@ -83,23 +91,27 @@ class OnAudioQuery {
   /// * [requestPermission] is used for request or no Android STORAGE PERMISSION.
   /// * [orderType] is used to define if order will be Ascending or Descending.
   /// * [sortType] is used to define list sort.
+  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
   ///
   /// Important:
   ///
   /// * If [requestPermission] is null, will be set to [false].
   /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
   /// * If [sortType] is null, will be set to [AlbumName].
-  /// * If Android >= Q/10 [artwork] will return null, in this case, it's necessary use [queryArtworks]
+  /// * If [uriType] is null, will be set to [EXTERNAL].
+  /// * If Android >= Q/10 [artwork] will return null, in this case, it's necessary use [queryArtworks].
   Future<List<AlbumModel>> queryAlbums(
       [AlbumSortType? sortType,
       OrderType? orderType,
+      UriType? uriType,
       bool? requestPermission]) async {
     final List<dynamic> resultAlbums =
         await _channel.invokeMethod("queryAlbums", {
       "requestPermission": _checkPermission(requestPermission),
       "sortType":
           sortType != null ? sortType.index : AlbumSortType.DEFAULT.index,
-      "orderType": _checkOrder(orderType)
+      "orderType": _checkOrder(orderType),
+      "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index
     });
     return resultAlbums.map((albumInfo) => AlbumModel(albumInfo)).toList();
   }
@@ -111,23 +123,27 @@ class OnAudioQuery {
   /// * [requestPermission] is used for request or no Android STORAGE PERMISSION.
   /// * [orderType] is used to define if order will be Ascending or Descending.
   /// * [sortType] is used to define list sort.
+  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
   ///
   /// Important:
   ///
   /// * If [requestPermission] is null, will be set to [false].
   /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
   /// * If [sortType] is null, will be set to [ArtistName].
+  /// * If [uriType] is null, will be set to [EXTERNAL].
   /// * Mp3 only support one image, artist image don't exist.
   Future<List<ArtistModel>> queryArtists(
       [ArtistSortType? sortType,
       OrderType? orderType,
+      UriType? uriType,
       bool? requestPermission]) async {
     final List<dynamic> resultArtists =
         await _channel.invokeMethod("queryArtists", {
       "requestPermission": _checkPermission(requestPermission),
       "sortType":
           sortType != null ? sortType.index : ArtistSortType.DEFAULT.index,
-      "orderType": _checkOrder(orderType)
+      "orderType": _checkOrder(orderType),
+      "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index
     });
     return resultArtists.map((artistInfo) => ArtistModel(artistInfo)).toList();
   }
@@ -139,22 +155,26 @@ class OnAudioQuery {
   /// * [requestPermission] is used for request or no Android STORAGE PERMISSION.
   /// * [orderType] is used to define if order will be Ascending or Descending.
   /// * [sortType] is used to define list sort.
+  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
   ///
   /// Important:
   ///
   /// * If [requestPermission] is null, will be set to [false].
   /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
   /// * If [sortType] is null, will be set to [PlaylistName].
+  /// * If [uriType] is null, will be set to [EXTERNAL].
   Future<List<PlaylistModel>> queryPlaylists(
       [PlaylistSortType? sortType,
       OrderType? orderType,
+      UriType? uriType,
       bool? requestPermission]) async {
     final List<dynamic> resultPlaylists =
         await _channel.invokeMethod("queryPlaylists", {
       "requestPermission": _checkPermission(requestPermission),
       "sortType":
           sortType != null ? sortType.index : PlaylistSortType.DEFAULT.index,
-      "orderType": _checkOrder(orderType)
+      "orderType": _checkOrder(orderType),
+      "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index
     });
     return resultPlaylists
         .map((playlistInfo) => PlaylistModel(playlistInfo))
@@ -168,22 +188,26 @@ class OnAudioQuery {
   /// * [requestPermission] is used for request or no Android STORAGE PERMISSION.
   /// * [orderType] is used to define if order will be Ascending or Descending.
   /// * [sortType] is used to define list sort.
+  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
   ///
   /// Important:
   ///
   /// * If [requestPermission] is null, will be set to [false].
   /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
   /// * If [sortType] is null, will be set to [GenreName].
+  /// * If [uriType] is null, will be set to [EXTERNAL].
   Future<List<GenreModel>> queryGenres(
       [GenreSortType? sortType,
       OrderType? orderType,
+      UriType? uriType,
       bool? requestPermission]) async {
     final List<dynamic> resultGenres =
         await _channel.invokeMethod("queryGenres", {
       "requestPermission": _checkPermission(requestPermission),
       "sortType":
           sortType != null ? sortType.index : GenreSortType.DEFAULT.index,
-      "orderType": _checkOrder(orderType)
+      "orderType": _checkOrder(orderType),
+      "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index
     });
     return resultGenres.map((genreInfo) => GenreModel(genreInfo)).toList();
   }
@@ -208,6 +232,82 @@ class OnAudioQuery {
       "where": where
     });
     return resultSongsFrom.map((songInfo) => SongModel(songInfo)).toList();
+  }
+
+  /// Used to return Songs Info based in [SongModel].
+  ///
+  /// This method is similar to [querySongs], but, will return only audio types specifics in [AudiosOnlyType]
+  ///
+  /// Parameters:
+  ///
+  /// * [requestPermission] is used for request or no Android STORAGE PERMISSION.
+  /// * [orderType] is used to define if order will be Ascending or Descending.
+  /// * [sortType] is used to define list sort.
+  /// * [isOnly] is used to define what audio type you want.
+  ///
+  /// Important:
+  ///
+  /// * If [requestPermission] is null, will be set to [false].
+  /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
+  /// * If [sortType] is null, will be set to [title].
+  /// * Some types exclusively for Android >= Q/29, if you try call them in a Android below will return all types together.
+  /// * If Android >= Q/10 [artwork] will return null, in this case, it's necessary use [queryArtworks].
+  Future<List<SongModel>> queryAudiosOnly(AudiosOnlyType isOnly,
+      [SongSortType? sortType,
+      OrderType? orderType,
+      bool? requestPermission]) async {
+    final List<dynamic> resultSongs =
+        await _channel.invokeMethod("queryAudiosOnly", {
+      "requestPermission": _checkPermission(requestPermission),
+      "sortType":
+          sortType != null ? sortType.index : SongSortType.DEFAULT.index,
+      "orderType": _checkOrder(orderType),
+      "isOnly": isOnly.index
+    });
+    return resultSongs.map((songInfo) => SongModel(songInfo)).toList();
+  }
+
+  /// Used to return Songs Info based in Something. Works like a "Search".
+  ///
+  /// Parameters:
+  ///
+  /// * [requestPermission] is used for request or no Android STORAGE PERMISSION.
+  /// * [withType] The type of search based in [WithFiltersType].
+  /// * [args] is used to define what you're looking for.
+  /// * [argsVal] The "key".
+  ///
+  /// Before you use:
+  ///
+  /// * [queryWithFilters] implements all types based in [WithFiltersType], this method return always a [dynamic] List.
+  /// * After call this method you will need to specify the [Model]. See [Example1].
+  ///
+  /// Example1:
+  ///
+  /// ```dart
+  ///   //Using [FutureBuilder]
+  ///   //I changed [>] to [-]
+  ///   builder: (context, AsyncSnapshot-List-dynamic-- item) {
+  ///     List-SongModel- = item.data!.map((e) => SongModel(e)).toList(); //Ex1
+  ///     List-ArtistModel- = item.data!.map((e) => ArtistModel(e)).toList(); //Ex2
+  ///   ...}
+  /// ```
+  ///
+  /// Important:
+  ///
+  /// * If [requestPermission] is null, will be set to [false].
+  /// * If [args] is null, will be set to [Title] or [Name].
+  /// * If Android >= Q/10 [artwork] will return null, in this case, it's necessary use [queryArtworks].
+  Future<List<dynamic>> queryWithFilters(
+      String argsVal, WithFiltersType withType,
+      [dynamic? args, bool? requestPermission]) async {
+    final List<dynamic> resultFilters =
+        await _channel.invokeMethod("queryWithFilters", {
+      "requestPermission": _checkPermission(requestPermission),
+      "withType": withType.index,
+      "args": args.index ?? 0,
+      "argsVal": argsVal
+    });
+    return resultFilters;
   }
 
   /// Used to return Songs Artwork.

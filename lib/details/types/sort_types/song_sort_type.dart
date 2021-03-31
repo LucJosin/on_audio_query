@@ -21,7 +21,7 @@ enum SongSortType {
   DATA_ADDED,
 
   ///[SIZE] will return song list based in song [size].
-  SIZE_SMALLER,
+  SIZE,
 
   ///[DISPLAY_NAME] will return song list based in song [display_name].
   DISPLAY_NAME,

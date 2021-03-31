@@ -44,8 +44,8 @@ class _SongsState extends State<Songs> {
           elevation: 2,
         ),
         body: FutureBuilder(
-          future: OnAudioQuery()
-              .querySongs(SongSortType.DEFAULT, OrderType.ASC_OR_SMALLER, true),
+          future: OnAudioQuery().querySongs(SongSortType.DEFAULT,
+              OrderType.ASC_OR_SMALLER, UriType.EXTERNAL, true),
           builder: (context, AsyncSnapshot<List<SongModel>> item) {
             if (item.data != null) {
               songList = item.data!;
