@@ -7,6 +7,8 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lucasjosino.on_audio_query.types.checkAudiosUriType
+import com.lucasjosino.on_audio_query.types.checkPlaylistsUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkGenreSortType
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -18,7 +20,7 @@ import kotlinx.coroutines.withContext
 class OnPlaylistQuery : ViewModel() {
 
     //Main parameters
-    private val uri: Uri = MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
+    private lateinit var uri: Uri
     private lateinit var resolver: ContentResolver
     private lateinit var sortType: String
 
@@ -37,6 +39,7 @@ class OnPlaylistQuery : ViewModel() {
 
         //SortType: Type and Order
         sortType = checkGenreSortType(call.argument<Int>("sortType")!!, call.argument<Int>("orderType")!!)
+        uri = checkPlaylistsUriType(call.argument<Int>("uri")!!)
 
         //Query everything in the Background it's necessary for better performance
         viewModelScope.launch {

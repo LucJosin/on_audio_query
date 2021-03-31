@@ -6,6 +6,8 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lucasjosino.on_audio_query.types.checkAudiosUriType
+import com.lucasjosino.on_audio_query.types.checkGenresUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkGenreSortType
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -17,7 +19,7 @@ import kotlinx.coroutines.withContext
 class OnGenresQuery : ViewModel() {
 
     //Main parameters
-    private val uri: Uri = MediaStore.Audio.Genres.EXTERNAL_CONTENT_URI
+    private lateinit var uri: Uri
     private lateinit var sortType: String
     private lateinit var resolver: ContentResolver
 
@@ -33,6 +35,7 @@ class OnGenresQuery : ViewModel() {
 
         //SortType: Type and Order
         sortType = checkGenreSortType(call.argument<Int>("sortType")!!, call.argument<Int>("orderType")!!)
+        uri = checkGenresUriType(call.argument<Int>("uri")!!)
 
         //Query everything in the Background it's necessary for better performance
         viewModelScope.launch {
