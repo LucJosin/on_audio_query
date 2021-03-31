@@ -187,7 +187,7 @@ All types of methods on this plugin:
 ```
 
 #### queryWithFilters
-⚠ **Note: Args it's defined with `[dynamic]` but will only work if you use correct Types.** <br>
+⚠ **Note: Args are defined with `[dynamic]` but will only work if you use correct Types.** <br>
 ⚠ **See more in [Documentation](https://pub.dev/documentation/on_audio_query/latest/on_audio_query/on_audio_query-library.html) -> Enums** 
 ```dart
   someName() async {
