@@ -1,7 +1,7 @@
 # on_audio_query
 <!-- https://img.shields.io/badge/Platform-Android%20%7C%20IOS-9cf?&style=flat-square -->
 [![Pub.dev](https://img.shields.io/pub/v/on_audio_query?color=9cf&label=Pub.dev&style=flat-square)](https://pub.dev/packages/on_audio_query)
-[![Platform](https://img.shields.io/badge/Platform-Android-9cf?&style=flat-square)](https://www.android.com/)
+[![Platform](https://img.shields.io/badge/Platform-Android-9cf?logo=android&style=flat-square)](https://www.android.com/)
 [![Flutter](https://img.shields.io/badge/Language-Flutter%20%7C%20Null--Safety-9cf?logo=flutter&style=flat-square)](https://www.flutter.dev/)
 [![Kotlin](https://img.shields.io/badge/Language-Kotlin-9cf?logo=kotlin&style=flat-square)](https://kotlinlang.org/)
 
@@ -193,7 +193,7 @@ All types of methods on this plugin:
   someName() async {
     //DEFAULT: Args.TITLE and false
     //ArgsTypes: AudiosArgs, AlbumsArgs, PlaylistsArgs, ArtistsArgs, GenresArgs
-    var something = await OnAudioQuery().queryAudiosOnly("Sam Smith", WithFiltersType.ARTISTS);
+    var something = await OnAudioQuery().queryWithFilters("Sam Smith", WithFiltersType.ARTISTS);
   }
 ```
 
