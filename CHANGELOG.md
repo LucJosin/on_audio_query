@@ -1,3 +1,16 @@
+## [1.0.6] - [04.08.2021]
+### Fixes
+#### Kotlin
+- Fixed `[queryArtwork]` returning null album image in Android 11.
+
+### Documentation
+- Updated `README` documentation.
+
+### Changes
+#### Kotlin
+- Removed unnecessary code from `[WithFiltersType]`.
+- Updated some `[Kotlin]` dependencies.
+
 ## [1.0.5] - [03.31.2021]
 ### Features
 #### Dart/Kotlin

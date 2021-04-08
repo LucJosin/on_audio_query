@@ -28,7 +28,6 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
 
-
 /** OnAudioQueryPlugin Central */
 class OnAudioQueryPlugin: FlutterPlugin, MethodCallHandler, ActivityAware,
         OnPermissionManagerInterface, PluginRegistry.RequestPermissionsResultListener {
@@ -81,13 +80,13 @@ class OnAudioQueryPlugin: FlutterPlugin, MethodCallHandler, ActivityAware,
       //Permissions and Storage in Android are very complicated, get device info may help
       "getDeviceSDK" -> result.success(Build.VERSION.SDK_INT)
       "getDeviceRelease" -> result.success(Build.VERSION.RELEASE)
+      //Folders
       "getDeviceCode" -> {
         val fields = Build.VERSION_CODES::class.java.fields
         result.success(fields[Integer.parseInt(Build.VERSION.SDK_INT.toString())].name)
       }
       else -> { onCheckPermission(request) } //All others methods
     }
-
   }
 
   //This is only important for initialization - Start

@@ -298,8 +298,8 @@ class OnAudioQuery {
   /// * If [args] is null, will be set to [Title] or [Name].
   /// * If Android >= Q/10 [artwork] will return null, in this case, it's necessary use [queryArtworks].
   Future<List<dynamic>> queryWithFilters(
-      String argsVal, WithFiltersType withType,
-      [dynamic? args, bool? requestPermission]) async {
+      String argsVal, WithFiltersType withType, dynamic? args,
+      [bool? requestPermission]) async {
     final List<dynamic> resultFilters =
         await _channel.invokeMethod("queryWithFilters", {
       "requestPermission": _checkPermission(requestPermission),
@@ -541,4 +541,18 @@ class OnAudioQuery {
     final String resultCode = await _channel.invokeMethod("getDeviceCode");
     return resultCode;
   }
+
+  // Folders
+
+  // /// Used to return [Audio] folder location based in [Data].
+  // Future<String> getCurrentFolder(String data) async {
+  //   final String resultFolder = await _channel.invokeMethod("getCurrentFolder", {"data": data});
+  //   return resultFolder;
+  // }
+  //
+  // /// Used to return next [Audio] folder location based in [Data].
+  // Future<String> getNextFolder(String data) async {
+  //   final String resultNextFolder = await _channel.invokeMethod("getNextFolder", {"data": data});
+  //   return resultNextFolder;
+  // }
 }
