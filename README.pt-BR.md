@@ -8,6 +8,8 @@
 
 `on_audio_query` é um [Flutter](https://flutter.dev/) Plugin usado para adquirir informações de áudios/músicas 🎶 [título, artista, album, etc..] do celular. <br>
 
+Esse Plugin apenas adquiri músicas do celular, Se você quiser editar esses audios use: [on_audio_edit](https://github.com/LucasPJS/on_audio_edit)
+
 ## Ajuda:
 
 **Algum problema? [Issues](https://github.com/LucasPJS/on_audio_query/issues)** <br>
@@ -37,7 +39,7 @@ NOTE: Fique à vontade para ajudar nas traduções
 Adicione o seguinte codigo para seu `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^1.0.5
+  on_audio_query: ^1.0.6
 ```
 
 #### Solicitar Permissões:
@@ -67,7 +69,6 @@ Se você quer usar a solicitação de permissões interna, irá precisar adicion
 ## Para fazer:
 
 * Adicionar uma melhor performace para todo o plugin.
-* Adicionar método para editar tag dos audios.
 * Criar métodos para IOS.
 * Opção para remover músicas.
 * Arrumar erros.
@@ -88,8 +89,8 @@ Todos os tipos de métodos nesse plugin:
 | [`queryPlaylists`](#queryplaylists) | `(SortType, OrderType, UriType, RequestPermission)` | `List<PlaylistModel>` | <br>
 | [`queryGenres`](#querygenres) | `(SortType, OrderType, UriType, RequestPermission)` | `List<GenreModel>` | <br>
 | [`queryAudiosFrom`]() | `(Type, Where, RequestPermission)` | `List<SongModel>` | <br>
-| [`queryAudiosOnly`]() | **[Novo]**`(Type, Where, isOnly, RequestPermission)` | `List<SongModel>` | <br>
-| [`queryWithFilters`]() | **[Novo]**`(ArgsVal, WithFiltersType, Args, RequestPermission)` | `List<dynamic>` | <br>
+| [`queryAudiosOnly`]() | `(Type, Where, isOnly, RequestPermission)` | `List<SongModel>` | <br>
+| [`queryWithFilters`]() | `(ArgsVal, WithFiltersType, Args, RequestPermission)` | `List<dynamic>` | <br>
 | [`queryArtworks`]() | `(Id, Type, Format, Size, RequestPermission)` | `Uint8List` | <br>
 | [`createPlaylist`]() | `(PlaylistName, RequestPermission)` | `bool` | <br>
 | [`removePlaylist`]() | `(PlaylistId, RequestPermission)` | `bool` | <br>
