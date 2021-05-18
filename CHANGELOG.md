@@ -21,7 +21,7 @@
 - Now all `[Kotlin]` checks will throw a `[Exception]` if value don't exist.
 - Updated some `[Kotlin]` dependencies.
 
-### Important Changes
+### ⚠ Important Changes
 #### Dart/Kotlin
 - Changed `[ALBUM]`, `[ARTIST]` and `[PLAYLIST]` to `[ALBUM_NAME]`, `[ARTIST_NAME]` and `[PLAYLIST_NAME]` in `[AudiosFromType]`.
 
@@ -197,7 +197,7 @@
 ### Changes
 - TODO
 
-### Important Changes
+### ⚠ Important Changes
 - TODO
  -->
 
