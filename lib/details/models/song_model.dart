@@ -16,6 +16,9 @@ class SongModel {
   /// Return song [displayName]
   String get displayName => _info["_display_name"];
 
+  /// Return song [displayName] without Extension
+  String get displayNameWOExt => _info["_display_name_wo_ext"];
+
   /// Return song [size]
   String get size => _info["_size"];
 
@@ -81,6 +84,12 @@ class SongModel {
   ///
   /// * If Android >= Q/10 this method will return null, in this case it's necessary use [queryArtworks]
   String? get artwork => _info["artwork"];
+
+  /// Return song only the [fileExtension]
+  String get fileExtension => _info["file_extension"];
+
+  /// Return song [fileParent] (All the path before file)
+  String get fileParent => _info["file_parent"];
 
   // Bool methods
 

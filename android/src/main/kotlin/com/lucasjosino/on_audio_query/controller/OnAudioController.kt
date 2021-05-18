@@ -18,6 +18,7 @@ class OnAudioController(
             //Query methods
             "querySongs" -> OnAudiosQuery().querySongs(context, result, call, true)
             "queryAudios" -> OnAudiosQuery().querySongs(context, result, call, false)
+            "queryFromFolder" -> OnAudiosQuery().querySongs(context, result, call, false)
             "queryAlbums" -> OnAlbumsQuery().queryAlbums(context, result, call)
             "queryArtists" -> OnArtistsQuery().queryArtists(context, result, call)
             "queryPlaylists" -> OnPlaylistQuery().queryPlaylists(context, result, call)
@@ -26,6 +27,7 @@ class OnAudioController(
             "queryAudiosFrom" -> OnAudiosFromQuery().querySongsFrom(context, result, call)
             "queryAudiosOnly" -> OnAudiosOnlyQuery().queryAudiosOnly(context, result, call)
             "queryWithFilters" -> OnWithFiltersQuery().queryWithFilters(context, result, call)
+            "queryAllPath" -> OnAllPathQuery().queryAllPath(context, result)
             //Playlists methods
             "createPlaylist" -> OnPlaylistsController().createPlaylist(context, result, call)
             "removePlaylist" -> OnPlaylistsController().removePlaylist(context, result, call)

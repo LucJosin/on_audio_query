@@ -1,10 +1,14 @@
 /*
+=============
 Author: Lucas Josino
 Github: https://github.com/LucasPJS
-Plugin: on_audio_query
+Website: https://lucasjosino.com/
+=============
+Plugin/Id: on_audio_query#0
 Homepage: https://github.com/LucasPJS/on_audio_query
-Copyright: © 2021, Lucas Josino. All rights reserved.
 License: https://github.com/LucasPJS/on_audio_query/blob/main/LICENSE
+Copyright: © 2021, Lucas Josino. All rights reserved.
+=============
 */
 
 import 'dart:io';

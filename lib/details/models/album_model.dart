@@ -14,7 +14,7 @@ class AlbumModel {
   String get albumName => _info["album"];
 
   /// Return album [albumId]
-  String get albumId => _info["album_id"];
+  int get albumId => int.parse(_info["album_id"]);
 
   // /// Return album [albumKey]
   // ///

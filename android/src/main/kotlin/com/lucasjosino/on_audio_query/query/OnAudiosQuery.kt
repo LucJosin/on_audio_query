@@ -15,6 +15,7 @@ import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
 /** OnAudiosQuery */
 class OnAudiosQuery : ViewModel() {
@@ -24,6 +25,7 @@ class OnAudiosQuery : ViewModel() {
     private var onlyMusic: Boolean = false
     private lateinit var resolver: ContentResolver
     private lateinit var sortType: String
+    private var selection: String? = null
     @SuppressLint("StaticFieldLeak")
     private lateinit var context: Context
 
@@ -62,6 +64,8 @@ class OnAudiosQuery : ViewModel() {
         //SortType: Type and Order
         sortType = checkSongSortType(call.argument<Int>("sortType")!!, call.argument<Int>("orderType")!!)
         uri = checkAudiosUriType(call.argument<Int>("uri")!!)
+        if (call.argument<String>("path") != null)
+            selection = projection[0] + " like " + "'%" + call.argument<String>("path") + "/%'"
 
         //Query everything in the Background it's necessary for better performance
         viewModelScope.launch {
@@ -75,7 +79,7 @@ class OnAudiosQuery : ViewModel() {
 
     //Loading in Background
     private suspend fun loadSongs() : ArrayList<MutableMap<String, Any>> = withContext(Dispatchers.IO) {
-        val cursor = resolver.query(uri, projection, null, null, sortType)
+        val cursor = resolver.query(uri, projection, selection, null, sortType)
         val songList: ArrayList<MutableMap<String, Any>> = ArrayList()
         while (cursor != null && cursor.moveToNext()) {
             val songData: MutableMap<String, Any> = HashMap()
@@ -88,6 +92,14 @@ class OnAudiosQuery : ViewModel() {
             //Artwork
             val art = loadArtwork(context, songData["album"].toString())
             if (art.isNotEmpty()) songData["artwork"] = art
+
+            //Getting displayName without [Extension]. GitHub request - https://github.com/LucasPJS/on_audio_query/issues/5
+            val file = File(songData["_data"].toString())
+            songData["_display_name_wo_ext"] = file.nameWithoutExtension
+            //Adding only the extension
+            songData["file_extension"] = file.extension
+            //Adding parent file (All the path before file)
+            songData["file_parent"] = file.parent.orEmpty()
 
             //if "queryAudios" query everything, else query only musics
             //TODO("Add more filters for "onlyMusic")

@@ -11,7 +11,7 @@ fun checkWithFiltersType(sortType: Int): Uri {
         2 -> MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
         3 -> MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI
         4 -> MediaStore.Audio.Genres.EXTERNAL_CONTENT_URI
-        else -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+        else -> throw Exception("[checkWithFiltersType] value don't exist!")
     }
 }
 
@@ -33,7 +33,7 @@ fun checkSongsArgs(args: Int): String {
         1 -> MediaStore.Audio.Media.DISPLAY_NAME + " like ?"
         2 -> MediaStore.Audio.Media.ALBUM + " like ?"
         3 -> MediaStore.Audio.Media.ARTIST + " like ?"
-        else -> MediaStore.Audio.Media.TITLE + " like ?"
+        else -> throw Exception("[checkSongsArgs] value don't exist!")
     }
 }
 
@@ -41,28 +41,28 @@ fun checkAlbumsArgs(args: Int): String {
     return when (args) {
         0 -> MediaStore.Audio.Albums.ALBUM + " like ?"
         1 -> MediaStore.Audio.Albums.ARTIST + " like ?"
-        else -> MediaStore.Audio.Albums.ALBUM + " like ?"
+        else -> throw Exception("[checkAlbumsArgs] value don't exist!")
     }
 }
 
 fun checkPlaylistsArgs(args: Int): String {
     return when (args) {
         0 -> MediaStore.Audio.Playlists.NAME + " like ?"
-        else -> MediaStore.Audio.Playlists.NAME + " like ?"
+        else -> throw Exception("[checkPlaylistsArgs] value don't exist!")
     }
 }
 
 fun checkArtistsArgs(args: Int): String {
     return when (args) {
         0 -> MediaStore.Audio.Artists.ARTIST + " like ?"
-        else -> MediaStore.Audio.Artists.ARTIST + " like ?"
+        else -> throw Exception("[checkArtistsArgs] value don't exist!")
     }
 }
 
 fun checkGenresArgs(args: Int): String {
     return when (args) {
         0 -> MediaStore.Audio.Genres.NAME + " like ?"
-        else -> MediaStore.Audio.Genres.NAME + " like ?"
+        else -> throw Exception("[checkGenresArgs] value don't exist!")
     }
 }
 

@@ -1,7 +1,34 @@
+## [1.0.7] - [05.18.2021]
+### Features
+#### Dart/Kotlin
+- Added `[queryFromFolder]`.
+- Added `[queryAllPath]`.
+- Added `[_display_name_wo_ext]` (`[displayName]` without extension) to `[SongModel]`. - [Added #5](https://github.com/LucasPJS/on_audio_query/issues/5)
+- Added `[file_extension]` (Only file extension) to `[SongModel]`.
+- Added `[file_parent]` (All the path before file) to `[SongModel]`.
+- Added `[Genre]` to `[queryAudiosFrom]`.
+- Added `[ALBUM_ID]`, `[ARTIST_ID]` and `[PLAYLIST_ID]` to `[AudiosFromType]`. - [Added #2](https://github.com/LucasPJS/on_audio_query/issues/2)
+
+### Documentation
+- Updated `README` documentation.
+
+### Changes
+#### Dart/Kotlin
+- Now `[queryAudiosFrom]` supports `[name]` and `[id]`.
+- Now `[albumId]` from `[AlbumModel]` return a `[int]`.
+
+#### Kotlin
+- Now all `[Kotlin]` checks will throw a `[Exception]` if value don't exist.
+- Updated some `[Kotlin]` dependencies.
+
+### Important Changes
+#### Dart/Kotlin
+- Changed `[ALBUM]`, `[ARTIST]` and `[PLAYLIST]` to `[ALBUM_NAME]`, `[ARTIST_NAME]` and `[PLAYLIST_NAME]` in `[AudiosFromType]`.
+
 ## [1.0.6] - [04.08.2021]
 ### Fixes
 #### Kotlin
-- Fixed `[queryArtwork]` returning null album image in Android 11.
+- Fixed `[queryArtwork]` returning null album image in Android 11.  - [Fixed #1](https://github.com/LucasPJS/on_audio_query/issues/1)
 
 ### Documentation
 - Updated `README` documentation.
@@ -173,3 +200,9 @@
 ### Important Changes
 - TODO
  -->
+
+<!-- 
+ - [Added #Issue](Link)
+ - [Fixed #Issue](Link)
+ - [Changed #Issue](Link)
+-->

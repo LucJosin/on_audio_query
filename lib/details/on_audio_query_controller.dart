@@ -1,3 +1,16 @@
+/*
+=============
+Author: Lucas Josino
+Github: https://github.com/LucasPJS
+Website: https://lucasjosino.com/
+=============
+Plugin/Id: on_audio_query#0
+Homepage: https://github.com/LucasPJS/on_audio_query
+License: https://github.com/LucasPJS/on_audio_query/blob/main/LICENSE
+Copyright: © 2021, Lucas Josino. All rights reserved.
+=============
+*/
+
 part of on_audio_query;
 
 ///Interface and Main method for use on_audio_query
@@ -223,7 +236,7 @@ class OnAudioQuery {
   /// Important:
   ///
   /// * If [requestPermission] is null, will be set to [false].
-  Future<List<SongModel>> queryAudiosFrom(AudiosFromType type, String where,
+  Future<List<SongModel>> queryAudiosFrom(AudiosFromType type, Object where,
       [bool? requestPermission]) async {
     final List<dynamic> resultSongsFrom =
         await _channel.invokeMethod("queryAudiosFrom", {
@@ -343,6 +356,51 @@ class OnAudioQuery {
       "size": size != null ? size : 200
     });
     return finalArtworks;
+  }
+
+  /// Used to return Songs Info from a specific [Folder] based in [SongModel].
+  ///
+  /// Parameters:
+  ///
+  /// * [path] is used to define where the plugin will search for audio.
+  /// * [requestPermission] is used for request or no Android STORAGE PERMISSION.
+  /// * [orderType] is used to define if order will be Ascending or Descending.
+  /// * [sortType] is used to define list sort.
+  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
+  ///
+  /// Important:
+  ///
+  /// * If [requestPermission] is null, will be set to [false].
+  /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
+  /// * If [sortType] is null, will be set to [title].
+  /// * If [uriType] is null, will be set to [EXTERNAL].
+  /// * If Android >= Q/10 [artwork] will return null, in this case, it's necessary use [queryArtworks].
+  Future<List<SongModel>> queryFromFolder(String path,
+      [SongSortType? sortType,
+      OrderType? orderType,
+      UriType? uriType,
+      bool? requestPermission]) async {
+    final List<dynamic> resultFromFolder =
+        await _channel.invokeMethod("queryFromFolder", {
+      "requestPermission": _checkPermission(requestPermission),
+      "sortType":
+          sortType != null ? sortType.index : SongSortType.DEFAULT.index,
+      "orderType": _checkOrder(orderType),
+      "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
+      "path": path
+    });
+    return resultFromFolder.map((songInfo) => SongModel(songInfo)).toList();
+  }
+
+  /// Used to return Songs path.
+  ///
+  /// Important:
+  ///
+  /// * Duplicate path will be ignored.
+  Future<List<dynamic>> queryAllPath() async {
+    final List<dynamic> resultAllPath =
+        await _channel.invokeMethod("queryAllPath");
+    return resultAllPath;
   }
 
   //Playlist methods

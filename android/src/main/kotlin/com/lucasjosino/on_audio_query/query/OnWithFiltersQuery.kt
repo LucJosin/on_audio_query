@@ -14,6 +14,7 @@ import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
 class OnWithFiltersQuery : ViewModel() {
 
@@ -71,6 +72,15 @@ class OnWithFiltersQuery : ViewModel() {
                 //Artwork
                 val art = loadArtwork(context, withFiltersData["album"].toString())
                 if (art.isNotEmpty()) withFiltersData["artwork"] = art
+
+                //Getting displayName without [Extension]. GitHub request - https://github.com/LucasPJS/on_audio_query/issues/5
+                val file = File(withFiltersData["_data"].toString())
+                withFiltersData["_display_name_wo_ext"] = file.nameWithoutExtension
+                //Adding only the extension
+                withFiltersData["file_extension"] = file.extension
+                //Adding parent file (All the path before file)
+                withFiltersData["file_parent"] = file.parent.orEmpty()
+
                 withFiltersList.add(withFiltersData)
             } else withFiltersList.add(withFiltersData)
         }

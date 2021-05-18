@@ -14,6 +14,7 @@ import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.File
 
 /** OnAudiosFromQuery */
 class OnAudiosFromQuery : ViewModel() {
@@ -61,8 +62,8 @@ class OnAudiosFromQuery : ViewModel() {
         this.context = context ; resolver = context.contentResolver
 
         //where -> Album/Artist/Genre/Playlist ; where -> uri
-        if (call.argument<Int>("type")!! != 2) {
-            whereVal = call.argument<String>("where")!!
+        if (call.argument<Int>("type")!! != 6) {
+            whereVal = call.argument<Any>("where")!!.toString()
             where = checkAudiosFromType(call.argument<Int>("type")!!)
 
             //Query everything in the Background it's necessary for better performance
@@ -93,6 +94,14 @@ class OnAudiosFromQuery : ViewModel() {
             val art = loadArtwork(context, songFromData["album"].toString())
             if (art.isNotEmpty()) songFromData["artwork"] = art
 
+            //Getting displayName without [Extension].
+            val file = File(songFromData["_data"].toString())
+            songFromData["_display_name_wo_ext"] = file.nameWithoutExtension
+            //Adding only the extension
+            songFromData["file_extension"] = file.extension
+            //Adding parent file (All the path before file)
+            songFromData["file_parent"] = file.parent.orEmpty()
+
             songsFromList.add(songFromData)
         }
         cursor?.close()
@@ -100,21 +109,21 @@ class OnAudiosFromQuery : ViewModel() {
     }
 
     private fun querySongsFromPlaylist(result: MethodChannel.Result, call: MethodCall) {
-        val playlistName = call.argument<String>("where")!!
+        val playlistInfo = call.argument<Any>("where")!!
 
         //Check if Playlist exists based in Id
-        if (!checkPlaylistName(playlistName)) result.success(false)
-        else {
-            pUri = MediaStore.Audio.Playlists.Members.getContentUri("external", pId.toLong())
+        val checkedPl = checkPlaylistName(playlistInfo.toString())
+        if (!checkedPl) pId = playlistInfo.toString().toInt()
 
-            //Query everything in the Background it's necessary for better performance
-            viewModelScope.launch {
-                //Start querying
-                val resultSongsFromPl = loadSongsFromPlaylist()
+        pUri = MediaStore.Audio.Playlists.Members.getContentUri("external", pId.toLong())
 
-                //Flutter UI will start, but, information still loading
-                result.success(resultSongsFromPl)
-            }
+        //Query everything in the Background it's necessary for better performance
+        viewModelScope.launch {
+            //Start querying
+            val resultSongsFromPl = loadSongsFromPlaylist()
+
+            //Flutter UI will start, but, information still loading
+            result.success(resultSongsFromPl)
         }
     }
 
