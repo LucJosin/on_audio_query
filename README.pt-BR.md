@@ -62,6 +62,7 @@ Se você quer usar a solicitação de permissões interna, irá precisar adicion
 * Pega todas as playlists e áudios específicos das playlists.
 * Pega todos os gêneros e áudios específicos dos gêneros.
 * Pega todos os métodos de query com keys específicas [Search/Busca].
+* Pega todos as pastas e áudios específicos das pastas.
 * Criar/Deletar/Renomear playlists.
 * Adicionar/Remover/Mover específicos áudios para playlists.
 * Específicos tipos de classificação para todos os métodos.
@@ -82,16 +83,18 @@ Todos os tipos de métodos nesse plugin:
 
 |  Métodos  |   Parâmetros   |   Return   |
 |--------------|-----------------|-----------------|
-| [`querySongs`](#querysongs) | `(SortType, OrderType, UriType,RequestPermission)` | `List<SongModel>` | <br>
+| [`querySongs`](#querysongs) | `(SortType, OrderType, UriType, RequestPermission)` | `List<SongModel>` | <br>
 | [`queryAudio`]() | `(SortType, OrderType, UriType, RequestPermission)`. | `List<SongModel>` | <br>
 | [`queryAlbums`](#queryalbums) | `(SortType, OrderType, UriType, RequestPermission)` | `List<AlbumModel>` | <br>
 | [`queryArtists`](#queryartists) | `(SortType, OrderType, UriType, RequestPermission)` | `List<ArtistModel>` | <br>
 | [`queryPlaylists`](#queryplaylists) | `(SortType, OrderType, UriType, RequestPermission)` | `List<PlaylistModel>` | <br>
 | [`queryGenres`](#querygenres) | `(SortType, OrderType, UriType, RequestPermission)` | `List<GenreModel>` | <br>
 | [`queryAudiosFrom`]() | `(Type, Where, RequestPermission)` | `List<SongModel>` | <br>
-| [`queryAudiosOnly`]() | `(Type, Where, isOnly, RequestPermission)` | `List<SongModel>` | <br>
-| [`queryWithFilters`]() | `(ArgsVal, WithFiltersType, Args, RequestPermission)` | `List<dynamic>` | <br>
-| [`queryArtworks`]() | `(Id, Type, Format, Size, RequestPermission)` | `Uint8List` | <br>
+| [`queryAudiosOnly`](#queryAudiosOnly) | `(Type, Where, AudiosOnlyType, RequestPermission)` | `List<SongModel>` | <br>
+| [`queryWithFilters`](#queryWithFilters) | `(ArgsVal, WithFiltersType, Args, RequestPermission)` | `List<dynamic>` | <br>
+| [`queryArtworks`](#queryArtworks) | `(Id, Type, Format, Size, RequestPermission)` | `Uint8List` | <br>
+| [`queryFromFolder`]() | `(Path, SortType, OrderType, UriType, RequestPermission)`. | `List<SongModel>` | <br>
+| [`queryAllPath`]() |  | `List<String>` | <br>
 | [`createPlaylist`]() | `(PlaylistName, RequestPermission)` | `bool` | <br>
 | [`removePlaylist`]() | `(PlaylistId, RequestPermission)` | `bool` | <br>
 | [`addToPlaylist`]() | **[NT-BG]**`(PlaylistId, AudioId, RequestPermission)` | `bool` | <br>
