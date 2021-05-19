@@ -39,7 +39,7 @@ NOTE: Feel free to help with readme translations
 Add the following code to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^1.0.7
+  on_audio_query: ^1.0.8
 ```
 
 #### Request Permission:
@@ -92,7 +92,7 @@ All types of methods on this plugin:
 | [`queryAudiosFrom`]() | `(Type, Where, RequestPermission)` | `List<SongModel>` | <br>
 | [`queryAudiosOnly`](#queryAudiosOnly) | `(Type, Where, AudiosOnlyType, RequestPermission)` | `List<SongModel>` | <br>
 | [`queryWithFilters`](#queryWithFilters) | `(ArgsVal, WithFiltersType, Args, RequestPermission)` | `List<dynamic>` | <br>
-| [`queryArtworks`](#queryArtworks) | `(Id, Type, Format, Size, RequestPermission)` | `Uint8List` | <br>
+| [`queryArtworks`](#queryArtworks) | `(Id, Type, Format, Size, RequestPermission)` | `Uint8List?` | <br>
 | [`queryFromFolder`]() | `(Path, SortType, OrderType, UriType, RequestPermission)`. | `List<SongModel>` | <br>
 | [`queryAllPath`]() |  | `List<String>` | <br>
 | [`createPlaylist`]() | `(PlaylistName, RequestPermission)` | `bool` | <br>
@@ -156,7 +156,7 @@ All types of methods on this plugin:
 ```
 
 #### queryArtworks
-⚠ **Note: Only in Android >= Q/10**
+⚠ **Note: Only works in Android >= Q/10**
 ```dart
   someName() async {
     //DEFAULT: ArtworkFormat.JPEG, 200 and false
@@ -175,6 +175,8 @@ All types of methods on this plugin:
     return Icon(Icons.image_not_supported)
   }
 ```
+
+**See more in [QueryArtworkWidget](https://pub.dev/documentation/on_audio_query/latest/on_audio_query/QueryArtworkWidget-class.html)**
 
 #### queryAudiosOnly
 ⚠ **Note: Some Types only exist in Android >= Q/10, if you try call them Android below Q/10 will return all types.** <br>

@@ -39,7 +39,7 @@ NOTE: Fique à vontade para ajudar nas traduções
 Adicione o seguinte codigo para seu `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^1.0.6
+  on_audio_query: ^1.0.8
 ```
 
 #### Solicitar Permissões:
@@ -92,7 +92,7 @@ Todos os tipos de métodos nesse plugin:
 | [`queryAudiosFrom`]() | `(Type, Where, RequestPermission)` | `List<SongModel>` | <br>
 | [`queryAudiosOnly`](#queryAudiosOnly) | `(Type, Where, AudiosOnlyType, RequestPermission)` | `List<SongModel>` | <br>
 | [`queryWithFilters`](#queryWithFilters) | `(ArgsVal, WithFiltersType, Args, RequestPermission)` | `List<dynamic>` | <br>
-| [`queryArtworks`](#queryArtworks) | `(Id, Type, Format, Size, RequestPermission)` | `Uint8List` | <br>
+| [`queryArtworks`](#queryArtworks) | `(Id, Type, Format, Size, RequestPermission)` | `Uint8List?` | <br>
 | [`queryFromFolder`]() | `(Path, SortType, OrderType, UriType, RequestPermission)`. | `List<SongModel>` | <br>
 | [`queryAllPath`]() |  | `List<String>` | <br>
 | [`createPlaylist`]() | `(PlaylistName, RequestPermission)` | `bool` | <br>
@@ -176,6 +176,8 @@ Todos os tipos de métodos nesse plugin:
     return Icon(Icons.image_not_supported)
   }
 ```
+
+**Veja mais em [QueryArtworkWidget](https://pub.dev/documentation/on_audio_query/latest/on_audio_query/QueryArtworkWidget-class.html)**
 
 #### queryAudiosOnly
 ⚠ **Note: Algumas classificações apenas existem no Android >= Q/10, Se você tentar chamar com Android abaixo de Q/10 retornará todos os tipos.** <br>
