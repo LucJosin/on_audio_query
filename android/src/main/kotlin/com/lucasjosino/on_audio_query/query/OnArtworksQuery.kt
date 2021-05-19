@@ -41,17 +41,17 @@ class OnArtworksQuery : ViewModel() {
         //Query everything in the Background it's necessary for better performance
         viewModelScope.launch {
             //Start querying
-            val resultArtList: ByteArray = loadArt()
+            val resultArtList: ByteArray? = loadArt()
 
             //Flutter UI will start, but, information still loading
-            if (resultArtList.isNotEmpty()) result.success(resultArtList)
+            result.success(resultArtList)
         }
     }
 
     //Loading in Background
     @Suppress("BlockingMethodInNonBlockingContext")
-    private suspend fun loadArt() : ByteArray = withContext(Dispatchers.IO) {
-        var artData = ByteArray(0)
+    private suspend fun loadArt() : ByteArray? = withContext(Dispatchers.IO) {
+        var artData: ByteArray? = null
         if (Build.VERSION.SDK_INT >= 29) {
             val query = ContentUris.withAppendedId(uri, id)
             try {

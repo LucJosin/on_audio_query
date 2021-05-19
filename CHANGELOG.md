@@ -1,3 +1,20 @@
+## [1.0.8] - [05.19.2021]
+### Features
+#### Dart
+- Added `[artworkClipBehavior]`, `[keepOldArtwork]`, `[repeat]` and `[scale]` to `[QueryArtworkWidget]`.
+- Added comments to `[QueryArtworkWidget]`.
+
+### Fixes
+#### Kotlin
+- Now `[queryArtworks]` will return null. - [Fixed #6](https://github.com/LucasPJS/on_audio_query/issues/6)
+
+### Documentation
+- Updated `README` documentation.
+
+### ⚠ Important Changes
+#### Dart
+- Now `[queryArtworks]` return `[Uint8List?]`.
+
 ## [1.0.7] - [05.18.2021]
 ### Features
 #### Dart/Kotlin
@@ -28,7 +45,7 @@
 ## [1.0.6] - [04.08.2021]
 ### Fixes
 #### Kotlin
-- Fixed `[queryArtwork]` returning null album image in Android 11.  - [Fixed #1](https://github.com/LucasPJS/on_audio_query/issues/1)
+- Fixed `[queryArtwork]` returning null album image in Android 11. - [Fixed #1](https://github.com/LucasPJS/on_audio_query/issues/1)
 
 ### Documentation
 - Updated `README` documentation.

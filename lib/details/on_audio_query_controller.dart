@@ -345,9 +345,9 @@ class OnAudioQuery {
   /// * If [format] is null, will be set to [JPEG] for better performance.
   /// * If [size] is null, will be set to [200] for better performance
   /// * We need this method separated from [querySongs/queryAudios] because return [Uint8List] and using inside query causes a slow performance.
-  Future<Uint8List> queryArtworks(int id, ArtworkType type,
+  Future<Uint8List?> queryArtworks(int id, ArtworkType type,
       [ArtworkFormat? format, int? size, bool? requestPermission]) async {
-    final Uint8List finalArtworks =
+    final Uint8List? finalArtworks =
         await _channel.invokeMethod("queryArtworks", {
       "requestPermission": _checkPermission(requestPermission),
       "type": type.index,
