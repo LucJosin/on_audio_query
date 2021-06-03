@@ -287,7 +287,7 @@ class OnAudioQuery {
   /// Parameters:
   ///
   /// * [requestPermission] is used for request or no Android STORAGE PERMISSION.
-  /// * [by] is used to define a value that will be used to find the music.
+  /// * [songsByType] is used to define a value that will be used to find the music.
   /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
   /// * [values] is used to define the value to find every music.
   ///
