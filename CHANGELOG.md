@@ -1,3 +1,32 @@
+## [1.1.0] - [06.03.2021]
+### Features
+#### Dart/Kotlin
+- Added `[queryDeviceInfo]`.
+- Added `[dateModified]` to `[SongModel]`.
+- Added `[querySongsBy]` and `[SongsByType]`.
+
+### Fixes
+#### Kotlin
+- Fixed incompatibility with `[permission_handler]`. - [Fixed #3](https://github.com/LucasPJS/on_audio_query/issues/3) - Thanks [@mvanbeusekom](https://github.com/mvanbeusekom)
+
+#### Dart
+- Fixed wrong name. From `[dataAdded]` to `[dateAdded]`.
+
+### Documentation
+- Updated `README` documentation.
+- Updated `[OnAudioQueryExample]` to add new `[queryDeviceInfo]` and `[QueryArtworkWidget]` methods.
+
+### Changes
+#### Kotlin
+- Updated some `[Kotlin]` dependencies.
+- Changed some `[Kotlin]` methods.
+
+### ⚠ Important Changes
+#### Dart
+- Now `[getDeviceSDK]`, `[getDeviceRelease]` and `[getDeviceCode]` are part of `[queryDeviceInfo]`.
+- Now `[QueryArtworkWidget]` support Android above and below 29/Q/10.
+- Now `[size]`, `[albumId]`, `[artistId]`, `[dataAdded]`, `[dataModified]`, `[duration]`, `[track]` and `[year]` from `[SongModel]` will return `[int]`.
+
 ## [1.0.8] - [05.19.2021]
 ### Features
 #### Dart

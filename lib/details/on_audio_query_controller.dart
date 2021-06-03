@@ -280,6 +280,38 @@ class OnAudioQuery {
     return resultSongs.map((songInfo) => SongModel(songInfo)).toList();
   }
 
+  /// Used to return Songs Info based in [SongModel].
+  ///
+  /// This method will search every single music based in some value from [SongsByType].
+  ///
+  /// Parameters:
+  ///
+  /// * [requestPermission] is used for request or no Android STORAGE PERMISSION.
+  /// * [by] is used to define a value that will be used to find the music.
+  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
+  /// * [values] is used to define the value to find every music.
+  ///
+  /// Important:
+  ///
+  /// * If [requestPermission] is null, will be set to [false].
+  /// * If [uriType] is null, will be set to [EXTERNAL].
+  Future<List<SongModel>> querySongsBy(
+      SongsByType songsByType, List<Object> values,
+      [UriType? uriType, bool? requestPermission]) async {
+    List<String> valuesConverted = [];
+    values.forEach((element) {
+      valuesConverted.add(element.toString());
+    });
+    final List<dynamic> resultSongs =
+        await _channel.invokeMethod("querySongsBy", {
+      "requestPermission": _checkPermission(requestPermission),
+      "by": songsByType.index,
+      "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
+      "values": valuesConverted
+    });
+    return resultSongs.map((songInfo) => SongModel(songInfo)).toList();
+  }
+
   /// Used to return Songs Info based in Something. Works like a "Search".
   ///
   /// Parameters:
@@ -311,7 +343,7 @@ class OnAudioQuery {
   /// * If [args] is null, will be set to [Title] or [Name].
   /// * If Android >= Q/10 [artwork] will return null, in this case, it's necessary use [queryArtworks].
   Future<List<dynamic>> queryWithFilters(
-      String argsVal, WithFiltersType withType, dynamic? args,
+      String argsVal, WithFiltersType withType, dynamic args,
       [bool? requestPermission]) async {
     final List<dynamic> resultFilters =
         await _channel.invokeMethod("queryWithFilters", {
@@ -557,60 +589,17 @@ class OnAudioQuery {
 
   //Device Information
 
-  /// Used to return Device SDK Version
+  /// Used to return Device Info
   ///
-  /// Usage:
+  /// Will return:
   ///
-  /// * Permissions and Storage in Android are very complicated, get device info may help.
-  ///
-  /// Important:
-  ///
-  /// * This method will always return a int.
-  Future<int> getDeviceSDK() async {
-    final int resultSDK = await _channel.invokeMethod("getDeviceSDK");
-    return resultSDK;
+  /// * Device SDK.
+  /// * Device Release.
+  /// * Device Code.
+  /// * Device Type.
+  Future<DeviceModel> queryDeviceInfo() async {
+    final List<dynamic> deviceResult =
+        await _channel.invokeMethod("queryDeviceInfo");
+    return deviceResult.map((deviceInfo) => DeviceModel(deviceInfo)).first;
   }
-
-  /// Used to return Device Version
-  ///
-  /// Usage:
-  ///
-  /// * Permissions and Storage in Android are very complicated, get device info may help.
-  ///
-  /// Important:
-  ///
-  /// * This method will always return a String.
-  Future<String> getDeviceRelease() async {
-    final String resultRelease =
-        await _channel.invokeMethod("getDeviceRelease");
-    return resultRelease;
-  }
-
-  /// Used to return Device Version [Alphabetical]
-  ///
-  /// Usage:
-  ///
-  /// * Permissions and Storage in Android are very complicated, get device info may help.
-  ///
-  /// Important:
-  ///
-  /// * This method will always return a String.
-  Future<String> getDeviceCode() async {
-    final String resultCode = await _channel.invokeMethod("getDeviceCode");
-    return resultCode;
-  }
-
-  // Folders
-
-  // /// Used to return [Audio] folder location based in [Data].
-  // Future<String> getCurrentFolder(String data) async {
-  //   final String resultFolder = await _channel.invokeMethod("getCurrentFolder", {"data": data});
-  //   return resultFolder;
-  // }
-  //
-  // /// Used to return next [Audio] folder location based in [Data].
-  // Future<String> getNextFolder(String data) async {
-  //   final String resultNextFolder = await _channel.invokeMethod("getNextFolder", {"data": data});
-  //   return resultNextFolder;
-  // }
 }

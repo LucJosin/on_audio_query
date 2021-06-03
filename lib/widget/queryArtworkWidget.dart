@@ -2,7 +2,8 @@ part of on_audio_query;
 
 /// Create a custom image Widget.
 ///
-/// Image used in this Widget it's returned from [queryArtworks] using [id] and [type] values.
+/// If you are using Android >= 29 the image returned it's from [queryArtworks]
+/// and if Android is below 29 the image it's returned from [artwork].
 class QueryArtworkWidget extends StatelessWidget {
   /// Used to find and get image.
   ///
@@ -13,6 +14,12 @@ class QueryArtworkWidget extends StatelessWidget {
   ///
   /// Opts: [AUDIO] and [ALBUM].
   final ArtworkType type;
+
+  ///
+  final String? artwork;
+
+  ///
+  final DeviceModel deviceInfo;
 
   /// Used to define artwork [format].
   ///
@@ -95,6 +102,20 @@ class QueryArtworkWidget extends StatelessWidget {
   /// * If [artworkRepeat] is null, will be set to [false].
   final ImageRepeat? artworkRepeat;
 
+  /// Used to define artwork [color].
+  ///
+  /// Important:
+  ///
+  /// * [artworkColor] default value is [null].
+  final Color? artworkColor;
+
+  /// Used to define artwork [blend].
+  ///
+  /// Important:
+  ///
+  /// * [artworkBlendMode] default value is [null].
+  final BlendMode? artworkBlendMode;
+
   /// Used to define if artwork should [keep] old art even when [Flutter State] change.
   ///
   /// ## Flutter Docs:
@@ -131,30 +152,36 @@ class QueryArtworkWidget extends StatelessWidget {
 
   /// Create a custom image Widget.
   ///
-  /// Image used in this Widget it's returned from [queryArtworks] using [id] and [type] values.
+  /// If you are using Android >= 29 the image returned it's from [queryArtworks]
+  /// and if Android is below 29 the image it's returned from [artwork].
   const QueryArtworkWidget(
       {Key? key,
-      required this.id,
-      required this.type,
-      this.format,
-      this.size,
-      this.requestPermission,
-      this.artworkQuality,
-      this.artworkBorder,
-      this.artworkWidth,
-      this.artworkHeight,
-      this.artworkFit,
-      this.artworkClipBehavior,
-      this.artworkScale,
-      this.artworkRepeat,
-      this.keepOldArtwork,
-      // this.cacheArtworkHeight,
-      // this.cacheArtworkWidth,
-      this.nullArtworkWidget});
+        required this.id,
+        required this.type,
+        required this.artwork,
+        required this.deviceInfo,
+        this.format,
+        this.size,
+        this.requestPermission,
+        this.artworkQuality,
+        this.artworkBorder,
+        this.artworkWidth,
+        this.artworkHeight,
+        this.artworkFit,
+        this.artworkClipBehavior,
+        this.artworkScale,
+        this.artworkRepeat,
+        this.artworkColor,
+        this.artworkBlendMode,
+        this.keepOldArtwork,
+        // this.cacheArtworkHeight,
+        // this.cacheArtworkWidth,
+        this.nullArtworkWidget});
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
+    return deviceInfo.sdk >= 29
+        ? FutureBuilder(
       future: OnAudioQuery().queryArtworks(
           id,
           type,
@@ -176,6 +203,8 @@ class QueryArtworkWidget extends StatelessWidget {
               width: artworkWidth ?? 50,
               height: artworkHeight ?? 50,
               fit: artworkFit ?? BoxFit.cover,
+              color: artworkColor,
+              colorBlendMode: artworkBlendMode,
               filterQuality: artworkQuality ?? FilterQuality.low,
             ),
           );
@@ -186,6 +215,28 @@ class QueryArtworkWidget extends StatelessWidget {
               size: 50,
             );
       },
-    );
+    )
+        : artwork != null
+        ? ClipRRect(
+      borderRadius: artworkBorder ?? BorderRadius.circular(50),
+      clipBehavior: artworkClipBehavior ?? Clip.antiAlias,
+      child: Image(
+        image: FileImage(
+          File(artwork!),
+          scale: artworkScale ?? 1.0,
+        ),
+        gaplessPlayback: keepOldArtwork ?? false,
+        repeat: artworkRepeat ?? ImageRepeat.noRepeat,
+        width: artworkWidth ?? 50,
+        height: artworkHeight ?? 50,
+        fit: artworkFit ?? BoxFit.cover,
+        filterQuality: artworkQuality ?? FilterQuality.low,
+      ),
+    )
+        : nullArtworkWidget ??
+        Icon(
+          Icons.image_not_supported,
+          size: 50,
+        );
   }
 }

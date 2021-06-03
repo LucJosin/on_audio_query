@@ -7,14 +7,15 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lucasjosino.on_audio_query.extras.loadArtwork
+import com.lucasjosino.on_audio_query.utils.loadArtwork
 import com.lucasjosino.on_audio_query.types.checkAudiosFromType
+import com.lucasjosino.on_audio_query.types.songProjection
+import com.lucasjosino.on_audio_query.utils.getExtraInfo
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 
 /** OnAudiosFromQuery */
 class OnAudiosFromQuery : ViewModel() {
@@ -28,34 +29,6 @@ class OnAudiosFromQuery : ViewModel() {
     private lateinit var resolver: ContentResolver
     @SuppressLint("StaticFieldLeak")
     private lateinit var context: Context
-
-    //Query projection
-    @SuppressLint("InlinedApi")
-    private val projection = arrayOf(
-            MediaStore.Audio.Media.DATA, //
-            MediaStore.Audio.Media.DISPLAY_NAME,
-            MediaStore.Audio.Media._ID,
-            MediaStore.Audio.Media.SIZE,
-            MediaStore.Audio.Media.ALBUM,
-            MediaStore.Audio.Media.ALBUM_ARTIST,
-            MediaStore.Audio.Media.ALBUM_ID,
-//            MediaStore.Audio.Media.ALBUM_KEY,
-            MediaStore.Audio.Media.ARTIST,
-            MediaStore.Audio.Media.ARTIST_ID,
-//            MediaStore.Audio.Media.ARTIST_KEY,
-            MediaStore.Audio.Media.BOOKMARK,
-            MediaStore.Audio.Media.COMPOSER,
-            MediaStore.Audio.Media.DATE_ADDED,
-            MediaStore.Audio.Media.DURATION,
-            MediaStore.Audio.Media.TITLE,
-            MediaStore.Audio.Media.TRACK,
-            MediaStore.Audio.Media.YEAR,
-            MediaStore.Audio.Media.IS_ALARM,
-            MediaStore.Audio.Media.IS_MUSIC,
-            MediaStore.Audio.Media.IS_NOTIFICATION,
-            MediaStore.Audio.Media.IS_PODCAST,
-            MediaStore.Audio.Media.IS_RINGTONE
-    )
 
     //
     fun querySongsFrom(context: Context, result: MethodChannel.Result, call: MethodCall) {
@@ -80,7 +53,7 @@ class OnAudiosFromQuery : ViewModel() {
 
     //Loading in Background
     private suspend fun loadSongsFrom() : ArrayList<MutableMap<String, Any>> = withContext(Dispatchers.IO) {
-        val cursor = resolver.query(uri, projection, where, arrayOf(whereVal), null)
+        val cursor = resolver.query(uri, songProjection, where, arrayOf(whereVal), null)
         val songsFromList: ArrayList<MutableMap<String, Any>> = ArrayList()
         while (cursor != null && cursor.moveToNext()) {
             val songFromData: MutableMap<String, Any> = HashMap()
@@ -94,13 +67,9 @@ class OnAudiosFromQuery : ViewModel() {
             val art = loadArtwork(context, songFromData["album"].toString())
             if (art.isNotEmpty()) songFromData["artwork"] = art
 
-            //Getting displayName without [Extension].
-            val file = File(songFromData["_data"].toString())
-            songFromData["_display_name_wo_ext"] = file.nameWithoutExtension
-            //Adding only the extension
-            songFromData["file_extension"] = file.extension
-            //Adding parent file (All the path before file)
-            songFromData["file_parent"] = file.parent.orEmpty()
+            //Extra information from song
+            val extraInfo = getExtraInfo(songFromData["_data"].toString())
+            songFromData.putAll(extraInfo)
 
             songsFromList.add(songFromData)
         }
@@ -129,7 +98,7 @@ class OnAudiosFromQuery : ViewModel() {
 
     private suspend fun loadSongsFromPlaylist() : ArrayList<MutableMap<String, Any>> = withContext(Dispatchers.IO) {
         val songsFromPlaylist: ArrayList<MutableMap<String, Any>> = ArrayList()
-        val cursor = resolver.query(pUri, projection, null, null, null)
+        val cursor = resolver.query(pUri, songProjection, null, null, null)
         while (cursor != null && cursor.moveToNext()) {
             val songFromPlData: MutableMap<String, Any> = HashMap()
             for (playlistMedia in cursor.columnNames) {
@@ -137,6 +106,11 @@ class OnAudiosFromQuery : ViewModel() {
                     songFromPlData[playlistMedia] = cursor.getString(cursor.getColumnIndex(playlistMedia))
                 } else songFromPlData[playlistMedia] = ""
             }
+
+            //Extra information from song
+            val extraInfo = getExtraInfo(songFromPlData["_data"].toString())
+            songFromPlData.putAll(extraInfo)
+
             songsFromPlaylist.add(songFromPlData)
         }
         cursor?.close()

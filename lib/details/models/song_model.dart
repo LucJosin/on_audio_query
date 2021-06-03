@@ -20,29 +20,19 @@ class SongModel {
   String get displayNameWOExt => _info["_display_name_wo_ext"];
 
   /// Return song [size]
-  String get size => _info["_size"];
+  int get size => int.parse(_info["_size"]);
 
   /// Return song [album]
   String get album => _info["album"];
 
   /// Return song [albumId]
-  String get albumId => _info["album_id"];
-
-  // /// Return song [albumKey]
-  // ///
-  // /// Some times [albumKey] is returned null
-  // String get albumKey => _info["album_key"];
+  int get albumId => int.parse(_info["album_id"]);
 
   /// Return song [artist]
   String get artist => _info["artist"];
 
   /// Return song [artistId]
-  String? get artistId => _info["artist_id"];
-
-  // /// Return song [artistKey]
-  // ///
-  // /// Some times [artistKey] is returned null
-  // String get artistKey => _info["artist_key"];
+  int get artistId => int.parse(_info["artist_id"]);
 
   /// Return song [bookmark]
   ///
@@ -54,26 +44,31 @@ class SongModel {
   /// Some times [composer] is returned null
   String? get composer => _info["composer"];
 
-  /// Return song [dataAdded]
+  /// Return song [dateAdded]
   ///
-  /// Some times [dataAdded] is returned null
-  String? get dataAdded => _info["date_added"];
+  /// Some times [dateAdded] is returned null
+  int get dateAdded => int.parse(_info["date_added"]);
+
+  /// Return song [dateModified]
+  ///
+  /// Some times [dateModified] is returned null
+  int? get dateModified => int.parse(_info["date_modified"]);
 
   /// Return song [duration]
   ///
   /// Will always return time in [milliseconds]
-  String get duration => _info["duration"];
+  int get duration => int.parse(_info["duration"]);
 
   /// Return song [title]
   String get title => _info["title"];
 
   /// Return song [track]
-  String? get track => _info["track"];
+  int? get track => int.parse(_info["track"]);
 
   /// Return song [year]
   ///
   /// Some times [year] is returned null
-  String? get year => _info["year"];
+  int? get year => int.parse(_info["year"]);
 
   // /// Return song [uri]
   // String get uri;

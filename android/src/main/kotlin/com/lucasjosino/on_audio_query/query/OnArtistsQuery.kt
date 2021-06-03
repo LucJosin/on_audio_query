@@ -27,7 +27,6 @@ class OnArtistsQuery : ViewModel() {
     private val projection = arrayOf(
             MediaStore.Audio.Artists._ID,
             MediaStore.Audio.Artists.ARTIST,
-//            MediaStore.Audio.Artists.ARTIST_KEY,
             MediaStore.Audio.Artists.NUMBER_OF_ALBUMS,
             MediaStore.Audio.Artists.NUMBER_OF_TRACKS
     )

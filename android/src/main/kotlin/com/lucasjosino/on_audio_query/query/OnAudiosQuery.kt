@@ -4,12 +4,14 @@ import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
-import android.provider.MediaStore
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lucasjosino.on_audio_query.extras.loadArtwork
+import com.lucasjosino.on_audio_query.utils.loadArtwork
 import com.lucasjosino.on_audio_query.types.checkAudiosUriType
+import com.lucasjosino.on_audio_query.types.songProjection
 import com.lucasjosino.on_audio_query.types.sorttypes.checkSongSortType
+import com.lucasjosino.on_audio_query.utils.getExtraInfo
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
@@ -29,34 +31,6 @@ class OnAudiosQuery : ViewModel() {
     @SuppressLint("StaticFieldLeak")
     private lateinit var context: Context
 
-    //Query projection
-    @SuppressLint("InlinedApi")
-    private val projection = arrayOf(
-            MediaStore.Audio.Media.DATA, //
-            MediaStore.Audio.Media.DISPLAY_NAME,
-            MediaStore.Audio.Media._ID,
-            MediaStore.Audio.Media.SIZE,
-            MediaStore.Audio.Media.ALBUM,
-            MediaStore.Audio.Media.ALBUM_ARTIST,
-            MediaStore.Audio.Media.ALBUM_ID,
-//            MediaStore.Audio.Media.ALBUM_KEY,
-            MediaStore.Audio.Media.ARTIST,
-            MediaStore.Audio.Media.ARTIST_ID,
-//            MediaStore.Audio.Media.ARTIST_KEY,
-            MediaStore.Audio.Media.BOOKMARK,
-            MediaStore.Audio.Media.COMPOSER,
-            MediaStore.Audio.Media.DATE_ADDED,
-            MediaStore.Audio.Media.DURATION,
-            MediaStore.Audio.Media.TITLE,
-            MediaStore.Audio.Media.TRACK,
-            MediaStore.Audio.Media.YEAR,
-            MediaStore.Audio.Media.IS_ALARM,
-            MediaStore.Audio.Media.IS_MUSIC, // 17
-            MediaStore.Audio.Media.IS_NOTIFICATION,
-            MediaStore.Audio.Media.IS_PODCAST,
-            MediaStore.Audio.Media.IS_RINGTONE
-    )
-
     //querySongs and queryAudios together
     fun querySongs(context: Context, result: MethodChannel.Result, call: MethodCall, onlyMusic: Boolean) {
         this.context = context ; this.onlyMusic = onlyMusic ; resolver = context.contentResolver
@@ -65,7 +39,7 @@ class OnAudiosQuery : ViewModel() {
         sortType = checkSongSortType(call.argument<Int>("sortType")!!, call.argument<Int>("orderType")!!)
         uri = checkAudiosUriType(call.argument<Int>("uri")!!)
         if (call.argument<String>("path") != null)
-            selection = projection[0] + " like " + "'%" + call.argument<String>("path") + "/%'"
+            selection = songProjection[0] + " like " + "'%" + call.argument<String>("path") + "/%'"
 
         //Query everything in the Background it's necessary for better performance
         viewModelScope.launch {
@@ -79,7 +53,7 @@ class OnAudiosQuery : ViewModel() {
 
     //Loading in Background
     private suspend fun loadSongs() : ArrayList<MutableMap<String, Any>> = withContext(Dispatchers.IO) {
-        val cursor = resolver.query(uri, projection, selection, null, sortType)
+        val cursor = resolver.query(uri, songProjection, selection, null, sortType)
         val songList: ArrayList<MutableMap<String, Any>> = ArrayList()
         while (cursor != null && cursor.moveToNext()) {
             val songData: MutableMap<String, Any> = HashMap()
@@ -93,13 +67,9 @@ class OnAudiosQuery : ViewModel() {
             val art = loadArtwork(context, songData["album"].toString())
             if (art.isNotEmpty()) songData["artwork"] = art
 
-            //Getting displayName without [Extension]. GitHub request - https://github.com/LucasPJS/on_audio_query/issues/5
-            val file = File(songData["_data"].toString())
-            songData["_display_name_wo_ext"] = file.nameWithoutExtension
-            //Adding only the extension
-            songData["file_extension"] = file.extension
-            //Adding parent file (All the path before file)
-            songData["file_parent"] = file.parent.orEmpty()
+            //Extra information from song
+            val extraInfo = getExtraInfo(songData["_data"].toString())
+            songData.putAll(extraInfo)
 
             //if "queryAudios" query everything, else query only musics
             //TODO("Add more filters for "onlyMusic")
@@ -131,13 +101,12 @@ class OnAudiosQuery : ViewModel() {
 // album,
 // album_artist,
 // album_id
-// album_key,
 // artist,
 // artist_id,
-// artist_key,
 // bookmark,
 // composer,
 // date_added,
+// date_modified,
 // duration,
 // title,
 // track,

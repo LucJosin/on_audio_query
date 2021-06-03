@@ -1,7 +1,7 @@
 package com.lucasjosino.on_audio_query.controller
 
 import android.content.Context
-import com.lucasjosino.on_audio_query.extras.OnPlaylistsController
+import com.lucasjosino.on_audio_query.utils.OnPlaylistsController
 import com.lucasjosino.on_audio_query.query.*
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -26,6 +26,7 @@ class OnAudioController(
             "queryArtworks" -> OnArtworksQuery().queryArtworks(context, result, call)
             "queryAudiosFrom" -> OnAudiosFromQuery().querySongsFrom(context, result, call)
             "queryAudiosOnly" -> OnAudiosOnlyQuery().queryAudiosOnly(context, result, call)
+            "querySongsBy" -> OnAudiosByQuery().querySongsBy(context, result, call)
             "queryWithFilters" -> OnWithFiltersQuery().queryWithFilters(context, result, call)
             "queryAllPath" -> OnAllPathQuery().queryAllPath(context, result)
             //Playlists methods

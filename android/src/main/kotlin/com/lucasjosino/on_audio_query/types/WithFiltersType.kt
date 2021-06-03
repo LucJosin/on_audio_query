@@ -68,7 +68,7 @@ fun checkGenresArgs(args: Int): String {
 
 //Query songs projection
 @SuppressLint("InlinedApi")
-private val songProjection = arrayOf(
+val songProjection = arrayOf(
         MediaStore.Audio.Media.DATA, //
         MediaStore.Audio.Media.DISPLAY_NAME,
         MediaStore.Audio.Media._ID,
@@ -81,6 +81,7 @@ private val songProjection = arrayOf(
         MediaStore.Audio.Media.BOOKMARK,
         MediaStore.Audio.Media.COMPOSER,
         MediaStore.Audio.Media.DATE_ADDED,
+        MediaStore.Audio.Media.DATE_MODIFIED,
         MediaStore.Audio.Media.DURATION,
         MediaStore.Audio.Media.TITLE,
         MediaStore.Audio.Media.TRACK,
