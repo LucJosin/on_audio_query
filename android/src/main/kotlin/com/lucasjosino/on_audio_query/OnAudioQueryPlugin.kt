@@ -149,17 +149,39 @@ class OnAudioQueryPlugin: FlutterPlugin, MethodCallHandler, ActivityAware,
   }
 
   override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>?, grantResults: IntArray?): Boolean {
+    // When `pResult` is not initialized the permission request did not originate from the
+    // on_audio_query plugin, so return `false` to indicate the on_audio_query plugin is not
+    // handling the request result and Android should continue executing other registered handlers.
+    if (!this::pResult.isInitialized) {
+      return false
+    }
+
+    // When the incoming request code doesn't match the request codes defined by the on_audio_query
+    // plugin return `false` to indicate the on_audio_query plugin is not handling the request
+    // result and Android should continue executing other registered handlers.
+    if (requestCode != onRequestCode && requestCode != onExternalRequestCode) {
+      return false
+    }
+
     val isPermissionGranted = if (grantResults != null) grantResults.isNotEmpty()
             && grantResults[0] == PackageManager.PERMISSION_GRANTED else false
+
     when (requestCode) {
-      onRequestCode -> if (isPermissionGranted) onAudioController.onAudioController()
-      else if (retryRequest) onRetryRequestPermission()
-      //
-      onExternalRequestCode -> if (isPermissionGranted) pResult.success(true)
-      else if (retryRequest) onRetryRequestPermission() else pResult.success(false)
-      //
-      else -> pResult.error(channelError, "RequestCode: [$requestCode] don't exist, probably my fault, open a issue in GitHub", null)
+      onRequestCode -> {
+        if (isPermissionGranted) onAudioController.onAudioController()
+        else if (retryRequest) onRetryRequestPermission()
+      }
+      onExternalRequestCode -> {
+        when {
+            isPermissionGranted -> pResult.success(true)
+            retryRequest -> onRetryRequestPermission()
+            else -> pResult.success(false)
+        }
+      }
     }
-    return false
+
+    // Return `true` here to indicate that the on_audio_query plugin handled the permission request
+    // result and Android should not continue executing other registered handlers.
+    return true;
   }
 }
