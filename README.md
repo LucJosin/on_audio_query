@@ -8,12 +8,14 @@
 
 `on_audio_query` is a [Flutter](https://flutter.dev/) Plugin used to query audios/songs 🎶 infos [title, artist, album, etc..] from device storage. <br>
 
-This Plugin only query songs from device, if you want edit these audios use: [on_audio_edit](https://github.com/LucasPJS/on_audio_edit)
-
 ## Help:
 
 **Any problem? [Issues](https://github.com/LucasPJS/on_audio_query/issues)** <br>
 **Any suggestion? [Pull request](https://github.com/LucasPJS/on_audio_query/pulls)**
+
+### Extensions:
+
+* [on_audio_edit](https://github.com/LucasPJS/on_audio_edit) - Used to edit audio metadata.
 
 ### Translations:
 
@@ -39,7 +41,7 @@ NOTE: Feel free to help with readme translations
 Add the following code to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^1.0.8
+  on_audio_query: ^1.1.0
 ```
 
 #### Request Permission:
@@ -91,6 +93,7 @@ All types of methods on this plugin:
 | [`queryGenres`](#querygenres) | `(SortType, OrderType, UriType, RequestPermission)` | `List<GenreModel>` | <br>
 | [`queryAudiosFrom`]() | `(Type, Where, RequestPermission)` | `List<SongModel>` | <br>
 | [`queryAudiosOnly`](#queryAudiosOnly) | `(Type, Where, AudiosOnlyType, RequestPermission)` | `List<SongModel>` | <br>
+| [`querySongsBy`]() | `(SongsByType, Values, UriType, RequestPermission)` | `List<SongModel>` | <br>
 | [`queryWithFilters`](#queryWithFilters) | `(ArgsVal, WithFiltersType, Args, RequestPermission)` | `List<dynamic>` | <br>
 | [`queryArtworks`](#queryArtworks) | `(Id, Type, Format, Size, RequestPermission)` | `Uint8List?` | <br>
 | [`queryFromFolder`]() | `(Path, SortType, OrderType, UriType, RequestPermission)`. | `List<SongModel>` | <br>
@@ -103,9 +106,7 @@ All types of methods on this plugin:
 | [`moveItemTo`]() | **[NT]**`(PlaylistId, From, To, RequestPermission)` | `bool` | <br>
 | [`permissionsRequest`]() | `(retryRequest)` | `bool` | <br>
 | [`permissionsStatus`]() |  | `bool` | <br>
-| [`getDeviceSDK`]() |  | `int` | <br>
-| [`getDeviceRelease`]() |  | `String` | <br>
-| [`getDeviceCode`]() |  | `String` | <br>
+| [`queryDeviceInfo`]() |  | `DeviceModel` | <br>
 
 **Note: Some query methods require the `SortType` and `RequestPermisson`, by default, will be set `DEFAULT` and `false`**
 **See all defaults sorttypes in [Examples](#examples)**
@@ -118,7 +119,7 @@ All types of methods on this plugin:
 #### querySongs
 ```dart
   someName() async {
-    //DEFAULT: SongSortType.TITLE, OrderType.ASC_OR_SMALLER and false
+    //DEFAULT: SongSortType.TITLE, OrderType.ASC_OR_SMALLER, UriType.EXTERNAL and false
     var something = await OnAudioQuery().querySongs();
   }
 ```
@@ -160,27 +161,16 @@ All types of methods on this plugin:
 ```dart
   someName() async {
     //DEFAULT: ArtworkFormat.JPEG, 200 and false
-    var something = await OnAudioQuery().queryArtworks(SongId, ArtworkType.AUDIO ...)
-  }
-
-  //Or you can use a basic and custom Widget
-  Widget someOtherName() async {
-    var version = await OnAudioQuery().getDeviceSDK();
-    if (version >= 29) {
-      return QueryArtworkWidget(
-        id: SongId, 
-        type: ArtworkType.AUDIO
-      );
-    }
-    return Icon(Icons.image_not_supported)
+    var something = await OnAudioQuery().queryArtworks(SongId, ArtworkType.AUDIO, ...)
   }
 ```
 
-**See more in [QueryArtworkWidget](https://pub.dev/documentation/on_audio_query/latest/on_audio_query/QueryArtworkWidget-class.html)**
+Or you can use a basic and custom Widget.
+**See example [QueryArtworkWidget](#queryartworkwidget)**
 
 #### queryAudiosOnly
-⚠ **Note: Some Types only exist in Android >= Q/10, if you try call them Android below Q/10 will return all types.** <br>
-⚠ **See more in [Documentation](https://pub.dev/documentation/on_audio_query/latest/on_audio_query/OnAudioQuery/queryAudiosOnly.html)**
+⚠ Note: Some Types only exist in Android >= Q/10, if you try call them Android below Q/10 will return all types. <br>
+⚠ See more in [Documentation](https://pub.dev/documentation/on_audio_query/latest/on_audio_query/OnAudioQuery/queryAudiosOnly.html)
 ```dart
   someName() async {
     //DEFAULT: SongSortType.TITLE, OrderType.ASC_OR_SMALLER and false
@@ -194,8 +184,8 @@ All types of methods on this plugin:
 ```
 
 #### queryWithFilters
-⚠ **Note: Args are defined with `[dynamic]` but will only work if you use correct Types.** <br>
-⚠ **See more in [Documentation](https://pub.dev/documentation/on_audio_query/latest/on_audio_query/on_audio_query-library.html) -> Enums** 
+⚠ Note: Args are defined with `[dynamic]` but will only work if you use correct Types. <br>
+⚠ See more in [Documentation](https://pub.dev/documentation/on_audio_query/latest/on_audio_query/on_audio_query-library.html) -> Enums
 ```dart
   someName() async {
     //DEFAULT: Args.TITLE and false
@@ -203,6 +193,22 @@ All types of methods on this plugin:
     var something = await OnAudioQuery().queryWithFilters("Sam Smith", WithFiltersType.ARTISTS);
   }
 ```
+
+#### QueryArtworkWidget
+Now `[QueryArtworkWidget]` support all Android versions.
+```dart
+  Widget someOtherName() async {
+    DeviceModel deviceInfo = await OnAudioQuery().queryDeviceInfo();
+    return QueryArtworkWidget(
+      id: SongId, 
+      type: ArtworkType.AUDIO,
+      artwork: songList[index].artwork,
+      deviceInfo: deviceModel,
+    );
+  }
+```
+
+**See more in [QueryArtworkWidget](https://pub.dev/documentation/on_audio_query/latest/on_audio_query/QueryArtworkWidget-class.html)**
 
 ## LICENSE:
 
