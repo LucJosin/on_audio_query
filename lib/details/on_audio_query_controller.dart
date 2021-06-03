@@ -569,7 +569,7 @@ class OnAudioQuery {
   /// Important:
   ///
   /// * This method will always return a bool.
-  /// * If return true [READ] and [WRITE] permissions is Granted, else [READ] and [WRITE] is Denied.
+  /// * If return true `[READ]` and `[WRITE]` permissions is Granted, else `[READ]` and `[WRITE]` is Denied.
   Future<bool> permissionsStatus() async {
     final bool resultStatus = await _channel.invokeMethod("permissionsStatus");
     return resultStatus;
@@ -580,7 +580,7 @@ class OnAudioQuery {
   /// Important:
   ///
   /// * This method will always return a bool.
-  /// * If return true [READ] and [WRITE] permissions is Granted, else [READ] and [WRITE] is Denied.
+  /// * If return true `[READ]` and `[WRITE]` permissions is Granted, else `[READ]` and `[WRITE]` is Denied.
   Future<bool> permissionsRequest() async {
     final bool resultRequest =
         await _channel.invokeMethod("permissionsRequest");
