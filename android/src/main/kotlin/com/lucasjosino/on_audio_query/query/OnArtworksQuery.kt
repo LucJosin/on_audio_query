@@ -6,6 +6,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
+import android.util.Log
 import android.util.Size
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -23,7 +24,7 @@ import kotlin.properties.Delegates
 class OnArtworksQuery : ViewModel() {
 
     //Main parameters
-    private var id: Long = 0
+    private var id: Number = 0
     private var size by Delegates.notNull<Int>()
     private lateinit var uri: Uri
     private lateinit var resolver: ContentResolver
@@ -34,7 +35,7 @@ class OnArtworksQuery : ViewModel() {
         resolver = context.contentResolver
 
         //Id, size, and uri
-        id = call.argument<Long>("id")!! ; size = call.argument<Int>("size")!!
+        id = call.argument<Number>("id")!! ; size = call.argument<Int>("size")!!
         format = checkArtworkFormat(call.argument<Int>("format")!!)
         uri = checkArtworkType(call.argument<Int>("type")!!)
 
@@ -53,7 +54,7 @@ class OnArtworksQuery : ViewModel() {
     private suspend fun loadArt() : ByteArray? = withContext(Dispatchers.IO) {
         var artData: ByteArray? = null
         if (Build.VERSION.SDK_INT >= 29) {
-            val query = ContentUris.withAppendedId(uri, id)
+            val query = ContentUris.withAppendedId(uri, id.toLong())
             try {
                 val bitmap = resolver.loadThumbnail(query, Size(size, size), null)
                 artData = convertToByteArray(bitmap)!!

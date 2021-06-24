@@ -2,6 +2,7 @@ package com.lucasjosino.on_audio_query.query
 
 import android.annotation.SuppressLint
 import android.content.ContentResolver
+import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
@@ -67,6 +68,10 @@ class OnAudiosOnlyQuery : ViewModel() {
             //Extra information from song
             val extraInfo = getExtraInfo(audiosData["_data"].toString())
             audiosData.putAll(extraInfo)
+
+            //
+            val uri = ContentUris.withAppendedId(uri, audiosData["_id"].toString().toLong())
+            audiosData["_uri"] = uri.toString()
 
             audiosOnlyList.add(audiosData)
         }

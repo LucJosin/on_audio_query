@@ -2,9 +2,9 @@ package com.lucasjosino.on_audio_query.query
 
 import android.annotation.SuppressLint
 import android.content.ContentResolver
+import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lucasjosino.on_audio_query.utils.loadArtwork
@@ -17,7 +17,6 @@ import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 
 /** OnAudiosQuery */
 class OnAudiosQuery : ViewModel() {
@@ -70,6 +69,10 @@ class OnAudiosQuery : ViewModel() {
             //Extra information from song
             val extraInfo = getExtraInfo(songData["_data"].toString())
             songData.putAll(extraInfo)
+
+            //
+            val uri = ContentUris.withAppendedId(uri, songData["_id"].toString().toLong())
+            songData["_uri"] = uri.toString()
 
             //if "queryAudios" query everything, else query only musics
             //TODO("Add more filters for "onlyMusic")

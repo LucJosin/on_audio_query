@@ -15,11 +15,16 @@ class QueryArtworkWidget extends StatelessWidget {
   /// Opts: [AUDIO] and [ALBUM].
   final ArtworkType type;
 
+  /// Used to define [artwork]
   ///
+  /// The [artwork] will only be available on Android below 10/Q
   final String? artwork;
 
-  ///
-  final DeviceModel deviceInfo;
+  /// Used to define which version of Android will be used.
+  final int deviceSDK;
+
+  ///Deprecated after [1.1.1].
+  final DeviceModel? deviceInfo;
 
   /// Used to define artwork [format].
   ///
@@ -156,87 +161,89 @@ class QueryArtworkWidget extends StatelessWidget {
   /// and if Android is below 29 the image it's returned from [artwork].
   const QueryArtworkWidget(
       {Key? key,
-        required this.id,
-        required this.type,
-        required this.artwork,
-        required this.deviceInfo,
-        this.format,
-        this.size,
-        this.requestPermission,
-        this.artworkQuality,
-        this.artworkBorder,
-        this.artworkWidth,
-        this.artworkHeight,
-        this.artworkFit,
-        this.artworkClipBehavior,
-        this.artworkScale,
-        this.artworkRepeat,
-        this.artworkColor,
-        this.artworkBlendMode,
-        this.keepOldArtwork,
-        // this.cacheArtworkHeight,
-        // this.cacheArtworkWidth,
-        this.nullArtworkWidget});
+      required this.id,
+      required this.type,
+      required this.artwork,
+      required this.deviceSDK,
+      @Deprecated("Use [deviceSDK] instead. Deprecated after [1.1.1]")
+          this.deviceInfo,
+      this.format,
+      this.size,
+      this.requestPermission,
+      this.artworkQuality,
+      this.artworkBorder,
+      this.artworkWidth,
+      this.artworkHeight,
+      this.artworkFit,
+      this.artworkClipBehavior,
+      this.artworkScale,
+      this.artworkRepeat,
+      this.artworkColor,
+      this.artworkBlendMode,
+      this.keepOldArtwork,
+      // this.cacheArtworkHeight,
+      // this.cacheArtworkWidth,
+      this.nullArtworkWidget});
 
   @override
   Widget build(BuildContext context) {
-    return deviceInfo.sdk >= 29
+    return deviceSDK >= 29
         ? FutureBuilder(
-      future: OnAudioQuery().queryArtworks(
-          id,
-          type,
-          format ?? ArtworkFormat.JPEG,
-          size ?? 200,
-          requestPermission ?? false),
-      builder: (context, AsyncSnapshot<Uint8List?> item) {
-        if (item.data != null) {
-          return ClipRRect(
-            borderRadius: artworkBorder ?? BorderRadius.circular(50),
-            clipBehavior: artworkClipBehavior ?? Clip.antiAlias,
-            child: Image.memory(
-              item.data!,
-              // cacheWidth: cacheArtworkWidth ?? 20,
-              // cacheHeight: cacheArtworkHeight ?? 20,
-              gaplessPlayback: keepOldArtwork ?? false,
-              repeat: artworkRepeat ?? ImageRepeat.noRepeat,
-              scale: artworkScale ?? 1.0,
-              width: artworkWidth ?? 50,
-              height: artworkHeight ?? 50,
-              fit: artworkFit ?? BoxFit.cover,
-              color: artworkColor,
-              colorBlendMode: artworkBlendMode,
-              filterQuality: artworkQuality ?? FilterQuality.low,
-            ),
-          );
-        }
-        return nullArtworkWidget ??
-            Icon(
-              Icons.image_not_supported,
-              size: 50,
-            );
-      },
-    )
+            future: OnAudioQuery().queryArtworks(
+                id,
+                type,
+                format ?? ArtworkFormat.JPEG,
+                size ?? 200,
+                requestPermission ?? false),
+            builder: (context, AsyncSnapshot<Uint8List?> item) {
+              if (item.data != null) {
+                return ClipRRect(
+                  borderRadius: artworkBorder ?? BorderRadius.circular(50),
+                  clipBehavior: artworkClipBehavior ?? Clip.antiAlias,
+                  child: Image.memory(
+                    item.data!,
+                    // cacheWidth: cacheArtworkWidth ?? 20,
+                    // cacheHeight: cacheArtworkHeight ?? 20,
+                    gaplessPlayback: keepOldArtwork ?? false,
+                    repeat: artworkRepeat ?? ImageRepeat.noRepeat,
+                    scale: artworkScale ?? 1.0,
+                    width: artworkWidth ?? 50,
+                    height: artworkHeight ?? 50,
+                    fit: artworkFit ?? BoxFit.cover,
+                    color: artworkColor,
+                    colorBlendMode: artworkBlendMode,
+                    filterQuality: artworkQuality ?? FilterQuality.low,
+                  ),
+                );
+              }
+              return nullArtworkWidget ??
+                  Icon(
+                    Icons.image_not_supported,
+                    size: 50,
+                  );
+            },
+          )
         : artwork != null
-        ? ClipRRect(
-      borderRadius: artworkBorder ?? BorderRadius.circular(50),
-      clipBehavior: artworkClipBehavior ?? Clip.antiAlias,
-      child: Image(
-        image: FileImage(
-          File(artwork!),
-          scale: artworkScale ?? 1.0,
-        ),
-        gaplessPlayback: keepOldArtwork ?? false,
-        repeat: artworkRepeat ?? ImageRepeat.noRepeat,
-        width: artworkWidth ?? 50,
-        height: artworkHeight ?? 50,
-        fit: artworkFit ?? BoxFit.cover,
-        filterQuality: artworkQuality ?? FilterQuality.low,
-      ),
-    )
-        : nullArtworkWidget ??
-        Icon(
-          Icons.image_not_supported,
-          size: 50,
-        );
+            ? ClipRRect(
+                borderRadius: artworkBorder ?? BorderRadius.circular(50),
+                clipBehavior: artworkClipBehavior ?? Clip.antiAlias,
+                child: Image(
+                  image: FileImage(
+                    File(artwork!),
+                    scale: artworkScale ?? 1.0,
+                  ),
+                  gaplessPlayback: keepOldArtwork ?? false,
+                  repeat: artworkRepeat ?? ImageRepeat.noRepeat,
+                  width: artworkWidth ?? 50,
+                  height: artworkHeight ?? 50,
+                  fit: artworkFit ?? BoxFit.cover,
+                  filterQuality: artworkQuality ?? FilterQuality.low,
+                ),
+              )
+            : nullArtworkWidget ??
+                Icon(
+                  Icons.image_not_supported,
+                  size: 50,
+                );
   }
 }

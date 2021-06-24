@@ -13,6 +13,9 @@ class SongModel {
   /// Return song [data]
   String get data => _info["_data"];
 
+  /// Return song [uri]
+  String get uri => _info["_uri"];
+
   /// Return song [displayName]
   String get displayName => _info["_display_name"];
 

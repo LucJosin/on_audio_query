@@ -60,7 +60,7 @@ class _SongsState extends State<Songs> {
               return ListView.builder(
                 itemCount: songList.length,
                 itemBuilder: (context, index) {
-                  print(songList[index].artwork);
+                  print(songList[index].uri);
                   return ListTile(
                     title: Text(songList[index].title),
                     subtitle: Text(songList[index].artist),
@@ -69,7 +69,7 @@ class _SongsState extends State<Songs> {
                       id: songList[index].id,
                       type: ArtworkType.AUDIO,
                       artwork: songList[index].artwork,
-                      deviceInfo: deviceModel,
+                      deviceSDK: deviceModel.sdk,
                     ),
                   );
                 },

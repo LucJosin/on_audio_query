@@ -2,6 +2,7 @@ package com.lucasjosino.on_audio_query.query
 
 import android.annotation.SuppressLint
 import android.content.ContentResolver
+import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
@@ -63,6 +64,10 @@ class OnAudiosByQuery : ViewModel() {
                 //Extra information from song
                 val extraInfo = getExtraInfo(songsByData["_data"].toString())
                 songsByData.putAll(extraInfo)
+
+                //
+                val uri = ContentUris.withAppendedId(uri, songsByData["_id"].toString().toLong())
+                songsByData["_uri"] = uri.toString()
 
                 songByList.add(songsByData)
             }

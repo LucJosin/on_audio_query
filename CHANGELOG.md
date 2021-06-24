@@ -1,3 +1,24 @@
+## [1.1.1] - [06.23.2021]
+### Features
+#### Dart/Kotlin
+- Added `[uri]` to `[SongModel]`. - Added #10
+
+### Fixes
+#### Kotlin
+- Fixed `java.lang.Integer cannot be cast to java.lang.Long` from `[queryArtworks]`. - Fixed #11
+
+### Documentation
+- Updated `README` documentation.
+- Created `DEPRECATED` file/history.
+
+### Changes
+#### Dart
+- Changed from `[deviceInfo]` to `[deviceSDK]` on `[QueryArtworkWidget]`.
+
+### ⚠ Important Changes
+#### Dart
+- Deprecated `[deviceInfo]` from `[QueryArtworkWidget]`.
+
 ## [1.1.0] - [06.03.2021]
 ### Features
 #### Dart/Kotlin

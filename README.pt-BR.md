@@ -16,6 +16,7 @@
 ### Extensões:
 
 * [on_audio_edit](https://github.com/LucasPJS/on_audio_edit) - Usado para editar audio metadata.
+* [on_audio_room](https://github.com/LucasPJS/on_audio_room) - Usado para guardar audio [Favoritos, Mais tocados, etc..].
 
 ### Traduções:
 
@@ -41,7 +42,7 @@ NOTE: Fique à vontade para ajudar nas traduções
 Adicione o seguinte codigo para seu `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^1.1.0
+  on_audio_query: ^1.1.1
 ```
 
 #### Solicitar Permissões:
@@ -204,7 +205,7 @@ Agora `[QueryArtworkWidget]` suporta todas as versões do Android.
       id: SongId, 
       type: ArtworkType.AUDIO,
       artwork: songList[index].artwork,
-      deviceInfo: deviceModel,
+      deviceSDK: device.sdk,
     );
   }
 ```

@@ -2,6 +2,7 @@ package com.lucasjosino.on_audio_query.query
 
 import android.annotation.SuppressLint
 import android.content.ContentResolver
+import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
@@ -15,11 +16,11 @@ import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
 
 class OnWithFiltersQuery : ViewModel() {
 
     //Main parameters
+    private val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
     private var projection: Array<String>? = arrayOf()
     private lateinit var resolver: ContentResolver
     @SuppressLint("StaticFieldLeak")
@@ -77,6 +78,10 @@ class OnWithFiltersQuery : ViewModel() {
                 //Extra information from song
                 val extraInfo = getExtraInfo(withFiltersData["_data"].toString())
                 withFiltersData.putAll(extraInfo)
+
+                //
+                val uri = ContentUris.withAppendedId(uri, withFiltersData["_id"].toString().toLong())
+                withFiltersData["_uri"] = uri.toString()
 
                 withFiltersList.add(withFiltersData)
             } else withFiltersList.add(withFiltersData)
