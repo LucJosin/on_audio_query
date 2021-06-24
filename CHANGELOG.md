@@ -1,11 +1,11 @@
 ## [1.1.1] - [06.23.2021]
 ### Features
 #### Dart/Kotlin
-- Added `[uri]` to `[SongModel]`. - Added #10
+- Added `[uri]` to `[SongModel]`. - [Added #10](https://github.com/LucasPJS/on_audio_query/issues/10)
 
 ### Fixes
 #### Kotlin
-- Fixed `java.lang.Integer cannot be cast to java.lang.Long` from `[queryArtworks]`. - Fixed #11
+- Fixed `java.lang.Integer cannot be cast to java.lang.Long` from `[queryArtworks]`. - [Fixed #11](https://github.com/LucasPJS/on_audio_query/issues/11)
 
 ### Documentation
 - Updated `README` documentation.
