@@ -6,6 +6,7 @@ Website: https://lucasjosino.com/
 =============
 Plugin/Id: on_audio_query#0
 Homepage: https://github.com/LucasPJS/on_audio_query
+Pub: https://pub.dev/packages/on_audio_query
 License: https://github.com/LucasPJS/on_audio_query/blob/main/LICENSE
 Copyright: © 2021, Lucas Josino. All rights reserved.
 =============
@@ -51,16 +52,19 @@ class _SongsState extends State<Songs> {
             )
           ],
         ),
-        body: FutureBuilder(
-          // DEFAULT: SongSortType.TITLE, OrderType.ASC_OR_SMALLER, UriType.EXTERNAL and false
-          future: OnAudioQuery().querySongs(null, null, null, true),
-          builder: (context, AsyncSnapshot<List<SongModel>> item) {
+        body: FutureBuilder<List<SongModel>>(
+          future: OnAudioQuery().querySongs(
+            SongSortType.DEFAULT,
+            OrderType.ASC_OR_SMALLER,
+            UriType.EXTERNAL,
+            false,
+          ),
+          builder: (context, item) {
             if (item.data != null) {
               songList = item.data!;
               return ListView.builder(
                 itemCount: songList.length,
                 itemBuilder: (context, index) {
-                  print(songList[index].uri);
                   return ListTile(
                     title: Text(songList[index].title),
                     subtitle: Text(songList[index].artist),

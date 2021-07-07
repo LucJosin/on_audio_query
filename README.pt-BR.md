@@ -42,7 +42,7 @@ NOTE: Fique à vontade para ajudar nas traduções
 Adicione o seguinte codigo para seu `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^1.1.1
+  on_audio_query: ^1.1.2
 ```
 
 #### Solicitar Permissões:

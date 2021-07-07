@@ -35,20 +35,23 @@ class OnAudiosFromQuery : ViewModel() {
     fun querySongsFrom(context: Context, result: MethodChannel.Result, call: MethodCall) {
         this.context = context ; resolver = context.contentResolver
 
-        //where -> Album/Artist/Genre/Playlist ; where -> uri
-        if (call.argument<Int>("type")!! != 6) {
-            whereVal = call.argument<Any>("where")!!.toString()
-            where = checkAudiosFromType(call.argument<Int>("type")!!)
+        when (call.argument<Int>("type")!!) {
+            0, 1, 2, 3 -> {
+                //where -> Album/Artist/Genre/Playlist ; where -> uri
+                whereVal = call.argument<Any>("where")!!.toString()
+                where = checkAudiosFromType(call.argument<Int>("type")!!)
 
-            //Query everything in the Background it's necessary for better performance
-            viewModelScope.launch {
-                //Start querying
-                val resultSongList = loadSongsFrom()
+                //Query everything in the Background it's necessary for better performance
+                viewModelScope.launch {
+                    //Start querying
+                    val resultSongList = loadSongsFrom()
 
-                //Flutter UI will start, but, information still loading
-                result.success(resultSongList)
+                    //Flutter UI will start, but, information still loading
+                    result.success(resultSongList)
+                }
             }
-        } else querySongsFromPlaylist(result, call)
+            4, 5, 6 -> querySongsFromPlaylistOrGenre(result, call, call.argument<Int>("type")!!)
+        }
 
     }
 
@@ -82,53 +85,82 @@ class OnAudiosFromQuery : ViewModel() {
         return@withContext songsFromList
     }
 
-    private fun querySongsFromPlaylist(result: MethodChannel.Result, call: MethodCall) {
-        val playlistInfo = call.argument<Any>("where")!!
+    private fun querySongsFromPlaylistOrGenre(result: MethodChannel.Result, call: MethodCall, type: Int) {
+        val info = call.argument<Any>("where")!!
 
         //Check if Playlist exists based in Id
-        val checkedPl = checkPlaylistName(playlistInfo.toString())
-        if (!checkedPl) pId = playlistInfo.toString().toInt()
+        val checkedName = if (type == 4 || type == 5) {
+            checkName(genreName = info.toString())
+        } else checkName(plName = info.toString())
 
-        pUri = MediaStore.Audio.Playlists.Members.getContentUri("external", pId.toLong())
+        if (!checkedName) pId = info.toString().toInt()
+
+        //
+        pUri = if (type == 4 || type == 5) {
+            MediaStore.Audio.Genres.Members.getContentUri("external", pId.toLong())
+        } else MediaStore.Audio.Playlists.Members.getContentUri("external", pId.toLong())
 
         //Query everything in the Background it's necessary for better performance
         viewModelScope.launch {
             //Start querying
-            val resultSongsFromPl = loadSongsFromPlaylist()
+            val resultSongsFrom = loadSongsFromPlaylistOrGenre()
 
             //Flutter UI will start, but, information still loading
-            result.success(resultSongsFromPl)
+            result.success(resultSongsFrom)
         }
     }
 
-    private suspend fun loadSongsFromPlaylist() : ArrayList<MutableMap<String, Any>> = withContext(Dispatchers.IO) {
-        val songsFromPlaylist: ArrayList<MutableMap<String, Any>> = ArrayList()
+    private suspend fun loadSongsFromPlaylistOrGenre() : ArrayList<MutableMap<String, Any>> =
+            withContext(Dispatchers.IO) {
+
+        val songsFrom: ArrayList<MutableMap<String, Any>> = ArrayList()
         val cursor = resolver.query(pUri, songProjection, null, null, null)
         while (cursor != null && cursor.moveToNext()) {
-            val songFromPlData: MutableMap<String, Any> = HashMap()
-            for (playlistMedia in cursor.columnNames) {
-                if (cursor.getString(cursor.getColumnIndex(playlistMedia)) != null) {
-                    songFromPlData[playlistMedia] = cursor.getString(cursor.getColumnIndex(playlistMedia))
-                } else songFromPlData[playlistMedia] = ""
+            val songFromData: MutableMap<String, Any> = HashMap()
+            for (media in cursor.columnNames) {
+                if (cursor.getString(cursor.getColumnIndex(media)) != null) {
+                    songFromData[media] = cursor.getString(cursor.getColumnIndex(media))
+                } else songFromData[media] = ""
             }
 
-            //Extra information from song
-            val extraInfo = getExtraInfo(songFromPlData["_data"].toString())
-            songFromPlData.putAll(extraInfo)
+            //Artwork
+            val art = loadArtwork(context, songFromData["album"].toString())
+            if (art.isNotEmpty()) songFromData["artwork"] = art
 
-            songsFromPlaylist.add(songFromPlData)
+            //Extra information from song
+            val extraInfo = getExtraInfo(songFromData["_data"].toString())
+            songFromData.putAll(extraInfo)
+
+            //
+            val uri = ContentUris.withAppendedId(uri, songFromData["_id"].toString().toLong())
+            songFromData["_uri"] = uri.toString()
+
+            songsFrom.add(songFromData)
         }
         cursor?.close()
-        return@withContext songsFromPlaylist
+        return@withContext songsFrom
     }
 
-    //Return true if playlist already exist, false if don't exist
-    private fun checkPlaylistName(plName: String) : Boolean {
-        val uri = MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
-        val cursor = resolver.query(uri, arrayOf(MediaStore.Audio.Playlists.NAME, MediaStore.Audio.Playlists._ID), null, null, null)
+    //Return true if playlist or genre exists, false, if don't.
+    private fun checkName(plName: String? = null, genreName: String? = null) : Boolean {
+        //
+        val uri = if (plName == null) MediaStore.Audio.Genres.EXTERNAL_CONTENT_URI else
+            MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
+
+        //
+        val pProjection = if (plName == null) {
+            arrayOf(MediaStore.Audio.Playlists.NAME, MediaStore.Audio.Playlists._ID)
+        } else arrayOf(MediaStore.Audio.Genres.NAME, MediaStore.Audio.Genres._ID)
+
+        //
+        val cursor = resolver.query(uri, pProjection, null, null, null)
         while (cursor != null && cursor.moveToNext()) {
-            val playListName = cursor.getString(0) //Id
-            if (playListName == plName) return true ; pId = cursor.getInt(1)
+            val name = cursor.getString(0) //Name
+
+            if (name == plName || name == genreName) {
+                pId = cursor.getInt(1)
+                return true
+            }
         }
         cursor?.close()
         return false
