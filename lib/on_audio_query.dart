@@ -12,7 +12,6 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 =============
 */
 
-
 library on_audio_query;
 
 //
