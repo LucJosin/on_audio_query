@@ -1,3 +1,15 @@
+## [1.1.4] - [07.19.2021]
+### Fixes
+#### Kotlin
+- Fixed `[Kotlin]` issue when installing the plugin.
+
+### Documentation
+- Updated `README` documentation.
+
+### Changes
+#### Kotlin
+- Downgraded some `[Kotlin]` dependencies.
+
 ## [1.1.3] - [07.18.2021]
 ### Fixes
 #### Kotlin
