@@ -1,7 +1,19 @@
+## [1.1.3] - [07.18.2021]
+### Fixes
+#### Kotlin
+- Fixed `[cursor]` problem when using `[AudiosFromType.GENRE_NAME]` or `[AudiosFromType.GENRE_ID]` on `[queryAudiosFrom]`. - [Fixed #16](https://github.com/LucasPJS/on_audio_query/issues/16) and [Fixed #12](https://github.com/LucasPJS/on_audio_query/issues/12)
+
+### Documentation
+- Updated `README` documentation.
+
+### Changes
+#### Kotlin
+- Updated some `[Kotlin]` dependencies.
+
 ## [1.1.2] - [07.07.2021]
 ### Fixes
 #### Kotlin
-- Fixed `[cursor]` problem when using `[AudiosFromType.GENRE_NAME]` or `[AudiosFromType.GENRE_ID]` on `[queryAudiosFrom]`. - [Fixed #12](https://github.com/LucasPJS/on_audio_query/issues/12)
+- ~~Fixed `[cursor]` problem when using `[AudiosFromType.GENRE_NAME]` or `[AudiosFromType.GENRE_ID]` on `[queryAudiosFrom]`.~~
 
 ### Documentation
 - Updated `README` documentation.

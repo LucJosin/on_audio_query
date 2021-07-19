@@ -5,6 +5,7 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.provider.MediaStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -35,24 +36,38 @@ class OnAudiosFromQuery : ViewModel() {
     fun querySongsFrom(context: Context, result: MethodChannel.Result, call: MethodCall) {
         this.context = context ; resolver = context.contentResolver
 
-        when (call.argument<Int>("type")!!) {
-            0, 1, 2, 3 -> {
-                //where -> Album/Artist/Genre/Playlist ; where -> uri
-                whereVal = call.argument<Any>("where")!!.toString()
-                where = checkAudiosFromType(call.argument<Int>("type")!!)
+        //
+        val helper = call.argument<Int>("type")!!
 
-                //Query everything in the Background it's necessary for better performance
-                viewModelScope.launch {
-                    //Start querying
-                    val resultSongList = loadSongsFrom()
+        //TODO Add a better way to handle this query
+        //This will fix (for now) the problem between Android < 30 && Android > 30
+        //The method used to query genres on Android < 30 don't work properly on Android > 30 so,
+        //we need separate
+        //
+        //If helper == 6 (Playlist) send to [querySongsFromPlaylistOrGenre] in any version.
+        //If helper == 4 (Genre name) && helper == 5 (Genre Id) and Android < 30 send to
+        //[querySongsFromPlaylistOrGenre] else, follow the rest of the "normal" code.
+        //
+        //Why? Android 10 and below don't has "genre" category and we need use a "workaround"
+        //[MediaStore](https://developer.android.com/reference/android/provider/MediaStore.Audio.AudioColumns#GENRE)
+        if (helper == 6 || ((helper == 4 || helper == 5) && Build.VERSION.SDK_INT < 30)) {
+            //Works on Android 10
+            querySongsFromPlaylistOrGenre(result, call, helper)
+        } else {
+            //Works on Android 11
+            //where -> Album/Artist/Genre(Sometimes) ; where -> uri
+            whereVal = call.argument<Any>("where")!!.toString()
+            where = checkAudiosFromType(helper)
 
-                    //Flutter UI will start, but, information still loading
-                    result.success(resultSongList)
-                }
+            //Query everything in the Background it's necessary for better performance
+            viewModelScope.launch {
+                //Start querying
+                val resultSongList = loadSongsFrom()
+
+                //Flutter UI will start, but, information still loading
+                result.success(resultSongList)
             }
-            4, 5, 6 -> querySongsFromPlaylistOrGenre(result, call, call.argument<Int>("type")!!)
         }
-
     }
 
     //Loading in Background
@@ -143,21 +158,24 @@ class OnAudiosFromQuery : ViewModel() {
 
     //Return true if playlist or genre exists, false, if don't.
     private fun checkName(plName: String? = null, genreName: String? = null) : Boolean {
-        //
-        val uri = if (plName == null) MediaStore.Audio.Genres.EXTERNAL_CONTENT_URI else
-            MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
+        val uri: Uri
+        val projection: Array<String>
 
         //
-        val pProjection = if (plName == null) {
-            arrayOf(MediaStore.Audio.Playlists.NAME, MediaStore.Audio.Playlists._ID)
-        } else arrayOf(MediaStore.Audio.Genres.NAME, MediaStore.Audio.Genres._ID)
+        if (plName != null) {
+            uri = MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
+            projection = arrayOf(MediaStore.Audio.Playlists.NAME, MediaStore.Audio.Playlists._ID)
+        } else {
+            uri = MediaStore.Audio.Genres.EXTERNAL_CONTENT_URI
+            projection = arrayOf(MediaStore.Audio.Genres.NAME, MediaStore.Audio.Genres._ID)
+        }
 
         //
-        val cursor = resolver.query(uri, pProjection, null, null, null)
+        val cursor = resolver.query(uri, projection, null, null, null)
         while (cursor != null && cursor.moveToNext()) {
             val name = cursor.getString(0) //Name
 
-            if (name == plName || name == genreName) {
+            if (name != null && name == plName || name == genreName) {
                 pId = cursor.getInt(1)
                 return true
             }
