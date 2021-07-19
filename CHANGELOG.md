@@ -1,4 +1,4 @@
-## [1.1.4] - [07.19.2021]
+## [1.1.3+1] - [07.19.2021]
 ### Fixes
 #### Kotlin
 - Fixed `[Kotlin]` issue when installing the plugin.
