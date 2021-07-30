@@ -23,4 +23,12 @@ class PlaylistModel {
   ///
   /// Some times [dateModified] is returned null
   String? get dateModified => _info["date_modified"];
+
+  /// Return a map with all [keys] and [values] from specific playlist.
+  Map get getMap => _info;
+
+  @override
+  String toString() {
+    return _info.toString();
+  }
 }

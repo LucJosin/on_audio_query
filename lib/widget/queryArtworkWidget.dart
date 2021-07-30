@@ -37,9 +37,6 @@ class QueryArtworkWidget extends StatelessWidget {
   /// Used to define which version of Android will be used.
   final int deviceSDK;
 
-  ///Deprecated after [1.1.1].
-  final DeviceModel? deviceInfo;
-
   /// Used to define artwork [format].
   ///
   /// Opts: [JPEG] and [PNG].
@@ -179,8 +176,6 @@ class QueryArtworkWidget extends StatelessWidget {
       required this.type,
       required this.artwork,
       required this.deviceSDK,
-      @Deprecated("Use [deviceSDK] instead. Deprecated after [1.1.1]")
-          this.deviceInfo,
       this.format,
       this.size,
       this.requestPermission,

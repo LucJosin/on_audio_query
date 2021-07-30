@@ -18,4 +18,12 @@ class DeviceModel {
 
   /// Return device [deviceType]
   String get deviceType => _info["device"];
+
+  /// Return a map with all [keys] and [values] from device.
+  Map get getMap => _info;
+
+  @override
+  String toString() {
+    return _info.toString();
+  }
 }

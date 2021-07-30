@@ -29,4 +29,12 @@ class ArtistModel {
 
   // ///Return artist [artwork]
   // String get artwork => _info["artwork"];
+
+  /// Return a map with all [keys] and [values] from specific artist.
+  Map get getMap => _info;
+
+  @override
+  String toString() {
+    return _info.toString();
+  }
 }

@@ -19,4 +19,12 @@ class GenreModel {
   ///
   /// * If Android >= Q/10 this method will return null, in this case it's necessary use [queryArtworks]
   String? get artwork => _info["artwork"];
+
+  /// Return a map with all [keys] and [values] from specific genre.
+  Map get getMap => _info;
+
+  @override
+  String toString() {
+    return _info.toString();
+  }
 }

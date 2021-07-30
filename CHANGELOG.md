@@ -1,3 +1,17 @@
+## [1.2.0] - [07.30.2021]
+### Features
+- Added `[path]` parameter to `[querySongs]` and `[queryAudio]`.
+- Added `[getMap]` to:
+    * `[SongModel]`
+    * `[AlbumModel]`
+    * `[ArtistModel]`
+    * `[GenreModel]`
+    * `[PlaylistModel]`
+    * `[DeviceModel]`
+
+### Documentation
+- Updated `README` documentation.
+
 ## [1.1.3+1] - [07.19.2021]
 ### Fixes
 #### Kotlin

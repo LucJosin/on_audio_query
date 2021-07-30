@@ -115,4 +115,12 @@ class SongModel {
   ///
   /// Will always return true or false
   bool? get isRingtone => _info["is_ringtone"];
+
+  /// Return a map with all [keys] and [values] from specific song.
+  Map get getMap => _info;
+
+  @override
+  String toString() {
+    return _info.toString();
+  }
 }
