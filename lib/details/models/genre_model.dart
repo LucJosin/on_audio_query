@@ -8,7 +8,7 @@ class GenreModel {
   Map<dynamic, dynamic> _info;
 
   /// Return genre [id]
-  int get id => int.parse(_info["_id"]);
+  int get id => _info["_id"] is String ? int.parse(_info["_id"]) : _info["_id"];
 
   /// Return genre [name]
   String get genreName => _info["name"];
@@ -18,6 +18,7 @@ class GenreModel {
   /// Important:
   ///
   /// * If Android >= Q/10 this method will return null, in this case it's necessary use [queryArtworks]
+  @Deprecated("message")
   String? get artwork => _info["artwork"];
 
   /// Return a map with all [keys] and [values] from specific genre.

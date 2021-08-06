@@ -8,7 +8,8 @@ class SongModel {
   Map<dynamic, dynamic> _info;
 
   /// Return song [id]
-  int get id => int.parse(_info["_id"]);
+  int? get id =>
+      _info["_id"] is String ? int.parse(_info["_id"]) : _info["_id"];
 
   /// Return song [data]
   String get data => _info["_data"];
@@ -23,19 +24,24 @@ class SongModel {
   String get displayNameWOExt => _info["_display_name_wo_ext"];
 
   /// Return song [size]
-  int get size => int.parse(_info["_size"]);
+  int? get size =>
+      _info["_size"] is String ? int.parse(_info["_size"]) : _info["_size"];
 
   /// Return song [album]
   String get album => _info["album"];
 
   /// Return song [albumId]
-  int get albumId => int.parse(_info["album_id"]);
+  int? get albumId => _info["album_id"] is String
+      ? int.parse(_info["album_id"])
+      : _info["album_id"];
 
   /// Return song [artist]
   String get artist => _info["artist"];
 
   /// Return song [artistId]
-  int get artistId => int.parse(_info["artist_id"]);
+  int? get artistId => _info["artist_id"] is String
+      ? int.parse(_info["artist_id"])
+      : _info["artist_id"];
 
   /// Return song [bookmark]
   ///
@@ -50,23 +56,30 @@ class SongModel {
   /// Return song [dateAdded]
   ///
   /// Some times [dateAdded] is returned null
-  int get dateAdded => int.parse(_info["date_added"]);
+  int? get dateAdded => _info["date_added"] is String
+      ? int.parse(_info["date_added"])
+      : _info["date_added"];
 
   /// Return song [dateModified]
   ///
   /// Some times [dateModified] is returned null
-  int? get dateModified => int.parse(_info["date_modified"]);
+  int? get dateModified => _info["date_modified"] is String
+      ? int.parse(_info["date_modified"])
+      : _info["date_modified"];
 
   /// Return song [duration]
   ///
   /// Will always return time in [milliseconds]
-  int get duration => int.parse(_info["duration"]);
+  int? get duration => _info["duration"] is String
+      ? int.parse(_info["duration"])
+      : _info["duration"];
 
   /// Return song [title]
   String get title => _info["title"];
 
   /// Return song [track]
-  int? get track => int.parse(_info["track"]);
+  int? get track =>
+      _info["track"] is String ? int.parse(_info["track"]) : _info["track"];
 
   /// Return song [year]
   ///
@@ -81,7 +94,7 @@ class SongModel {
   /// Important:
   ///
   /// * If Android >= Q/10 this method will return null, in this case it's necessary use [queryArtworks]
-  String? get artwork => _info["artwork"];
+  Uint8List? get artwork => _info["artwork"];
 
   /// Return song only the [fileExtension]
   String get fileExtension => _info["file_extension"];

@@ -69,12 +69,6 @@ class _SongsState extends State<Songs> {
                     title: Text(songList[index].title),
                     subtitle: Text(songList[index].artist),
                     trailing: Icon(Icons.arrow_forward_rounded),
-                    leading: QueryArtworkWidget(
-                      id: songList[index].id,
-                      type: ArtworkType.AUDIO,
-                      artwork: songList[index].artwork,
-                      deviceSDK: deviceModel.sdk,
-                    ),
                   );
                 },
               );

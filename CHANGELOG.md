@@ -1,13 +1,79 @@
+## [2.0.0-alpha.0] - [08.05.2021] - [GitHub Only]
+### Release
+- `[2.0.0-alpha.0]` release.
+
+## [2.0.0-dev.1] - [08.05.2021] - [Internal]
+#### IOS
+- Added `[queryArtists]`, `[queryGenres]` to `[IOS]`.
+
+### ⚠ Important Changes
+- Removed `[artwork]` from `[ArtistModel]`.
+- Removed `[artwork]` from `[GenreModel]`.
+
+### Dev Changes
+#### Dart
+- Added a checker to all int items from `[ArtistModel]`.
+    - Temporary
+- Added a checker to all int items from `[GenreModel]`.
+    - Temporary
+
+## [2.0.0-dev.0] - [08.02.2021] - [Internal]
+### Features
+#### on_audio_query
+- The plugin now supports `[IOS]`. **(Not 100%)**
+
+#### IOS
+- Added `[querySongs]` and `[queryAlbums]` to `[IOS]`.
+
+#### Dart
+- Added `[model]` to `[DeviceModel]`.
+
+### Changes
+#### Dart
+- Now `[sdk]` are `[version]`.
+- Now `[deviceType]` are `[type]`.
+
+### ⚠ Important Changes
+#### Dart
+- Removed `[release]` from `[DeviceModel]`.
+- Removed `[code]` from `[DeviceModel]`.
+- Now `[artwork]` from `[SongModel]` return a `[Uint8list]`.
+- Now all `[int]` from `[SongModel]` can be `[null]`.
+- Removed `[maxyear]` from `[AlbumModel]`.
+- Removed `[minyear]` from `[AlbumModel]`.
+- Now `[artwork]` from `[AlbumModel]` return a `[Uint8list]`.
+- Removed `[numOfSongsArtists]` from `[AlbumModel]`.
+
+#### @**Deprecated**
+- `[year]` from `[SongModel]`.
+- `[is_alarm]` from `[SongModel]`.
+- `[is_music]` from `[SongModel]`.
+- `[is_notification]` from `[SongModel]`.
+- `[is_ringtone]` from `[SongModel]`.
+- `[is_podcast]` from `[SongModel]`.
+- `[file_parent]` from `[SongModel]`.
+- `[firstYear]` from `[AlbumModel]`.
+- `[lastYear]` from `[AlbumModel]`.
+
+### Dev Changes
+#### Dart
+- Now `[queryDeviceInfo]` will return Map instead of List.
+- Added a checker to all int items from `[SongModel]`.
+    - Temporary.
+- Added a checker to all int items from `[AlbumModel]`.
+    - Temporary.
+- Now `[queryDeviceInfo]` return a Map.
+
 ## [1.2.0] - [07.30.2021]
 ### Features
 - Added `[path]` parameter to `[querySongs]` and `[queryAudio]`.
 - Added `[getMap]` to:
-    * `[SongModel]`
-    * `[AlbumModel]`
-    * `[ArtistModel]`
-    * `[GenreModel]`
-    * `[PlaylistModel]`
-    * `[DeviceModel]`
+    * `[SongModel]`.
+    * `[AlbumModel]`.
+    * `[ArtistModel]`.
+    * `[GenreModel]`.
+    * `[PlaylistModel]`.
+    * `[DeviceModel]`.
 
 ### Documentation
 - Updated `README` documentation.
@@ -311,6 +377,7 @@
 - TODO
 
 ### ⚠ Important Changes
+#### @**Deprecated**
 - TODO
  -->
 

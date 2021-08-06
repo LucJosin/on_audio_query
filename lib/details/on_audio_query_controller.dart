@@ -646,8 +646,7 @@ class OnAudioQuery {
   /// * Device Code.
   /// * Device Type.
   Future<DeviceModel> queryDeviceInfo() async {
-    final List<dynamic> deviceResult =
-        await _channel.invokeMethod("queryDeviceInfo");
-    return deviceResult.map((deviceInfo) => DeviceModel(deviceInfo)).first;
+    final Map deviceResult = await _channel.invokeMethod("queryDeviceInfo");
+    return DeviceModel(deviceResult);
   }
 }

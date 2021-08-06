@@ -46,7 +46,7 @@ class AlbumModel {
   /// Important:
   ///
   /// * If Android >= Q/10 this method will return null, in this case it's necessary use [queryArtworks]
-  String? get artwork => _info["album_art"];
+  Uint8List? get artwork => _info["album_art"];
 
   /// Return a map with all [keys] and [values] from specific album.
   Map get getMap => _info;

@@ -1,12 +1,19 @@
 # on_audio_query
-<!-- https://img.shields.io/badge/Platform-Android%20%7C%20IOS-9cf?&style=flat-square -->
 [![Pub.dev](https://img.shields.io/pub/v/on_audio_query?color=9cf&label=Pub.dev&style=flat-square)](https://pub.dev/packages/on_audio_query)
-[![Platform](https://img.shields.io/badge/Platform-Android-9cf?logo=android&style=flat-square)](https://www.android.com/)
-[![Flutter](https://img.shields.io/badge/Language-Flutter%20%7C%20Null--Safety-9cf?logo=flutter&style=flat-square)](https://www.flutter.dev/)
-[![Kotlin](https://img.shields.io/badge/Language-Kotlin-9cf?logo=kotlin&style=flat-square)](https://kotlinlang.org/)
-<!-- [![LucasPJS](./banner.png)](https://github.com/LucasPJS) -->
+[![Platforms](https://img.shields.io/badge/Platform-Android%20%7C%20IOS-9cf?&style=flat-square)]()
+[![Languages](https://img.shields.io/badge/Language-Flutter%20%7C%20Kotlin%20%7C%20Swift-9cf?&style=flat-square)]()
 
 `on_audio_query` is a [Flutter](https://flutter.dev/) Plugin used to query audios/songs 🎶 infos [title, artist, album, etc..] from device storage. <br>
+
+## Alpha:
+You can use the alpha version adding the following code to your `pubspec.yaml`:
+```yaml
+dependencies:
+  on_audio_query:
+    git:
+      url: git://github.com/LucasPJS/on_audio_query.git
+      ref: 2.0.0-dev
+```
 
 ## Help:
 
@@ -15,7 +22,7 @@
 
 ### Extensions:
 
-* [on_audio_edit](https://github.com/LucasPJS/on_audio_edit) - Used to edit audio metadata.
+<!-- * [on_audio_edit](https://github.com/LucasPJS/on_audio_edit) - Used to edit audio metadata. -->
 * [on_audio_room](https://github.com/LucasPJS/on_audio_room) - Used to store audio [Favorites, Most Played, etc..].
 
 ### Translations:
@@ -45,8 +52,9 @@ dependencies:
   on_audio_query: ^1.2.0
 ```
 
-#### Request Permission:
-If you want to use the built-in request permission, will need add the following code to your `AndroidManifest.xml`
+### Request Permission:
+#### Android:
+To use this plugin add the following code to your `AndroidManifest.xml`
 ```xml
 <manifest> ...
 
@@ -54,6 +62,13 @@ If you want to use the built-in request permission, will need add the following 
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
 </manifest>
+```
+
+#### IOS:
+To use this plugin add the following code to your `Info.plist`
+```plist
+	<key>NSAppleMusicUsageDescription</key>
+	<string> (Add a reason) </string>
 ```
 
 ## Some Features:
@@ -73,7 +88,6 @@ If you want to use the built-in request permission, will need add the following 
 ## TODO:
 
 * Add better performance for all plugin.
-* Create methods for IOS.
 * Option to remove songs.
 * Fix bugs.
 

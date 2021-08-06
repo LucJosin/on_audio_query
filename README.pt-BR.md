@@ -1,12 +1,19 @@
 # on_audio_query
-<!-- https://img.shields.io/badge/Platform-Android%20%7C%20IOS-9cf?&style=flat-square -->
 [![Pub.dev](https://img.shields.io/pub/v/on_audio_query?color=9cf&label=Pub.dev&style=flat-square)](https://pub.dev/packages/on_audio_query)
-[![Platform](https://img.shields.io/badge/Platform-Android-9cf?logo=android&style=flat-square)](https://www.android.com/)
-[![Flutter](https://img.shields.io/badge/Language-Flutter%20%7C%20Null--Safety-9cf?logo=flutter&style=flat-square)](https://www.flutter.dev/)
-[![Kotlin](https://img.shields.io/badge/Language-Kotlin-9cf?logo=kotlin&style=flat-square)](https://kotlinlang.org/)
-<!-- [![LucasPJS](./banner.png)](https://github.com/LucasPJS) -->
+[![Platforms](https://img.shields.io/badge/Platform-Android%20%7C%20IOS-9cf?&style=flat-square)]()
+[![Languages](https://img.shields.io/badge/Language-Flutter%20%7C%20Kotlin%20%7C%20Swift-9cf?&style=flat-square)]()
 
 `on_audio_query` é um [Flutter](https://flutter.dev/) Plugin usado para adquirir informações de áudios/músicas 🎶 [título, artista, album, etc..] do celular. <br>
+
+## Alpha:
+Você pode usar a versão alpha adicionando o seguinte codigo para seu `pubspec.yaml`:
+```yaml
+dependencies:
+  on_audio_query:
+    git:
+      url: git://github.com/LucasPJS/on_audio_query.git
+      ref: 2.0.0-dev
+```
 
 ## Ajuda:
 
@@ -15,7 +22,7 @@
 
 ### Extensões:
 
-* [on_audio_edit](https://github.com/LucasPJS/on_audio_edit) - Usado para editar audio metadata.
+<!-- * [on_audio_edit](https://github.com/LucasPJS/on_audio_edit) - Usado para editar audio metadata. -->
 * [on_audio_room](https://github.com/LucasPJS/on_audio_room) - Usado para guardar audio [Favoritos, Mais tocados, etc..].
 
 ### Traduções:
@@ -46,7 +53,8 @@ dependencies:
 ```
 
 #### Solicitar Permissões:
-Se você quer usar a solicitação de permissões interna, irá precisar adicionar os seguintes codigos para seu `AndroidManifest.xml`
+#### Android:
+Para usar esse plugin adicione o seguinte código no seu `AndroidManifest.xml`
 ```xml
 <manifest> ...
 
@@ -54,6 +62,13 @@ Se você quer usar a solicitação de permissões interna, irá precisar adicion
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
 </manifest>
+```
+
+#### IOS:
+Para usar esse plugin adicione o seguinte código no seu `Info.plist`
+```plist
+	<key>NSAppleMusicUsageDescription</key>
+	<string> (Adicione um motivo) </string>
 ```
 
 ## Algumas qualidades:
@@ -73,7 +88,6 @@ Se você quer usar a solicitação de permissões interna, irá precisar adicion
 ## Para fazer:
 
 * Adicionar uma melhor performace para todo o plugin.
-* Criar métodos para IOS.
 * Opção para remover músicas.
 * Arrumar erros.
 

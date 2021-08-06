@@ -1,13 +1,13 @@
 #
 # To learn more about a Podspec see http://guides.cocoapods.org/syntax/podspec.html.
-# Run `pod lib lint on_audio_query.podspec' to validate before publishing.
+# Run `pod lib lint on_audio_query.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
   s.name             = 'on_audio_query'
   s.version          = '0.0.1'
-  s.summary          = 'Flutter plugin to get songs info [title, artist, album, etc..] from device storage.'
+  s.summary          = 'A new flutter plugin project.'
   s.description      = <<-DESC
-Flutter plugin to get songs info [title, artist, album, etc..] from device storage.
+A new flutter plugin project.
                        DESC
   s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }
