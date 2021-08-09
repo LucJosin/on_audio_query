@@ -26,6 +26,9 @@ import 'package:flutter/material.dart';
 //Controller
 part 'details/on_audio_query_controller.dart';
 
+//Extensions
+part 'details/extensions/models_extensions.dart';
+
 //Models
 part 'details/models/song_model.dart';
 part 'details/models/album_model.dart';

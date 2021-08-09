@@ -19,6 +19,14 @@ public class OnAudioController {
             OnArtistsQuery(call: call, result: result).queryArtists()
         case "queryGenres":
             OnGenresQuery(call: call, result: result).queryGenres()
+        case "queryPlaylists":
+            OnPlaylistsQuery(call: call, result: result).queryPlaylists()
+        case "queryAudiosFrom":
+            OnAudiosFromQuery(call: call, result: result).queryAudiosFrom()
+        case "queryWithFilters":
+            OnWithFiltersQuery(call: call, result: result).queryWithFilters()
+        case "createPlaylist":
+            OnPlaylistsController(call: call, result: result).createPlaylist()
         default:
             result(FlutterMethodNotImplemented)
         }

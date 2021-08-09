@@ -1,12 +1,49 @@
+## [2.0.0-alpha.1] - [08.08.2021] - [GitHub Only]
+### Features
+#### Dart
+- Added `[artwork]` to `[PlaylistModel]` as `[Uint8List]`
+- Added `[numOfTracks]` to `[PlaylistModel]`
+- Added `[playlistAuthor]` and `[playlistDesc]` parameter to `[createPlaylist]` (IOS only)
+- Added `[OnModelFormatter]` extension.
+    - Added `[toSongModel]`.
+    - Added `[toAlbumModel]`.
+    - Added `[toPlaylistModel]`.
+    - Added `[toArtistModel]`.
+    - Added `[toGenreModel]`.
+
+#### IOS
+- Added `[queryWithFilters]` method.
+- Added `[createPlaylist]` method.
+- Added `[queryPlaylists]` method.
+- Added `[queryAudiosFrom]` method.
+
+### ⚠ Important Changes
+#### Dart
+- Now `[dateAdded]` from `[PlaylistModel]` return a `[int]`.
+- Now `[dateModified]` from `[PlaylistModel]` return a `[int]`.
+
+#### @Deprecated
+- `[queryAudiosOnly]`
+- `[AudiosOnlyType]`
+- `[queryAudiosBy]`
+- `[AudiosByType]`
+
+### Dev Changes
+#### Dart
+- Added checker to all `[int]` from `[PlaylistModel]`
+    - Temporary
+
 ## [2.0.0-alpha.0] - [08.05.2021] - [GitHub Only]
 ### Release
 - `[2.0.0-alpha.0]` release.
 
 ## [2.0.0-dev.1] - [08.05.2021] - [Internal]
+### Features
 #### IOS
-- Added `[queryArtists]`, `[queryGenres]` to `[IOS]`.
+- Added `[queryArtists]` and `[queryGenres]`.
 
 ### ⚠ Important Changes
+#### @Deprecated
 - Removed `[artwork]` from `[ArtistModel]`.
 - Removed `[artwork]` from `[GenreModel]`.
 
@@ -23,7 +60,7 @@
 - The plugin now supports `[IOS]`. **(Not 100%)**
 
 #### IOS
-- Added `[querySongs]` and `[queryAlbums]` to `[IOS]`.
+- Added `[querySongs]` and `[queryAlbums]`.
 
 #### Dart
 - Added `[model]` to `[DeviceModel]`.
@@ -35,16 +72,16 @@
 
 ### ⚠ Important Changes
 #### Dart
-- Removed `[release]` from `[DeviceModel]`.
-- Removed `[code]` from `[DeviceModel]`.
 - Now `[artwork]` from `[SongModel]` return a `[Uint8list]`.
 - Now all `[int]` from `[SongModel]` can be `[null]`.
-- Removed `[maxyear]` from `[AlbumModel]`.
-- Removed `[minyear]` from `[AlbumModel]`.
 - Now `[artwork]` from `[AlbumModel]` return a `[Uint8list]`.
-- Removed `[numOfSongsArtists]` from `[AlbumModel]`.
 
 #### @**Deprecated**
+- `[numOfSongsArtists]` from `[AlbumModel]`.
+- `[maxyear]` from `[AlbumModel]`.
+- `[minyear]` from `[AlbumModel]`.
+- `[release]` from `[DeviceModel]`.
+- `[code]` from `[DeviceModel]`.
 - `[year]` from `[SongModel]`.
 - `[is_alarm]` from `[SongModel]`.
 - `[is_music]` from `[SongModel]`.

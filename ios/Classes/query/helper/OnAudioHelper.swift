@@ -156,30 +156,12 @@ public func formatArtistList(args: [String: Any], allArtists: [[String: Any?]]) 
 //Genres
 
 func loadGenreItem(genre: MPMediaItemCollection) -> [String: Any?] {
-    //Get all albums from artist
-//    let albumsCursor = MPMediaQuery.albums()
-//    albumsCursor.addFilterPredicate(MPMediaPropertyPredicate.init(value: artist.items[0].albumArtist, forProperty: MPMediaItemPropertyAlbumArtist))
-//    var finalCount: [String] = Array()
-    
-//    let albums = albumsCursor.collections
-    
-    //Normally when song don't have a album, will be "nil" or "unknown",
-    //Here we'll "filter" the albums, removing this "non-albums".
-    //So, if multiples songs don't has a defined album, will be count only 1.
-//    for album in albums! {
-//        let itemAlbum = album.items[0].albumTitle
-//        if itemAlbum != nil && !finalCount.contains(itemAlbum!) {
-//            finalCount.append(itemAlbum!)
-//        }
-//    }
-    
     //
     let genreData: [String: Any?] = [
         "_id": genre.items[0].genrePersistentID,
         "name": genre.items[0].genre,
         "number_of_songs": genre.count
     ]
-    print(genreData)
     return genreData
 }
 
@@ -192,4 +174,25 @@ public func formatGenreList(args: [String: Any], allGenres: [[String: Any?]]) ->
         tempList.reverse()
     }
     return tempList
+}
+
+func loadPlaylistItem(playlist: MPMediaItemCollection) -> [String: Any?] {
+    //Get the artwork from the first song inside the playlist
+    var artwork: Data? = nil
+    if playlist.items.count >= 1 {
+        artwork = playlist.items[0].artwork?.image(at: CGSize(width: 150, height: 150))?.jpegData(compressionQuality: 1)
+    }
+    //
+    let id = playlist.value(forProperty: MPMediaPlaylistPropertyPersistentID) as? Int
+    let dateAdded = playlist.value(forProperty: "dateCreated") as? Date
+    let dateModified = playlist.value(forProperty: "dateModified") as? Date
+    let playlistData: [String: Any?] = [
+        "_id": String(id ?? 0),
+        "name": playlist.value(forProperty: MPMediaPlaylistPropertyName),
+        "date_added": String(dateAdded!.timeIntervalSince1970),
+        "date_modified": String(dateModified!.timeIntervalSince1970),
+        "number_of_tracks": playlist.items.count,
+        "artwork": artwork
+    ]
+    return playlistData
 }
