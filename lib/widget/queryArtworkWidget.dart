@@ -198,12 +198,12 @@ class QueryArtworkWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return deviceSDK >= 29
         ? FutureBuilder(
-            future: OnAudioQuery().queryArtworks(
-                id,
-                type,
-                format ?? ArtworkFormat.JPEG,
-                size ?? 200,
-                requestPermission ?? false),
+            future: OnAudioQuery().queryArtwork(
+              id,
+              type,
+              format: format ?? ArtworkFormat.JPEG,
+              size: size ?? 200,
+            ),
             builder: (context, AsyncSnapshot<Uint8List?> item) {
               if (item.data != null) {
                 return ClipRRect(

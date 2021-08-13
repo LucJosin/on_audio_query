@@ -1,0 +1,31 @@
+name: Dart Analyzer
+on: [push, pull_request]
+
+jobs:
+  package-analysis:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: axel-op/dart-package-analyzer@v3
+        id: dart_analysis
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+      - name: Check Scores
+        env:
+          TOTAL: ${{ steps.dart_analysis.outputs.total }}
+          TOTAL_MAX: ${{ steps.dart_analysis.outputs.total_max }}
+          DOCUMENTATION: ${{ steps.dart_analysis.outputs.documentation }}
+          DOCUMENTATION_MAX: ${{ steps.dart_analysis.outputs.documentation_max }}
+        run: |
+          PERCENTAGE=$(( $TOTAL * 100 / $TOTAL_MAX - 10 ))
+          DOCUMENTATION_PER=$(( $DOCUMENTATION * 100 / $DOCUMENTATION_MAX ))
+          if (( $PERCENTAGE < 100 ))
+          then
+            echo Total score: [$PERCENTAGE].
+            echo Too low!.
+          elif (( $DOCUMENTATION_PER < 20 ))
+          then
+            echo Total documentation score: [$DOCUMENTATION_PER].
+            echo Too low!. Provide more documentation.
+            exit 1
+          fi

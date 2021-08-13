@@ -2,16 +2,14 @@ package com.lucasjosino.on_audio_query.query
 
 import android.annotation.SuppressLint
 import android.content.ContentResolver
-import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lucasjosino.on_audio_query.utils.loadArtwork
+import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
 import com.lucasjosino.on_audio_query.types.checkAudiosUriType
 import com.lucasjosino.on_audio_query.types.songProjection
 import com.lucasjosino.on_audio_query.types.sorttypes.checkSongSortType
-import com.lucasjosino.on_audio_query.utils.getExtraInfo
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
@@ -22,23 +20,29 @@ import kotlinx.coroutines.withContext
 class OnAudiosQuery : ViewModel() {
 
     //Main parameters
+    private val helper = OnAudioHelper()
     private lateinit var uri: Uri
-    private var onlyMusic: Boolean = false
     private lateinit var resolver: ContentResolver
     private lateinit var sortType: String
-    private var selection: String? = null
+
     @SuppressLint("StaticFieldLeak")
     private lateinit var context: Context
 
-    //querySongs and queryAudios together
-    fun querySongs(context: Context, result: MethodChannel.Result, call: MethodCall, onlyMusic: Boolean) {
-        this.context = context ; this.onlyMusic = onlyMusic ; resolver = context.contentResolver
+    //This method will query all audio/songs available.
+    fun querySongs(
+        context: Context,
+        result: MethodChannel.Result,
+        call: MethodCall,
+    ) {
+        this.context = context; resolver = context.contentResolver
 
         //SortType: Type and Order
-        sortType = checkSongSortType(call.argument<Int>("sortType")!!, call.argument<Int>("orderType")!!)
+        sortType = checkSongSortType(
+            call.argument<Int>("sortType")!!,
+            call.argument<Int>("orderType")!!
+        )
+        //
         uri = checkAudiosUriType(call.argument<Int>("uri")!!)
-        if (call.argument<String>("path") != null)
-            selection = songProjection[0] + " like " + "'%" + call.argument<String>("path") + "/%'"
 
         //Query everything in the Background it's necessary for better performance
         viewModelScope.launch {
@@ -51,75 +55,41 @@ class OnAudiosQuery : ViewModel() {
     }
 
     //Loading in Background
-    private suspend fun loadSongs() : ArrayList<MutableMap<String, Any>> = withContext(Dispatchers.IO) {
-        val cursor = resolver.query(uri, songProjection, selection, null, sortType)
-        val songList: ArrayList<MutableMap<String, Any>> = ArrayList()
-        while (cursor != null && cursor.moveToNext()) {
-            val songData: MutableMap<String, Any> = HashMap()
-            for (audioMedia in cursor.columnNames) {
-                if (cursor.getString(cursor.getColumnIndex(audioMedia)) != null) {
-                    songData[audioMedia] = cursor.getString(cursor.getColumnIndex(audioMedia))
-                } else songData[audioMedia] = ""
+    private suspend fun loadSongs(): ArrayList<MutableMap<String, Any?>> =
+        withContext(Dispatchers.IO) {
+            val cursor = resolver.query(uri, songProjection, null, null, sortType)
+            val songList: ArrayList<MutableMap<String, Any?>> = ArrayList()
+            //Search for song.
+            while (cursor != null && cursor.moveToNext()) {
+                //Create a temp [Map] to store information.
+                //[songProjection] is used to define which items we need.
+                val tempData: MutableMap<String, Any?> = HashMap()
+                //You can see all projection types below this file.
+                for (audioMedia in cursor.columnNames) {
+                    tempData[audioMedia] = helper.loadSongItem(audioMedia, cursor)
+                }
+
+                //Get a extra information from audio, e.g: extension, uri, etc..
+                val tempExtraData = helper.loadSongExtraInfo(uri, tempData)
+                tempData.putAll(tempExtraData)
+
+                //
+                songList.add(tempData)
             }
-
-            //Artwork
-            val art = loadArtwork(context, songData["album"].toString())
-            if (art.isNotEmpty()) songData["artwork"] = art
-
-            //Extra information from song
-            val extraInfo = getExtraInfo(songData["_data"].toString())
-            songData.putAll(extraInfo)
-
-            //
-            val uri = ContentUris.withAppendedId(uri, songData["_id"].toString().toLong())
-            songData["_uri"] = uri.toString()
-
-            //if "queryAudios" query everything, else query only musics
-            //TODO("Add more filters for "onlyMusic")
-            if (onlyMusic) {
-                val filter = songData["album"]?.toString()
-                if (filter?.contains("Audio", ignoreCase = true) == false) songList.add(songData)
-            } else songList.add(songData)
+            cursor?.close()
+            return@withContext songList
         }
-        cursor?.close()
-        return@withContext songList
-    }
 }
 
 //Extras:
 
 // * Query only audio > 60000 ms [1 minute]
 // Obs: I don't think is a good idea, some audio "Non music" have more than 1 minute
-//query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, MediaStore.Audio.Media.DURATION + ">= 60000", null, checkSongSortType(sortType!!))
+//query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, MediaStore.Audio.Media.DURATION +
+// ">= 60000", null, checkSongSortType(sortType!!))
 
 // * Query audio with limit, used for better performance in tests
 //MediaStore.Audio.Media.TITLE + " LIMIT 4"
-
-// * All projection used for query audio in this Plugin
-//I/OnAudioCursor[Audio]: [
-// _data,
-// _display_name,
-// _id,
-// _size,
-// album,
-// album_artist,
-// album_id
-// artist,
-// artist_id,
-// bookmark,
-// composer,
-// date_added,
-// date_modified,
-// duration,
-// title,
-// track,
-// year,
-// is_alarm
-// is_music,
-// is_notification,
-// is_podcast,
-// is_ringtone
-// ]
 
 // * All projection types in android [Audio]
 //I/AudioCursor[All]: [

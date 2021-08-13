@@ -1,3 +1,54 @@
+## [2.0.0] - [06.23.2021] -> [X.X.X] - [XX.XX.2021]
+### Deprecated
+- `[albumName]` from `[AlbumModel]`.
+    - Use `[album]` instead.
+- `[artistName]` from `[ArtistModel]`.
+    - Use `[artist]` instead.
+- `[genreName]` from `[GenreModel]`.
+    - Use `[genre]` instead.
+- `[playlistName]` from `[PlaylistModel]`.
+    - Use `[playlist]` instead.
+- `[ALBUM_NAME]` FROM `[AudiosFromType]`.
+    - Use `[ALBUM]` instead.
+- `[ARTIST_NAME]` FROM `[AudiosFromType]`.
+    - Use `[ARTIST]` instead.
+- `[GENRE_NAME]` FROM `[AudiosFromType]`.
+    - Use `[GENRE]` instead.
+- `[ALBUM_NAME]` FROM `[AlbumsArgs]`.
+    - Use `[ALBUM]` instead.
+- `[PLAYLIST_NAME]` FROM `[PlaylistsArgs]`.
+    - Use `[PLAYLIST]` instead.
+- `[PLAYLIST_NAME]` FROM `[PlaylistSortType]`.
+    - Use `[PLAYLIST]` instead.
+- `[ARTIST_NAME]` FROM `[ArtistsArgs]`.
+    - Use `[ARTIST]` instead.
+- `[GENRE_NAME]` FROM `[GenresArgs]`.
+    - Use `[GENRE]` instead.
+- `[numOfSongsArtists]` from `[AlbumModel]`.
+- `[firstYear]` from `[AlbumModel]`.
+    - `[FIRST_YEAR]` from `[AlbumSortType]`.
+- `[lastYear]` from `[AlbumModel]`.
+    - `[LAST_YEAR]` from `[AlbumSortType]`.
+- `[release]` from `[DeviceModel]`.
+- `[code]` from `[DeviceModel]`.
+- `[year]` from `[SongModel]`.
+- `[is_alarm]` from `[SongModel]`.
+- `[is_music]` from `[SongModel]`.
+- `[is_notification]` from `[SongModel]`.
+- `[is_ringtone]` from `[SongModel]`.
+- `[is_podcast]` from `[SongModel]`.
+- `[file_parent]` from `[SongModel]`.
+- `[path]` from `[querySongs]`.
+- `[artwork]` from `[SongModel]`.
+    - Use `[queryArtwork]` instead.
+- `[artwork]` from `[ArtistModel]`.
+- `[artwork]` from `[GenreModel]`.
+- `[queryAudiosOnly]`.
+- `[querySongsBy]`.
+- `[AudiosOnlyType]`.
+- `[SongsByType]`.
+- `[queryAudios]`.
+
 ## [1.1.1] - [06.23.2021] -> [1.2.0] - [07.30.2021]
 ### Deprecated
-- Deprecated `[deviceInfo]` from `[QueryArtworkWidget]`.
+- `[deviceInfo]` from `[QueryArtworkWidget]`.

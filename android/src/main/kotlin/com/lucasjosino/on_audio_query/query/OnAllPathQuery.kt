@@ -14,14 +14,17 @@ class OnAllPathQuery {
     private lateinit var resolver: ContentResolver
 
     fun queryAllPath(context: Context, result: MethodChannel.Result) {
-        this.resolver = context.contentResolver ; this.uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+        this.resolver = context.contentResolver
+        this.uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
 
+        //
         val resultAllPath = loadAllPath()
 
+        //
         result.success(resultAllPath)
     }
 
-    private fun loadAllPath() : ArrayList<String>{
+    private fun loadAllPath(): ArrayList<String> {
         val cursor = resolver.query(uri, null, null, null, null)
         val songPathList: ArrayList<String> = ArrayList()
         while (cursor != null && cursor.moveToNext()) {

@@ -14,10 +14,11 @@ enum AlbumSortType {
   ///[NUM_OF_SONGS] will return album list based in [number_of_songs].
   NUM_OF_SONGS,
 
-  //
-  ///[FIRST_YEAR] will return album list based in [first_year] dates.
+  /// Deprecated after [2.0.0].
+  @Deprecated("This method will be removed soon")
   FIRST_YEAR,
 
-  ///[LAST_YEAR] will return album list based in [last_year] dates.
+  /// Deprecated after [2.0.0].
+  @Deprecated("This method will be removed soon")
   LAST_YEAR,
 }

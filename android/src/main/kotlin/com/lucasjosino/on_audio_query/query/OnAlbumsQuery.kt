@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.annotation.NonNull
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
 import com.lucasjosino.on_audio_query.types.checkAlbumsUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkAlbumSortType
 import io.flutter.plugin.common.MethodCall
@@ -18,6 +19,7 @@ import kotlinx.coroutines.withContext
 class OnAlbumsQuery : ViewModel() {
 
     //Main parameters
+    private val helper = OnAudioHelper()
     private lateinit var uri: Uri
     private lateinit var sortType: String
     private lateinit var resolver: ContentResolver
@@ -41,21 +43,19 @@ class OnAlbumsQuery : ViewModel() {
     }
 
     //Loading in Background
-    private suspend fun loadAlbums() : ArrayList<MutableMap<String, Any>> = withContext(Dispatchers.IO) {
+    private suspend fun loadAlbums() : ArrayList<MutableMap<String, Any?>> = withContext(Dispatchers.IO) {
         val cursor = resolver.query(uri, null, null, null, sortType)
-        val albumList: ArrayList<MutableMap<String, Any>> = ArrayList()
+        val albumList: ArrayList<MutableMap<String, Any?>> = ArrayList()
         while (cursor != null && cursor.moveToNext()) {
-            val albumData: MutableMap<String, Any> = HashMap()
+            val tempData: MutableMap<String, Any?> = HashMap()
             for (albumMedia in cursor.columnNames) {
-                if (cursor.getString(cursor.getColumnIndex(albumMedia)) != null) {
-                    albumData[albumMedia] = cursor.getString(cursor.getColumnIndex(albumMedia))
-                } else albumData[albumMedia] = ""
+                tempData[albumMedia] = helper.loadAlbumItem(albumMedia, cursor)
             }
 
             //In Android 10 and above [album_art] will return null, to avoid problem, we remove it.
-            val art = albumData["album_art"].toString()
-            if (art.isEmpty()) albumData.remove("album_art")
-            albumList.add(albumData)
+            val art = tempData["album_art"].toString()
+            if (art.isEmpty()) tempData.remove("album_art")
+            albumList.add(tempData)
         }
         cursor?.close()
         return@withContext albumList

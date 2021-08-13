@@ -4,10 +4,9 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lucasjosino.on_audio_query.types.checkAudiosUriType
+import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
 import com.lucasjosino.on_audio_query.types.checkPlaylistsUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkGenreSortType
 import io.flutter.plugin.common.MethodCall
@@ -20,17 +19,18 @@ import kotlinx.coroutines.withContext
 class OnPlaylistQuery : ViewModel() {
 
     //Main parameters
+    private val helper = OnAudioHelper()
     private lateinit var uri: Uri
     private lateinit var resolver: ContentResolver
     private lateinit var sortType: String
 
     //Query projection
     private val projection = arrayOf(
-            MediaStore.Audio.Playlists.DATA,
-            MediaStore.Audio.Playlists._ID,
-            MediaStore.Audio.Playlists.DATE_ADDED,
-            MediaStore.Audio.Playlists.DATE_MODIFIED,
-            MediaStore.Audio.Playlists.NAME
+        MediaStore.Audio.Playlists.DATA,
+        MediaStore.Audio.Playlists._ID,
+        MediaStore.Audio.Playlists.DATE_ADDED,
+        MediaStore.Audio.Playlists.DATE_MODIFIED,
+        MediaStore.Audio.Playlists.NAME
     )
 
     //
@@ -38,7 +38,10 @@ class OnPlaylistQuery : ViewModel() {
         resolver = context.contentResolver
 
         //SortType: Type and Order
-        sortType = checkGenreSortType(call.argument<Int>("sortType")!!, call.argument<Int>("orderType")!!)
+        sortType = checkGenreSortType(
+            call.argument<Int>("sortType")!!,
+            call.argument<Int>("orderType")!!
+        )
         uri = checkPlaylistsUriType(call.argument<Int>("uri")!!)
 
         //Query everything in the Background it's necessary for better performance
@@ -52,21 +55,20 @@ class OnPlaylistQuery : ViewModel() {
     }
 
     //Loading in Background
-    private suspend fun loadPlaylists() : ArrayList<MutableMap<String, Any>> = withContext(Dispatchers.IO) {
-        val cursor = resolver.query(uri, projection, null, null, null)
-        val playlistList: ArrayList<MutableMap<String, Any>> = ArrayList()
-        while (cursor != null && cursor.moveToNext()) {
-            val playlistData: MutableMap<String, Any> = HashMap()
-            for (playlistMedia in cursor.columnNames) {
-                if (cursor.getString(cursor.getColumnIndex(playlistMedia)) != null) {
-                    playlistData[playlistMedia] = cursor.getString(cursor.getColumnIndex(playlistMedia))
-                } else playlistData[playlistMedia] = ""
+    private suspend fun loadPlaylists(): ArrayList<MutableMap<String, Any?>> =
+        withContext(Dispatchers.IO) {
+            val cursor = resolver.query(uri, projection, null, null, null)
+            val playlistList: ArrayList<MutableMap<String, Any?>> = ArrayList()
+            while (cursor != null && cursor.moveToNext()) {
+                val playlistData: MutableMap<String, Any?> = HashMap()
+                for (playlistMedia in cursor.columnNames) {
+                    playlistData[playlistMedia] = helper.loadPlaylistItem(playlistMedia, cursor)
+                }
+                playlistList.add(playlistData)
             }
-            playlistList.add(playlistData)
+            cursor?.close()
+            return@withContext playlistList
         }
-        cursor?.close()
-        return@withContext playlistList
-    }
 }
 
 //Extras:

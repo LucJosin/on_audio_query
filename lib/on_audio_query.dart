@@ -20,6 +20,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 //Dart/Flutter
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
@@ -52,6 +53,7 @@ part 'details/types/audios_only_type.dart';
 part 'details/types/with_filters_type.dart';
 part 'details/types/uri_type.dart';
 part 'details/types/songs_by_type.dart';
+//
 
 //Widget
 part 'widget/queryArtworkWidget.dart';

@@ -34,142 +34,133 @@ import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry
 
 /** OnAudioQueryPlugin Central */
-class OnAudioQueryPlugin: FlutterPlugin, MethodCallHandler, ActivityAware,
-        OnPermissionManagerInterface, PluginRegistry.RequestPermissionsResultListener {
+class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
+    OnPermissionManagerInterface, PluginRegistry.RequestPermissionsResultListener {
 
-  //Dart <-> Kotlin communication
-  private val channelName = "com.lucasjosino.on_audio_query"
-  private lateinit var channel : MethodChannel
+    // Dart <-> Kotlin communication
+    private val channelName = "com.lucasjosino.on_audio_query"
+    private lateinit var channel: MethodChannel
 
-  //Main parameters
-  private var retryRequest: Boolean = false
-  private lateinit var pContext: Context
-  private lateinit var pActivity: Activity
-  private lateinit var pResult: Result
-  private lateinit var onAudioController: OnAudioController
-
-  //
-  private val onPermission = arrayOf(
-          Manifest.permission.READ_EXTERNAL_STORAGE,
-          Manifest.permission.WRITE_EXTERNAL_STORAGE
-  )
-
-  //This is only important for initialization
-  override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    this.pContext = flutterPluginBinding.applicationContext
-    channel = MethodChannel(flutterPluginBinding.binaryMessenger, channelName)
-    channel.setMethodCallHandler(this)
-  }
-
-  //Methods will always follow the same route:
-  //Receive method -> check permission -> controller -> do what's needed -> return to dart
-  override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
-    pResult = result ; onAudioController = OnAudioController(pContext, call, result)
-
-    //Request will be null(*For kotlin) when permissions methods are called, so, it's important to check.
-    //*For Kotlin: Actually request won't be null, Dart already have a request check.
-    val request = call.argument<Boolean>("requestPermission") ?: false
-    //If user deny permission request a pop up will immediately show up
-    //If [retryRequest] is null, the message will only show when call method again
-    retryRequest = call.argument<Boolean>("retryRequest") ?: false
+    // Main parameters
+    private var retryRequest: Boolean = false
+    private lateinit var pContext: Context
+    private lateinit var pActivity: Activity
+    private lateinit var pResult: Result
+    private lateinit var onAudioController: OnAudioController
 
     //
-    when (call.method) {
-      //Permissions
-      "permissionsStatus" -> result.success(onPermissionStatus())
-      "permissionsRequest" -> onRequestPermission("E")
-      //Device information
-      //Permissions and Storage in Android are very complicated, get device info may help
-      "queryDeviceInfo" -> queryDeviceInfo(result)
-      else -> { onCheckPermission(request) } //All others methods
+    private val onPermission = arrayOf(
+        Manifest.permission.READ_EXTERNAL_STORAGE,
+        Manifest.permission.WRITE_EXTERNAL_STORAGE
+    )
+
+    // This is only important for initialization
+    override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+        this.pContext = flutterPluginBinding.applicationContext
+        channel = MethodChannel(flutterPluginBinding.binaryMessenger, channelName)
+        channel.setMethodCallHandler(this)
     }
-  }
 
-  //This is only important for initialization - Start
-  override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
-    channel.setMethodCallHandler(null)
-  }
+    // Methods will always follow the same route:
+    // Receive method -> check permission -> controller -> do what's needed -> return to dart
+    override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
+        pResult = result; onAudioController = OnAudioController(pContext, call, result)
 
-  override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-    this.pActivity = binding.activity
-    binding.addRequestPermissionsResultListener(this)
-  }
+        // If user deny permission request a pop up will immediately show up
+        // If [retryRequest] is null, the message will only show when call method again
+        retryRequest = call.argument<Boolean>("retryRequest") ?: false
 
-  override fun onDetachedFromActivityForConfigChanges() {}
+        //
+        when (call.method) {
+            // Permissions
+            "permissionsStatus" -> result.success(onPermissionStatus())
+            "permissionsRequest" -> onRequestPermission()
 
-  override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {}
+            // Device information
+            "queryDeviceInfo" -> queryDeviceInfo(result)
 
-  override fun onDetachedFromActivity() {}
-  //End
-
-  //OnPermissionController
-  //TODO Find another solution for Permission Request
-  // if [OnPermissionController] is in another class, [onRequestPermissionsResult]
-  // won't listen to Call and Result parameters
-
-  //
-  private val onRequestCode: Int = 88560
-  private val onExternalRequestCode: Int = 88561
-
-  override fun onCheckPermission(requestPermission: Boolean) {
-    if (!requestPermission || onPermissionStatus()) onAudioController.onAudioController()
-    else onRequestPermission("I")
-  }
-
-  override fun onPermissionStatus(): Boolean = onPermission.all {
-    return ContextCompat.checkSelfPermission(pContext, it) == PackageManager.PERMISSION_GRANTED
-  }
-
-  override fun onRequestPermission(IorE: String) {
-    //[I] -> Internal -> From Kotlin ; [E] -> External -> From Dart
-    when (IorE) {
-      "I" -> ActivityCompat.requestPermissions(pActivity, onPermission, onRequestCode)
-      "E" -> ActivityCompat.requestPermissions(pActivity, onPermission, onExternalRequestCode)
+            // All others methods
+            else -> {
+                if (onPermissionStatus()) onAudioController.onAudioController() else pResult.error(
+                    "on_audio_error",
+                    "Android has no permission to [Read] or [Write] information.",
+                    "Be sure that added/called required permissions"
+                )
+            }
+        }
     }
-  }
 
-  //Second requestPermission, this one with the option "Never Ask Again".
-  override fun onRetryRequestPermission() {
-    if (ActivityCompat.shouldShowRequestPermissionRationale(pActivity, onPermission[0])
-            || ActivityCompat.shouldShowRequestPermissionRationale(pActivity, onPermission[1])) {
-      onRequestPermission("I")
+    // This is only important for initialization - Start
+    override fun onDetachedFromEngine(@NonNull binding: FlutterPlugin.FlutterPluginBinding) {
+        channel.setMethodCallHandler(null)
     }
-  }
 
-  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>?, grantResults: IntArray?): Boolean {
-    // When `pResult` is not initialized the permission request did not originate from the
-    // on_audio_query plugin, so return `false` to indicate the on_audio_query plugin is not
-    // handling the request result and Android should continue executing other registered handlers.
-    if (!this::pResult.isInitialized) return false
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        this.pActivity = binding.activity
+        binding.addRequestPermissionsResultListener(this)
+    }
 
-    // When the incoming request code doesn't match the request codes defined by the on_audio_query
-    // plugin return `false` to indicate the on_audio_query plugin is not handling the request
-    // result and Android should continue executing other registered handlers.
-    if (requestCode != onRequestCode && requestCode != onExternalRequestCode) return false
+    override fun onDetachedFromActivityForConfigChanges() {}
+
+    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {}
+
+    override fun onDetachedFromActivity() {}
+    // End
+
+    // OnPermissionController
+    // TODO Find another solution for Permission Request
 
     //
-    val isPermissionGranted = if (grantResults != null) grantResults.isNotEmpty()
-            && grantResults[0] == PackageManager.PERMISSION_GRANTED else false
+    private val onRequestCode: Int = 88560
 
-    when (requestCode) {
-      onRequestCode -> {
-        when {
-          isPermissionGranted -> onAudioController.onAudioController()
-          retryRequest -> onRetryRequestPermission()
-          else -> pResult.success(false)
-        }
-      }
-      onExternalRequestCode -> {
-        when {
-            isPermissionGranted -> pResult.success(true)
-            retryRequest -> onRetryRequestPermission()
-            else -> pResult.success(false)
-        }
-      }
+    override fun onPermissionStatus(): Boolean = onPermission.all {
+        return ContextCompat.checkSelfPermission(pContext, it) == PackageManager.PERMISSION_GRANTED
     }
 
-    // Return `true` here to indicate that the on_audio_query plugin handled the permission request
-    // result and Android should not continue executing other registered handlers.
-    return true
-  }
+    override fun onRequestPermission() {
+        ActivityCompat.requestPermissions(pActivity, onPermission, onRequestCode)
+    }
+
+    // Second requestPermission, this one with the option "Never Ask Again".
+    override fun onRetryRequestPermission() {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(pActivity, onPermission[0])
+            || ActivityCompat.shouldShowRequestPermissionRationale(pActivity, onPermission[1])
+        ) {
+            onRequestPermission()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>?,
+        grantResults: IntArray?
+    ): Boolean {
+        // When [pResult] is not initialized the permission request did not originate from the
+        // [on_audio_query] plugin, so return [false] to indicate the [on_audio_query] plugin is not
+        // handling the request result and Android should continue executing other registered handlers.
+        if (!this::pResult.isInitialized) return false
+
+        // When the incoming request code doesn't match the request codes defined by the on_audio_query
+        // plugin return [false] to indicate the [on_audio_query] plugin is not handling the request
+        // result and Android should continue executing other registered handlers.
+        if (requestCode != onRequestCode) return false
+
+        // Check permission
+        val isPermissionGranted = if (grantResults != null) grantResults.isNotEmpty()
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED else false
+
+        when (requestCode) {
+            onRequestCode -> {
+                when {
+                    isPermissionGranted -> onAudioController.onAudioController()
+                    retryRequest -> onRetryRequestPermission()
+                    else -> pResult.success(false)
+                }
+            }
+        }
+
+        // Return [true] here to indicate that the [on_audio_query] plugin handled the permission request
+        // result and Android should not continue executing other registered handlers.
+        return true
+    }
 }

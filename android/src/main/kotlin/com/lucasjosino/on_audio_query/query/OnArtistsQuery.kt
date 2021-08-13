@@ -6,8 +6,8 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
 import com.lucasjosino.on_audio_query.types.checkArtistsUriType
-import com.lucasjosino.on_audio_query.types.checkAudiosUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkArtistSortType
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -19,23 +19,27 @@ import kotlinx.coroutines.withContext
 class OnArtistsQuery : ViewModel() {
 
     //Main parameters
+    private val helper = OnAudioHelper()
     private lateinit var uri: Uri
     private lateinit var resolver: ContentResolver
     private lateinit var sortType: String
 
     //Query projection
     private val projection = arrayOf(
-            MediaStore.Audio.Artists._ID,
-            MediaStore.Audio.Artists.ARTIST,
-            MediaStore.Audio.Artists.NUMBER_OF_ALBUMS,
-            MediaStore.Audio.Artists.NUMBER_OF_TRACKS
+        MediaStore.Audio.Artists._ID,
+        MediaStore.Audio.Artists.ARTIST,
+        MediaStore.Audio.Artists.NUMBER_OF_ALBUMS,
+        MediaStore.Audio.Artists.NUMBER_OF_TRACKS
     )
 
     fun queryArtists(context: Context, result: MethodChannel.Result, call: MethodCall) {
         resolver = context.contentResolver
 
         //SortType: Type and Order
-        sortType = checkArtistSortType(call.argument<Int>("sortType")!!, call.argument<Int>("orderType")!!)
+        sortType = checkArtistSortType(
+            call.argument<Int>("sortType")!!,
+            call.argument<Int>("orderType")!!
+        )
         uri = checkArtistsUriType(call.argument<Int>("uri")!!)
 
         //Query everything in the Background it's necessary for better performance
@@ -49,21 +53,20 @@ class OnArtistsQuery : ViewModel() {
     }
 
     //Loading in Background
-    private suspend fun loadArtists() : ArrayList<MutableMap<String, Any>> = withContext(Dispatchers.IO) {
-        val cursor = resolver.query(uri, projection, null, null, sortType)
-        val artistList: ArrayList<MutableMap<String, Any>> = ArrayList()
-        while (cursor != null && cursor.moveToNext()) {
-            val artistData: MutableMap<String, Any> = HashMap()
-            for (artistMedia in cursor.columnNames) {
-                if (cursor.getString(cursor.getColumnIndex(artistMedia)) != null) {
-                    artistData[artistMedia] = cursor.getString(cursor.getColumnIndex(artistMedia))
-                } else artistData[artistMedia] = ""
+    private suspend fun loadArtists(): ArrayList<MutableMap<String, Any?>> =
+        withContext(Dispatchers.IO) {
+            val cursor = resolver.query(uri, projection, null, null, sortType)
+            val artistList: ArrayList<MutableMap<String, Any?>> = ArrayList()
+            while (cursor != null && cursor.moveToNext()) {
+                val tempData: MutableMap<String, Any?> = HashMap()
+                for (artistMedia in cursor.columnNames) {
+                    tempData[artistMedia] = helper.loadArtistItem(artistMedia, cursor)
+                }
+                artistList.add(tempData)
             }
-            artistList.add(artistData)
+            cursor?.close()
+            return@withContext artistList
         }
-        cursor?.close()
-        return@withContext artistList
-    }
 }
 
 //Extras:

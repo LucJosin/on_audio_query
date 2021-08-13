@@ -1,4 +1,4 @@
-package com.lucasjosino.on_audio_query.utils
+package com.lucasjosino.on_audio_query.controller
 
 import android.content.ContentResolver
 import android.content.ContentUris

@@ -45,7 +45,11 @@ class _SongsState extends State<Songs> {
           elevation: 2,
           actions: [
             IconButton(
-              onPressed: () {
+              onPressed: () async {
+                bool result = await OnAudioQuery().permissionsStatus();
+                if (!result) {
+                  await OnAudioQuery().permissionsRequest();
+                }
                 setState(() {});
               },
               icon: Icon(Icons.add),
@@ -54,10 +58,9 @@ class _SongsState extends State<Songs> {
         ),
         body: FutureBuilder<List<SongModel>>(
           future: OnAudioQuery().querySongs(
-            SongSortType.DEFAULT,
-            OrderType.ASC_OR_SMALLER,
-            UriType.EXTERNAL,
-            false,
+            sortType: SongSortType.DEFAULT,
+            orderType: OrderType.ASC_OR_SMALLER,
+            uriType: UriType.EXTERNAL,
           ),
           builder: (context, item) {
             if (item.data != null) {
@@ -67,7 +70,7 @@ class _SongsState extends State<Songs> {
                 itemBuilder: (context, index) {
                   return ListTile(
                     title: Text(songList[index].title),
-                    subtitle: Text(songList[index].artist),
+                    subtitle: Text(songList[index].artist ?? "No Artist"),
                     trailing: Icon(Icons.arrow_forward_rounded),
                   );
                 },

@@ -6,7 +6,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
-import android.util.Log
 import android.util.Size
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -31,11 +30,11 @@ class OnArtworksQuery : ViewModel() {
     private lateinit var format: Bitmap.CompressFormat
 
     //
-    fun queryArtworks(context: Context, result: MethodChannel.Result, call: MethodCall) {
+    fun queryArtwork(context: Context, result: MethodChannel.Result, call: MethodCall) {
         resolver = context.contentResolver
 
         //Id, size, and uri
-        id = call.argument<Number>("id")!! ; size = call.argument<Int>("size")!!
+        id = call.argument<Number>("id")!!; size = call.argument<Int>("size")!!
         format = checkArtworkFormat(call.argument<Int>("format")!!)
         uri = checkArtworkType(call.argument<Int>("type")!!)
 
@@ -51,7 +50,7 @@ class OnArtworksQuery : ViewModel() {
 
     //Loading in Background
     @Suppress("BlockingMethodInNonBlockingContext")
-    private suspend fun loadArt() : ByteArray? = withContext(Dispatchers.IO) {
+    private suspend fun loadArt(): ByteArray? = withContext(Dispatchers.IO) {
         var artData: ByteArray? = null
         if (Build.VERSION.SDK_INT >= 29) {
             val query = ContentUris.withAppendedId(uri, id.toLong())
@@ -66,7 +65,7 @@ class OnArtworksQuery : ViewModel() {
     }
 
     //
-    private fun convertToByteArray(bitmap: Bitmap) : ByteArray? {
+    private fun convertToByteArray(bitmap: Bitmap): ByteArray? {
         var convertedBytes: ByteArray? = null
         try {
             val byteArray = ByteArrayOutputStream()
@@ -78,4 +77,13 @@ class OnArtworksQuery : ViewModel() {
         }
         return convertedBytes
     }
+
+//    private fun convertToBitmap(byteArray: ByteArray) : Bitmap? {
+//        return try {
+//            BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
+//        } catch (e: Exception) {
+//            null
+//            //Log.i("Error", e.toString())
+//        }
+//    }
 }

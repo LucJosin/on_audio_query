@@ -2,17 +2,15 @@ package com.lucasjosino.on_audio_query.query
 
 import android.annotation.SuppressLint
 import android.content.ContentResolver
-import android.content.ContentUris
 import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lucasjosino.on_audio_query.utils.loadArtwork
+import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
 import com.lucasjosino.on_audio_query.types.checkAudiosFromType
 import com.lucasjosino.on_audio_query.types.songProjection
-import com.lucasjosino.on_audio_query.utils.getExtraInfo
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
@@ -23,18 +21,20 @@ import kotlinx.coroutines.withContext
 class OnAudiosFromQuery : ViewModel() {
 
     //Main parameters
+    private val helper = OnAudioHelper()
     private val uri: Uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
     private var pId = 0
     private var pUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+
+    @SuppressLint("StaticFieldLeak")
+    private lateinit var context: Context
     private lateinit var where: String
     private lateinit var whereVal: String
     private lateinit var resolver: ContentResolver
-    @SuppressLint("StaticFieldLeak")
-    private lateinit var context: Context
 
     //
     fun querySongsFrom(context: Context, result: MethodChannel.Result, call: MethodCall) {
-        this.context = context ; resolver = context.contentResolver
+        this.context = context; resolver = context.contentResolver
 
         //
         val helper = call.argument<Int>("type")!!
@@ -71,36 +71,31 @@ class OnAudiosFromQuery : ViewModel() {
     }
 
     //Loading in Background
-    private suspend fun loadSongsFrom() : ArrayList<MutableMap<String, Any>> = withContext(Dispatchers.IO) {
-        val cursor = resolver.query(uri, songProjection, where, arrayOf(whereVal), null)
-        val songsFromList: ArrayList<MutableMap<String, Any>> = ArrayList()
-        while (cursor != null && cursor.moveToNext()) {
-            val songFromData: MutableMap<String, Any> = HashMap()
-            for (audioMedia in cursor.columnNames) {
-                if (cursor.getString(cursor.getColumnIndex(audioMedia)) != null) {
-                    songFromData[audioMedia] = cursor.getString(cursor.getColumnIndex(audioMedia))
-                } else songFromData[audioMedia] = ""
+    private suspend fun loadSongsFrom(): ArrayList<MutableMap<String, Any?>> =
+        withContext(Dispatchers.IO) {
+            val cursor = resolver.query(uri, songProjection, where, arrayOf(whereVal), null)
+            val songsFromList: ArrayList<MutableMap<String, Any?>> = ArrayList()
+            while (cursor != null && cursor.moveToNext()) {
+                val tempData: MutableMap<String, Any?> = HashMap()
+                for (audioMedia in cursor.columnNames) {
+                    tempData[audioMedia] = helper.loadSongItem(audioMedia, cursor)
+                }
+
+                //Get a extra information from audio, e.g: extension, uri, etc..
+                val tempExtraData = helper.loadSongExtraInfo(uri, tempData)
+                tempData.putAll(tempExtraData)
+
+                songsFromList.add(tempData)
             }
-
-            //Artwork
-            val art = loadArtwork(context, songFromData["album"].toString())
-            if (art.isNotEmpty()) songFromData["artwork"] = art
-
-            //Extra information from song
-            val extraInfo = getExtraInfo(songFromData["_data"].toString())
-            songFromData.putAll(extraInfo)
-
-            //
-            val uri = ContentUris.withAppendedId(uri, songFromData["_id"].toString().toLong())
-            songFromData["_uri"] = uri.toString()
-
-            songsFromList.add(songFromData)
+            cursor?.close()
+            return@withContext songsFromList
         }
-        cursor?.close()
-        return@withContext songsFromList
-    }
 
-    private fun querySongsFromPlaylistOrGenre(result: MethodChannel.Result, call: MethodCall, type: Int) {
+    private fun querySongsFromPlaylistOrGenre(
+        result: MethodChannel.Result,
+        call: MethodCall,
+        type: Int
+    ) {
         val info = call.argument<Any>("where")!!
 
         //Check if Playlist exists based in Id
@@ -125,39 +120,29 @@ class OnAudiosFromQuery : ViewModel() {
         }
     }
 
-    private suspend fun loadSongsFromPlaylistOrGenre() : ArrayList<MutableMap<String, Any>> =
-            withContext(Dispatchers.IO) {
+    private suspend fun loadSongsFromPlaylistOrGenre(): ArrayList<MutableMap<String, Any?>> =
+        withContext(Dispatchers.IO) {
 
-        val songsFrom: ArrayList<MutableMap<String, Any>> = ArrayList()
-        val cursor = resolver.query(pUri, songProjection, null, null, null)
-        while (cursor != null && cursor.moveToNext()) {
-            val songFromData: MutableMap<String, Any> = HashMap()
-            for (media in cursor.columnNames) {
-                if (cursor.getString(cursor.getColumnIndex(media)) != null) {
-                    songFromData[media] = cursor.getString(cursor.getColumnIndex(media))
-                } else songFromData[media] = ""
+            val songsFrom: ArrayList<MutableMap<String, Any?>> = ArrayList()
+            val cursor = resolver.query(pUri, songProjection, null, null, null)
+            while (cursor != null && cursor.moveToNext()) {
+                val tempData: MutableMap<String, Any?> = HashMap()
+                for (media in cursor.columnNames) {
+                    tempData[media] = helper.loadSongItem(media, cursor)
+                }
+
+                //Get a extra information from audio, e.g: extension, uri, etc..
+                val tempExtraData = helper.loadSongExtraInfo(uri, tempData)
+                tempData.putAll(tempExtraData)
+
+                songsFrom.add(tempData)
             }
-
-            //Artwork
-            val art = loadArtwork(context, songFromData["album"].toString())
-            if (art.isNotEmpty()) songFromData["artwork"] = art
-
-            //Extra information from song
-            val extraInfo = getExtraInfo(songFromData["_data"].toString())
-            songFromData.putAll(extraInfo)
-
-            //
-            val uri = ContentUris.withAppendedId(uri, songFromData["_id"].toString().toLong())
-            songFromData["_uri"] = uri.toString()
-
-            songsFrom.add(songFromData)
+            cursor?.close()
+            return@withContext songsFrom
         }
-        cursor?.close()
-        return@withContext songsFrom
-    }
 
     //Return true if playlist or genre exists, false, if don't.
-    private fun checkName(plName: String? = null, genreName: String? = null) : Boolean {
+    private fun checkName(plName: String? = null, genreName: String? = null): Boolean {
         val uri: Uri
         val projection: Array<String>
 

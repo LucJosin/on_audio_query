@@ -1,3 +1,25 @@
+## [2.0.0-beta.0] - [08.11.2021]
+### Features
+#### on_audio_query
+- Added a <a href="https://github.com/axel-op/dart-package-analyzer/" target="_blank">`[DART ANALYZAR]`</a> to `PULL_REQUEST` and `PUSH`.
+
+### Documentation
+- Updated `on_audio_query` documentation.
+- Updated `README` documentation.
+- Updated `DEPRECATED` documentation.
+- Created <a href="./PLATFORMS.md" target="_blank">`[PLATFORMS]`</a> file.
+
+### ⚠ Important Changes
+#### Dart
+- Now **ALL** methods has `Named Optional` arguments.
+- Changed `[queryArtworks]` to `[queryArtwork]`.
+
+#### @Deprecated
+- Removed the `[requestPermission]` arguments from **ALL** methods.
+- `[queryAudios]`.
+- `[artwork]` from `[SongModel]`.
+- `[path]` from `[querySongs]`.
+
 ## [2.0.0-alpha.1] - [08.08.2021] - [GitHub Only]
 ### Features
 #### Dart
@@ -30,7 +52,7 @@
 
 ### Dev Changes
 #### Dart
-- Added checker to all `[int]` from `[PlaylistModel]`
+- ~~Added checker to all `[int]` from `[PlaylistModel]`.~~
     - Temporary
 
 ## [2.0.0-alpha.0] - [08.05.2021] - [GitHub Only]
@@ -49,9 +71,9 @@
 
 ### Dev Changes
 #### Dart
-- Added a checker to all int items from `[ArtistModel]`.
+- ~~Added a checker to all int items from `[ArtistModel]`.~~
     - Temporary
-- Added a checker to all int items from `[GenreModel]`.
+- ~~Added a checker to all int items from `[GenreModel]`.~~
     - Temporary
 
 ## [2.0.0-dev.0] - [08.02.2021] - [Internal]
@@ -73,7 +95,7 @@
 ### ⚠ Important Changes
 #### Dart
 - Now `[artwork]` from `[SongModel]` return a `[Uint8list]`.
-- Now all `[int]` from `[SongModel]` can be `[null]`.
+- ~~Now all `[int]` from `[SongModel]` can be `[null]`.~~
 - Now `[artwork]` from `[AlbumModel]` return a `[Uint8list]`.
 
 #### @**Deprecated**
@@ -95,11 +117,10 @@
 ### Dev Changes
 #### Dart
 - Now `[queryDeviceInfo]` will return Map instead of List.
-- Added a checker to all int items from `[SongModel]`.
+- ~~Added a checker to all int items from `[SongModel]`.~~
     - Temporary.
-- Added a checker to all int items from `[AlbumModel]`.
+- ~~Added a checker to all int items from `[AlbumModel]`.~~
     - Temporary.
-- Now `[queryDeviceInfo]` return a Map.
 
 ## [1.2.0] - [07.30.2021]
 ### Features
