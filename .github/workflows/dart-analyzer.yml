@@ -14,18 +14,12 @@ jobs:
         env:
           TOTAL: ${{ steps.dart_analysis.outputs.total }}
           TOTAL_MAX: ${{ steps.dart_analysis.outputs.total_max }}
-          DOCUMENTATION: ${{ steps.dart_analysis.outputs.documentation }}
-          DOCUMENTATION_MAX: ${{ steps.dart_analysis.outputs.documentation_max }}
         run: |
-          PERCENTAGE=$(( $TOTAL * 100 / $TOTAL_MAX - 10 ))
-          DOCUMENTATION_PER=$(( $DOCUMENTATION * 100 / $DOCUMENTATION_MAX ))
-          if (( $PERCENTAGE < 100 ))
+          if (( $TOTAL < $TOTAL_MAX ))
           then
-            echo Total score: [$PERCENTAGE].
-            echo Too low!.
-          elif (( $DOCUMENTATION_PER < 20 ))
-          then
-            echo Total documentation score: [$DOCUMENTATION_PER].
-            echo Too low!. Provide more documentation.
+            echo Total Score: [$TOTAL].
+            echo Something's wrong!.
             exit 1
+          else
+            echo Everything's ok.
           fi
