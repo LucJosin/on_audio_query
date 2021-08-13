@@ -49,10 +49,8 @@ part 'details/types/sort_types/genre_sort_type.dart';
 part 'details/types/order_type.dart';
 part 'details/types/artwork_type.dart';
 part 'details/types/audios_from_type.dart';
-part 'details/types/audios_only_type.dart';
 part 'details/types/with_filters_type.dart';
 part 'details/types/uri_type.dart';
-part 'details/types/songs_by_type.dart';
 //
 
 //Widget
