@@ -15,7 +15,9 @@ jobs:
           TOTAL: ${{ steps.dart_analysis.outputs.total }}
           TOTAL_MAX: ${{ steps.dart_analysis.outputs.total_max }}
         run: |
-          if (( $TOTAL < $TOTAL_MAX ))
+          # [dart-package-analyzer@v3] don't support [dartdoc comments] so, we
+          # add more 10 points.
+          if (( ($TOTAL + 10) < ($TOTAL_MAX + 10) ))
           then
             echo Total Score: [$TOTAL].
             echo Something's wrong!.
