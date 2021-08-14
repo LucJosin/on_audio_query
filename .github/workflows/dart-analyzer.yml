@@ -15,10 +15,9 @@ jobs:
           TOTAL: ${{ steps.dart_analysis.outputs.total }}
           TOTAL_MAX: ${{ steps.dart_analysis.outputs.total_max }}
         run: |
-          TOTALFINAL=$(( $TOTAL + 10 ))
-          if (( $TOTALFINAL < 100 ))
+          if (( $TOTAL < 100 ))
           then
-            echo Total Score: [$TOTALFINAL].
+            echo Total Score: [$TOTAL].
             echo Something's wrong!.
             exit 1
           fi
