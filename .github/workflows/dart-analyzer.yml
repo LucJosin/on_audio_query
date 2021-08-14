@@ -17,11 +17,9 @@ jobs:
         run: |
           # [dart-package-analyzer@v3] don't support [dartdoc comments] so, we
           # add more 10 points.
+          echo Total Score: [$TOTAL].
           if (( ($TOTAL + 10) < ($TOTAL_MAX + 10) ))
           then
-            echo Total Score: [$TOTAL].
             echo Something's wrong!.
             exit 1
-          else
-            echo Everything's ok.
           fi
