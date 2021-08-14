@@ -15,8 +15,6 @@ jobs:
           TOTAL: ${{ steps.dart_analysis.outputs.total }}
           TOTAL_MAX: ${{ steps.dart_analysis.outputs.total_max }}
         run: |
-          # [dart-package-analyzer@v3] don't support [dartdoc comments] so, we
-          # add more 10 points.
           TOTALFINAL=$(( $TOTAL + 10 ))
           if (( $TOTALFINAL < 100 ))
           then
