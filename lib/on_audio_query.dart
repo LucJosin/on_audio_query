@@ -16,7 +16,6 @@ library on_audio_query;
 
 //
 import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
 
 //Dart/Flutter

@@ -3,17 +3,17 @@
 [![Platforms](https://img.shields.io/badge/Platforms-Android%20%7C%20IOS-9cf?&style=flat-square)]()
 [![Languages](https://img.shields.io/badge/Languages-Flutter%20%7C%20Kotlin%20%7C%20Swift-9cf?&style=flat-square)]()
 
-`on_audio_query` is a <a href="https://flutter.dev/" target="_blank">Flutter</a> Plugin used to query audios/songs 🎶 infos [title, artist, album, etc..] from device storage. <br>
+`on_audio_query` is a [Flutter](https://flutter.dev/) Plugin used to query audios/songs 🎶 infos [title, artist, album, etc..] from device storage. <br>
 
 ## Help:
 
-**Any problem? <a href="https://github.com/LucasPJS/on_audio_query/issues" target="_blank">Issues</a>** <br>
-**Any suggestion? <a href="https://github.com/LucasPJS/on_audio_query/pulls" target="_blank">Pull request</a>**
+**Any problem? [Issues](https://github.com/LucasPJS/on_audio_query/issues)** <br>
+**Any suggestion? [Pull request](https://github.com/LucasPJS/on_audio_query/pulls)**
 
 ### Extensions:
 
 <!-- * [on_audio_edit](https://github.com/LucasPJS/on_audio_edit) - Used to edit audio metadata. -->
-* <a href="https://github.com/LucasPJS/on_audio_room" target="_blank">on_audio_room</a> - Used to store audio [Favorites, Most Played, etc..].
+* [on_audio_room](https://github.com/LucasPJS/on_audio_room) - Used to store audio [Favorites, Most Played, etc..].
 
 ### Translations:
 
@@ -49,7 +49,7 @@ NOTE: Feel free to help with readme translations
 | `queryGenres` | `✔️` | `✔️` | <br>
 | `queryAudiosFrom` | `✔️` | `✔️` | <br>
 | `queryWithFilters` | `✔️` | `✔️` | <br>
-| `queryArtworks` | `✔️` | `❌` | <br>
+| `queryArtwork` | `✔️` | `❌` | <br>
 | `createPlaylist` | `✔️` | `✔️` | <br>
 | `removePlaylist` | `✔️` | `⭕` | <br>
 | `addToPlaylist` | `✔️` | `❌` | <br>
@@ -64,13 +64,13 @@ NOTE: Feel free to help with readme translations
 ❌ -> Not Supported <br>
 ⭕ -> Supported Partially/Platform Limitation
 
-**<a href="./PLATFORMS.md" target="_blank">See all platforms methods support</a>**
+**[See all platforms methods support](./PLATFORMS.md)**
 
 ## How to Install:
 Add the following code to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^2.0.0-beta.0
+  on_audio_query: ^2.0.0-beta.1
 ```
 
 ### Request Permission:
@@ -130,7 +130,7 @@ All types of methods on this plugin:
 | [`queryGenres`](#querygenres) | `(SortType, OrderType, UriType, RequestPermission)` | `List<GenreModel>` | <br>
 | [`queryAudiosFrom`]() | `(Type, Where, RequestPermission)` | `List<SongModel>` | <br>
 | [`queryWithFilters`](#queryWithFilters) | `(ArgsVal, WithFiltersType, Args, RequestPermission)` | `List<dynamic>` | <br>
-| [`queryArtworks`](#queryArtworks) | `(Id, Type, Format, Size, RequestPermission)` | `Uint8List?` | <br>
+| [`queryArtwork`](#queryArtwork) | `(Id, Type, Format, Size, RequestPermission)` | `Uint8List?` | <br>
 
 ### Playlist methods
 
@@ -157,12 +157,9 @@ Now `[QueryArtworkWidget]` support all Android versions.
 
 ```dart
   Widget someOtherName() async {
-    DeviceModel deviceInfo = await OnAudioQuery().queryDeviceInfo();
     return QueryArtworkWidget(
       id: SongId, 
       type: ArtworkType.AUDIO,
-      artwork: songList[index].artwork,
-      deviceSDK: device.sdk,
     );
   }
 ```
@@ -232,12 +229,12 @@ Now `[QueryArtworkWidget]` support all Android versions.
   }
 ```
 
-#### queryArtworks
+#### queryArtwork
 ⚠ **Note: Only works in Android >= Q/10**
 ```dart
   someName() async {
     // DEFAULT: ArtworkFormat.JPEG, 200 and false
-    Uint8List something = await OnAudioQuery().queryArtworks(
+    Uint8List something = await OnAudioQuery().queryArtwork(
         SongId, 
         ArtworkType.AUDIO, 
         ...,

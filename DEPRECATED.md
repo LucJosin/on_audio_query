@@ -43,6 +43,9 @@
     - Use `[queryArtwork]` instead.
 - `[artwork]` from `[ArtistModel]`.
 - `[artwork]` from `[GenreModel]`.
+- `[artwork]` from `[QueryArtworkWidget]`.
+- `[deviceSDK]` from `[QueryArtworkWidget]`.
+- `[requestPermission]` from `[QueryArtworkWidget]`.
 - `[queryAudiosOnly]`.
 - `[querySongsBy]`.
 - `[AudiosOnlyType]`.

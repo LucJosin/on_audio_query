@@ -7,6 +7,7 @@ class OnAudiosFromQuery {
     var type: Int = -1
     
     init(call: FlutterMethodCall, result: @escaping FlutterResult) {
+        // To make life easy, add all arguments inside a map.
         self.args = call.arguments as! [String: Any]
         self.result = result
     }
@@ -14,10 +15,18 @@ class OnAudiosFromQuery {
     func queryAudiosFrom() {
         self.type = args["type"] as! Int
         let wh3re = args["where"] as Any
+        
+        // Choose the type(To match android side, let's call "cursor").
         var cursor: MPMediaQuery? = checkAudiosFrom(type: type, where: wh3re)
+        
+        // TODO: Add sort type to [queryAudiosFrom].
+        
+        // Here we'll check if the request is to [Playlist] or other.
         if self.type != 6 && cursor != nil {
+            // Query everything in background for a better performance.
             loadQueryAudiosFrom(cursor: cursor!)
         } else {
+            // Query everything in background for a better performance.
             cursor = MPMediaQuery.playlists()
             loadSongsFromPlaylist(cursor: cursor!.collections)
         }
@@ -27,12 +36,18 @@ class OnAudiosFromQuery {
         DispatchQueue.global(qos: .userInitiated).async {
             var listOfSongs: [[String: Any?]] = Array()
             
+            // For each item(song) inside this "cursor", take one and "format"
+            // into a [Map<String, dynamic>], all keys are based on [Android]
+            // platforms so, if you change some key, will have to change the [Android] too.
             for song in cursor.items! {
                 let songData = loadSongItem(song: song)
                 listOfSongs.append(songData)
             }
             
+            // After finish the "query", go back to the "main" thread(You can only call flutter
+            // inside the main thread).
             DispatchQueue.main.async {
+                // TODO: Add sort type to [queryAudiosFrom].
                 self.result(listOfSongs)
             }
         }
@@ -43,6 +58,14 @@ class OnAudiosFromQuery {
         DispatchQueue.global(qos: .userInitiated).async {
             var listOfSongs: [[String: Any?]] = Array()
             
+            // Here we need a different approach.
+            //
+            // First, query all playlists. After check if the argument is a:
+            //   * [String]: The playlist [Name].
+            //   * [Int]: The playlist [Id].
+            //
+            // Second, find the specific playlist using/comparing the argument.
+            // After, query all item(song) from this playlist.
             for playlist in cursor {
                 let iPlaylist = playlist as! MPMediaPlaylist
                 let iWhere = self.args["where"] as Any
@@ -68,7 +91,10 @@ class OnAudiosFromQuery {
                 }
             }
             
+            // After finish the "query", go back to the "main" thread(You can only call flutter
+            // inside the main thread).
             DispatchQueue.main.async {
+                // TODO: Add sort type to [queryAudiosFrom].
                 self.result(listOfSongs)
             }
         }

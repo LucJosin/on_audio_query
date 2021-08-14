@@ -32,7 +32,7 @@ class OnAudiosQuery : ViewModel() {
     fun querySongs(
         context: Context,
         result: MethodChannel.Result,
-        call: MethodCall,
+        call: MethodCall
     ) {
         this.context = context; resolver = context.contentResolver
 

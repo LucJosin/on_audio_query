@@ -45,7 +45,7 @@ Here you'll see a extra information about every method/type etc..
 | `queryGenres` | `✔️` | `✔️` | <br>
 | `queryAudiosFrom` | `✔️` | `✔️` | <br>
 | `queryWithFilters` | `✔️` | `✔️` | <br>
-| `queryArtworks` | `✔️` | `❌` | <br>
+| `queryArtwork` | `✔️` | `❌` | <br>
 | `createPlaylist` | `✔️` | `✔️` | <br>
 | `removePlaylist` | `✔️` | `⭕` | <br>
 | `addToPlaylist` | `✔️` | `❌` | <br>
@@ -234,7 +234,7 @@ Here you'll see a extra information about every method/type etc..
 | `dateAdded` | `✔️` | `✔️` | <br>
 | `dateModified` | `✔️` | `✔️` | <br>
 | `numOfSongs` | `✔️` | `✔️` | <br>
-| `artwork` | `✔️` | `✔️` | <br>
+| `artwork` | `❌` | `✔️` | <br>
 
 ### ArtistModel
 

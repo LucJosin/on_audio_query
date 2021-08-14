@@ -1,8 +1,8 @@
 import MediaPlayer
 
+// This will "clean" the main method and help all query methods.
+
 public func loadSongItem(song: MPMediaItem) -> [String: Any?] {
-    // TODO Add others png option
-    let artwork = song.artwork?.image(at: CGSize(width: 150, height: 150))?.jpegData(compressionQuality: 1)
     let fileExt = song.assetURL?.pathExtension ?? ""
     let sizeInBytes = song.value(forProperty: "fileSize") as? Int
     let songData: [String: Any?] = [
@@ -16,14 +16,13 @@ public func loadSongItem(song: MPMediaItem) -> [String: Any?] {
         "album_id": song.albumPersistentID,
         "artist": song.artist,
         "artist_id": song.artistPersistentID,
-        "bookmark": String.init(song.bookmarkTime),
+        "bookmark": Int(song.bookmarkTime),
         "composer": song.composer,
-        "date_added": song.dateAdded.timeIntervalSince1970,
+        "date_added": Int(song.dateAdded.timeIntervalSince1970),
         "date_modified": 0,
-        "duration": song.playbackDuration * 1000,
+        "duration": Int(song.playbackDuration * 1000),
         "title": song.title,
         "track": song.albumTrackNumber,
-        "artwork": artwork,
         "file_extension": fileExt,
     ]
     return songData
@@ -66,13 +65,11 @@ public func formatSongList(args: [String: Any], allSongs: [[String: Any?]]) -> [
 //Albums
 
 func loadAlbumItem(album: MPMediaItemCollection) -> [String: Any?] {
-    let artwork = album.items[0].artwork?.image(at: CGSize(width: 150, height: 150))?.jpegData(compressionQuality: 1)
     let albumData: [String: Any?] = [
         "numsongs": album.count,
         "artist": album.items[0].albumArtist,
         "_id": album.items[0].persistentID,
         "album": album.items[0].albumTitle,
-        "album_art": artwork,
         "artist_id": album.items[0].albumArtistPersistentID,
         "album_id": album.items[0].albumPersistentID
     ]
@@ -189,8 +186,8 @@ func loadPlaylistItem(playlist: MPMediaItemCollection) -> [String: Any?] {
     let playlistData: [String: Any?] = [
         "_id": String(id ?? 0),
         "name": playlist.value(forProperty: MPMediaPlaylistPropertyName),
-        "date_added": String(dateAdded!.timeIntervalSince1970),
-        "date_modified": String(dateModified!.timeIntervalSince1970),
+        "date_added": Int(dateAdded!.timeIntervalSince1970),
+        "date_modified": Int(dateModified!.timeIntervalSince1970),
         "number_of_tracks": playlist.items.count,
         "artwork": artwork
     ]

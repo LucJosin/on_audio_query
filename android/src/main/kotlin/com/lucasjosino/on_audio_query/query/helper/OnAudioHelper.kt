@@ -1,8 +1,10 @@
 package com.lucasjosino.on_audio_query.query.helper
 
+import android.content.ContentResolver
 import android.content.ContentUris
 import android.database.Cursor
 import android.net.Uri
+import android.provider.MediaStore
 import java.io.File
 
 class OnAudioHelper {
@@ -71,30 +73,31 @@ class OnAudioHelper {
         }
     }
 
+    fun loadFirstItem(uri: Uri, id: String, resolver: ContentResolver): String?  {
+        val selection: String = if (uri == MediaStore.Audio.Media.EXTERNAL_CONTENT_URI) {
+            MediaStore.Audio.Media._ID + "=?"
+        } else {
+            MediaStore.Audio.Media.ALBUM_ID + "=?"
+        }
 
-    //Load artwork for Android < Q/10
-//    private fun loadArtwork(context: Context, albumName: String): String? {
-//        var art: String? = null
-//        val channelError = "on_audio_error"
-//        if (Build.VERSION.SDK_INT < 29) {
-//            val resolver = context.contentResolver
-//            val cursor = resolver.query(
-//                MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI, arrayOf(
-//                    MediaStore.Audio.Albums.ALBUM, MediaStore.Audio.Albums.ALBUM_ART
-//                ),
-//                MediaStore.Audio.Albums.ALBUM + " =?", arrayOf(albumName), null
-//            )
-//
-//            //
-//            while (cursor != null && cursor.moveToNext()) {
-//                try {
-//                    art = cursor.getString(1)
-//                } catch (e: Exception) {
-//                    Log.i(channelError, e.toString())
-//                }
-//            }
-//            cursor?.close()
-//        }
-//        return art
-//    }
+        var data: String? = null
+        var cursor: Cursor? = null
+        try {
+            cursor = resolver.query(
+                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                arrayOf(MediaStore.Audio.Media.DATA),
+                selection,
+                arrayOf(id),
+                null
+            )
+        } catch (e: Exception) {
+//            Log.i("on_audio_error", e.toString())
+        }
+        if (cursor != null) {
+            cursor.moveToFirst()
+            data = cursor.getString(0)
+        }
+        cursor?.close()
+        return data
+    }
 }

@@ -9,7 +9,11 @@ public class OnAudioController {
         self.result = result
     }
     
+    
+    //This method will sort call according to request.
     public func chooseMethod() {
+        // All necessary method to this plugin support both platforms, only playlists
+        // are limited when using [IOS].
         switch call.method {
         case "querySongs":
             OnAudioQuery(call: call, result: result).querySongs()
@@ -25,9 +29,21 @@ public class OnAudioController {
             OnAudiosFromQuery(call: call, result: result).queryAudiosFrom()
         case "queryWithFilters":
             OnWithFiltersQuery(call: call, result: result).queryWithFilters()
+        case "queryArtwork":
+            OnArtworkQuery(call: call, result: result).queryArtwork()
+        // The playlist for [IOS] is completely limited, the developer can only:
+        //   * Create playlist
+        //   * Add item to playlist (Unsuported, for now)
+        //
+        // Missing methods:
+        //   * Rename playlist
+        //   * Remove playlist
+        //   * Remove item from playlist
+        //   * Move item inside playlist
         case "createPlaylist":
             OnPlaylistsController(call: call, result: result).createPlaylist()
         default:
+            // All non suported methods will throw this error.
             result(FlutterMethodNotImplemented)
         }
     }

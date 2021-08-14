@@ -1,13 +1,37 @@
-## [2.0.0-beta.0] - [08.11.2021]
+## [2.0.0-beta.1] - [08.14.2021]
 ### Features
-#### on_audio_query
-- Added a <a href="https://github.com/axel-op/dart-package-analyzer/" target="_blank">`[DART ANALYZAR]`</a> to `PULL_REQUEST` and `PUSH`.
+#### IOS
+- Added `[queryArtwork]`.
+
+### Fixes
+#### Kotlin
+- Fixed `error` when building to `[Android]`.
+
+#### IOS
+- Fixed wrong values `[duration]`, `[dateAdded]` and `[bookmark]` returning from `[SongModel]`.
 
 ### Documentation
 - Updated `on_audio_query` documentation.
 - Updated `README` documentation.
 - Updated `DEPRECATED` documentation.
-- Created <a href="./PLATFORMS.md" target="_blank">`[PLATFORMS]`</a> file.
+- Added documentation to `IOS` platform.
+
+### ⚠ Important Changes
+#### @Deprecated
+- `[artwork]` from `[QueryArtworkWidget]`.
+- `[deviceSDK]` from `[QueryArtworkWidget]`.
+- `[requestPermission]` from `[QueryArtworkWidget]`.
+
+## [2.0.0-beta.0] - [08.13.2021]
+### Features
+#### on_audio_query
+- Added a [`DART ANALYZER`](https://github.com/axel-op/dart-package-analyzer/) to `PULL_REQUEST` and `PUSH`.
+
+### Documentation
+- Updated `on_audio_query` documentation.
+- Updated `README` documentation.
+- Updated `DEPRECATED` documentation.
+- Created [`PLATFORMS`](https://github.com/LucasPJS/on_audio_query/blob/2.0.0-dev/PLATFORMS.md) file.
 
 ### ⚠ Important Changes
 #### Dart
@@ -15,7 +39,7 @@
 - Changed `[queryArtworks]` to `[queryArtwork]`.
 
 #### @Deprecated
-- Removed the `[requestPermission]` arguments from **ALL** methods.
+- `[requestPermission]` argument from **ALL** methods.
 - `[queryAudios]`.
 - `[artwork]` from `[SongModel]`.
 - `[path]` from `[querySongs]`.
@@ -330,7 +354,7 @@
 ## [0.5.0] - [03.23.2021]
 ### Features
 #### Dart/Kotlin
-- Changed some methods extructure.
+- Changed some methods structure.
 - Added `[moveItemTo]` method to Playlist.
 - Added `[Size]` and `[Format]` parameters to `[queryArtwork]`.
 - Added `[getDeviceSDK]`, `[getDeviceRelease]` and `[getDeviceCode]`.
@@ -340,7 +364,7 @@
 - Added `[QueryArtworkWidget]`.
 
 ### Fixes
-- Added paramerer `[AudioId]` to `[addToPlaylist]` and `[removeFromPlaylist]`.
+- Added parameter `[AudioId]` to `[addToPlaylist]` and `[removeFromPlaylist]`.
 
 ### Documentation
 - Updated `README` documentation.
@@ -354,7 +378,7 @@
 ## [0.4.0] - [03.18.2021]
 ### Features
 #### Dart/Kotlin
-- Changed some methods extructure.
+- Changed some methods structure.
 - Added `[renamePlaylist]`.
 - Added separate option for sortType order `[ASC_OR_SMALLER]` and `[DESC_OR_GREATER]`.
 - Added `[permissionsStatus]` and `[permissionsRequest]`.
@@ -383,7 +407,7 @@
 - Added `[queryArtworks]` and `[queryAudiosFrom]`.
 
 ### Fixes
-- Added a better performace for query images.
+- Added a better performance for query images.
 
 ### Documentation
 - Updated `README` documentation.
@@ -395,7 +419,7 @@
 - Added `[ArtistSortType]`, `[PlaylistsSortType]` and `[GenreSortType]`.
 
 #### Kotlin
-- Now all methods use `Kotlin Coroutines` for query in background, adding a better performace.
+- Now all methods use `Kotlin Coroutines` for query in background, adding a better performance.
 
 ### Documentation
 - Updated `README` documentation.

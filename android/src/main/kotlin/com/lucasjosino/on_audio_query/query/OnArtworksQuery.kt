@@ -4,11 +4,14 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.os.Build
 import android.util.Size
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
 import com.lucasjosino.on_audio_query.types.checkArtworkFormat
 import com.lucasjosino.on_audio_query.types.checkArtworkType
 import io.flutter.plugin.common.MethodCall
@@ -17,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
+import java.io.FileInputStream
 import kotlin.properties.Delegates
 
 /** OnArtworksQuery */
@@ -56,34 +60,45 @@ class OnArtworksQuery : ViewModel() {
             val query = ContentUris.withAppendedId(uri, id.toLong())
             try {
                 val bitmap = resolver.loadThumbnail(query, Size(size, size), null)
-                artData = convertToByteArray(bitmap)!!
+                artData = convertOrResize(bitmap = bitmap)!!
             } catch (e: Exception) {
 //            Log.i("OnAudioError", e.toString())
+            }
+        } else {
+            val item = OnAudioHelper().loadFirstItem(uri, id.toString(), resolver)
+            if (item != null) {
+                try {
+                    val file = FileInputStream(item)
+                    val metadata = MediaMetadataRetriever()
+                    metadata.setDataSource(file.fd)
+                    val image = metadata.embeddedPicture
+                    if (image != null) {
+                        artData = convertOrResize(byteArray = image)
+                    }
+                } catch (e: Exception) {
+//                Log.i("on_audio_error", e.toString())
+                }
             }
         }
         return@withContext artData
     }
 
     //
-    private fun convertToByteArray(bitmap: Bitmap): ByteArray? {
-        var convertedBytes: ByteArray? = null
+    private fun convertOrResize(bitmap: Bitmap? = null, byteArray: ByteArray? = null): ByteArray? {
+        val convertedBytes: ByteArray?
+        val byteArrayBase = ByteArrayOutputStream()
         try {
-            val byteArray = ByteArrayOutputStream()
-            bitmap.compress(format, 100, byteArray)
-            convertedBytes = byteArray.toByteArray()
-            byteArray.close()
+            if (bitmap != null) {
+                bitmap.compress(format, 100, byteArrayBase)
+            } else {
+                val convertedBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray!!.size)
+                convertedBitmap.compress(format, 100, byteArrayBase)
+            }
         } catch (e: Exception) {
             //Log.i("Error", e.toString())
         }
+        convertedBytes = byteArrayBase.toByteArray()
+        byteArrayBase.close()
         return convertedBytes
     }
-
-//    private fun convertToBitmap(byteArray: ByteArray) : Bitmap? {
-//        return try {
-//            BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
-//        } catch (e: Exception) {
-//            null
-//            //Log.i("Error", e.toString())
-//        }
-//    }
 }
