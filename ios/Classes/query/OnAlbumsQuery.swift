@@ -22,11 +22,18 @@ class OnAlbumsQuery {
         // send to Dart.
         cursor.groupingType = checkAlbumSortType(sortType: sortType)
         
-        // Query everything in background for a better performance.
-        loadAlbums(cursor: cursor.collections)
+        // We cannot "query" without permission so, just return a empty list.
+        let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
+        if hasPermission {
+            // Query everything in background for a better performance.
+            loadAlbums(cursor: cursor.collections)
+        } else {
+            // There's no permission so, return empty to avoid crashes.
+            result([])
+        }
     }
     
-    internal func loadAlbums(cursor: [MPMediaItemCollection]!) {
+    private func loadAlbums(cursor: [MPMediaItemCollection]!) {
         DispatchQueue.global(qos: .userInitiated).async {
             var listOfAlbums: [[String: Any?]] = Array()
             

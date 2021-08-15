@@ -21,18 +21,25 @@ class OnAudiosFromQuery {
         
         // TODO: Add sort type to [queryAudiosFrom].
         
-        // Here we'll check if the request is to [Playlist] or other.
-        if self.type != 6 && cursor != nil {
-            // Query everything in background for a better performance.
-            loadQueryAudiosFrom(cursor: cursor!)
+        // We cannot "query" without permission so, just return a empty list.
+        let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
+        if hasPermission {
+            // Here we'll check if the request is to [Playlist] or other.
+            if self.type != 6 && cursor != nil {
+                // Query everything in background for a better performance.
+                loadQueryAudiosFrom(cursor: cursor!)
+            } else {
+                // Query everything in background for a better performance.
+                cursor = MPMediaQuery.playlists()
+                loadSongsFromPlaylist(cursor: cursor!.collections)
+            }
         } else {
-            // Query everything in background for a better performance.
-            cursor = MPMediaQuery.playlists()
-            loadSongsFromPlaylist(cursor: cursor!.collections)
+            // There's no permission so, return empty to avoid crashes.
+            result([])
         }
     }
     
-    internal func loadQueryAudiosFrom(cursor: MPMediaQuery!) {
+    private func loadQueryAudiosFrom(cursor: MPMediaQuery!) {
         DispatchQueue.global(qos: .userInitiated).async {
             var listOfSongs: [[String: Any?]] = Array()
             
@@ -54,7 +61,7 @@ class OnAudiosFromQuery {
     }
     
     //Add a better code
-    internal func loadSongsFromPlaylist(cursor: [MPMediaItemCollection]!) {
+    private func loadSongsFromPlaylist(cursor: [MPMediaItemCollection]!) {
         DispatchQueue.global(qos: .userInitiated).async {
             var listOfSongs: [[String: Any?]] = Array()
             

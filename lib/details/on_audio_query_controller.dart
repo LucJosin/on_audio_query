@@ -460,7 +460,9 @@ class OnAudioQuery {
   ///
   /// Parameters:
   ///
-  /// * [playlistName] is used to add a name to Playlist.
+  /// * [name] the playlist name.
+  /// * [author] the playlist author. (IOS only)
+  /// * [desc] the playlist description. (IOS only)
   ///
   /// Important:
   ///
@@ -473,9 +475,16 @@ class OnAudioQuery {
   /// | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
-  Future<bool> createPlaylist(String playlistName) async {
-    final bool resultCreatePl = await _channel
-        .invokeMethod("createPlaylist", {"playlistName": playlistName});
+  Future<bool> createPlaylist(
+    String name, {
+    String? author,
+    String? desc,
+  }) async {
+    final bool resultCreatePl = await _channel.invokeMethod("createPlaylist", {
+      "playlistName": name,
+      "playlistAuthor": author,
+      "playlistDesc": desc,
+    });
     return resultCreatePl;
   }
 
@@ -510,7 +519,7 @@ class OnAudioQuery {
   ///
   /// |   Android   |   IOS   |
   /// |--------------|-----------------|
-  /// | `✔️` | `❌` | <br>
+  /// | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> addToPlaylist(int playlistId, int audioId) async {

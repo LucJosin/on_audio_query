@@ -19,11 +19,18 @@ class OnGenresQuery {
         // the [Artist]. The others will be sorted "manually" using
         // [formatSongList] before send to Dart.
         
-        // Query everything in background for a better performance.
-        loadGenres(cursor: cursor.collections)
+        // We cannot "query" without permission so, just return a empty list.
+        let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
+        if hasPermission {
+            // Query everything in background for a better performance.
+            loadGenres(cursor: cursor.collections)
+        } else {
+            // There's no permission so, return empty to avoid crashes.
+            result([])
+        }
     }
     
-    internal func loadGenres(cursor: [MPMediaItemCollection]!) {
+    private func loadGenres(cursor: [MPMediaItemCollection]!) {
         DispatchQueue.global(qos: .userInitiated).async {
             var listOfGenres: [[String: Any?]] = Array()
             

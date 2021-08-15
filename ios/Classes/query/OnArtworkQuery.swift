@@ -43,16 +43,19 @@ class OnArtworkQuery {
             cursor = MPMediaQuery.albums()
         }
         
-        // If [cursor] is "nil", just return to dart.
-        if cursor != nil {
+        // If [cursor] is "nil" or has no permission, just return to dart.
+        let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
+        if cursor != nil && hasPermission {
             cursor?.addFilterPredicate(filter)
+            // Query everything in background for a better performance.
             loadArtwork(cursor: cursor, size: size, format: format, uri: uri)
         } else {
+            // There's no permission so, return null to avoid crashes.
             result(nil)
         }
     }
     
-    internal func loadArtwork(cursor: MPMediaQuery!, size: Int, format: Int, uri: Int) {
+    private func loadArtwork(cursor: MPMediaQuery!, size: Int, format: Int, uri: Int) {
         DispatchQueue.global(qos: .userInitiated).async {
             var tempArtwork: Data?
             var tempItem: MPMediaItem?
@@ -81,7 +84,7 @@ class OnArtworkQuery {
             // inside the main thread).
             DispatchQueue.main.async {
                 // We don't need a "empty" image so, return null to avoid problems.
-                if tempArtwork!.isEmpty {
+                if tempArtwork != nil && tempArtwork!.isEmpty {
                     tempArtwork = nil
                 }
                 self.result(tempArtwork)

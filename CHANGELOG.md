@@ -1,3 +1,20 @@
+## [2.0.0-beta.2] - [08.15.2021]
+### Features
+#### IOS
+- Now **ALL** methods will only `"query"` if has permission to `library`.
+- Added `[addToPlaylist]`.
+
+#### Dart
+- Added `[author]` and `[desc]` arguments to `[createPlaylist]`. **(IOS only)**
+
+### Fixes
+#### IOS
+- Fixed crash when using `[queryArtwork]`.
+- Fixed wrong `[id]` value returning from `[PlaylistModel]`.
+
+### Documentation
+- Updated `README` documentation.
+
 ## [2.0.0-beta.1] - [08.14.2021]
 ### Features
 #### IOS
@@ -8,7 +25,7 @@
 - Fixed `error` when building to `[Android]`.
 
 #### IOS
-- Fixed wrong values `[duration]`, `[dateAdded]` and `[bookmark]` returning from `[SongModel]`.
+- Fixed wrong `[duration]`, `[dateAdded]` and `[bookmark]` values returning from `[SongModel]`.
 
 ### Documentation
 - Updated `on_audio_query` documentation.

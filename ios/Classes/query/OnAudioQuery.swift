@@ -22,11 +22,18 @@ class OnAudioQuery {
         // send to Dart.
         cursor.groupingType = checkSongSortType(sortType: sortType)
         
-        // Query everything in background for a better performance.
-        loadSongs(cursor: cursor)
+        // We cannot "query" without permission so, just return a empty list.
+        let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
+        if hasPermission {
+            // Query everything in background for a better performance.
+            loadSongs(cursor: cursor)
+        } else {
+            // There's no permission so, return empty to avoid crashes.
+            result([])
+        }
     }
     
-    internal func loadSongs(cursor: MPMediaQuery!) {
+    private func loadSongs(cursor: MPMediaQuery!) {
         DispatchQueue.global(qos: .userInitiated).async {
             var listOfSongs: [[String: Any?]] = Array()
             

@@ -220,12 +220,103 @@ class _SongsState extends State<Songs> {
                     id: songList[index].id,
                     type: ArtworkType.AUDIO,
                   ),
+                  onLongPress: () async {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (context) => Playlists(
+                          audioId: songList[index].id,
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             );
           }
           return CircularProgressIndicator();
         },
+      ),
+    );
+  }
+}
+
+class Playlists extends StatefulWidget {
+  final int audioId;
+  const Playlists({Key? key, required this.audioId}) : super(key: key);
+
+  @override
+  _PlaylistsState createState() => _PlaylistsState();
+}
+
+class _PlaylistsState extends State<Playlists> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: FutureBuilder<List<PlaylistModel>>(
+          future: OnAudioQuery().queryPlaylists(),
+          builder: (context, item) {
+            if (item.data == null) return CircularProgressIndicator();
+
+            if (item.data!.isEmpty) return Text("No data found");
+
+            return ListView.builder(
+              itemCount: item.data!.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(item.data![index].playlist),
+                  subtitle: Text(item.data![index].id.toString()),
+                  onTap: () async {
+                    var result = await OnAudioQuery().addToPlaylist(
+                      item.data![index].id,
+                      widget.audioId,
+                    );
+                    Navigator.of(context).pop([result]);
+                  },
+                );
+              },
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+class PlaylistItems extends StatefulWidget {
+  final int playlistId;
+  const PlaylistItems({Key? key, required this.playlistId}) : super(key: key);
+
+  @override
+  _PlaylistItemsState createState() => _PlaylistItemsState();
+}
+
+class _PlaylistItemsState extends State<PlaylistItems> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: Center(
+        child: FutureBuilder<List<SongModel>>(
+          future: OnAudioQuery()
+              .queryAudiosFrom(AudiosFromType.PLAYLIST, widget.playlistId),
+          builder: (context, item) {
+            if (item.data == null) return CircularProgressIndicator();
+
+            if (item.data!.isEmpty) return Text("No data found");
+
+            return ListView.builder(
+              itemCount: item.data!.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(item.data![index].title),
+                  subtitle: Text(item.data![index].artist ?? "No Artist"),
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

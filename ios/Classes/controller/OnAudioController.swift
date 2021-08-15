@@ -42,6 +42,8 @@ public class OnAudioController {
         //   * Move item inside playlist
         case "createPlaylist":
             OnPlaylistsController(call: call, result: result).createPlaylist()
+        case "addToPlaylist":
+            OnPlaylistsController(call: call, result: result).addToPlaylist()
         default:
             // All non suported methods will throw this error.
             result(FlutterMethodNotImplemented)

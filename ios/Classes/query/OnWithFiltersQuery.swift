@@ -46,17 +46,26 @@ class OnWithFiltersQuery {
             break
         }
         
-        // Choose between query [Playlist] or others.
-        if filter != nil && withType != 2 {
-            // Add the filter.
-            cursor?.addFilterPredicate(filter!)
-            loadItemsWithFilter(cursor: cursor!, type: withType)
+        // We cannot "query" without permission so, just return a empty list.
+        let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
+        if hasPermission {
+            // Choose between query [Playlist] or others.
+            if filter != nil && withType != 2 {
+                // Add the filter.
+                cursor?.addFilterPredicate(filter!)
+                // Query everything in background for a better performance.
+                loadItemsWithFilter(cursor: cursor!, type: withType)
+            } else {
+                // Query everything in background for a better performance.
+                loadPlaylistsWithFilter(cursor: cursor!.collections, argVal: argVal)
+            }
         } else {
-            loadPlaylistsWithFilter(cursor: cursor!.collections, argVal: argVal)
+            // There's no permission so, return empty to avoid crashes.
+            result([])
         }
     }
     
-    internal func loadItemsWithFilter(cursor: MPMediaQuery, type: Int) {
+    private func loadItemsWithFilter(cursor: MPMediaQuery, type: Int) {
         DispatchQueue.global(qos: .userInitiated).async {
             var listOfItems: [[String: Any?]] = Array()
             
@@ -70,7 +79,7 @@ class OnWithFiltersQuery {
                     let songData = loadSongItem(song: song)
                     listOfItems.append(songData)
                 }
-            //
+                //
             } else {
                 // For each item inside "cursor", take one and choose between [Album],
                 // [Artist] and [Genre], after this, "format" into a [Map<String, dynamic>],
@@ -101,7 +110,7 @@ class OnWithFiltersQuery {
         }
     }
     
-    internal func loadPlaylistsWithFilter(cursor: [MPMediaItemCollection]!, argVal: String) {
+    private func loadPlaylistsWithFilter(cursor: [MPMediaItemCollection]!, argVal: String) {
         DispatchQueue.global(qos: .userInitiated).async {
             var listOfPlaylist: [[String: Any?]] = Array()
             

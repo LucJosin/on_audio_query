@@ -17,11 +17,18 @@ class OnPlaylistsQuery {
         
         // TODO: Add sort type to [queryPlaylists].
         
-        // Query everything in background for a better performance.
-        loadPlaylists(cursor: cursor.collections)
+        // We cannot "query" without permission so, just return a empty list.
+        let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
+        if hasPermission {
+            // Query everything in background for a better performance.
+            loadPlaylists(cursor: cursor.collections)
+        } else {
+            // There's no permission so, return empty to avoid crashes.
+            result([])
+        }
     }
     
-    internal func loadPlaylists(cursor: [MPMediaItemCollection]!) {
+    private func loadPlaylists(cursor: [MPMediaItemCollection]!) {
         DispatchQueue.global(qos: .userInitiated).async {
             var listOfPlaylists: [[String: Any?]] = Array()
             

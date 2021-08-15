@@ -165,7 +165,7 @@ func loadGenreItem(genre: MPMediaItemCollection) -> [String: Any?] {
 public func formatGenreList(args: [String: Any], allGenres: [[String: Any?]]) -> [[String: Any?]] {
     var tempList = allGenres
     let order = args["orderType"] as? Int
-
+    
     //
     if order == 1 {
         tempList.reverse()
@@ -184,7 +184,7 @@ func loadPlaylistItem(playlist: MPMediaItemCollection) -> [String: Any?] {
     let dateAdded = playlist.value(forProperty: "dateCreated") as? Date
     let dateModified = playlist.value(forProperty: "dateModified") as? Date
     let playlistData: [String: Any?] = [
-        "_id": String(id ?? 0),
+        "_id": id,
         "name": playlist.value(forProperty: MPMediaPlaylistPropertyName),
         "date_added": Int(dateAdded!.timeIntervalSince1970),
         "date_modified": Int(dateModified!.timeIntervalSince1970),

@@ -18,12 +18,7 @@ public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
         //
         // The others status will be ignored and replaced with [false].
         case "permissionsStatus":
-            let permissionStatus = MPMediaLibrary.authorizationStatus()
-            if permissionStatus == MPMediaLibraryAuthorizationStatus.authorized {
-                result(true)
-            } else {
-                result(false)
-            }
+            result(checkPermission)
         // The same as [permissionStatus], this is a basic permission handler and will only
         // return [true] or [false].
         //
@@ -46,6 +41,15 @@ public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
         default:
             //
             OnAudioController(call: call, result: result).chooseMethod()
+        }
+    }
+    
+    public func checkPermission() -> Bool {
+        let permissionStatus = MPMediaLibrary.authorizationStatus()
+        if permissionStatus == MPMediaLibraryAuthorizationStatus.authorized {
+            return true
+        } else {
+            return false
         }
     }
 }
