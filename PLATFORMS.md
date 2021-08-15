@@ -45,10 +45,10 @@ Here you'll see a extra information about every method/type etc..
 | `queryGenres` | `✔️` | `✔️` | <br>
 | `queryAudiosFrom` | `✔️` | `✔️` | <br>
 | `queryWithFilters` | `✔️` | `✔️` | <br>
-| `queryArtwork` | `✔️` | `❌` | <br>
+| `queryArtwork` | `✔️` | `✔️` | <br>
 | `createPlaylist` | `✔️` | `✔️` | <br>
 | `removePlaylist` | `✔️` | `⭕` | <br>
-| `addToPlaylist` | `✔️` | `❌` | <br>
+| `addToPlaylist` | `✔️` | `✔️` | <br>
 | `removeFromPlaylist` | `✔️` | `⭕` | <br>
 | `renamePlaylist` | `✔️` | `⭕` | <br>
 | `moveItemTo` | `✔️` | `⭕` | <br>
@@ -121,15 +121,15 @@ Here you'll see a extra information about every method/type etc..
 
 |  Methods  |   Android   |   IOS   |
 |--------------|-----------------|-----------------|
-| `AUDIO` | `✔️` | `❌` | <br>
-| `ALBUM` | `✔️` | `❌` | <br>
+| `AUDIO` | `✔️` | `✔️` | <br>
+| `ALBUM` | `✔️` | `✔️` | <br>
 
 ## ArtworkFormat
 
 |  Methods  |   Android   |   IOS   |
 |--------------|-----------------|-----------------|
-| `JPEG` | `✔️` | `❌` | <br>
-| `PNG` | `✔️` | `❌` | <br>
+| `JPEG` | `✔️` | `✔️` | <br>
+| `PNG` | `✔️` | `✔️` | <br>
 
 ## AudiosFromType
 
