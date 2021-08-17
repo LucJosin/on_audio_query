@@ -8,7 +8,7 @@ class AlbumModel {
   Map<dynamic, dynamic> _info;
 
   /// Return album [id]
-  int get id => int.parse(_info["_id"]);
+  int get id => _info["_id"];
 
   /// Deprecated after [2.0.0].
   @Deprecated("Use [album] instead")

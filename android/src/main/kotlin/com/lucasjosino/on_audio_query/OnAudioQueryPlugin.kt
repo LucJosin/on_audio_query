@@ -80,13 +80,7 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
             "queryDeviceInfo" -> queryDeviceInfo(result)
 
             // All others methods
-            else -> {
-                if (onPermissionStatus()) onAudioController.onAudioController() else pResult.error(
-                    "on_audio_error",
-                    "Android has no permission to [Read] or [Write] information.",
-                    "Be sure that added/called required permissions"
-                )
-            }
+            else -> onAudioController.onAudioController()
         }
     }
 
@@ -113,8 +107,13 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     //
     private val onRequestCode: Int = 88560
 
-    override fun onPermissionStatus(): Boolean = onPermission.all {
-        return ContextCompat.checkSelfPermission(pContext, it) == PackageManager.PERMISSION_GRANTED
+    override fun onPermissionStatus(context: Context?): Boolean = onPermission.all {
+        // After "leaving" this class, context will be null so, we need this context argument to
+        // call the [checkSelfPermission].
+        return ContextCompat.checkSelfPermission(
+            context ?: pContext,
+            it
+        ) == PackageManager.PERMISSION_GRANTED
     }
 
     override fun onRequestPermission() {
@@ -126,6 +125,7 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         if (ActivityCompat.shouldShowRequestPermissionRationale(pActivity, onPermission[0])
             || ActivityCompat.shouldShowRequestPermissionRationale(pActivity, onPermission[1])
         ) {
+            retryRequest = false
             onRequestPermission()
         }
     }
@@ -149,14 +149,11 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         val isPermissionGranted = if (grantResults != null) grantResults.isNotEmpty()
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED else false
 
-        when (requestCode) {
-            onRequestCode -> {
-                when {
-                    isPermissionGranted -> onAudioController.onAudioController()
-                    retryRequest -> onRetryRequestPermission()
-                    else -> pResult.success(false)
-                }
-            }
+        // After all checks, we can handle the permission request.
+        when {
+            isPermissionGranted -> pResult.success(true)
+            retryRequest -> onRetryRequestPermission()
+            else -> pResult.success(false)
         }
 
         // Return [true] here to indicate that the [on_audio_query] plugin handled the permission request

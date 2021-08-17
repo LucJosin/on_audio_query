@@ -14,7 +14,11 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 
 part of on_audio_query;
 
-/// Create a custom image Widget.
+/// Widget that will help to "query" artwork for song/album.
+///
+/// A simple example on how you can use the [queryArtwork].
+///
+/// See more: [QueryArtworkWidget](https://shorturl.at/rBR68)
 class QueryArtworkWidget extends StatelessWidget {
   /// Used to find and get image.
   ///
@@ -157,10 +161,11 @@ class QueryArtworkWidget extends StatelessWidget {
   /// * If [nullArtworkWidget] is null, will be set to [image_not_supported] icon.
   final Widget? nullArtworkWidget;
 
-  /// Create a custom image Widget.
+  /// Widget that will help to "query" artwork for song/album.
   ///
-  /// If you are using Android >= 29 the image returned it's from [queryArtworks]
-  /// and if Android is below 29 the image it's returned from [artwork].
+  /// A simple example on how you can use the [queryArtwork].
+  ///
+  /// See more: [QueryArtworkWidget](https://shorturl.at/rBR68)
   const QueryArtworkWidget(
       {Key? key,
       required this.id,

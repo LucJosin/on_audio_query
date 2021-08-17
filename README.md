@@ -32,9 +32,8 @@ NOTE: Feel free to help with readme translations
 * [License](#license)
 
 ## Gif Examples:
-| <img src="https://user-images.githubusercontent.com/76869974/112378123-522c1a00-8cc5-11eb-880d-ba67706c415d.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378181-62dc9000-8cc5-11eb-8cb3-c8db71372fa9.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378214-6e2fbb80-8cc5-11eb-996a-d61bb8a620ca.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378250-7687f680-8cc5-11eb-94a1-ea91868d119c.gif"/> |
+| <img src="https://user-images.githubusercontent.com/76869974/129740857-33f38b27-06a3-4959-bb31-2ae97d6b66ff.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129741012-1215b292-d700-466f-9c41-552df0ad5e89.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129741188-e6803432-24d7-4e39-bfde-cc6765e13663.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129741151-b820edc9-ddbf-4446-b67a-6e254cb5a46d.gif"/> |
 |:---:|:---:|:---:|:---:|
-| <img src="https://user-images.githubusercontent.com/76869974/112378123-522c1a00-8cc5-11eb-880d-ba67706c415d.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378181-62dc9000-8cc5-11eb-8cb3-c8db71372fa9.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378214-6e2fbb80-8cc5-11eb-996a-d61bb8a620ca.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378250-7687f680-8cc5-11eb-94a1-ea91868d119c.gif"/> |
 | Songs | Albums | Playlists | Artists |
 
 ## Platforms:
@@ -49,10 +48,10 @@ NOTE: Feel free to help with readme translations
 | `queryGenres` | `✔️` | `✔️` | <br>
 | `queryAudiosFrom` | `✔️` | `✔️` | <br>
 | `queryWithFilters` | `✔️` | `✔️` | <br>
-| `queryArtwork` | `✔️` | `❌` | <br>
+| `queryArtwork` | `✔️` | `✔️` | <br>
 | `createPlaylist` | `✔️` | `✔️` | <br>
 | `removePlaylist` | `✔️` | `⭕` | <br>
-| `addToPlaylist` | `✔️` | `❌` | <br>
+| `addToPlaylist` | `✔️` | `✔️` | <br>
 | `removeFromPlaylist` | `✔️` | `⭕` | <br>
 | `renamePlaylist` | `✔️` | `⭕` | <br>
 | `moveItemTo` | `✔️` | `⭕` | <br>
@@ -64,13 +63,13 @@ NOTE: Feel free to help with readme translations
 ❌ -> Not Supported <br>
 ⭕ -> Supported Partially/Platform Limitation
 
-**[See all platforms methods support](./PLATFORMS.md)**
+**[See all platforms methods support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)**
 
 ## How to Install:
 Add the following code to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^2.0.0-beta.2
+  on_audio_query: ^2.0.0-beta.3
 ```
 
 ### Request Permission:
@@ -164,7 +163,7 @@ Now `[QueryArtworkWidget]` support all Android versions.
   }
 ```
 
-**See more: <a href="https://pub.dev/documentation/on_audio_query/latest/on_audio_query/QueryArtworkWidget-class.html" target="_blank">QueryArtworkWidget</a>**
+**See more: [QueryArtworkWidget](https://pub.dev/documentation/on_audio_query/latest/on_audio_query/QueryArtworkWidget-class.html)**
 
 ### Abbreviations
 
@@ -180,7 +179,6 @@ Now `[QueryArtworkWidget]` support all Android versions.
     // SongSortType.TITLE, 
     // OrderType.ASC_OR_SMALLER,
     // UriType.EXTERNAL, 
-    // false
     List<SongModel> something = await OnAudioQuery().querySongs();
   }
 ```
@@ -191,7 +189,6 @@ Now `[QueryArtworkWidget]` support all Android versions.
     // DEFAULT: 
     // AlbumSortType.ALBUM, 
     // OrderType.ASC_OR_SMALLER 
-    // false
     List<AlbumModel> something = await OnAudioQuery().queryAlbums();
   }
 ```
@@ -202,7 +199,6 @@ Now `[QueryArtworkWidget]` support all Android versions.
     // DEFAULT: 
     // ArtistSortType.ARTIST, 
     // OrderType.ASC_OR_SMALLER 
-    // false
     List<ArtistModel> something = await OnAudioQuery().queryArtists();
   }
 ```
@@ -213,7 +209,6 @@ Now `[QueryArtworkWidget]` support all Android versions.
     // DEFAULT: 
     // PlaylistSortType.NAME, 
     // OrderType.ASC_OR_SMALLER 
-    // false
     List<PlaylistModel> something = await OnAudioQuery().queryPlaylists();
   }
 ```
@@ -224,7 +219,6 @@ Now `[QueryArtworkWidget]` support all Android versions.
     // DEFAULT: 
     // GenreSortType.NAME, 
     // OrderType.ASC_OR_SMALLER 
-    // false
     List<GenreModel> something = await OnAudioQuery().queryGenres();
   }
 ```

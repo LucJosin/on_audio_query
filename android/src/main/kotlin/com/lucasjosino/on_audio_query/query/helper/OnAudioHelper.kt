@@ -73,6 +73,14 @@ class OnAudioHelper {
         }
     }
 
+    //This method will separate [String] from [Int]
+    fun loadGenreItem(itemProperty: String, cursor: Cursor): Any? {
+        return when (itemProperty) {
+            "_id" -> cursor.getInt(cursor.getColumnIndex(itemProperty))
+            else -> cursor.getString(cursor.getColumnIndex(itemProperty))
+        }
+    }
+
     fun loadFirstItem(uri: Uri, id: String, resolver: ContentResolver): String?  {
         val selection: String = if (uri == MediaStore.Audio.Media.EXTERNAL_CONTENT_URI) {
             MediaStore.Audio.Media._ID + "=?"
@@ -99,5 +107,15 @@ class OnAudioHelper {
         }
         cursor?.close()
         return data
+    }
+
+    fun chooseWithFilterType(uri: Uri, itemProperty: String, cursor: Cursor) {
+        when (uri) {
+            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI -> loadSongItem(itemProperty, cursor)
+            MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI -> loadAlbumItem(itemProperty, cursor)
+            MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI -> loadPlaylistItem(itemProperty, cursor)
+            MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI -> loadArtistItem(itemProperty, cursor)
+            MediaStore.Audio.Genres.EXTERNAL_CONTENT_URI -> loadGenreItem(itemProperty, cursor)
+        }
     }
 }

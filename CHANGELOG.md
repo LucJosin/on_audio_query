@@ -1,7 +1,20 @@
+## [2.0.0-beta.3] - [08.17.2021]
+### Features
+#### Android
+- Now **ALL** methods will only `"query"` if has permission to `READ`.
+
+### Fixes
+#### Android
+- Fixed no value returning when using `[requestPermission]`.
+
+### Documentation
+- Updated `README` documentation.
+- Added more documentation to `Android` platform.
+
 ## [2.0.0-beta.2] - [08.15.2021]
 ### Features
 #### IOS
-- Now **ALL** methods will only `"query"` if has permission to `library`.
+- Now **ALL** methods will only `"query"` if has permission to `Library`.
 - Added `[addToPlaylist]`.
 
 #### Dart
@@ -21,7 +34,7 @@
 - Added `[queryArtwork]`.
 
 ### Fixes
-#### Kotlin
+#### Android
 - Fixed `error` when building to `[Android]`.
 
 #### IOS
@@ -179,31 +192,31 @@
 
 ## [1.1.3+1] - [07.19.2021]
 ### Fixes
-#### Kotlin
+#### Android
 - Fixed `[Kotlin]` issue when installing the plugin.
 
 ### Documentation
 - Updated `README` documentation.
 
 ### Changes
-#### Kotlin
+#### Android
 - Downgraded some `[Kotlin]` dependencies.
 
 ## [1.1.3] - [07.18.2021]
 ### Fixes
-#### Kotlin
+#### Android
 - Fixed `[cursor]` problem when using `[AudiosFromType.GENRE_NAME]` or `[AudiosFromType.GENRE_ID]` on `[queryAudiosFrom]`. - [Fixed #16](https://github.com/LucasPJS/on_audio_query/issues/16) and [Fixed #12](https://github.com/LucasPJS/on_audio_query/issues/12)
 
 ### Documentation
 - Updated `README` documentation.
 
 ### Changes
-#### Kotlin
+#### Android
 - Updated some `[Kotlin]` dependencies.
 
 ## [1.1.2] - [07.07.2021]
 ### Fixes
-#### Kotlin
+#### Android
 - ~~Fixed `[cursor]` problem when using `[AudiosFromType.GENRE_NAME]` or `[AudiosFromType.GENRE_ID]` on `[queryAudiosFrom]`.~~
 
 ### Documentation
@@ -211,11 +224,11 @@
 
 ## [1.1.1] - [06.23.2021]
 ### Features
-#### Dart/Kotlin
+#### Dart/Android
 - Added `[uri]` to `[SongModel]`. - [Added #10](https://github.com/LucasPJS/on_audio_query/issues/10)
 
 ### Fixes
-#### Kotlin
+#### Android
 - Fixed `java.lang.Integer cannot be cast to java.lang.Long` from `[queryArtworks]`. - [Fixed #11](https://github.com/LucasPJS/on_audio_query/issues/11)
 
 ### Documentation
@@ -232,13 +245,13 @@
 
 ## [1.1.0] - [06.03.2021]
 ### Features
-#### Dart/Kotlin
+#### Dart/Android
 - Added `[queryDeviceInfo]`.
 - Added `[dateModified]` to `[SongModel]`.
 - Added `[querySongsBy]` and `[SongsByType]`.
 
 ### Fixes
-#### Kotlin
+#### Android
 - Fixed incompatibility with `[permission_handler]`. - [Fixed #3](https://github.com/LucasPJS/on_audio_query/issues/3) - Thanks [@mvanbeusekom](https://github.com/mvanbeusekom)
 
 #### Dart
@@ -249,7 +262,7 @@
 - Updated `[OnAudioQueryExample]` to add new `[queryDeviceInfo]` and `[QueryArtworkWidget]` methods.
 
 ### Changes
-#### Kotlin
+#### Android
 - Updated some `[Kotlin]` dependencies.
 - Changed some `[Kotlin]` methods.
 
@@ -266,7 +279,7 @@
 - Added comments to `[QueryArtworkWidget]`.
 
 ### Fixes
-#### Kotlin
+#### Android
 - Now `[queryArtworks]` will return null. - [Fixed #6](https://github.com/LucasPJS/on_audio_query/issues/6)
 
 ### Documentation
@@ -278,7 +291,7 @@
 
 ## [1.0.7] - [05.18.2021]
 ### Features
-#### Dart/Kotlin
+#### Dart/Android
 - Added `[queryFromFolder]`.
 - Added `[queryAllPath]`.
 - Added `[_display_name_wo_ext]` (`[displayName]` without extension) to `[SongModel]`. - [Added #5](https://github.com/LucasPJS/on_audio_query/issues/5)
@@ -291,34 +304,34 @@
 - Updated `README` documentation.
 
 ### Changes
-#### Dart/Kotlin
+#### Dart/Android
 - Now `[queryAudiosFrom]` supports `[name]` and `[id]`.
 - Now `[albumId]` from `[AlbumModel]` return a `[int]`.
 
-#### Kotlin
+#### Android
 - Now all `[Kotlin]` checks will throw a `[Exception]` if value don't exist.
 - Updated some `[Kotlin]` dependencies.
 
 ### ⚠ Important Changes
-#### Dart/Kotlin
+#### Dart/Android
 - Changed `[ALBUM]`, `[ARTIST]` and `[PLAYLIST]` to `[ALBUM_NAME]`, `[ARTIST_NAME]` and `[PLAYLIST_NAME]` in `[AudiosFromType]`.
 
 ## [1.0.6] - [04.08.2021]
 ### Fixes
-#### Kotlin
+#### Android
 - Fixed `[queryArtwork]` returning null album image in Android 11. - [Fixed #1](https://github.com/LucasPJS/on_audio_query/issues/1)
 
 ### Documentation
 - Updated `README` documentation.
 
 ### Changes
-#### Kotlin
+#### Android
 - Removed unnecessary code from `[WithFiltersType]`.
 - Updated some `[Kotlin]` dependencies.
 
 ## [1.0.5] - [03.31.2021]
 ### Features
-#### Dart/Kotlin
+#### Dart/Android
 - Added `[queryAudiosOnly]`.
 - Added `[queryWithFilters]`.
 - Added `[AudiosOnlyType]` and `[WithFiltersType]`.
@@ -329,10 +342,10 @@
 - Updated `README` documentation.
 
 ### Changes
-#### Dart/Kotlin
+#### Dart/Android
 - Now `[querySongs]`, `[queryAlbums]`, `[queryArtists]`, `[queryPlaylists]` and `[queryGenres]` have `[UriType]` as parameter.
 
-#### Kotlin
+#### Android
 - Updated some `[Kotlin]` dependencies.
 
 ## [1.0.3] - [03.28.2021]
@@ -345,7 +358,7 @@
 #### Dart
 - Fixed flutter example.
 
-#### Kotlin
+#### Android
 - Fixed `[audiosFromPlaylist]` [**Now this method is part of queryAudiosFrom**]
 - Fixed `"count(*)"` error from `[addToPlaylist]`. [**Permission bug on Android 10 still happening**]
 
@@ -357,10 +370,10 @@
 - Now `[Id]` in models return `[int]` instead `[String]`.
 
 ### ⚠ Important Changes
-#### Dart/Kotlin
+#### Dart/Android
 - Removed `[ALBUM_KEY]`, `[ARTIST_KEY]` from all query audio methods.
 
-#### Kotlin
+#### Android
 - Moved `[audiosFromPlaylist]` to `[queryAudiosFrom]`.
 
 ## [1.0.0] - [03.24.2021]
@@ -370,7 +383,7 @@
 
 ## [0.5.0] - [03.23.2021]
 ### Features
-#### Dart/Kotlin
+#### Dart/Android
 - Changed some methods structure.
 - Added `[moveItemTo]` method to Playlist.
 - Added `[Size]` and `[Format]` parameters to `[queryArtwork]`.
@@ -394,7 +407,7 @@
 
 ## [0.4.0] - [03.18.2021]
 ### Features
-#### Dart/Kotlin
+#### Dart/Android
 - Changed some methods structure.
 - Added `[renamePlaylist]`.
 - Added separate option for sortType order `[ASC_OR_SMALLER]` and `[DESC_OR_GREATER]`.
@@ -409,7 +422,7 @@
 
 ## [0.3.0] - [03.16.2021]
 ### Features
-#### Dart/Kotlin
+#### Dart/Android
 - Added `[createPlaylist]`, `[removePlaylist]`, `[addToPlaylist]` and `[removeFromPlaylist]`.
 
 #### Dart
@@ -420,7 +433,7 @@
 
 ## [0.2.5] - [03.11.2021]
 ### Features
-#### Dart/Kotlin
+#### Dart/Android
 - Added `[queryArtworks]` and `[queryAudiosFrom]`.
 
 ### Fixes
@@ -431,11 +444,11 @@
 
 ## [0.2.0] - [03.10.2021]
 ### Features
-#### Dart/Kotlin
+#### Dart/Android
 - Added `[queryArtists]`, `[queryPlaylists]` and `[queryGenres]`.
 - Added `[ArtistSortType]`, `[PlaylistsSortType]` and `[GenreSortType]`.
 
-#### Kotlin
+#### Android
 - Now all methods use `Kotlin Coroutines` for query in background, adding a better performance.
 
 ### Documentation
@@ -446,11 +459,11 @@
 
 ## [0.1.5] - [03.08.2021]
 ### Features
-#### Dart/Kotlin
+#### Dart/Android
 - Added `[querySongs]`, `[queryAudio]` and `[queryAlbums]`.
 - Added `[AudioSortType]` and `[AlbumSortType]`.
 
-#### Kotlin
+#### Android
 - Added `[Optional]` and `[Built-in]` Write and Read Storage Permission.
 
 ### Documentation
@@ -458,7 +471,7 @@
 
 ## [0.0.1] - [02.16.2021]
 ### Features
-#### Dart/Kotlin
+#### Dart/Android
 - Created the base for the plugin.
 
 <!-- 

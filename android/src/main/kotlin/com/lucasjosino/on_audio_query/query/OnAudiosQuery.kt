@@ -6,10 +6,11 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.lucasjosino.on_audio_query.OnAudioQueryPlugin
 import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
 import com.lucasjosino.on_audio_query.types.checkAudiosUriType
-import com.lucasjosino.on_audio_query.types.songProjection
 import com.lucasjosino.on_audio_query.types.sorttypes.checkSongSortType
+import com.lucasjosino.on_audio_query.utils.songProjection
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
@@ -19,8 +20,10 @@ import kotlinx.coroutines.withContext
 /** OnAudiosQuery */
 class OnAudiosQuery : ViewModel() {
 
-    //Main parameters
+    // Main parameters
     private val helper = OnAudioHelper()
+
+    // None of this methods can be null.
     private lateinit var uri: Uri
     private lateinit var resolver: ContentResolver
     private lateinit var sortType: String
@@ -28,7 +31,14 @@ class OnAudiosQuery : ViewModel() {
     @SuppressLint("StaticFieldLeak")
     private lateinit var context: Context
 
-    //This method will query all audio/songs available.
+    /**
+     * Method to "query" all songs.
+     *
+     * Parameters:
+     *   * [context]
+     *   * [result]
+     *   * [call]
+     */
     fun querySongs(
         context: Context,
         result: MethodChannel.Result,
@@ -36,18 +46,28 @@ class OnAudiosQuery : ViewModel() {
     ) {
         this.context = context; resolver = context.contentResolver
 
-        //SortType: Type and Order
+        // Sort: Type and Order.
         sortType = checkSongSortType(
             call.argument<Int>("sortType")!!,
             call.argument<Int>("orderType")!!
         )
-        //
+        // Check uri:
+        //   * [0]: External.
+        //   * [1]: Internal.
         uri = checkAudiosUriType(call.argument<Int>("uri")!!)
 
-        //Query everything in the Background it's necessary for better performance
+        // Query everything in background for a better performance.
         viewModelScope.launch {
-            //Start querying
-            val resultSongList = loadSongs()
+            // Request permission status from the main method.
+            val hasPermission = OnAudioQueryPlugin().onPermissionStatus(context)
+            // Empty list.
+            var resultSongList = ArrayList<MutableMap<String, Any?>>()
+
+            // We cannot "query" without permission so, just return a empty list.
+            if (hasPermission) {
+                // Start querying
+                resultSongList = loadSongs()
+            }
 
             //Flutter UI will start, but, information still loading
             result.success(resultSongList)
@@ -57,14 +77,15 @@ class OnAudiosQuery : ViewModel() {
     //Loading in Background
     private suspend fun loadSongs(): ArrayList<MutableMap<String, Any?>> =
         withContext(Dispatchers.IO) {
+            // Setup the cursor with [uri], [projection] and [sortType].
             val cursor = resolver.query(uri, songProjection, null, null, sortType)
+            // Empty list.
             val songList: ArrayList<MutableMap<String, Any?>> = ArrayList()
-            //Search for song.
+
+            // For each item(song) inside this "cursor", take one and "format"
+            // into a [Map<String, dynamic>].
             while (cursor != null && cursor.moveToNext()) {
-                //Create a temp [Map] to store information.
-                //[songProjection] is used to define which items we need.
                 val tempData: MutableMap<String, Any?> = HashMap()
-                //You can see all projection types below this file.
                 for (audioMedia in cursor.columnNames) {
                     tempData[audioMedia] = helper.loadSongItem(audioMedia, cursor)
                 }
@@ -73,10 +94,13 @@ class OnAudiosQuery : ViewModel() {
                 val tempExtraData = helper.loadSongExtraInfo(uri, tempData)
                 tempData.putAll(tempExtraData)
 
-                //
                 songList.add(tempData)
             }
+
+            // Close cursor to avoid memory leaks.
             cursor?.close()
+            // After finish the "query", go back to the "main" thread(You can only call flutter
+            // inside the main thread).
             return@withContext songList
         }
 }

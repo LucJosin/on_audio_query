@@ -34,7 +34,6 @@ NOTE: Fique à vontade para ajudar nas traduções
 ## Exemplos em Gif:
 | <img src="https://user-images.githubusercontent.com/76869974/112378123-522c1a00-8cc5-11eb-880d-ba67706c415d.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378181-62dc9000-8cc5-11eb-8cb3-c8db71372fa9.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378214-6e2fbb80-8cc5-11eb-996a-d61bb8a620ca.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378250-7687f680-8cc5-11eb-94a1-ea91868d119c.gif"/> |
 |:---:|:---:|:---:|:---:|
-| <img src="https://user-images.githubusercontent.com/76869974/112378123-522c1a00-8cc5-11eb-880d-ba67706c415d.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378181-62dc9000-8cc5-11eb-8cb3-c8db71372fa9.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378214-6e2fbb80-8cc5-11eb-996a-d61bb8a620ca.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378250-7687f680-8cc5-11eb-94a1-ea91868d119c.gif"/> |
 | Músicas | Albums | Playlists | Artistas |
 
 ## Platformas:
@@ -49,10 +48,10 @@ NOTE: Fique à vontade para ajudar nas traduções
 | `queryGenres` | `✔️` | `✔️` | <br>
 | `queryAudiosFrom` | `✔️` | `✔️` | <br>
 | `queryWithFilters` | `✔️` | `✔️` | <br>
-| `queryArtwork` | `✔️` | `❌` | <br>
+| `queryArtwork` | `✔️` | `✔️` | <br>
 | `createPlaylist` | `✔️` | `✔️` | <br>
 | `removePlaylist` | `✔️` | `⭕` | <br>
-| `addToPlaylist` | `✔️` | `❌` | <br>
+| `addToPlaylist` | `✔️` | `✔️` | <br>
 | `removeFromPlaylist` | `✔️` | `⭕` | <br>
 | `renamePlaylist` | `✔️` | `⭕` | <br>
 | `moveItemTo` | `✔️` | `⭕` | <br>
@@ -70,7 +69,7 @@ NOTE: Fique à vontade para ajudar nas traduções
 Adicione o seguinte codigo para seu `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^2.0.0-beta.2
+  on_audio_query: ^2.0.0-beta.3
 ```
 
 #### Solicitar Permissões:
