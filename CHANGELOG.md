@@ -1,4 +1,4 @@
-## [2.0.0-beta.3] - [08.17.2021]
+## [2.0.0-beta.3] - [08.17.2021] - [GitHub Only]
 ### Features
 #### Android
 - Now **ALL** methods will only `"query"` if has permission to `READ`.
