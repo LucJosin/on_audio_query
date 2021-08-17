@@ -1,6 +1,6 @@
 part of on_audio_query;
 
-/// [AlbumModel] contains all Albums Info
+/// [AlbumModel] that contains all [Album] Information.
 class AlbumModel {
   AlbumModel(this._info);
 
@@ -8,37 +8,37 @@ class AlbumModel {
   Map<dynamic, dynamic> _info;
 
   /// Return album [id]
-  int get id => int.parse(_info["_id"]);
+  int get id => _info["_id"];
 
-  /// Return album [albumName]
-  String get albumName => _info["album"];
+  /// Deprecated after [2.0.0].
+  @Deprecated("Use [album] instead")
+  String? get albumName => album;
+
+  /// Return album [album]
+  String get album => _info["album"];
 
   /// Return album [albumId]
-  int get albumId => int.parse(_info["album_id"]);
-
-  // /// Return album [albumKey]
-  // ///
-  // /// Some times [albumKey] is returned null
-  // String get albumKey => _info["album_key"];
+  int get albumId => _info["album_id"];
 
   /// Return album [artist]
-  ///
-  /// Some times [artist] is returned null
-  String get artist => _info["artist"];
+  String? get artist => _info["artist"];
 
   /// Return album [artistId]
   String? get artistId => _info["artist_id"];
 
-  /// Return album [lastYear]
+  /// Deprecated after [2.0.0].
+  @Deprecated("This method will be removed soon")
   String? get lastYear => _info["maxyear"];
 
-  /// Return album [firstYear]
+  /// Deprecated after [2.0.0].
+  @Deprecated("This method will be removed soon")
   String? get firstYear => _info["minyear"];
 
   /// Return album [numOfSongs]
-  String get numOfSongs => _info["numsongs"];
+  int get numOfSongs => _info["numsongs"];
 
-  /// Return album [numOfSongsArtists]
+  /// Deprecated after [2.0.0].
+  @Deprecated("This method will be removed soon")
   String? get numOfSongsArtists => _info["numsongs_by_artist"];
 
   /// Return album [artwork]
@@ -46,7 +46,7 @@ class AlbumModel {
   /// Important:
   ///
   /// * If Android >= Q/10 this method will return null, in this case it's necessary use [queryArtworks]
-  String? get artwork => _info["album_art"];
+  Uint8List? get artwork => _info["album_art"];
 
   /// Return a map with all [keys] and [values] from specific album.
   Map get getMap => _info;

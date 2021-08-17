@@ -1,6 +1,6 @@
 part of on_audio_query;
 
-/// [PlaylistModel] contains all Playlists Info
+/// [PlaylistModel] that contains all [Playlist] Information.
 class PlaylistModel {
   PlaylistModel(this._info);
 
@@ -8,21 +8,23 @@ class PlaylistModel {
   Map<dynamic, dynamic> _info;
 
   ///Return playlist [id]
-  int get id => int.parse(_info["_id"]);
+  int get id => _info["_id"];
 
-  ///Return playlist [name]
-  String get playlistName => _info["name"];
+  /// Deprecated after [2.0.0].
+  @Deprecated("Use [album] instead")
+  String? get playlistName => playlist;
+
+  ///Return playlist [playlist]
+  String get playlist => _info["name"];
 
   ///Return playlist [data]
   String? get data => _info["_data"];
 
   ///Return playlist [dateAdded]
-  String? get dateAdded => _info["date_added"];
+  int? get dateAdded => _info["date_added"];
 
   ///Return playlist [dateModified]
-  ///
-  /// Some times [dateModified] is returned null
-  String? get dateModified => _info["date_modified"];
+  int? get dateModified => _info["date_modified"];
 
   /// Return a map with all [keys] and [values] from specific playlist.
   Map get getMap => _info;

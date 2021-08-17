@@ -1,9 +1,10 @@
 package com.lucasjosino.on_audio_query.interfaces
 
+import android.content.Context
+
 /** OnPermissionManagerInterface */
 interface OnPermissionManagerInterface {
-    fun onCheckPermission(requestPermission: Boolean)
-    fun onPermissionStatus() : Boolean
-    fun onRequestPermission(IorE: String)
+    fun onPermissionStatus(context: Context? = null) : Boolean
+    fun onRequestPermission()
     fun onRetryRequestPermission()
 }

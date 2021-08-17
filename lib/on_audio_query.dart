@@ -16,15 +16,18 @@ library on_audio_query;
 
 //
 import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
 
 //Dart/Flutter
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 
 //Controller
 part 'details/on_audio_query_controller.dart';
+
+//Extensions
+part 'details/extensions/models_extensions.dart';
 
 //Models
 part 'details/models/song_model.dart';
@@ -49,6 +52,7 @@ part 'details/types/audios_only_type.dart';
 part 'details/types/with_filters_type.dart';
 part 'details/types/uri_type.dart';
 part 'details/types/songs_by_type.dart';
+//
 
 //Widget
 part 'widget/queryArtworkWidget.dart';

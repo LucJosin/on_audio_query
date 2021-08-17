@@ -1,6 +1,6 @@
 part of on_audio_query;
 
-/// [GenreModel] contains all Genres Info
+/// [GenreModel] that contains all [Genre] Information.
 class GenreModel {
   GenreModel(this._info);
 
@@ -8,16 +8,17 @@ class GenreModel {
   Map<dynamic, dynamic> _info;
 
   /// Return genre [id]
-  int get id => int.parse(_info["_id"]);
+  int get id => _info["_id"];
 
-  /// Return genre [name]
-  String get genreName => _info["name"];
+  /// Deprecated after [2.0.0].
+  @Deprecated("Use [artist] instead")
+  String? get genreName => genre;
 
-  /// Return genre [artwork]
-  ///
-  /// Important:
-  ///
-  /// * If Android >= Q/10 this method will return null, in this case it's necessary use [queryArtworks]
+  /// Return [genre] name
+  String get genre => _info["name"];
+
+  /// Deprecated after [2.0.0].
+  @Deprecated("This method will be removed soon")
   String? get artwork => _info["artwork"];
 
   /// Return a map with all [keys] and [values] from specific genre.

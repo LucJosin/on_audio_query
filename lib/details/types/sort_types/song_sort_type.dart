@@ -11,7 +11,8 @@ enum SongSortType {
   ///[ALBUM] will return song list based in album [name].
   ALBUM,
 
-  ///[YEAR] will return song list based in [year].
+  /// Deprecated after [2.0.0].
+  @Deprecated("This method will be removed soon")
   YEAR,
 
   ///[DURATION] will return song list based in song [duration].

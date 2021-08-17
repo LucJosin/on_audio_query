@@ -1,10 +1,7 @@
 part of on_audio_query;
 
-/// Defines a specific type for query audios.
-///
-/// Note: The types below are specific for Android >= Q/29, so if you try call them below Android 10 will return [ALL_TYPE]
-///
-/// Types: [IS_AUDIOBOOK], [IS_PENDING], [IS_FAVORITE], [IS_DRM], [IS_TRASHED] and [IS_DOWNLOAD].
+/// Deprecated after [2.0.0].
+@Deprecated("This method will be removed soon")
 enum AudiosOnlyType {
   /// Query only audios defined with [IS_ALARM].
   IS_ALARM,

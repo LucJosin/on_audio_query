@@ -25,16 +25,21 @@ class Songs extends StatefulWidget {
 }
 
 class _SongsState extends State<Songs> {
-  late List<SongModel> songList;
-  late DeviceModel deviceModel;
+  OnAudioQuery audioQuery = OnAudioQuery();
 
   @override
   void initState() {
     super.initState();
-    getDevice();
+    requestPermission();
   }
 
-  getDevice() async => deviceModel = await OnAudioQuery().queryDeviceInfo();
+  requestPermission() async {
+    bool permissionStatus = await audioQuery.permissionsStatus();
+    if (!permissionStatus) {
+      await audioQuery.permissionsRequest();
+    }
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,43 +48,38 @@ class _SongsState extends State<Songs> {
         appBar: AppBar(
           title: Text("OnAudioQueryExample"),
           elevation: 2,
-          actions: [
-            IconButton(
-              onPressed: () {
-                setState(() {});
-              },
-              icon: Icon(Icons.add),
-            )
-          ],
         ),
         body: FutureBuilder<List<SongModel>>(
           future: OnAudioQuery().querySongs(
-            SongSortType.DEFAULT,
-            OrderType.ASC_OR_SMALLER,
-            UriType.EXTERNAL,
-            false,
+            sortType: SongSortType.DEFAULT,
+            orderType: OrderType.ASC_OR_SMALLER,
+            uriType: UriType.EXTERNAL,
           ),
           builder: (context, item) {
-            if (item.data != null) {
-              songList = item.data!;
-              return ListView.builder(
-                itemCount: songList.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(songList[index].title),
-                    subtitle: Text(songList[index].artist),
-                    trailing: Icon(Icons.arrow_forward_rounded),
-                    leading: QueryArtworkWidget(
-                      id: songList[index].id,
-                      type: ArtworkType.AUDIO,
-                      artwork: songList[index].artwork,
-                      deviceSDK: deviceModel.sdk,
-                    ),
-                  );
-                },
-              );
-            }
-            return CircularProgressIndicator();
+            if (item.data == null) return CircularProgressIndicator();
+
+            // When you try "query" without asking for [READ] or [Library] permission
+            // the plugin will return a [Empty] list.
+            if (item.data!.isEmpty) return Text("Nothing found!");
+
+            // You can use [item.data!] direct or you can create a:
+            // List<SongModel> songs = item.data!;
+            return ListView.builder(
+              itemCount: item.data!.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(item.data![index].title),
+                  subtitle: Text(item.data![index].artist ?? "No Artist"),
+                  trailing: Icon(Icons.arrow_forward_rounded),
+                  // This Widget will query/load image. Just add the id and type.
+                  // You can use/create your own widget/method using [queryArtwork].
+                  leading: QueryArtworkWidget(
+                    id: item.data![index].id,
+                    type: ArtworkType.AUDIO,
+                  ),
+                );
+              },
+            );
           },
         ),
       ),
