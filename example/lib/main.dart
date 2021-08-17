@@ -15,9 +15,9 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
-// void main() {
-//   runApp(Songs());
-// }
+void main() {
+  runApp(Songs());
+}
 
 class Songs extends StatefulWidget {
   @override

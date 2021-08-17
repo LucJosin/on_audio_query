@@ -70,7 +70,7 @@ NOTE: Feel free to help with readme translations
 Add the following code to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^2.0.0-beta.3
+  on_audio_query: ^2.0.0
 ```
 
 ### Request Permission:

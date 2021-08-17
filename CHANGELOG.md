@@ -1,3 +1,17 @@
+## [2.0.0] - [08.05.2021]
+### Release
+- `[2.0.0]` release.
+
+See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/main/CHANGELOG.md):
+- [2.0.0-beta.3](#200-beta3---08172021---github-only)
+- [2.0.0-beta.2](#200-beta2---08152021)
+- [2.0.0-beta.1](#200-beta1---08142021)
+- [2.0.0-beta.0](#200-beta0---08132021)
+- [2.0.0-alpha.1](#200-alpha1---08082021---github-only)
+- [2.0.0-alpha.0](#200-alpha0---08052021---github-only)
+- [2.0.0-dev.1](#200-dev1---08052021---internal)
+- [2.0.0-dev.0](#200-dev0---08022021---internal)
+
 ## [2.0.0-beta.3] - [08.17.2021] - [GitHub Only]
 ### Features
 #### Android
