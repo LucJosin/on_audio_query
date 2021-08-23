@@ -10,18 +10,15 @@ jobs:
         id: dart_analysis
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
+          relativePath: on_audio_query/on_audio_query/
       - name: Check Scores
         env:
           TOTAL: ${{ steps.dart_analysis.outputs.total }}
           TOTAL_MAX: ${{ steps.dart_analysis.outputs.total_max }}
         run: |
-          # [dart-package-analyzer@v3] don't support [dartdoc comments] so, we
-          # add more 10 points.
           if (( ($TOTAL + 10) < ($TOTAL_MAX + 10) ))
           then
             echo Total Score: [$TOTAL].
             echo Something's wrong!.
             exit 1
-          else
-            echo Everything's ok.
           fi
