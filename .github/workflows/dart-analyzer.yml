@@ -1,5 +1,11 @@
 name: Dart Analyzer
-on: [push, pull_request]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   package-analysis:
@@ -16,7 +22,7 @@ jobs:
           TOTAL: ${{ steps.dart_analysis.outputs.total }}
           TOTAL_MAX: ${{ steps.dart_analysis.outputs.total_max }}
         run: |
-          if (( ($TOTAL + 10) < ($TOTAL_MAX + 10) ))
+          if (( $TOTAL < $TOTAL_MAX ))
           then
             echo Total Score: [$TOTAL].
             echo Something's wrong!.
