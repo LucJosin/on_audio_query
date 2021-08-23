@@ -10,7 +10,7 @@ jobs:
         id: dart_analysis
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
-          relativePath: on_audio_query/on_audio_query/
+          relativePath: on_audio_query/
       - name: Check Scores
         env:
           TOTAL: ${{ steps.dart_analysis.outputs.total }}
