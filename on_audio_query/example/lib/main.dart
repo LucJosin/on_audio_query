@@ -27,19 +27,19 @@ class Songs extends StatefulWidget {
 class _SongsState extends State<Songs> {
   OnAudioQuery audioQuery = OnAudioQuery();
 
-  @override
-  void initState() {
-    super.initState();
-    requestPermission();
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   requestPermission();
+  // }
 
-  requestPermission() async {
-    bool permissionStatus = await audioQuery.permissionsStatus();
-    if (!permissionStatus) {
-      await audioQuery.permissionsRequest();
-    }
-    setState(() {});
-  }
+  // requestPermission() async {
+  //   bool permissionStatus = await audioQuery.permissionsStatus();
+  //   if (!permissionStatus) {
+  //     await audioQuery.permissionsRequest();
+  //   }
+  //   setState(() {});
+  // }
 
   @override
   Widget build(BuildContext context) {

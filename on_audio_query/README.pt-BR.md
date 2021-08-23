@@ -39,30 +39,29 @@ NOTE: Fique à vontade para ajudar nas traduções
 
 ## Platformas:
 
-<!-- ✔️ | ❌ | ⭕ -->
-|  Methods  |   Android   |   IOS   |
-|--------------|-----------------|-----------------|
-| `querySongs` | `✔️` | `✔️` | <br>
-| `queryAlbums` | `✔️` | `✔️` | <br>
-| `queryArtists` | `✔️` | `✔️` | <br>
-| `queryPlaylists` | `✔️` | `✔️` | <br>
-| `queryGenres` | `✔️` | `✔️` | <br>
-| `queryAudiosFrom` | `✔️` | `✔️` | <br>
-| `queryWithFilters` | `✔️` | `✔️` | <br>
-| `queryArtwork` | `✔️` | `✔️` | <br>
-| `createPlaylist` | `✔️` | `✔️` | <br>
-| `removePlaylist` | `✔️` | `⭕` | <br>
-| `addToPlaylist` | `✔️` | `✔️` | <br>
-| `removeFromPlaylist` | `✔️` | `⭕` | <br>
-| `renamePlaylist` | `✔️` | `⭕` | <br>
-| `moveItemTo` | `✔️` | `⭕` | <br>
-| `permissionsRequest` | `✔️` | `✔️` | <br>
-| `permissionsStatus` | `✔️` | `✔️` | <br>
-| `queryDeviceInfo` | `✔️` | `✔️` | <br>
+<!-- ✔️ | ❌ -->
+|  Methods  |   Android   |   IOS   |   Web   |
+|--------------|-----------------|-----------------|-----------------|
+| `querySongs` | `✔️` | `✔️` | `✔️` | <br>
+| `queryAlbums` | `✔️` | `✔️` | `✔️` | <br>
+| `queryArtists` | `✔️` | `✔️` | `✔️` | <br>
+| `queryPlaylists` | `✔️` | `✔️` | `❌` | <br>
+| `queryGenres` | `✔️` | `✔️` | `✔️` | <br>
+| `queryAudiosFrom` | `✔️` | `✔️` | `✔️` | <br>
+| `queryWithFilters` | `✔️` | `✔️` | `✔️` | <br>
+| `queryArtwork` | `✔️` | `✔️` | `✔️` | <br>
+| `createPlaylist` | `✔️` | `✔️` | `❌` | <br>
+| `removePlaylist` | `✔️` | `❌` | `❌` | <br>
+| `addToPlaylist` | `✔️` | `✔️` | `❌` | <br>
+| `removeFromPlaylist` | `✔️` | `❌` | `❌` | <br>
+| `renamePlaylist` | `✔️` | `❌` | `❌` | <br>
+| `moveItemTo` | `✔️` | `❌` | `❌` | <br>
+| `permissionsRequest` | `✔️` | `✔️` | `❌` | <br>
+| `permissionsStatus` | `✔️` | `✔️` | `❌` | <br>
+| `queryDeviceInfo` | `✔️` | `✔️` | `✔️` | <br>
 
 ✔️ -> Tem suporte <br>
 ❌ -> Não tem suporte <br>
-⭕ -> Suporte limitado/Limitação da platforma
 
 **[Veja todos os suportes](./PLATFORMS.md)**
 
@@ -70,7 +69,7 @@ NOTE: Fique à vontade para ajudar nas traduções
 Adicione o seguinte codigo para seu `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^2.0.0
+  on_audio_query: ^2.1.0
 ```
 
 #### Solicitar Permissões:

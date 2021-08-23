@@ -1,4 +1,27 @@
-## [2.0.0] - [08.05.2021]
+## [2.1.0] - [08.23.2021]
+### Features
+#### on_audio_query
+- The plugin now supports `[Web]`.
+- The plugin now utilize `[Platform interface]` package.
+
+#### Web
+- Added:
+    - `[querySongs]`.
+    - `[queryAlbums]`.
+    - `[queryArtists]`.
+    - `[queryGenres]`.
+    - `[queryAudiosFrom]`.
+    - `[queryWithFilters]`.
+    - `[queryArtwork]`.
+    - `[queryDeviceInfo]`.
+
+### Documentation
+- Updated `on_audio_query` documentation.
+- Updated `README` documentation.
+- Updated `PLATFORMS` documentation.
+- Added documentation to `Web` platform.
+
+## [2.0.0] - [08.17.2021]
 ### Release
 - `[2.0.0]` release.
 

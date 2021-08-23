@@ -16,9 +16,8 @@ part of on_audio_query;
 
 ///Interface and Main method for use on_audio_query
 class OnAudioQuery {
-  //Dart <-> Kotlin communication
-  static const String _CHANNEL_ID = "com.lucasjosino.on_audio_query";
-  static const MethodChannel _channel = const MethodChannel(_CHANNEL_ID);
+  /// The platform interface that drives this plugin
+  static OnAudioQueryPlatform get platform => OnAudioQueryPlatform.instance;
 
   /// Used to return Songs Info based in [SongModel].
   ///
@@ -36,9 +35,9 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<SongModel>> querySongs({
@@ -46,15 +45,11 @@ class OnAudioQuery {
     OrderType? orderType,
     UriType? uriType,
   }) async {
-    final List<dynamic> resultSongs =
-        await _channel.invokeMethod("querySongs", {
-      "sortType":
-          sortType != null ? sortType.index : SongSortType.DEFAULT.index,
-      "orderType":
-          orderType != null ? orderType.index : OrderType.ASC_OR_SMALLER.index,
-      "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
-    });
-    return resultSongs.map((songInfo) => SongModel(songInfo)).toList();
+    return platform.querySongs(
+      sortType: sortType,
+      orderType: orderType,
+      uriType: uriType,
+    );
   }
 
   /// Deprecated after [2.0.0].
@@ -89,9 +84,9 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<AlbumModel>> queryAlbums({
@@ -99,15 +94,11 @@ class OnAudioQuery {
     OrderType? orderType,
     UriType? uriType,
   }) async {
-    final List<dynamic> resultAlbums =
-        await _channel.invokeMethod("queryAlbums", {
-      "sortType":
-          sortType != null ? sortType.index : AlbumSortType.DEFAULT.index,
-      "orderType":
-          orderType != null ? orderType.index : OrderType.ASC_OR_SMALLER.index,
-      "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index
-    });
-    return resultAlbums.map((albumInfo) => AlbumModel(albumInfo)).toList();
+    return platform.queryAlbums(
+      sortType: sortType,
+      orderType: orderType,
+      uriType: uriType,
+    );
   }
 
   /// Used to return Artists Info based in [ArtistModel].
@@ -127,9 +118,9 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<ArtistModel>> queryArtists({
@@ -137,15 +128,11 @@ class OnAudioQuery {
     OrderType? orderType,
     UriType? uriType,
   }) async {
-    final List<dynamic> resultArtists =
-        await _channel.invokeMethod("queryArtists", {
-      "sortType":
-          sortType != null ? sortType.index : ArtistSortType.DEFAULT.index,
-      "orderType":
-          orderType != null ? orderType.index : OrderType.ASC_OR_SMALLER.index,
-      "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index
-    });
-    return resultArtists.map((artistInfo) => ArtistModel(artistInfo)).toList();
+    return platform.queryArtists(
+      sortType: sortType,
+      orderType: orderType,
+      uriType: uriType,
+    );
   }
 
   /// Used to return Playlists Info based in [PlaylistModel].
@@ -164,9 +151,9 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<PlaylistModel>> queryPlaylists({
@@ -174,17 +161,11 @@ class OnAudioQuery {
     OrderType? orderType,
     UriType? uriType,
   }) async {
-    final List<dynamic> resultPlaylists =
-        await _channel.invokeMethod("queryPlaylists", {
-      "sortType":
-          sortType != null ? sortType.index : PlaylistSortType.DEFAULT.index,
-      "orderType":
-          orderType != null ? orderType.index : OrderType.ASC_OR_SMALLER.index,
-      "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index
-    });
-    return resultPlaylists
-        .map((playlistInfo) => PlaylistModel(playlistInfo))
-        .toList();
+    return platform.queryPlaylists(
+      sortType: sortType,
+      orderType: orderType,
+      uriType: uriType,
+    );
   }
 
   /// Used to return Genres Info based in [GenreModel].
@@ -203,9 +184,9 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<GenreModel>> queryGenres({
@@ -213,15 +194,11 @@ class OnAudioQuery {
     OrderType? orderType,
     UriType? uriType,
   }) async {
-    final List<dynamic> resultGenres =
-        await _channel.invokeMethod("queryGenres", {
-      "sortType":
-          sortType != null ? sortType.index : GenreSortType.DEFAULT.index,
-      "orderType":
-          orderType != null ? orderType.index : OrderType.ASC_OR_SMALLER.index,
-      "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index
-    });
-    return resultGenres.map((genreInfo) => GenreModel(genreInfo)).toList();
+    return platform.queryGenres(
+      sortType: sortType,
+      orderType: orderType,
+      uriType: uriType,
+    );
   }
 
   /// Used to return Songs/Audios Info from a specific queryType based in [SongModel].
@@ -233,21 +210,19 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<SongModel>> queryAudiosFrom(
     AudiosFromType type,
     Object where,
   ) async {
-    final List<dynamic> resultSongsFrom =
-        await _channel.invokeMethod("queryAudiosFrom", {
-      "type": type.index,
-      "where": where,
-    });
-    return resultSongsFrom.map((songInfo) => SongModel(songInfo)).toList();
+    return platform.queryAudiosFrom(
+      type,
+      where,
+    );
   }
 
   /// Deprecated after [2.0.0].
@@ -257,15 +232,7 @@ class OnAudioQuery {
     SongSortType? sortType,
     OrderType? orderType,
   }) async {
-    final List<dynamic> resultSongs =
-        await _channel.invokeMethod("queryAudiosOnly", {
-      "sortType":
-          sortType != null ? sortType.index : SongSortType.DEFAULT.index,
-      "orderType":
-          orderType != null ? orderType.index : OrderType.ASC_OR_SMALLER.index,
-      "isOnly": isOnly.index
-    });
-    return resultSongs.map((songInfo) => SongModel(songInfo)).toList();
+    return [];
   }
 
   /// Deprecated after [2.0.0].
@@ -279,13 +246,7 @@ class OnAudioQuery {
     values.forEach((element) {
       valuesConverted.add(element.toString());
     });
-    final List<dynamic> resultSongs =
-        await _channel.invokeMethod("querySongsBy", {
-      "by": songsByType.index,
-      "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
-      "values": valuesConverted
-    });
-    return resultSongs.map((songInfo) => SongModel(songInfo)).toList();
+    return [];
   }
 
   /// Used to return Songs Info based in Something. Works like a "Search".
@@ -319,9 +280,9 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<dynamic>> queryWithFilters(
@@ -329,13 +290,11 @@ class OnAudioQuery {
     WithFiltersType withType,
     dynamic args,
   ) async {
-    final List<dynamic> resultFilters = await _channel.invokeMethod(
-        "queryWithFilters", {
-      "withType": withType.index,
-      "args": args.index ?? 0,
-      "argsVal": argsVal
-    });
-    return resultFilters;
+    return platform.queryWithFilters(
+      argsVal,
+      withType,
+      args,
+    );
   }
 
   /// Used to return Songs Artwork.
@@ -362,9 +321,9 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<Uint8List?> queryArtwork(
@@ -373,14 +332,12 @@ class OnAudioQuery {
     ArtworkFormat? format,
     int? size,
   }) async {
-    final Uint8List? finalArtworks =
-        await _channel.invokeMethod("queryArtwork", {
-      "type": type.index,
-      "id": id,
-      "format": format != null ? format.index : ArtworkFormat.JPEG.index,
-      "size": size != null ? size : 200
-    });
-    return finalArtworks;
+    return platform.queryArtwork(
+      id,
+      type,
+      format: format,
+      size: size,
+    );
   }
 
   /// Deprecated after [2.0.0].
@@ -412,9 +369,9 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `❌` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<SongModel>> queryFromFolder(
@@ -423,16 +380,12 @@ class OnAudioQuery {
     OrderType? orderType,
     UriType? uriType,
   }) async {
-    final List<dynamic> resultFromFolder =
-        await _channel.invokeMethod("queryFromFolder", {
-      "sortType":
-          sortType != null ? sortType.index : SongSortType.DEFAULT.index,
-      "orderType":
-          orderType != null ? orderType.index : OrderType.ASC_OR_SMALLER.index,
-      "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
-      "path": path
-    });
-    return resultFromFolder.map((songInfo) => SongModel(songInfo)).toList();
+    return platform.queryFromFolder(
+      path,
+      sortType: sortType,
+      orderType: orderType,
+      uriType: uriType,
+    );
   }
 
   /// Used to return Songs path.
@@ -443,15 +396,13 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `❌` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<String>> queryAllPath() async {
-    final List<dynamic> resultAllPath =
-        await _channel.invokeMethod("queryAllPath");
-    return resultAllPath.cast<String>();
+    return platform.queryAllPath();
   }
 
   //Playlist methods
@@ -470,9 +421,9 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> createPlaylist(
@@ -480,12 +431,11 @@ class OnAudioQuery {
     String? author,
     String? desc,
   }) async {
-    final bool resultCreatePl = await _channel.invokeMethod("createPlaylist", {
-      "playlistName": name,
-      "playlistAuthor": author,
-      "playlistDesc": desc,
-    });
-    return resultCreatePl;
+    return platform.createPlaylist(
+      name,
+      author: author,
+      desc: desc,
+    );
   }
 
   /// Used to remove/delete a Playlist
@@ -496,16 +446,13 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `❌` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> removePlaylist(int playlistId) async {
-    final bool resultRemovePl = await _channel.invokeMethod("removePlaylist", {
-      "playlistId": playlistId,
-    });
-    return resultRemovePl;
+    return platform.removePlaylist(playlistId);
   }
 
   /// Used to add a specific song/audio to a specific Playlist
@@ -517,17 +464,13 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> addToPlaylist(int playlistId, int audioId) async {
-    final bool resultAddToPl = await _channel.invokeMethod("addToPlaylist", {
-      "playlistId": playlistId,
-      "audioId": audioId,
-    });
-    return resultAddToPl;
+    return platform.addToPlaylist(playlistId, audioId);
   }
 
   /// Used to remove a specific song/audio from a specific Playlist
@@ -539,18 +482,13 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `❌` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> removeFromPlaylist(int playlistId, int audioId) async {
-    final bool resultRemoveFromPl =
-        await _channel.invokeMethod("removeFromPlaylist", {
-      "playlistId": playlistId,
-      "audioId": audioId,
-    });
-    return resultRemoveFromPl;
+    return platform.removeFromPlaylist(playlistId, audioId);
   }
 
   /// Used to change song/audio position from a specific Playlist
@@ -563,18 +501,13 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `❌` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> moveItemTo(int playlistId, int from, int to) async {
-    final bool resultMoveItem = await _channel.invokeMethod("moveItemTo", {
-      "playlistId": playlistId,
-      "from": from,
-      "to": to,
-    });
-    return resultMoveItem;
+    return platform.moveItemTo(playlistId, from, to);
   }
 
   /// Used to rename a specific Playlist
@@ -586,17 +519,13 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `❌` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> renamePlaylist(int playlistId, String newName) async {
-    final bool resultRenamePl = await _channel.invokeMethod("renamePlaylist", {
-      "playlistId": playlistId,
-      "newPlName": newName,
-    });
-    return resultRenamePl;
+    return renamePlaylist(playlistId, newName);
   }
 
   //Permissions methods
@@ -610,14 +539,13 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> permissionsStatus() async {
-    final bool resultStatus = await _channel.invokeMethod("permissionsStatus");
-    return resultStatus;
+    return platform.permissionsStatus();
   }
 
   /// Used to request Android permissions.
@@ -629,15 +557,13 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> permissionsRequest() async {
-    final bool resultRequest =
-        await _channel.invokeMethod("permissionsRequest");
-    return resultRequest;
+    return platform.permissionsRequest();
   }
 
   //Device Information
@@ -653,13 +579,12 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<DeviceModel> queryDeviceInfo() async {
-    final Map deviceResult = await _channel.invokeMethod("queryDeviceInfo");
-    return DeviceModel(deviceResult);
+    return platform.queryDeviceInfo();
   }
 }
