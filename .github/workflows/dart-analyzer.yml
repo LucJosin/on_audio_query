@@ -24,7 +24,6 @@ jobs:
         run: |
           if (( $TOTAL < $TOTAL_MAX ))
           then
-            echo Total Score: [$TOTAL].
             echo Something's wrong!.
             exit 1
           fi
