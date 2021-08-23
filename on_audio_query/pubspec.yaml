@@ -13,11 +13,8 @@ environment:
   flutter: ">=1.20.0"
 
 dependencies:
-  on_audio_query_platform_interface:
-    path: ../on_audio_query_platform_interface
-  # on_audio_query_web:
-  #   git:
-  #     url: git://github.com/LucasPJS/tmp_web.git
+  on_audio_query_platform_interface: ^1.0.0
+  on_audio_query_web: ^1.0.0
   flutter:
     sdk: flutter
 
@@ -36,5 +33,5 @@ flutter:
         pluginClass: OnAudioQueryPlugin
       ios:
         pluginClass: OnAudioQueryPlugin
-      # web:
-      #   default_package: on_audio_query_web
+      web:
+        default_package: on_audio_query_web
