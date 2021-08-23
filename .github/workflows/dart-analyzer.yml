@@ -22,8 +22,9 @@ jobs:
           TOTAL: ${{ steps.dart_analysis.outputs.total }}
           TOTAL_MAX: ${{ steps.dart_analysis.outputs.total_max }}
         run: |
-          if (( $TOTAL < $TOTAL_MAX ))
+          SCORES=$(( $TOTAL + 10 / $TOTAL_MAX + 10 ))
+          if (( $SCORES < 1 ))
           then
-            echo Something's wrong!.
+            echo Score too low!
             exit 1
           fi
