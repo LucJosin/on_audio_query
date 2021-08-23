@@ -9,8 +9,7 @@ environment:
 
 dependencies:
   id3: ^1.0.0
-  on_audio_query_platform_interface:
-    path: ../on_audio_query_platform_interface
+  on_audio_query_platform_interface: ^1.0.0
   flutter:
     sdk: flutter
   flutter_web_plugins:
