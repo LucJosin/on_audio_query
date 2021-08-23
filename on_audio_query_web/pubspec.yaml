@@ -1,0 +1,29 @@
+name: on_audio_query_web
+description: The web implementation of [on_audio_query].
+version: 1.0.0
+homepage: https://github.com/LucasPJS/on_audio_query/tree/master/on_audio_query_web
+
+environment:
+  sdk: ">=2.12.0 <3.0.0"
+  flutter: ">=1.20.0"
+
+dependencies:
+  id3: ^1.0.0
+  on_audio_query_platform_interface:
+    path: ../on_audio_query_platform_interface
+  flutter:
+    sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+# The following section is specific to Flutter.
+flutter:
+  plugin:
+    platforms:
+      web:
+        pluginClass: OnAudioQueryPlugin
+        fileName: on_audio_query_web.dart
