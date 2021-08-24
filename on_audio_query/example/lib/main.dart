@@ -14,6 +14,7 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 
 import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
+import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() {
   runApp(Songs());
@@ -27,19 +28,22 @@ class Songs extends StatefulWidget {
 class _SongsState extends State<Songs> {
   OnAudioQuery audioQuery = OnAudioQuery();
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   requestPermission();
-  // }
+  @override
+  void initState() {
+    super.initState();
+    requestPermission();
+  }
 
-  // requestPermission() async {
-  //   bool permissionStatus = await audioQuery.permissionsStatus();
-  //   if (!permissionStatus) {
-  //     await audioQuery.permissionsRequest();
-  //   }
-  //   setState(() {});
-  // }
+  requestPermission() async {
+    // Web platform don't have permissions methods.
+    if (!kIsWeb) {
+      bool permissionStatus = await audioQuery.permissionsStatus();
+      if (!permissionStatus) {
+        await audioQuery.permissionsRequest();
+      }
+      setState(() {});
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,6 +60,7 @@ class _SongsState extends State<Songs> {
             uriType: UriType.EXTERNAL,
           ),
           builder: (context, item) {
+            // Load content
             if (item.data == null) return CircularProgressIndicator();
 
             // When you try "query" without asking for [READ] or [Library] permission

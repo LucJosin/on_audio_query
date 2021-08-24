@@ -1,7 +1,7 @@
 # on_audio_query
 [![Pub.dev](https://img.shields.io/pub/v/on_audio_query?color=9cf&label=Pub.dev&style=flat-square)](https://pub.dev/packages/on_audio_query)
-[![Platforms](https://img.shields.io/badge/Platform-Android%20%7C%20IOS-9cf?&style=flat-square)]()
-[![Languages](https://img.shields.io/badge/Language-Flutter%20%7C%20Kotlin%20%7C%20Swift-9cf?&style=flat-square)]()
+[![Platforms](https://img.shields.io/badge/Platform-Android%20%7C%20IOS%20%7C%20Web-9cf?&style=flat-square)]()
+[![Languages](https://img.shields.io/badge/Language-Dart%20%7C%20Kotlin%20%7C%20Swift-9cf?&style=flat-square)]()
 
 `on_audio_query` é um [Flutter](https://flutter.dev/) Plugin usado para adquirir informações de áudios/músicas 🎶 [título, artista, album, etc..] do celular. <br>
 
@@ -63,13 +63,13 @@ NOTE: Fique à vontade para ajudar nas traduções
 ✔️ -> Tem suporte <br>
 ❌ -> Não tem suporte <br>
 
-**[Veja todos os suportes](./PLATFORMS.md)**
+**[Veja todos os suportes](https://github.com/LucasPJS/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)**
 
 ## Como instalar:
 Adicione o seguinte codigo para seu `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^2.1.0
+  on_audio_query: ^2.1.1
 ```
 
 #### Solicitar Permissões:
@@ -91,6 +91,20 @@ Para usar esse plugin adicione o seguinte código no seu `Info.plist`
 	<string>..Adicione um motivo..</string>
 ```
 
+#### Web:
+Já que os navegadores **não** oferecem acesso direto ao `file system` dos usuários, esse plugin irá usar a pasta `assets` para "pegar" os audios. Então, dependerá totalmente do `desenvolvedor`.
+
+```yaml
+  # Você não precisa adicionar todos os audios, apenas defina a pasta.
+  assets:
+    - assets/
+    # Se seus arquivos estão em outra pasta dentro de `assets`:
+    - assets/audios/
+    # - assets/audios/animals/
+    # - assets/audios/animals/cat/
+    # ...
+```
+
 ## Algumas qualidades:
 
 * Opcional e Interna solicitação de permissão para `LER` e `ESCREVER`.
@@ -108,7 +122,7 @@ Para usar esse plugin adicione o seguinte código no seu `Info.plist`
 ## Para fazer:
 
 * Adicionar uma melhor performace para todo o plugin.
-* Adicionar suporte para Web/Windows/MacOs/Linux.
+* Adicionar suporte para Windows/MacOs/Linux.
 * Opção para remover músicas.
 * Arrumar erros.
 
@@ -138,8 +152,8 @@ Todos os tipos de métodos nesse plugin:
 |--------------|-----------------|-----------------|
 | [`createPlaylist`]() | `(PlaylistName, RequestPermission)` | `bool` | <br>
 | [`removePlaylist`]() | `(PlaylistId, RequestPermission)` | `bool` | <br>
-| [`addToPlaylist`]() | **[NT-BG]**`(PlaylistId, AudioId, RequestPermission)` | `bool` | <br>
-| [`removeFromPlaylist`]() | **[NT]**`(PlaylistId, AudioId, RequestPermission)` | `bool` | <br>
+| [`addToPlaylist`]() | **[BG]**`(PlaylistId, AudioId, RequestPermission)` | `bool` | <br>
+| [`removeFromPlaylist`]() | `(PlaylistId, AudioId, RequestPermission)` | `bool` | <br>
 | [`renamePlaylist`]() | `(PlaylistId, NewName, RequestPermission)` | `bool` | <br>
 | [`moveItemTo`]() | **[NT]**`(PlaylistId, From, To, RequestPermission)` | `bool` | <br>
 
@@ -247,6 +261,6 @@ Ou você pode usar um Widget básico e customizável.
 
 ## LICENÇA:
 
-* [LICENSE](https://github.com/LucasPJS/on_audio_query/blob/main/LICENSE)
+* [LICENSE](https://github.com/LucasPJS/on_audio_query/blob/main/on_audio_query/LICENSE)
 
 > * [Voltar ao Topo](#on_audio_query)

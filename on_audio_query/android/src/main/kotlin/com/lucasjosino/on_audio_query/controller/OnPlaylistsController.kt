@@ -21,7 +21,7 @@ class OnPlaylistsController {
 
     //Query projection
     private val columns = arrayOf(
-            "count(*)"
+        "count(*)"
     )
 
     //
@@ -50,7 +50,7 @@ class OnPlaylistsController {
         }
     }
 
-    //TODO option for list
+    //TODO Add option to use a list
     //TODO Fix error on Android 10
     fun addToPlaylist(context: Context, result: MethodChannel.Result, call: MethodCall) {
         this.resolver = context.contentResolver
@@ -61,8 +61,8 @@ class OnPlaylistsController {
         //Check if Playlist exists based in Id
         if (!checkPlaylistId(playlistId)) result.success(false)
         else {
-            val uri = MediaStore.Audio.Playlists.Members.getContentUri("external", playlistId.toLong())
-            Log.i("Uri", uri.toString())
+            val uri =
+                MediaStore.Audio.Playlists.Members.getContentUri("external", playlistId.toLong())
             //If Android is Q/10 or above "count(*)" don't count, so, we use other method.
             val columnsBasedOnVersion = if (Build.VERSION.SDK_INT < 29) columns else null
             val cursor = resolver.query(uri, columnsBasedOnVersion, null, null, null)
@@ -77,22 +77,33 @@ class OnPlaylistsController {
                 contentValues.put(MediaStore.Audio.Playlists.Members.AUDIO_ID, audioId.toLong())
                 resolver.insert(uri, contentValues)
                 result.success(true)
-            } catch (e: Exception) { Log.i(channelError, e.toString()) }
+            } catch (e: Exception) {
+                Log.i(channelError, e.toString())
+            }
         }
     }
 
-    //
+    //TODO Add option to use a list
     fun removeFromPlaylist(context: Context, result: MethodChannel.Result, call: MethodCall) {
         this.resolver = context.contentResolver
         val playlistId = call.argument<Int>("playlistId")!!
         val audioId = call.argument<Int>("audioId")!!
 
-        //Check if Playlist exists based in Id
+        //Check if Playlist exists based on Id
         if (!checkPlaylistId(playlistId)) result.success(false)
         else {
-            val uri = MediaStore.Audio.Playlists.Members.getContentUri("external", playlistId.toLong())
-            resolver.delete(uri, MediaStore.Audio.Playlists.Members.AUDIO_ID + " = " + audioId.toLong(), null)
-            result.success(true)
+            try {
+                val uri = MediaStore.Audio.Playlists.Members.getContentUri(
+                    "external",
+                    playlistId.toLong()
+                )
+                val where = MediaStore.Audio.Playlists.Members._ID + "=?"
+                resolver.delete(uri, where, arrayOf(audioId.toString()))
+                result.success(true)
+            } catch (e: Exception) {
+                Log.i("on_audio_error: ", e.toString())
+                result.success(false)
+            }
         }
     }
 
@@ -128,8 +139,14 @@ class OnPlaylistsController {
     }
 
     //Return true if playlist already exist, false if don't exist
-    private fun checkPlaylistId(plId: Int) : Boolean {
-        val cursor = resolver.query(uri, arrayOf(MediaStore.Audio.Playlists.NAME, MediaStore.Audio.Playlists._ID), null, null, null)
+    private fun checkPlaylistId(plId: Int): Boolean {
+        val cursor = resolver.query(
+            uri,
+            arrayOf(MediaStore.Audio.Playlists.NAME, MediaStore.Audio.Playlists._ID),
+            null,
+            null,
+            null
+        )
         while (cursor != null && cursor.moveToNext()) {
             val playListId = cursor.getInt(1) //Id
             if (playListId == plId) return true

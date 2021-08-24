@@ -1,3 +1,12 @@
+## [2.1.1] - [08.23.2021]
+### Fixes
+#### Android
+- Fixed error when using `[removeFromPlaylist]`. - [Fixed #22](https://github.com/LucasPJS/on_audio_query/issues/22)
+
+### Documentation
+- Updated `README` documentation.
+- Updated `[OnAudioQueryExample]` to support `[Web]` platform.
+
 ## [2.1.0] - [08.23.2021]
 ### Features
 #### on_audio_query
@@ -42,7 +51,7 @@ See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/ma
 
 ### Fixes
 #### Android
-- Fixed no value returning when using `[requestPermission]`.
+- Fixed no value returning when using `[permissionsRequest]`.
 
 ### Documentation
 - Updated `README` documentation.
@@ -531,6 +540,7 @@ See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/ma
  -->
 
 <!-- 
+ https://github.com/LucasPJS/on_audio_query/issues/
  - [Added #Issue](Link)
  - [Fixed #Issue](Link)
  - [Changed #Issue](Link)
