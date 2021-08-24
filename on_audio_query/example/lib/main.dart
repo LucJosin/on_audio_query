@@ -35,7 +35,7 @@ class _SongsState extends State<Songs> {
   }
 
   requestPermission() async {
-    // Web platform don't have permissions methods.
+    // Web platform don't support permissions methods.
     if (!kIsWeb) {
       bool permissionStatus = await audioQuery.permissionsStatus();
       if (!permissionStatus) {
@@ -60,7 +60,7 @@ class _SongsState extends State<Songs> {
             uriType: UriType.EXTERNAL,
           ),
           builder: (context, item) {
-            // Load content
+            // Loading content
             if (item.data == null) return CircularProgressIndicator();
 
             // When you try "query" without asking for [READ] or [Library] permission

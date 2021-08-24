@@ -99,7 +99,7 @@ class OnArtworksQuery : ViewModel() {
                 artData = convertOrResize(bitmap = bitmap)!!
             } catch (e: Exception) {
                 // Some problem can occur, we hide to not "flood" the terminal.
-//            Log.i("on_audio_error: ", e.toString())
+//                Log.i("on_audio_error: ", e.toString())
             }
 
         } else {

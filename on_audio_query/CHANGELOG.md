@@ -1,3 +1,14 @@
+## [2.1.2] - [08.24.2021]
+### Fixes
+#### Android
+- Fixed duplicate `media` from `[queryWithFilters]`.
+- Fixed `crash` when calling `[queryWithFilters]`. - [Fixed #23](https://github.com/LucasPJS/on_audio_query/issues/23)
+- Fixed `null` artwork returning from `[queryArtwork]` on Android 11/R. - [Fixed #21](https://github.com/LucasPJS/on_audio_query/issues/21)
+
+### Documentation
+- Updated `README` documentation.
+- Updated `pubspec` documentation.
+
 ## [2.1.1] - [08.23.2021]
 ### Fixes
 #### Android

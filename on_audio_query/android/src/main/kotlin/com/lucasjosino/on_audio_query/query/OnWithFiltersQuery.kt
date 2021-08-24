@@ -76,7 +76,7 @@ class OnWithFiltersQuery : ViewModel() {
                 resultWithFilter = loadWithFilters()
             }
 
-            //
+            //Flutter UI will start, but, information still loading
             result.success(resultWithFilter)
         }
     }
@@ -106,8 +106,6 @@ class OnWithFiltersQuery : ViewModel() {
                     //Get a extra information from audio, e.g: extension, uri, etc..
                     val tempExtraData = helper.loadSongExtraInfo(uri, tempData)
                     tempData.putAll(tempExtraData)
-
-                    withFiltersList.add(tempData)
                 }
 
                 withFiltersList.add(tempData)
