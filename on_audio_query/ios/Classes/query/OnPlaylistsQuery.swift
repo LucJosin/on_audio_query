@@ -17,6 +17,13 @@ class OnPlaylistsQuery {
         
         // TODO: Add sort type to [queryPlaylists].
         
+        // This filter will avoid audios/songs outside phone library(cloud).
+        let cloudFilter = MPMediaPropertyPredicate.init(
+            value: false,
+            forProperty: MPMediaItemPropertyIsCloudItem
+        )
+        cursor.addFilterPredicate(cloudFilter)
+        
         // We cannot "query" without permission so, just return a empty list.
         let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
         if hasPermission {

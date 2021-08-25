@@ -19,6 +19,13 @@ class OnGenresQuery {
         // the [Artist]. The others will be sorted "manually" using
         // [formatSongList] before send to Dart.
         
+        // This filter will avoid audios/songs outside phone library(cloud).
+        let cloudFilter = MPMediaPropertyPredicate.init(
+            value: false,
+            forProperty: MPMediaItemPropertyIsCloudItem
+        )
+        cursor.addFilterPredicate(cloudFilter)
+        
         // We cannot "query" without permission so, just return a empty list.
         let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
         if hasPermission {

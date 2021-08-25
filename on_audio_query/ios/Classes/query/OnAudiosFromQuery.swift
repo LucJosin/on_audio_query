@@ -26,11 +26,27 @@ class OnAudiosFromQuery {
         if hasPermission {
             // Here we'll check if the request is to [Playlist] or other.
             if self.type != 6 && cursor != nil {
+                
+                // This filter will avoid audios/songs outside phone library(cloud).
+                let cloudFilter = MPMediaPropertyPredicate.init(
+                    value: false,
+                    forProperty: MPMediaItemPropertyIsCloudItem
+                )
+                cursor?.addFilterPredicate(cloudFilter)
+                
                 // Query everything in background for a better performance.
                 loadQueryAudiosFrom(cursor: cursor!)
             } else {
                 // Query everything in background for a better performance.
                 cursor = MPMediaQuery.playlists()
+                
+                // This filter will avoid audios/songs outside phone library(cloud).
+                let cloudFilter = MPMediaPropertyPredicate.init(
+                    value: false,
+                    forProperty: MPMediaItemPropertyIsCloudItem
+                )
+                cursor?.addFilterPredicate(cloudFilter)
+                
                 loadSongsFromPlaylist(cursor: cursor!.collections)
             }
         } else {

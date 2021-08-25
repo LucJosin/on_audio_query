@@ -47,6 +47,14 @@ class OnArtworkQuery {
         let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
         if cursor != nil && hasPermission {
             cursor?.addFilterPredicate(filter)
+            
+            // This filter will avoid audios/songs outside phone library(cloud).
+            let cloudFilter = MPMediaPropertyPredicate.init(
+                value: false,
+                forProperty: MPMediaItemPropertyIsCloudItem
+            )
+            cursor?.addFilterPredicate(cloudFilter)
+            
             // Query everything in background for a better performance.
             loadArtwork(cursor: cursor, size: size, format: format, uri: uri)
         } else {

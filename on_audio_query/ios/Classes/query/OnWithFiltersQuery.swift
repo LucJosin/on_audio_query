@@ -53,9 +53,25 @@ class OnWithFiltersQuery {
             if filter != nil && withType != 2 {
                 // Add the filter.
                 cursor?.addFilterPredicate(filter!)
+                
+                // This filter will avoid audios/songs outside phone library(cloud).
+                let cloudFilter = MPMediaPropertyPredicate.init(
+                    value: false,
+                    forProperty: MPMediaItemPropertyIsCloudItem
+                )
+                cursor?.addFilterPredicate(cloudFilter)
+                
                 // Query everything in background for a better performance.
                 loadItemsWithFilter(cursor: cursor!, type: withType)
             } else {
+                
+                // This filter will avoid audios/songs outside phone library(cloud).
+                let cloudFilter = MPMediaPropertyPredicate.init(
+                    value: false,
+                    forProperty: MPMediaItemPropertyIsCloudItem
+                )
+                cursor?.addFilterPredicate(cloudFilter)
+                
                 // Query everything in background for a better performance.
                 loadPlaylistsWithFilter(cursor: cursor!.collections, argVal: argVal)
             }

@@ -22,6 +22,13 @@ class OnAlbumsQuery {
         // send to Dart.
         cursor.groupingType = checkAlbumSortType(sortType: sortType)
         
+        // This filter will avoid audios/songs outside phone library(cloud).
+        let cloudFilter = MPMediaPropertyPredicate.init(
+            value: false,
+            forProperty: MPMediaItemPropertyIsCloudItem
+        )
+        cursor.addFilterPredicate(cloudFilter)
+        
         // We cannot "query" without permission so, just return a empty list.
         let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
         if hasPermission {

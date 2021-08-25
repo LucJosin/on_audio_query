@@ -18,7 +18,7 @@ public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
         //
         // The others status will be ignored and replaced with [false].
         case "permissionsStatus":
-            result(checkPermission)
+            result(checkPermission())
         // The same as [permissionStatus], this is a basic permission handler and will only
         // return [true] or [false].
         //
