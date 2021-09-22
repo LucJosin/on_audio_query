@@ -32,9 +32,16 @@ class OnAudioHelper {
     fun loadSongItem(itemProperty: String, cursor: Cursor): Any? {
         return when (itemProperty) {
             "_id",
-            "_size",
             "album_id",
-            "artist_id",
+            "artist_id" -> {
+                // The [id] from Android >= 30/R is a [Long] instead of [Int].
+                if (Build.VERSION.SDK_INT >= 30) {
+                    cursor.getLong(cursor.getColumnIndex(itemProperty))
+                } else {
+                    cursor.getInt(cursor.getColumnIndex(itemProperty))
+                }
+            }
+            "_size",
             "bookmark",
             "date_added",
             "date_modified",
