@@ -7,6 +7,12 @@ enum ArtworkType {
 
   /// Artwork from Albums.
   ALBUM,
+
+  /// Artwork from Playlists.
+  PLAYLIST,
+
+  /// Artwork from Artists.
+  ARTIST,
 }
 
 /// Defines the type of image.

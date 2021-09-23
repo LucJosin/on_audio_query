@@ -10,10 +10,6 @@ class ArtistModel {
   /// Return artist [id]
   int get id => _info["_id"];
 
-  /// Deprecated after [2.0.0].
-  @Deprecated("Use [artist] instead")
-  String? get artistName => artist;
-
   /// Return artist [artist]
   String get artist => _info["artist"];
 
@@ -22,10 +18,6 @@ class ArtistModel {
 
   /// Return artist [numberOfTracks]
   int? get numberOfTracks => _info["number_of_tracks"];
-
-  /// Deprecated after [2.0.0].
-  @Deprecated("This method will be removed soon")
-  Uint8List? get artwork => _info["artwork"];
 
   /// Return a map with all [keys] and [values] from specific artist.
   Map get getMap => _info;

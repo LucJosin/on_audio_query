@@ -58,44 +58,37 @@ class SongModel {
   /// Return song [track]
   int? get track => _info["track"];
 
-  /// Deprecated after [2.0.0].
-  @Deprecated("This method will be removed soon")
-  int? get year => int.parse(_info["year"]);
-
   // /// Return song [uri]
   // String get uri;
-
-  /// Deprecated after [2.0.0].
-  @Deprecated("Use [queryArtwork] instead")
-  Uint8List? get artwork => _info["artwork"];
 
   /// Return song only the [fileExtension]
   String get fileExtension => _info["file_extension"];
 
-  /// Deprecated after [2.0.0].
-  @Deprecated("This method will be removed soon")
-  String? get fileParent => _info["file_parent"];
-
   // Bool methods
 
-  /// Deprecated after [2.0.0].
-  @Deprecated("This method will be removed soon")
+  /// Return song type: [isAlarm]
+  ///
+  /// Will always return true or false
   bool? get isAlarm => _info["is_alarm"];
 
-  /// Deprecated after [2.0.0].
-  @Deprecated("This method will be removed soon")
+  /// Return song type: [isMusic]
+  ///
+  /// Will always return true or false
   bool? get isMusic => _info["is_music"];
 
-  /// Deprecated after [2.0.0].
-  @Deprecated("This method will be removed soon")
+  /// Return song type: [isNotification]
+  ///
+  /// Will always return true or false
   bool? get isNotification => _info["is_notification"];
 
-  /// Deprecated after [2.0.0].
-  @Deprecated("This method will be removed soon")
+  /// Return song type: [isPodcast]
+  ///
+  /// Will always return true or false
   bool? get isPodcast => _info["is_podcast"];
 
-  /// Deprecated after [2.0.0].
-  @Deprecated("This method will be removed soon")
+  /// Return song type: [isRingtone]
+  ///
+  /// Will always return true or false
   bool? get isRingtone => _info["is_ringtone"];
 
   /// Return a map with all [keys] and [values] from specific song.

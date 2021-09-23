@@ -7,22 +7,6 @@ class DeviceModel {
   //The type dynamic is used for both but, the map is always based in [String, dynamic]
   Map<dynamic, dynamic> _info;
 
-  /// Deprecated after [2.0.0].
-  @Deprecated("Use [version] instead")
-  int? get sdk => version;
-
-  /// Deprecated after [2.0.0].
-  @Deprecated("This method will be removed soon")
-  String? get release => null;
-
-  /// Deprecated after [2.0.0].
-  @Deprecated("This method will be removed soon")
-  String? get code => null;
-
-  /// Deprecated after [2.0.0].
-  @Deprecated("Use [type] instead")
-  String? get deviceType => type;
-
   /// Return device [model]
   String get model => _info["device_model"];
 

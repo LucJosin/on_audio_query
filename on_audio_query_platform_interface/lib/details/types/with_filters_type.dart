@@ -65,38 +65,22 @@ enum AlbumsArgs {
 
   /// Uses album [ARTIST] as filter.
   ARTIST,
-
-  /// Deprecated after [2.0.0].
-  @Deprecated("Use [ALBUM] instead")
-  ALBUM_NAME,
 }
 
 /// Args types for Playlists.
 enum PlaylistsArgs {
   /// Uses [PLAYLIST] as filter.
   PLAYLIST,
-
-  /// Deprecated after [2.0.0].
-  @Deprecated("Use [PLAYLIST] instead")
-  PLAYLIST_NAME,
 }
 
 /// Args types for Artists.
 enum ArtistsArgs {
   /// Uses [ARTIST] as filter.
   ARTIST,
-
-  /// Deprecated after [2.0.0].
-  @Deprecated("Use [ARTIST] instead")
-  ARTIST_NAME,
 }
 
 /// Args types for Genres.
 enum GenresArgs {
   /// Uses [GENRE] as filter.
   GENRE,
-
-  /// Deprecated after [2.0.0].
-  @Deprecated("Use [GENRE] instead")
-  GENRE_NAME,
 }

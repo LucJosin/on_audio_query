@@ -10,10 +10,6 @@ class PlaylistModel {
   ///Return playlist [id]
   int get id => _info["_id"];
 
-  /// Deprecated after [2.0.0].
-  @Deprecated("Use [album] instead")
-  String? get playlistName => playlist;
-
   ///Return playlist [playlist]
   String get playlist => _info["name"];
 
