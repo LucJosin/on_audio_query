@@ -108,6 +108,7 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     ArtworkType type, {
     ArtworkFormat? format,
     int? size,
+    int? quality,
   }) async {
     return _controller.queryArtwork(id, type, format, size);
   }
