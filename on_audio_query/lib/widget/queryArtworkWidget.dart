@@ -30,12 +30,6 @@ class QueryArtworkWidget extends StatelessWidget {
   /// Opts: [AUDIO] and [ALBUM].
   final ArtworkType type;
 
-  /// Deprecated after [2.0.0].
-  final String? artwork;
-
-  /// Deprecated after [2.0.0].
-  final int? deviceSDK;
-
   /// Used to define artwork [format].
   ///
   /// Opts: [JPEG] and [PNG].
@@ -53,8 +47,12 @@ class QueryArtworkWidget extends StatelessWidget {
   /// * This value have a directly influence to image quality.
   final int? size;
 
-  /// Deprecated after [2.0.0].
-  final bool? requestPermission;
+  /// Used to define artwork [quality].
+  ///
+  /// Important:
+  ///
+  /// * If [quality] is null, will be set to [100].
+  final int? quality;
 
   /// Used to define the artwork [border radius].
   ///
@@ -166,36 +164,40 @@ class QueryArtworkWidget extends StatelessWidget {
   /// A simple example on how you can use the [queryArtwork].
   ///
   /// See more: [QueryArtworkWidget](https://shorturl.at/rBR68)
-  const QueryArtworkWidget(
-      {Key? key,
-      required this.id,
-      required this.type,
-      @Deprecated("This method will be removed soon") this.artwork,
-      @Deprecated("This method will be removed soon") this.deviceSDK,
-      this.format,
-      this.size,
-      @Deprecated("This method will be removed soon") this.requestPermission,
-      this.artworkQuality,
-      this.artworkBorder,
-      this.artworkWidth,
-      this.artworkHeight,
-      this.artworkFit,
-      this.artworkClipBehavior,
-      this.artworkScale,
-      this.artworkRepeat,
-      this.artworkColor,
-      this.artworkBlendMode,
-      this.keepOldArtwork,
-      this.nullArtworkWidget});
+  const QueryArtworkWidget({
+    Key? key,
+    required this.id,
+    required this.type,
+    this.format,
+    this.size,
+    this.quality,
+    this.artworkQuality,
+    this.artworkBorder,
+    this.artworkWidth,
+    this.artworkHeight,
+    this.artworkFit,
+    this.artworkClipBehavior,
+    this.artworkScale,
+    this.artworkRepeat,
+    this.artworkColor,
+    this.artworkBlendMode,
+    this.keepOldArtwork,
+    this.nullArtworkWidget,
+  });
 
   @override
   Widget build(BuildContext context) {
+    if (quality != null && quality! > 100)
+      throw Exception(
+        '[quality] value cannot be greater than [100]',
+      );
     return FutureBuilder<Uint8List?>(
       future: OnAudioQuery().queryArtwork(
         id,
         type,
         format: format ?? ArtworkFormat.JPEG,
         size: size ?? 200,
+        quality: quality ?? 100,
       ),
       builder: (context, item) {
         if (item.data != null && item.data!.isNotEmpty) {

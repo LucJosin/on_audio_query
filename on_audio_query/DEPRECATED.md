@@ -1,4 +1,28 @@
-## [2.0.0] - [06.23.2021] -> [X.X.X] - [XX.XX.2021]
+## [2.3.0] - [09.23.2021] -> [X.X.X] - [XX.XX.XXXX]
+### Deprecated
+- `[DEFAULT]` from `[SongSortType]`.
+    - Use `[TITLE]` instead.
+- `[DEFAULT]` from `[PlaylistSortType]`.
+    - Use `[PLAYLIST]` instead.
+- `[DEFAULT]` from `[ArtistSortType]`.
+    - Use `[ARTIST]` instead.
+- `[DEFAULT]` from `[AlbumSortType]`.
+    - Use `[ALBUM]` instead.
+- `[DEFAULT]` from `[GenreSortType]`.
+    - Use `[GENRE]` instead.
+- `[ARTIST_KEY]` from `[ArtistSortType]`.
+- `[ARTIST_NAME]` from `[ArtistSortType]`.
+    - Use `[ARTIST]` instead.
+- `[ALBUM_NAME]` from `[AlbumSortType]`.
+    - Use `[ALBUM]` instead.
+- `[GENRE_NAME]` from `[GenreSortType]`.
+    - Use `[GENRE]` instead.
+- `[DATA_ADDED]` from `[SongSortType]`.
+    - Use `[DATE_ADDED]` instead.
+- `[DATA_ADDED]` from `[PlaylistSortType]`.
+    - Use `[DATE_ADDED]` instead.
+
+## [2.0.0] - [06.23.2021] -> [2.3.0] - [09.23.2021]
 ### Deprecated
 - `[albumName]` from `[AlbumModel]`.
     - Use `[album]` instead.
@@ -32,11 +56,11 @@
 - `[release]` from `[DeviceModel]`.
 - `[code]` from `[DeviceModel]`.
 - `[year]` from `[SongModel]`.
-- `[is_alarm]` from `[SongModel]`.
-- `[is_music]` from `[SongModel]`.
-- `[is_notification]` from `[SongModel]`.
-- `[is_ringtone]` from `[SongModel]`.
-- `[is_podcast]` from `[SongModel]`.
+- ~~`[is_alarm]` from `[SongModel]`~~.
+- ~~`[is_music]` from `[SongModel]`~~.
+- ~~`[is_notification]` from `[SongModel]`~~.
+- ~~`[is_ringtone]` from `[SongModel]`~~.
+- ~~`[is_podcast]` from `[SongModel]`~~.
 - `[file_parent]` from `[SongModel]`.
 - `[path]` from `[querySongs]`.
 - `[artwork]` from `[SongModel]`.

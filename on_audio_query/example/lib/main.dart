@@ -55,7 +55,7 @@ class _SongsState extends State<Songs> {
         ),
         body: FutureBuilder<List<SongModel>>(
           future: OnAudioQuery().querySongs(
-            sortType: SongSortType.DEFAULT,
+            sortType: SongSortType.TITLE,
             orderType: OrderType.ASC_OR_SMALLER,
             uriType: UriType.EXTERNAL,
           ),

@@ -6,6 +6,7 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import java.io.File
 
 class OnAudioHelper {
@@ -54,7 +55,8 @@ class OnAudioHelper {
     //This method will separate [String] from [Int]
     fun loadAlbumItem(itemProperty: String, cursor: Cursor): Any? {
         return when (itemProperty) {
-            "_id" -> {
+            "_id",
+            "album_id" -> {
                 // The [album] id from Android >= 30/R is a [Long] instead of [Int].
                 if (Build.VERSION.SDK_INT >= 30) {
                     cursor.getLong(cursor.getColumnIndex(itemProperty))
@@ -62,7 +64,6 @@ class OnAudioHelper {
                     cursor.getInt(cursor.getColumnIndex(itemProperty))
                 }
             }
-            "album_id",
             "numsongs" -> cursor.getInt(cursor.getColumnIndex(itemProperty))
             else -> cursor.getString(cursor.getColumnIndex(itemProperty))
         }
@@ -81,7 +82,14 @@ class OnAudioHelper {
     //This method will separate [String] from [Int]
     fun loadArtistItem(itemProperty: String, cursor: Cursor): Any? {
         return when (itemProperty) {
-            "_id",
+            "_id" -> {
+                // The [artist] id from Android >= 30/R is a [Long] instead of [Int].
+                if (Build.VERSION.SDK_INT >= 30) {
+                    cursor.getLong(cursor.getColumnIndex(itemProperty))
+                } else {
+                    cursor.getInt(cursor.getColumnIndex(itemProperty))
+                }
+            }
             "number_of_albums",
             "number_of_tracks" -> cursor.getInt(cursor.getColumnIndex(itemProperty))
             else -> cursor.getString(cursor.getColumnIndex(itemProperty))
@@ -98,32 +106,64 @@ class OnAudioHelper {
 
     // Ignore the [Data] deprecation because this plugin support older versions.
     @Suppress("DEPRECATION")
-    fun loadFirstItem(uri: Uri, id: String, resolver: ContentResolver): String? {
-        val selection: String = if (uri == MediaStore.Audio.Media.EXTERNAL_CONTENT_URI) {
-            MediaStore.Audio.Media._ID + "=?"
-        } else {
-            MediaStore.Audio.Media.ALBUM_ID + "=?"
+    fun loadFirstItem(type: Int, id: Number, resolver: ContentResolver): String? {
+
+        // We use almost the same method to 'query' the first item from Song/Album/Artist and we
+        // need to use a different uri when 'querying' from playlist.
+        // If [type] is something different, return null.
+        val selection: String? = when (type) {
+            0 -> MediaStore.Audio.Media._ID + "=?"
+            1 -> MediaStore.Audio.Media.ALBUM_ID + "=?"
+            2 -> null
+            3 -> MediaStore.Audio.Media.ARTIST_ID + "=?"
+            else -> return null
         }
 
-        var data: String? = null
+        var dataOrId: String? = null
         var cursor: Cursor? = null
         try {
-            cursor = resolver.query(
-                MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                arrayOf(MediaStore.Audio.Media.DATA),
-                selection,
-                arrayOf(id),
-                null
-            )
+            if (type == 2 && selection == null) {
+                cursor = resolver.query(
+                    MediaStore.Audio.Playlists.Members.getContentUri("external", id.toLong()),
+                    arrayOf(
+                        MediaStore.Audio.Playlists.Members.DATA,
+                        MediaStore.Audio.Playlists.Members.AUDIO_ID
+                    ),
+                    null,
+                    null,
+                    null
+                )
+            } else {
+                cursor = resolver.query(
+                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                    arrayOf(MediaStore.Audio.Media.DATA, MediaStore.Audio.Media._ID),
+                    selection,
+                    arrayOf(id.toString()),
+                    null
+                )
+            }
         } catch (e: Exception) {
 //            Log.i("on_audio_error", e.toString())
         }
+
+        //
         if (cursor != null) {
             cursor.moveToFirst()
-            data = cursor.getString(0)
+            // Try / Catch to avoid problems. Everytime someone request the first song from a playlist and
+            // this playlist is empty will crash the app, so we just 'print' the error.
+            try {
+                dataOrId = if (Build.VERSION.SDK_INT >= 29 && (type == 2 || type == 3)) {
+                    cursor.getString(1)
+                } else {
+                    cursor.getString(0)
+                }
+            } catch (e: Exception) {
+                Log.i("on_audio_error", e.toString())
+            }
         }
         cursor?.close()
-        return data
+
+        return dataOrId
     }
 
     fun chooseWithFilterType(uri: Uri, itemProperty: String, cursor: Cursor): Any? {

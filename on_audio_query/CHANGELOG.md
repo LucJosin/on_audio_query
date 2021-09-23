@@ -1,3 +1,39 @@
+## [2.3.0] - [09.23.2021]
+### Features
+#### Android
+- **[Added]** `quality` to `queryArtwork`.
+- **[Added]** `Playlist` and `Artist` to `ArtworkType`.
+
+### Fixes
+#### Android
+- **[Fixed]** wrong value returning from `[id]` from `[ArtistModel]`.
+- **[Fixed]** no value returning from `[queryAudiosFrom]` when using `ARTIST_ID`.
+
+### Documentation
+- Updated `README` documentation.
+
+### Changes
+- **[Changed]** wrong name `DATA_ADDED` to `DATE_ADDED` for both `[SongSortType]` and `[PlaylistSortType]`. - [#27](https://github.com/LucasPJS/on_audio_query/issues/27)
+
+### ⚠ Important Changes
+#### Dart
+- The parameter `args` from `[queryWithFilters]` it's no longer required.
+
+#### @Deprecated
+- `[DEFAULT]` from `[SongSortType]`.
+- `[DEFAULT]` from `[PlaylistSortType]`.
+- `[DEFAULT]` from `[ArtistSortType]`.
+- `[DEFAULT]` from `[AlbumSortType]`.
+- `[DEFAULT]` from `[GenreSortType]`.
+- `[ARTIST_KEY]` from `[ArtistSortType]`.
+- `[ARTIST_NAME]` from `[ArtistSortType]`.
+- `[ALBUM_NAME]` from `[AlbumSortType]`.
+- `[GENRE_NAME]` from `[GenreSortType]`.
+- `[DATA_ADDED]` from `[SongSortType]`.
+- `[DATA_ADDED]` from `[PlaylistSortType]`.
+
+<!-- Deleted files: [audios_only_type.dart] and [songs_by_type.dart] -->
+
 ## [2.2.0] - [08.25.2021]
 ### Features
 #### IOS

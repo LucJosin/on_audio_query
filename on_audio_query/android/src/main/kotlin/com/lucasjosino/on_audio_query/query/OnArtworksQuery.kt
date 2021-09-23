@@ -22,14 +22,16 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
-import kotlin.properties.Delegates
 
 /** OnArtworksQuery */
 class OnArtworksQuery : ViewModel() {
 
     //Main parameters
+    private val helper = OnAudioHelper()
+    private var type: Int = -1
     private var id: Number = 0
-    private var size by Delegates.notNull<Int>()
+    private var quality: Int = 100
+    private var size: Int = 200
 
     // None of this methods can be null.
     private lateinit var uri: Uri
@@ -49,6 +51,10 @@ class OnArtworksQuery : ViewModel() {
 
         // The [id] of the song/album. If the [size] is null, will be [200].
         id = call.argument<Number>("id")!!; size = call.argument<Int>("size")!!
+        // Define the quality of image.
+        // The [quality] value cannot be greater than 100 so, we check and if is, set to [100].
+        quality = call.argument<Int>("quality")!!
+        if (quality > 100) quality = 100
         // Check format:
         //   * [0]: JPEG
         //   * [1]: PNG
@@ -56,7 +62,11 @@ class OnArtworksQuery : ViewModel() {
         // Check uri:
         //   * [0]: Song.
         //   * [1]: Album.
+        //   * [2]: Playlist.
+        //   * [3]: Artist.
         uri = checkArtworkType(call.argument<Int>("type")!!)
+        // Define the [type]:
+        type = call.argument<Int>("type")!!
 
         // Query everything in background for a better performance.
         viewModelScope.launch {
@@ -82,26 +92,37 @@ class OnArtworksQuery : ViewModel() {
         // Empty array.
         var artData: ByteArray? = null
 
-        // In this case we need check the [Android] version and then, "query" the artwork.
+        // In this case we need check the [Android] version and query [type].
         //
         // If [Android] >= 29/Q:
         //   * We have a limited access to files/folders and we use [loadThumbnail].
         // If [Android] < 29/Q:
         //   * We use the [embeddedPicture] from [MediaMetadataRetriever] to get the image.
         if (Build.VERSION.SDK_INT >= 29) {
-            // Due old problems with [MethodChannel] the [id] is defined as [Number].
-            // Here we convert to [Long]
-            val query = ContentUris.withAppendedId(uri, id.toLong())
-
             // Try / Catch to avoid problems.
             try {
+                // If [type] is 2 or 3, we need to 'get' the first item from playlist or artist.
+                // We'll use the first artist song to 'simulate' the artwork.
+                //
+                // Type:
+                //   * [3]: Artist.
+                //   * [2]: Playlist.
+                //
+                // Due old problems with [MethodChannel] the [id] is defined as [Number].
+                // Here we convert to [Long]
+                val query = if (type == 2 || type == 3) {
+                    val item = helper.loadFirstItem(type, id, resolver) ?: return@withContext null
+                    ContentUris.withAppendedId(uri, item.toLong())
+                } else {
+                    ContentUris.withAppendedId(uri, id.toLong())
+                }
+
                 val bitmap = resolver.loadThumbnail(query, Size(size, size), null)
                 artData = convertOrResize(bitmap = bitmap)!!
             } catch (e: Exception) {
                 // Some problem can occur, we hide to not "flood" the terminal.
 //                Log.i("on_audio_error: ", e.toString())
             }
-
         } else {
             // If [uri == Audio]:
             //   * Load the first [item] from cursor using the [id] as filter.
@@ -109,31 +130,26 @@ class OnArtworksQuery : ViewModel() {
             //   * Load the first [item] from [album] using the [id] as filter.
             //
             // If [item] return null, no song/album has found, just return null.
-            val item = OnAudioHelper().loadFirstItem(uri, id.toString(), resolver)
-            if (item != null) {
+            val item = helper.loadFirstItem(type, id, resolver) ?: return@withContext null
+            try {
+                // I tried both [_data] and [_uri], none of them work.
+                // So we use the [_data] inside the [FileInputStream] and take the
+                // [fd(FileDescriptor)].
+                val file = FileInputStream(item)
+                val metadata = MediaMetadataRetriever()
 
-                // Try / Catch to avoid problems.
-                try {
-                    // I tried both [_data] and [_uri], none of them work.
-                    // So we use the [_data] inside the [FileInputStream] and take the
-                    // [fd(FileDescriptor)].
-                    val file = FileInputStream(item)
-                    val metadata = MediaMetadataRetriever()
+                // Most of the cases the error occurred here.
+                metadata.setDataSource(file.fd)
+                val image = metadata.embeddedPicture
 
-                    // Most of the cases the error occurred here.
-                    metadata.setDataSource(file.fd)
-                    val image = metadata.embeddedPicture
+                // Check if [image] null.
+                artData = convertOrResize(byteArray = image) ?: return@withContext null
 
-                    // Check if [image] null.
-                    if (image != null) artData = convertOrResize(byteArray = image)
-
-                    // [close] can only be called using [Android] >= 29/Q.
-                    if (Build.VERSION.SDK_INT >= 29) metadata.close()
-                } catch (e: Exception) {
-                    // Some problem can occur, we hide to not "flood" the terminal.
+                // [close] can only be called using [Android] >= 29/Q.
+                if (Build.VERSION.SDK_INT >= 29) metadata.close()
+            } catch (e: Exception) {
+                // Some problem can occur, we hide to not "flood" the terminal.
 //                Log.i("on_audio_error: ", e.toString())
-                }
-
             }
         }
         // After finish the "query", go back to the "main" thread(You can only call flutter
@@ -151,11 +167,10 @@ class OnArtworksQuery : ViewModel() {
             // else:
             //   * The image(bytearray) is from second method. (Android < 29/Q).
             if (bitmap != null) {
-                // TODO: Add option to choose the image quality.
-                bitmap.compress(format, 100, byteArrayBase)
+                bitmap.compress(format, quality, byteArrayBase)
             } else {
                 val convertedBitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray!!.size)
-                convertedBitmap.compress(format, 100, byteArrayBase)
+                convertedBitmap.compress(format, quality, byteArrayBase)
             }
         } catch (e: Exception) {
             //Log.i("Error", e.toString())

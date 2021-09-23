@@ -6,7 +6,7 @@ import android.provider.MediaStore
 
 fun checkArtworkType(sortType: Int): Uri {
     return when (sortType) {
-        0 -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+        0,2,3 -> MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
         1 -> MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI
         else -> throw Exception("[checkArtworkType] value don't exist!")
     }
