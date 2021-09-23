@@ -84,7 +84,7 @@ class _OnAudioQueryWebController {
     //  });
     // ```
     switch (sortType) {
-      case SongSortType.DEFAULT:
+      case SongSortType.TITLE:
         tmpList.sort((val1, val2) => val1.title.compareTo(val2.title));
         break;
 
@@ -175,8 +175,7 @@ class _OnAudioQueryWebController {
     //  list.sort((val1, val2) => val1 == null ? 1 : 0);
     // ```
     switch (sortType) {
-      case AlbumSortType.DEFAULT:
-      case AlbumSortType.ALBUM_NAME:
+      case AlbumSortType.ALBUM:
         tmpList.sort((val1, val2) => val1.album.compareTo(val2.album));
         break;
 
@@ -253,31 +252,36 @@ class _OnAudioQueryWebController {
     //  });
     // ```
     switch (sortType) {
-      case ArtistSortType.DEFAULT:
-      case ArtistSortType.ARTIST_NAME:
+      case ArtistSortType.ARTIST:
         tmpList.sort((val1, val2) => val1.artist.compareTo(val2.artist));
         break;
 
       case ArtistSortType.NUM_OF_TRACKS:
         tmpList.sort((val1, val2) {
-          if (val1.numberOfTracks == null && val2.numberOfTracks == null)
+          if (val1.numberOfTracks == null && val2.numberOfTracks == null) {
             return -1;
-          if (val1.numberOfTracks == null && val2.numberOfTracks != null)
+          }
+          if (val1.numberOfTracks == null && val2.numberOfTracks != null) {
             return 1;
-          if (val1.numberOfTracks != null && val2.numberOfTracks == null)
+          }
+          if (val1.numberOfTracks != null && val2.numberOfTracks == null) {
             return 0;
+          }
           return val1.numberOfTracks!.compareTo(val2.numberOfTracks!);
         });
         break;
 
       case ArtistSortType.NUM_OF_ALBUMS:
         tmpList.sort((val1, val2) {
-          if (val1.numberOfAlbums == null && val2.numberOfAlbums == null)
+          if (val1.numberOfAlbums == null && val2.numberOfAlbums == null) {
             return -1;
-          if (val1.numberOfAlbums == null && val2.numberOfAlbums != null)
+          }
+          if (val1.numberOfAlbums == null && val2.numberOfAlbums != null) {
             return 1;
-          if (val1.numberOfAlbums != null && val2.numberOfAlbums == null)
+          }
+          if (val1.numberOfAlbums != null && val2.numberOfAlbums == null) {
             return 0;
+          }
           return val1.numberOfAlbums!.compareTo(val2.numberOfAlbums!);
         });
         break;
@@ -328,8 +332,7 @@ class _OnAudioQueryWebController {
 
     // Now we sort the list based on [sortType].
     switch (sortType) {
-      case GenreSortType.DEFAULT:
-      case GenreSortType.GENRE_NAME:
+      case GenreSortType.GENRE:
         tmpList.sort((val1, val2) => val1.genre.compareTo(val2.genre));
         break;
 
