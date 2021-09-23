@@ -5,7 +5,7 @@ class SongModel {
   SongModel(this._info);
 
   //The type dynamic is used for both but, the map is always based in [String, dynamic]
-  Map<dynamic, dynamic> _info;
+  final Map<dynamic, dynamic> _info;
 
   /// Return song [id]
   int get id => _info["_id"];

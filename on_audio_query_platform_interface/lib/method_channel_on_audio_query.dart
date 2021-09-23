@@ -158,7 +158,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "type": type.index,
         "id": id,
         "format": format != null ? format.index : ArtworkFormat.JPEG.index,
-        "size": size != null ? size : 200,
+        "size": size ?? 200,
         "quality": (quality != null && quality <= 100) ? size : 100,
       },
     );

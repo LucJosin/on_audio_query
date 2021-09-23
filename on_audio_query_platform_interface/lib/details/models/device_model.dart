@@ -5,7 +5,7 @@ class DeviceModel {
   DeviceModel(this._info);
 
   //The type dynamic is used for both but, the map is always based in [String, dynamic]
-  Map<dynamic, dynamic> _info;
+  final Map<dynamic, dynamic> _info;
 
   /// Return device [model]
   String get model => _info["device_model"];
