@@ -11,6 +11,7 @@
 
 ### Documentation
 - Updated `README` documentation.
+- Updated `OnAudioQuery` and `OnAudioQueryExample` documentation to support new `[Flutter 2.5]`.
 
 ### Changes
 - **[Changed]** wrong name `DATA_ADDED` to `DATE_ADDED` for both `[SongSortType]` and `[PlaylistSortType]`. - [#27](https://github.com/LucasPJS/on_audio_query/issues/27)
@@ -33,6 +34,7 @@
 - `[DATA_ADDED]` from `[PlaylistSortType]`.
 
 <!-- Deleted files: [audios_only_type.dart] and [songs_by_type.dart] -->
+<!-- Changed files: [queryArtworkWidget.dart] to [query_artwork_widget.dart] -->
 
 ## [2.2.0] - [08.25.2021]
 ### Features

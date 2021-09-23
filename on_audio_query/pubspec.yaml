@@ -13,16 +13,21 @@ environment:
   flutter: ">=1.20.0"
 
 dependencies:
+  # on_audio_query
   # on_audio_query_platform_interface: ^1.1.0
   on_audio_query_platform_interface:
     path: ../on_audio_query_platform_interface
   # on_audio_query_web: ^1.1.0
   on_audio_query_web:
     path: ../on_audio_query_web
+  
+  # Flutter
   flutter:
     sdk: flutter
 
 dev_dependencies:
+  # Flutter
+  flutter_lints: ^1.0.4
   flutter_test:
     sdk: flutter
 

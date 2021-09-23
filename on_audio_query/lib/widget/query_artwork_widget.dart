@@ -183,14 +183,15 @@ class QueryArtworkWidget extends StatelessWidget {
     this.artworkBlendMode,
     this.keepOldArtwork,
     this.nullArtworkWidget,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (quality != null && quality! > 100)
+    if (quality != null && quality! > 100) {
       throw Exception(
         '[quality] value cannot be greater than [100]',
       );
+    }
     return FutureBuilder<Uint8List?>(
       future: OnAudioQuery().queryArtwork(
         id,
@@ -219,7 +220,7 @@ class QueryArtworkWidget extends StatelessWidget {
           );
         }
         return nullArtworkWidget ??
-            Icon(
+            const Icon(
               Icons.image_not_supported,
               size: 50,
             );
