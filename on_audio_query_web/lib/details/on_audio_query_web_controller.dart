@@ -307,6 +307,7 @@ class _OnAudioQueryWebController {
     // This "helper" list will avoid duplicate values inside the final list.
     List<String> helperList = [];
     List<GenreModel> tmpList = [];
+    int tmpMediaCount = 0;
     // We cannot get albums direct so, we get all audios and check the album(if has).
     List audios = await _getInternalFiles();
 
@@ -318,14 +319,17 @@ class _OnAudioQueryWebController {
         // If [data] is null, the file probably has some wrong [bytes].
         // To avoid duplicate items, check if [helperList] already has this name.
         if (data!["Genre"] != null && !helperList.contains(data["Genre"])) {
+          // Count and add the number of songs for every genre.
+          tmpMediaCount += 1;
+
           // "format" into a [Map<String, dynamic>], all keys are based on [Android]
           // platforms so, if you change some key, will have to change the [Android] too.
-          Map formattedArtist = await data.formatArtist(audio);
+          Map formattedGenre = await data.formatGenre(audio, tmpMediaCount);
 
           // Temporary and the final list.
-          tmpList.add(GenreModel(formattedArtist));
+          tmpList.add(GenreModel(formattedGenre));
           //
-          helperList.add(data["Artist"]);
+          helperList.add(data["Genre"]);
         }
       }
     }
@@ -506,18 +510,27 @@ class _OnAudioQueryWebController {
     ArtworkType type, [
     ArtworkFormat? format,
     int? size,
+    int? quality,
   ]) async {
     // TODO: Add a better way to handle this method.
     List<SongModel> allSongs = await querySongs();
 
     for (var song in allSongs) {
-      int tmpId = type == ArtworkType.AUDIO
-          ? "${song.title} : ${song.artist}".generateAudioId()
-          : "${song.album}".generateId();
+      int tmpId = -1;
+      switch (type) {
+        case ArtworkType.AUDIO:
+          tmpId = "${song.title} : ${song.artist}".generateAudioId();
+          break;
+        case ArtworkType.ALBUM:
+          tmpId = "${song.album}".generateId();
+          break;
+        case ArtworkType.ARTIST:
+          tmpId = "${song.artist}".generateId();
+          break;
+        case ArtworkType.PLAYLIST:
+          return null;
+      }
 
-      // This method should work fine using [Audio] but, using [Album] will take
-      // **any** audio/song from the album.
-      // TODO: Take *the first* audio/song from album instead of randomly.
       if (id == tmpId) {
         MP3Instance mp3instance = await _getMP3(song.data);
         if (mp3instance.parseTagsSync()) {
@@ -530,7 +543,7 @@ class _OnAudioQueryWebController {
     return null;
   }
 
-  // Code from: [device_info_plus](shorturl.at/mrswQ)
+  /// Code from: [device_info_plus](shorturl.at/mrswQ)
   String parseUserAgentToBrowserName() {
     if (html.window.navigator.userAgent.contains('Firefox')) {
       return "Firefox";

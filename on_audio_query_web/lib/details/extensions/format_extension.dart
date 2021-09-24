@@ -65,10 +65,11 @@ extension OnAudioQueryFormat on Map {
     };
   }
 
-  Future<Map<String, dynamic>> formatGenre(String data) async {
+  Future<Map<String, dynamic>> formatGenre(String data, int count) async {
     return {
       "_id": "${this["Genre"]}".generateId(),
       "name": this["Genre"],
+      "num_of_songs": count,
     };
   }
 }
