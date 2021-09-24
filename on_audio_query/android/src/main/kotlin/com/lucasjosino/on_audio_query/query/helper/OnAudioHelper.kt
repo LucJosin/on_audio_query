@@ -74,7 +74,7 @@ class OnAudioHelper {
         return when (itemProperty) {
             "_id",
             "date_added",
-            "date_modified" -> cursor.getInt(cursor.getColumnIndex(itemProperty))
+            "date_modified" -> cursor.getLong(cursor.getColumnIndex(itemProperty))
             else -> cursor.getString(cursor.getColumnIndex(itemProperty))
         }
     }
@@ -99,9 +99,28 @@ class OnAudioHelper {
     //This method will separate [String] from [Int]
     fun loadGenreItem(itemProperty: String, cursor: Cursor): Any? {
         return when (itemProperty) {
-            "_id" -> cursor.getInt(cursor.getColumnIndex(itemProperty))
+            "_id" -> {
+                // The [genre] id from Android >= 30/R is a [Long] instead of [Int].
+                if (Build.VERSION.SDK_INT >= 30) {
+                    cursor.getLong(cursor.getColumnIndex(itemProperty))
+                } else {
+                    cursor.getInt(cursor.getColumnIndex(itemProperty))
+                }
+            }
             else -> cursor.getString(cursor.getColumnIndex(itemProperty))
         }
+    }
+
+    fun getMediaCount(type: Int, arg: String, resolver: ContentResolver): Int {
+        val uri: Uri = if (type == 0) {
+            MediaStore.Audio.Genres.Members.getContentUri("external", arg.toLong())
+        } else {
+            MediaStore.Audio.Playlists.Members.getContentUri("external", arg.toLong())
+        }
+        val cursor = resolver.query(uri, null, null, null, null)
+        val count = cursor?.count ?: -1
+        cursor?.close()
+        return count
     }
 
     // Ignore the [Data] deprecation because this plugin support older versions.

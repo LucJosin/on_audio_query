@@ -37,6 +37,18 @@ class SongModel {
   /// Return song [artistId]
   int? get artistId => _info["artist_id"];
 
+  /// Return song [genre]
+  ///
+  /// Important:
+  ///   * Only Api >= 30/Android 11
+  String? get genre => _info["genre"];
+
+  /// Return song [genreId]
+  ///
+  /// Important:
+  ///   * Only Api >= 30/Android 11
+  int? get genreId => _info["genre_id"];
+
   /// Return song [bookmark]
   int? get bookmark => _info["bookmark"];
 
@@ -70,6 +82,14 @@ class SongModel {
   ///
   /// Will always return true or false
   bool? get isAlarm => _info["is_alarm"];
+
+  /// Return song type: [isAudioBook]
+  ///
+  /// Will always return true or false
+  ///
+  /// Important:
+  ///   * Only Api >= 29/Android 10
+  bool? get isAudioBook => _info["is_audiobook"];
 
   /// Return song type: [isMusic]
   ///

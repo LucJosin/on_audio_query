@@ -22,6 +22,9 @@ class PlaylistModel {
   ///Return playlist [dateModified]
   int? get dateModified => _info["date_modified"];
 
+  ///Return playlist [numOfSongs]
+  int get numOfSongs => _info["num_of_songs"];
+
   /// Return a map with all [keys] and [values] from specific playlist.
   Map get getMap => _info;
 

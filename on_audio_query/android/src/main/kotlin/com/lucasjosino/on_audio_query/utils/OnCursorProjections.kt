@@ -8,7 +8,7 @@ import android.provider.MediaStore
 // Ignore the [Data] deprecation because this plugin support older versions.
 @Suppress("DEPRECATION")
 val songProjection = arrayOf(
-    MediaStore.Audio.Media.DATA, //
+    MediaStore.Audio.Media.DATA, // TODO: Deprecated
     MediaStore.Audio.Media.DISPLAY_NAME,
     MediaStore.Audio.Media._ID,
     MediaStore.Audio.Media.SIZE,
@@ -24,7 +24,15 @@ val songProjection = arrayOf(
     MediaStore.Audio.Media.DURATION,
     MediaStore.Audio.Media.TITLE,
     MediaStore.Audio.Media.TRACK,
-    MediaStore.Audio.Media.YEAR
+    MediaStore.Audio.Media.YEAR,
+    MediaStore.Audio.Media.GENRE, // Only Api >= 30
+    MediaStore.Audio.Media.GENRE_ID, // Only Api >= 30
+    MediaStore.Audio.Media.IS_ALARM,
+    MediaStore.Audio.Media.IS_AUDIOBOOK, // Only Api >= 29
+    MediaStore.Audio.Media.IS_MUSIC,
+    MediaStore.Audio.Media.IS_NOTIFICATION,
+    MediaStore.Audio.Media.IS_PODCAST,
+    MediaStore.Audio.Media.IS_RINGTONE,
 )
 
 // Query playlists projection

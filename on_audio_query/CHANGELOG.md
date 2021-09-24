@@ -2,11 +2,20 @@
 ### Features
 #### Android
 - **[Added]** `quality` to `queryArtwork`.
+- **[Added]** `[numOfSongs]` to `[PlaylistModel]` and `[GenreModel]`.
 - **[Added]** `Playlist` and `Artist` to `ArtworkType`.
+- **[Added]** `[isAudioBook]`, `[Genre]` and `[GenreId]` to `[SongModel]`.
+- Re-**[Added]** to `[SongModel]`:
+    - `[isAlarm]`.
+    - `[isMusic]`.
+    - `[isNotification]`.
+    - `[isPodcast]`.
+    - `[isRingtone]`.
 
 ### Fixes
 #### Android
-- **[Fixed]** wrong value returning from `[id]` from `[ArtistModel]`.
+- **[Fixed]** wrong value returning from `[id]` when using `[ArtistModel]`.
+- **[Fixed]** wrong value returning from `[id]` when using `[GenreModel]`.
 - **[Fixed]** no value returning from `[queryAudiosFrom]` when using `ARTIST_ID`.
 
 ### Documentation
@@ -18,7 +27,7 @@
 
 ### ⚠ Important Changes
 #### Dart
-- The parameter `args` from `[queryWithFilters]` it's no longer required.
+- The parameter `args` from `[queryWithFilters]` is no longer required.
 
 #### @Deprecated
 - `[DEFAULT]` from `[SongSortType]`.
