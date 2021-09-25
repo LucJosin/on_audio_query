@@ -20,6 +20,8 @@ extension OnAudioQueryFormat on Map {
       "album_id": "${this["Album"]}".generateId(),
       "artist": this["Artist"],
       "artist_id": "${this["Artist"]}".generateId(),
+      "genre": this["Genre"],
+      "genre_id": "${this["Genre"]}".generateId(),
       "bookmark": null,
       "composer": null,
       "date_added": null,
