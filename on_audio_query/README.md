@@ -24,18 +24,12 @@ NOTE: Feel free to help with readme translations
 
 ### Topics:
 
-* [Gif Examples](#gif-examples)
 * [How to Install](#how-to-install)
 * [Platforms](#platforms)
 * [How to use](#how-to-use)
 * [Examples](#examples)
+* [Gif Examples](#gif-examples)
 * [License](#license)
-
-## Gif Examples:
-| <img src="https://user-images.githubusercontent.com/76869974/129740857-33f38b27-06a3-4959-bb31-2ae97d6b66ff.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129741012-1215b292-d700-466f-9c41-552df0ad5e89.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129741188-e6803432-24d7-4e39-bfde-cc6765e13663.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129741151-b820edc9-ddbf-4446-b67a-6e254cb5a46d.gif"/> |
-|:---:|:---:|:---:|:---:|
-| <img src="https://user-images.githubusercontent.com/76869974/129763885-c0cb3871-39af-45fa-aebf-ebf4113effa2.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129763519-497cab72-6a95-42fd-8237-3f83e954ea50.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129763577-9037d16f-f940-4bcb-ba37-879a0eecf2ac.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129763551-726512a9-bc10-4c75-a167-8928f0c0c212.gif"/> |
-| Songs | Albums | Playlists | Artists |
 
 ## Platforms:
 
@@ -69,7 +63,7 @@ NOTE: Feel free to help with readme translations
 Add the following code to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^2.2.0
+  on_audio_query: ^2.3.0
 ```
 
 ### Request Permission:
@@ -166,8 +160,6 @@ All types of methods on this plugin:
 
 ### Artwork Widget
 
-Now `[QueryArtworkWidget]` support all Android versions.
-
 ```dart
   Widget someOtherName() async {
     return QueryArtworkWidget(
@@ -186,6 +178,11 @@ Now `[QueryArtworkWidget]` support all Android versions.
 
 ## Examples:
 
+#### OnAudioQuery
+```dart
+  final OnAudioQuery _audioQuery = OnAudioQuery();
+```
+
 #### querySongs
 ```dart
   someName() async {
@@ -193,7 +190,7 @@ Now `[QueryArtworkWidget]` support all Android versions.
     // SongSortType.TITLE, 
     // OrderType.ASC_OR_SMALLER,
     // UriType.EXTERNAL, 
-    List<SongModel> something = await OnAudioQuery().querySongs();
+    List<SongModel> something = await _audioQuery.querySongs();
   }
 ```
 
@@ -203,7 +200,7 @@ Now `[QueryArtworkWidget]` support all Android versions.
     // DEFAULT: 
     // AlbumSortType.ALBUM, 
     // OrderType.ASC_OR_SMALLER 
-    List<AlbumModel> something = await OnAudioQuery().queryAlbums();
+    List<AlbumModel> something = await _audioQuery.queryAlbums();
   }
 ```
 
@@ -213,7 +210,7 @@ Now `[QueryArtworkWidget]` support all Android versions.
     // DEFAULT: 
     // ArtistSortType.ARTIST, 
     // OrderType.ASC_OR_SMALLER 
-    List<ArtistModel> something = await OnAudioQuery().queryArtists();
+    List<ArtistModel> something = await _audioQuery.queryArtists();
   }
 ```
 
@@ -223,7 +220,7 @@ Now `[QueryArtworkWidget]` support all Android versions.
     // DEFAULT: 
     // PlaylistSortType.NAME, 
     // OrderType.ASC_OR_SMALLER 
-    List<PlaylistModel> something = await OnAudioQuery().queryPlaylists();
+    List<PlaylistModel> something = await _audioQuery.queryPlaylists();
   }
 ```
 
@@ -233,16 +230,15 @@ Now `[QueryArtworkWidget]` support all Android versions.
     // DEFAULT: 
     // GenreSortType.NAME, 
     // OrderType.ASC_OR_SMALLER 
-    List<GenreModel> something = await OnAudioQuery().queryGenres();
+    List<GenreModel> something = await _audioQuery.queryGenres();
   }
 ```
 
 #### queryArtwork
-⚠ **Note: Only works in Android >= Q/10**
 ```dart
   someName() async {
     // DEFAULT: ArtworkFormat.JPEG, 200 and false
-    Uint8List something = await OnAudioQuery().queryArtwork(
+    Uint8List something = await _audioQuery.queryArtwork(
         SongId, 
         ArtworkType.AUDIO, 
         ...,
@@ -256,20 +252,59 @@ Or you can use a basic and custom Widget.
 #### queryWithFilters
 ```dart
   someName() async {
-    // DEFAULT: Args.TITLE and false
-    // ArgsTypes: AudiosArgs, AlbumsArgs, PlaylistsArgs, ArtistsArgs, GenresArgs
-    List<dynamic> something = await OnAudioQuery().queryWithFilters(
+    // Here we'll search for a [song](WithFiltersType.AUDIOS) using his 
+    // [artist](AudiosArgs.ARTIST)
+    List<dynamic> something = await _audioQuery.queryWithFilters(
+        // The [text] to search
         "Sam Smith", 
-        WithFiltersType.ARTISTS,
-      );
+        // The type of search you want.
+        // All types:
+        //   * WithFiltersType.AUDIOS
+        //   * WithFiltersType.ALBUMS
+        //   * WithFiltersType.PLAYLISTS
+        //   * WithFiltersType.ARTISTS
+        //   * WithFiltersType.GENRES
+        WithFiltersType.AUDIOS,
+        // This method has [args] as parameter. With this value you can create
+        // a more 'advanced' search.
+        args: AudiosArgs.ARTIST,
+    );
+
+    // Other example:
+
+    // Here we'll search for a [song](WithFiltersType.AUDIOS) using his 
+    // [album](AudiosArgs.ALBUM)
+    List<dynamic> something = await _audioQuery.queryWithFilters(
+        // The [text] to search
+        "In the Lonely Hour", 
+        // The type of search you want.
+        // All types:
+        //   * WithFiltersType.AUDIOS
+        //   * WithFiltersType.ALBUMS
+        //   * WithFiltersType.PLAYLISTS
+        //   * WithFiltersType.ARTISTS
+        //   * WithFiltersType.GENRES
+        WithFiltersType.AUDIOS,
+        // This method has [args] as parameter. With this value you can create
+        // a more 'advanced' search.
+        args: AudiosArgs.ALBUM,
+    );
 
     // After getting the result from [queryWithFilters], convert this list using:
     List<TypeModel> convertedList = something.toTypeModel();
 
     // Example:
-    List<SongModel> convertedSongs = something.toArtistModel(); 
+    List<SongModel> convertedSongs = something.toSongModel(); 
   }
 ```
+
+ArgsTypes: [AudiosArgs](https://shorturl.at/lvwCJ), [AlbumsArgs](https://shorturl.at/iuOTY), [PlaylistsArgs](https://shorturl.at/ovyB5), [ArtistsArgs](https://shorturl.at/yMY06) and [GenresArgs](https://shorturl.at/bitKP)
+
+## Gif Examples:
+| <img src="https://user-images.githubusercontent.com/76869974/129740857-33f38b27-06a3-4959-bb31-2ae97d6b66ff.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129741012-1215b292-d700-466f-9c41-552df0ad5e89.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129741188-e6803432-24d7-4e39-bfde-cc6765e13663.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129741151-b820edc9-ddbf-4446-b67a-6e254cb5a46d.gif"/> |
+|:---:|:---:|:---:|:---:|
+| <img src="https://user-images.githubusercontent.com/76869974/129763885-c0cb3871-39af-45fa-aebf-ebf4113effa2.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129763519-497cab72-6a95-42fd-8237-3f83e954ea50.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129763577-9037d16f-f940-4bcb-ba37-879a0eecf2ac.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129763551-726512a9-bc10-4c75-a167-8928f0c0c212.gif"/> |
+| Songs | Albums | Playlists | Artists |
 
 ## LICENSE:
 

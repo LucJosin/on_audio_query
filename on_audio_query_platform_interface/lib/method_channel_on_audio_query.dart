@@ -24,7 +24,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
       "querySongs",
       {
         "sortType":
-            sortType != null ? sortType.index : SongSortType.DEFAULT.index,
+            sortType != null ? sortType.index : SongSortType.TITLE.index,
         "orderType": orderType != null
             ? orderType.index
             : OrderType.ASC_OR_SMALLER.index,
@@ -44,7 +44,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
       "queryAlbums",
       {
         "sortType":
-            sortType != null ? sortType.index : AlbumSortType.DEFAULT.index,
+            sortType != null ? sortType.index : AlbumSortType.ALBUM.index,
         "orderType": orderType != null
             ? orderType.index
             : OrderType.ASC_OR_SMALLER.index,
@@ -64,7 +64,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
       "queryArtists",
       {
         "sortType":
-            sortType != null ? sortType.index : ArtistSortType.DEFAULT.index,
+            sortType != null ? sortType.index : ArtistSortType.ARTIST.index,
         "orderType": orderType != null
             ? orderType.index
             : OrderType.ASC_OR_SMALLER.index,
@@ -84,7 +84,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
       "queryPlaylists",
       {
         "sortType":
-            sortType != null ? sortType.index : PlaylistSortType.DEFAULT.index,
+            sortType != null ? sortType.index : PlaylistSortType.PLAYLIST.index,
         "orderType": orderType != null
             ? orderType.index
             : OrderType.ASC_OR_SMALLER.index,
@@ -106,7 +106,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
       "queryGenres",
       {
         "sortType":
-            sortType != null ? sortType.index : GenreSortType.DEFAULT.index,
+            sortType != null ? sortType.index : GenreSortType.GENRE.index,
         "orderType": orderType != null
             ? orderType.index
             : OrderType.ASC_OR_SMALLER.index,
@@ -150,6 +150,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
     ArtworkType type, {
     ArtworkFormat? format,
     int? size,
+    int? quality,
   }) async {
     final Uint8List? finalArtworks = await _channel.invokeMethod(
       "queryArtwork",
@@ -157,7 +158,8 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "type": type.index,
         "id": id,
         "format": format != null ? format.index : ArtworkFormat.JPEG.index,
-        "size": size != null ? size : 200
+        "size": size ?? 200,
+        "quality": (quality != null && quality <= 100) ? size : 100,
       },
     );
     return finalArtworks;
@@ -174,7 +176,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
       "queryFromFolder",
       {
         "sortType":
-            sortType != null ? sortType.index : SongSortType.DEFAULT.index,
+            sortType != null ? sortType.index : SongSortType.TITLE.index,
         "orderType": orderType != null
             ? orderType.index
             : OrderType.ASC_OR_SMALLER.index,

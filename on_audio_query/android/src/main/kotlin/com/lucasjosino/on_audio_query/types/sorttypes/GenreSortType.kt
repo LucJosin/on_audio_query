@@ -8,8 +8,7 @@ fun checkGenreSortType(sortType: Int, order: Int): String {
     //TODO: **Review this code later**
     val pOrder: String = if (order == 0) " ASC" else " DESC"
     return when (sortType) {
-        0 -> MediaStore.Audio.Genres.DEFAULT_SORT_ORDER + pOrder
-        1 -> MediaStore.Audio.Genres.NAME + pOrder
-        else -> MediaStore.Audio.Genres.DEFAULT_SORT_ORDER //
+        0 -> MediaStore.Audio.Genres.NAME + pOrder
+        else -> MediaStore.Audio.Genres.NAME //
     }
 }

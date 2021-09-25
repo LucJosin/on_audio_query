@@ -49,9 +49,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<SongModel>> querySongs({
@@ -79,9 +79,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<AlbumModel>> queryAlbums({
@@ -109,9 +109,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<ArtistModel>> queryArtists({
@@ -138,9 +138,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<PlaylistModel>> queryPlaylists({
@@ -167,9 +167,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<GenreModel>> queryGenres({
@@ -189,9 +189,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<SongModel>> queryAudiosFrom(
@@ -232,9 +232,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<dynamic>> queryWithFilters(
@@ -269,9 +269,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<Uint8List?> queryArtwork(
@@ -279,6 +279,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
     ArtworkType type, {
     ArtworkFormat? format,
     int? size,
+    int? quality,
   }) {
     throw UnimplementedError('queryArtwork() has not been implemented.');
   }
@@ -301,9 +302,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `❌` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<SongModel>> queryFromFolder(
@@ -323,9 +324,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `❌` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<String>> queryAllPath() {
@@ -348,9 +349,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> createPlaylist(
@@ -369,9 +370,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `❌` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> removePlaylist(int playlistId) {
@@ -387,9 +388,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> addToPlaylist(int playlistId, int audioId) {
@@ -405,9 +406,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `❌` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> removeFromPlaylist(int playlistId, int audioId) {
@@ -424,9 +425,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `❌` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> moveItemTo(int playlistId, int from, int to) {
@@ -442,9 +443,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `❌` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> renamePlaylist(int playlistId, String newName) {
@@ -462,9 +463,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> permissionsStatus() {
@@ -480,9 +481,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> permissionsRequest() {
@@ -502,9 +503,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |
-  /// |--------------|-----------------|
-  /// | `✔️` | `✔️` | <br>
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<DeviceModel> queryDeviceInfo() {

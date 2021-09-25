@@ -1,13 +1,13 @@
 import 'dart:html';
 
 import 'package:on_audio_query_platform_interface/details/on_audio_query_helper.dart';
-import 'package:path/path.dart' as pathController;
+import 'package:path/path.dart' as path_controller;
 import 'package:on_audio_query_web/on_audio_query_web.dart';
 
 extension OnAudioQueryFormat on Map {
   Map<String, dynamic> formatAudio(String data, int size) {
     // MP3Info mp3info = MP3Processor.fromFile(data);
-    String extension = pathController.extension(data);
+    String extension = path_controller.extension(data);
     File file = File([], data);
     return {
       "_id": "${this["Title"]} : ${this["Artist"]}".generateAudioId(),
@@ -20,6 +20,8 @@ extension OnAudioQueryFormat on Map {
       "album_id": "${this["Album"]}".generateId(),
       "artist": this["Artist"],
       "artist_id": "${this["Artist"]}".generateId(),
+      "genre": this["Genre"],
+      "genre_id": "${this["Genre"]}".generateId(),
       "bookmark": null,
       "composer": null,
       "date_added": null,
@@ -65,10 +67,11 @@ extension OnAudioQueryFormat on Map {
     };
   }
 
-  Future<Map<String, dynamic>> formatGenre(String data) async {
+  Future<Map<String, dynamic>> formatGenre(String data, int count) async {
     return {
       "_id": "${this["Genre"]}".generateId(),
       "name": this["Genre"],
+      "num_of_songs": count,
     };
   }
 }
@@ -101,8 +104,8 @@ extension OnIdGenerator on String {
   /// int finalId = int.parse(idAsString); //839711074105000
   /// ```
   int generateAudioId() {
-    if (this.isEmpty) return 0;
-    List<String> splitted = this.split(" : ");
+    if (isEmpty) return 0;
+    List<String> splitted = split(" : ");
 
     //
     String title = splitted[0];
@@ -145,11 +148,11 @@ extension OnIdGenerator on String {
   /// int finalId = int.parse(idAsString); //741111061050000
   /// ```
   int generateId() {
-    if (this.isEmpty) return 0;
+    if (isEmpty) return 0;
 
     // Avoid problems with [title] less than 5.
-    int itemLength = this.length > 5 ? 5 : this.length;
-    List tmpId = this.substring(0, itemLength).codeUnits;
+    int itemLength = length > 5 ? 5 : length;
+    List tmpId = substring(0, itemLength).codeUnits;
     String idAsString = "";
     for (int item in tmpId) {
       idAsString += item.toString();
@@ -161,7 +164,7 @@ extension OnIdGenerator on String {
   }
 
   bool containsLower(String argsVal) {
-    return this.toLowerCase().contains(argsVal.toLowerCase());
+    return toLowerCase().contains(argsVal.toLowerCase());
   }
 }
 

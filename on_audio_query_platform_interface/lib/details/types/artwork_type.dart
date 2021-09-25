@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 part of on_audio_query_helper;
 
 /// Defines where artwork will be acquired.
@@ -7,6 +9,12 @@ enum ArtworkType {
 
   /// Artwork from Albums.
   ALBUM,
+
+  /// Artwork from Playlists.
+  PLAYLIST,
+
+  /// Artwork from Artists.
+  ARTIST,
 }
 
 /// Defines the type of image.

@@ -19,6 +19,23 @@ class OnAudioQuery {
   /// The platform interface that drives this plugin
   static OnAudioQueryPlatform get platform => OnAudioQueryPlatform.instance;
 
+  dynamic _getArgs(
+    WithFiltersType withType,
+  ) {
+    switch (withType) {
+      case WithFiltersType.AUDIOS:
+        return AudiosArgs.TITLE;
+      case WithFiltersType.ALBUMS:
+        return AlbumsArgs.ALBUM;
+      case WithFiltersType.PLAYLISTS:
+        return PlaylistsArgs.PLAYLIST;
+      case WithFiltersType.ARTISTS:
+        return ArtistsArgs.ARTIST;
+      case WithFiltersType.GENRES:
+        return GenresArgs.GENRE;
+    }
+  }
+
   /// Used to return Songs Info based in [SongModel].
   ///
   /// Parameters:
@@ -46,21 +63,6 @@ class OnAudioQuery {
     UriType? uriType,
   }) async {
     return platform.querySongs(
-      sortType: sortType,
-      orderType: orderType,
-      uriType: uriType,
-    );
-  }
-
-  /// Deprecated after [2.0.0].
-  @Deprecated("Use [querySongs] instead")
-  Future<List<SongModel>> queryAudios([
-    SongSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    String? path,
-  ]) async {
-    return await querySongs(
       sortType: sortType,
       orderType: orderType,
       uriType: uriType,
@@ -225,30 +227,6 @@ class OnAudioQuery {
     );
   }
 
-  /// Deprecated after [2.0.0].
-  @Deprecated("This method will be removed soon")
-  Future<List<SongModel>> queryAudiosOnly(
-    AudiosOnlyType isOnly, {
-    SongSortType? sortType,
-    OrderType? orderType,
-  }) async {
-    return [];
-  }
-
-  /// Deprecated after [2.0.0].
-  @Deprecated("This method will be removed soon")
-  Future<List<SongModel>> querySongsBy(
-    SongsByType songsByType,
-    List<Object> values, {
-    UriType? uriType,
-  }) async {
-    List<String> valuesConverted = [];
-    values.forEach((element) {
-      valuesConverted.add(element.toString());
-    });
-    return [];
-  }
-
   /// Used to return Songs Info based in Something. Works like a "Search".
   ///
   /// Parameters:
@@ -287,13 +265,13 @@ class OnAudioQuery {
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<dynamic>> queryWithFilters(
     String argsVal,
-    WithFiltersType withType,
+    WithFiltersType withType, {
     dynamic args,
-  ) async {
+  }) async {
     return platform.queryWithFilters(
       argsVal,
       withType,
-      args,
+      args ?? _getArgs(withType),
     );
   }
 
@@ -331,24 +309,15 @@ class OnAudioQuery {
     ArtworkType type, {
     ArtworkFormat? format,
     int? size,
+    int? quality,
   }) async {
     return platform.queryArtwork(
       id,
       type,
       format: format,
       size: size,
+      quality: quality,
     );
-  }
-
-  /// Deprecated after [2.0.0].
-  @Deprecated("Use [queryArtwork] instead")
-  Future<Uint8List?> queryArtworks(
-    int id,
-    ArtworkType type, {
-    ArtworkFormat? format,
-    int? size,
-  }) async {
-    return await queryArtworks(id, type, format: format, size: size);
   }
 
   /// Used to return Songs Info from a specific [Folder] based in [SongModel].

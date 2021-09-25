@@ -81,6 +81,7 @@ class OnArtistsQuery : ViewModel() {
                 for (artistMedia in cursor.columnNames) {
                     tempData[artistMedia] = helper.loadArtistItem(artistMedia, cursor)
                 }
+
                 artistList.add(tempData)
             }
 

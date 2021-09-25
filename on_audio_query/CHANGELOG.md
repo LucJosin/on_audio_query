@@ -1,3 +1,54 @@
+## [2.3.0] - [09.25.2021]
+### Features
+#### Android/IOS/Web
+- **[Added]** `[numOfSongs]` to `[PlaylistModel]` and `[GenreModel]`.
+- **[Added]** `Playlist` and `Artist` to `ArtworkType`.
+
+#### Android/IOS
+- **[Added]** `quality` to `queryArtwork`.
+
+#### Android
+- **[Added]** `[isAudioBook]`, `[Genre]` and `[GenreId]` to `[SongModel]`.
+- Re-**[Added]** to `[SongModel]`:
+    - `[isAlarm]`.
+    - `[isMusic]`.
+    - `[isNotification]`.
+    - `[isPodcast]`.
+    - `[isRingtone]`.
+
+### Fixes
+#### Android
+- **[Fixed]** wrong value returning from `[id]` when using `[ArtistModel]`.
+- **[Fixed]** wrong value returning from `[id]` when using `[GenreModel]`.
+- **[Fixed]** no value returning from `[queryAudiosFrom]` when using `ARTIST_ID`.
+
+### Documentation
+- Updated `README` documentation.
+- Updated `OnAudioQuery` and `OnAudioQueryExample` documentation to support new `[Flutter 2.5]`.
+
+### Changes
+- **[Changed]** wrong name `DATA_ADDED` to `DATE_ADDED` for both `[SongSortType]` and `[PlaylistSortType]`. - [#27](https://github.com/LucasPJS/on_audio_query/issues/27)
+
+### ⚠ Important Changes
+#### Dart
+- The parameter `args` from `[queryWithFilters]` is no longer required.
+
+#### @Deprecated
+- `[DEFAULT]` from `[SongSortType]`.
+- `[DEFAULT]` from `[PlaylistSortType]`.
+- `[DEFAULT]` from `[ArtistSortType]`.
+- `[DEFAULT]` from `[AlbumSortType]`.
+- `[DEFAULT]` from `[GenreSortType]`.
+- `[ARTIST_KEY]` from `[ArtistSortType]`.
+- `[ARTIST_NAME]` from `[ArtistSortType]`.
+- `[ALBUM_NAME]` from `[AlbumSortType]`.
+- `[GENRE_NAME]` from `[GenreSortType]`.
+- `[DATA_ADDED]` from `[SongSortType]`.
+- `[DATA_ADDED]` from `[PlaylistSortType]`.
+
+<!-- Deleted files: [audios_only_type.dart] and [songs_by_type.dart] -->
+<!-- Changed files: [queryArtworkWidget.dart] to [query_artwork_widget.dart] -->
+
 ## [2.2.0] - [08.25.2021]
 ### Features
 #### IOS

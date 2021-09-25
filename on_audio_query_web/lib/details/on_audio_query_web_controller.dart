@@ -84,7 +84,7 @@ class _OnAudioQueryWebController {
     //  });
     // ```
     switch (sortType) {
-      case SongSortType.DEFAULT:
+      case SongSortType.TITLE:
         tmpList.sort((val1, val2) => val1.title.compareTo(val2.title));
         break;
 
@@ -175,8 +175,7 @@ class _OnAudioQueryWebController {
     //  list.sort((val1, val2) => val1 == null ? 1 : 0);
     // ```
     switch (sortType) {
-      case AlbumSortType.DEFAULT:
-      case AlbumSortType.ALBUM_NAME:
+      case AlbumSortType.ALBUM:
         tmpList.sort((val1, val2) => val1.album.compareTo(val2.album));
         break;
 
@@ -253,31 +252,36 @@ class _OnAudioQueryWebController {
     //  });
     // ```
     switch (sortType) {
-      case ArtistSortType.DEFAULT:
-      case ArtistSortType.ARTIST_NAME:
+      case ArtistSortType.ARTIST:
         tmpList.sort((val1, val2) => val1.artist.compareTo(val2.artist));
         break;
 
       case ArtistSortType.NUM_OF_TRACKS:
         tmpList.sort((val1, val2) {
-          if (val1.numberOfTracks == null && val2.numberOfTracks == null)
+          if (val1.numberOfTracks == null && val2.numberOfTracks == null) {
             return -1;
-          if (val1.numberOfTracks == null && val2.numberOfTracks != null)
+          }
+          if (val1.numberOfTracks == null && val2.numberOfTracks != null) {
             return 1;
-          if (val1.numberOfTracks != null && val2.numberOfTracks == null)
+          }
+          if (val1.numberOfTracks != null && val2.numberOfTracks == null) {
             return 0;
+          }
           return val1.numberOfTracks!.compareTo(val2.numberOfTracks!);
         });
         break;
 
       case ArtistSortType.NUM_OF_ALBUMS:
         tmpList.sort((val1, val2) {
-          if (val1.numberOfAlbums == null && val2.numberOfAlbums == null)
+          if (val1.numberOfAlbums == null && val2.numberOfAlbums == null) {
             return -1;
-          if (val1.numberOfAlbums == null && val2.numberOfAlbums != null)
+          }
+          if (val1.numberOfAlbums == null && val2.numberOfAlbums != null) {
             return 1;
-          if (val1.numberOfAlbums != null && val2.numberOfAlbums == null)
+          }
+          if (val1.numberOfAlbums != null && val2.numberOfAlbums == null) {
             return 0;
+          }
           return val1.numberOfAlbums!.compareTo(val2.numberOfAlbums!);
         });
         break;
@@ -303,6 +307,7 @@ class _OnAudioQueryWebController {
     // This "helper" list will avoid duplicate values inside the final list.
     List<String> helperList = [];
     List<GenreModel> tmpList = [];
+    int tmpMediaCount = 0;
     // We cannot get albums direct so, we get all audios and check the album(if has).
     List audios = await _getInternalFiles();
 
@@ -314,22 +319,24 @@ class _OnAudioQueryWebController {
         // If [data] is null, the file probably has some wrong [bytes].
         // To avoid duplicate items, check if [helperList] already has this name.
         if (data!["Genre"] != null && !helperList.contains(data["Genre"])) {
+          // Count and add the number of songs for every genre.
+          tmpMediaCount += 1;
+
           // "format" into a [Map<String, dynamic>], all keys are based on [Android]
           // platforms so, if you change some key, will have to change the [Android] too.
-          Map formattedArtist = await data.formatArtist(audio);
+          Map formattedGenre = await data.formatGenre(audio, tmpMediaCount);
 
           // Temporary and the final list.
-          tmpList.add(GenreModel(formattedArtist));
+          tmpList.add(GenreModel(formattedGenre));
           //
-          helperList.add(data["Artist"]);
+          helperList.add(data["Genre"]);
         }
       }
     }
 
     // Now we sort the list based on [sortType].
     switch (sortType) {
-      case GenreSortType.DEFAULT:
-      case GenreSortType.GENRE_NAME:
+      case GenreSortType.GENRE:
         tmpList.sort((val1, val2) => val1.genre.compareTo(val2.genre));
         break;
 
@@ -503,18 +510,27 @@ class _OnAudioQueryWebController {
     ArtworkType type, [
     ArtworkFormat? format,
     int? size,
+    int? quality,
   ]) async {
     // TODO: Add a better way to handle this method.
     List<SongModel> allSongs = await querySongs();
 
     for (var song in allSongs) {
-      int tmpId = type == ArtworkType.AUDIO
-          ? "${song.title} : ${song.artist}".generateAudioId()
-          : "${song.album}".generateId();
+      int tmpId = -1;
+      switch (type) {
+        case ArtworkType.AUDIO:
+          tmpId = "${song.title} : ${song.artist}".generateAudioId();
+          break;
+        case ArtworkType.ALBUM:
+          tmpId = "${song.album}".generateId();
+          break;
+        case ArtworkType.ARTIST:
+          tmpId = "${song.artist}".generateId();
+          break;
+        case ArtworkType.PLAYLIST:
+          return null;
+      }
 
-      // This method should work fine using [Audio] but, using [Album] will take
-      // **any** audio/song from the album.
-      // TODO: Take *the first* audio/song from album instead of randomly.
       if (id == tmpId) {
         MP3Instance mp3instance = await _getMP3(song.data);
         if (mp3instance.parseTagsSync()) {
@@ -527,7 +543,7 @@ class _OnAudioQueryWebController {
     return null;
   }
 
-  // Code from: [device_info_plus](shorturl.at/mrswQ)
+  /// Code from: [device_info_plus](shorturl.at/mrswQ)
   String parseUserAgentToBrowserName() {
     if (html.window.navigator.userAgent.contains('Firefox')) {
       return "Firefox";

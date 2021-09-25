@@ -202,6 +202,8 @@ Here you'll see a extra information about every method/type etc..
 | `albumId` | `✔️` | `✔️` | `✔️` | <br>
 | `artist` | `✔️` | `✔️` | `✔️` | <br>
 | `artistId` | `✔️` | `✔️` | `✔️` | <br>
+| `genre` | `✔️` | `✔️` | `✔️` | <br>
+| `genreId` | `✔️` | `✔️` | `✔️` | <br>
 | `bookmark` | `✔️` | `✔️` | `❌` | <br>
 | `composer` | `✔️` | `✔️` | `❌` | <br>
 | `dateAdded` | `✔️` | `✔️` | `❌` | <br>
@@ -210,6 +212,12 @@ Here you'll see a extra information about every method/type etc..
 | `title` | `✔️` | `✔️` | `✔️` | <br>
 | `track` | `✔️` | `✔️` | `✔️` | <br>
 | `fileExtension` | `✔️` | `✔️` | `✔️` | <br>
+| `is_alarm` | `✔️` | `❌` | `❌` | <br>
+| `is_audiobook` | `✔️` | `❌` | `❌` | <br>
+| `is_music` | `✔️` | `❌` | `❌` | <br>
+| `is_notification` | `✔️` | `❌` | `❌` | <br>
+| `is_podcast` | `✔️` | `❌` | `❌` | <br>
+| `is_ringtone` | `✔️` | `❌` | `❌` | <br>
 
 ### AlbumModel
 
@@ -249,6 +257,7 @@ Here you'll see a extra information about every method/type etc..
 |--------------|-----------------|-----------------|-----------------|
 | `id` | `✔️` | `✔️` | `✔️` | <br>
 | `genre` | `✔️` | `✔️` | `✔️` | <br>
+| `numOfSongs` | `✔️` | `✔️` | `✔️` | <br>
 
 ### DeviceModel
 

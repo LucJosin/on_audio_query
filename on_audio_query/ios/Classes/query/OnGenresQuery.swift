@@ -45,7 +45,12 @@ class OnGenresQuery {
             // into a [Map<String, dynamic>], all keys are based on [Android]
             // platforms so, if you change some key, will have to change the [Android] too.
             for genre in cursor {
-                let genreData = loadGenreItem(genre: genre)
+                var genreData = loadGenreItem(genre: genre)
+                
+                // Count and add the number of songs for every genre.
+                let tmpMediaCount = getMediaCount(type: 0, id: genreData["_id"] as! Int)
+                genreData["num_of_songs"] = tmpMediaCount
+                
                 listOfGenres.append(genreData)
             }
             

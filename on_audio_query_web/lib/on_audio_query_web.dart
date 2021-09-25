@@ -33,7 +33,7 @@ part 'details/types/with_filters_type.dart';
 
 /// A web implementation of the OnAudioQueryWeb plugin.
 class OnAudioQueryPlugin extends OnAudioQueryPlatform {
-  _OnAudioQueryWebController _controller = _OnAudioQueryWebController();
+  final _OnAudioQueryWebController _controller = _OnAudioQueryWebController();
 
   /// Registers this class as the default instance of [OnAudioQueryPlatform].
   static void registerWith(Registrar registrar) {
@@ -103,12 +103,14 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     return DeviceModel(tmpMap);
   }
 
+  @override
   Future<Uint8List?> queryArtwork(
     int id,
     ArtworkType type, {
     ArtworkFormat? format,
     int? size,
+    int? quality,
   }) async {
-    return _controller.queryArtwork(id, type, format, size);
+    return _controller.queryArtwork(id, type, format, size, quality);
   }
 }

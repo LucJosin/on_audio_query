@@ -41,7 +41,7 @@ List<AlbumModel> checkAlbumsArgs(
   List<AlbumModel> tmpList,
 ) {
   switch (args) {
-    case AlbumSortType.DEFAULT:
+    case AlbumSortType.ALBUM:
       return tmpList
           .where(
             (val) => val.album.containsLower(argsVal),
@@ -64,7 +64,7 @@ List<ArtistModel> checkArtistsArgs(
   List<ArtistModel> tmpList,
 ) {
   switch (args) {
-    case ArtistSortType.DEFAULT:
+    case ArtistSortType.ARTIST:
       return tmpList
           .where(
             (val) => val.artist.containsLower(argsVal),
@@ -81,7 +81,7 @@ List<GenreModel> checkGenresArgs(
   List<GenreModel> tmpList,
 ) {
   switch (args) {
-    case ArtistSortType.DEFAULT:
+    case ArtistSortType.ARTIST:
       return tmpList
           .where(
             (val) => val.genre.containsLower(argsVal),

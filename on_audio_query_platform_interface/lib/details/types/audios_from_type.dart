@@ -1,3 +1,5 @@
+// ignore_for_file: constant_identifier_names
+
 part of on_audio_query_helper;
 
 /// Defines where audios will be acquired.
@@ -22,16 +24,4 @@ enum AudiosFromType {
 
   /// Audios from specific Playlist.
   PLAYLIST,
-
-  /// Deprecated after [2.0.0].
-  @Deprecated("Use [ALBUM] instead")
-  ALBUM_NAME,
-
-  /// Deprecated after [2.0.0].
-  @Deprecated("Use [ARTIST] instead")
-  ARTIST_NAME,
-
-  /// Deprecated after [2.0.0].
-  @Deprecated("Use [GENRE] instead")
-  GENRE_NAME,
 }

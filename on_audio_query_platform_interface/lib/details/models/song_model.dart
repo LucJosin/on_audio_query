@@ -5,7 +5,7 @@ class SongModel {
   SongModel(this._info);
 
   //The type dynamic is used for both but, the map is always based in [String, dynamic]
-  Map<dynamic, dynamic> _info;
+  final Map<dynamic, dynamic> _info;
 
   /// Return song [id]
   int get id => _info["_id"];
@@ -37,6 +37,18 @@ class SongModel {
   /// Return song [artistId]
   int? get artistId => _info["artist_id"];
 
+  /// Return song [genre]
+  ///
+  /// Important:
+  ///   * Only Api >= 30/Android 11
+  String? get genre => _info["genre"];
+
+  /// Return song [genreId]
+  ///
+  /// Important:
+  ///   * Only Api >= 30/Android 11
+  int? get genreId => _info["genre_id"];
+
   /// Return song [bookmark]
   int? get bookmark => _info["bookmark"];
 
@@ -58,44 +70,45 @@ class SongModel {
   /// Return song [track]
   int? get track => _info["track"];
 
-  /// Deprecated after [2.0.0].
-  @Deprecated("This method will be removed soon")
-  int? get year => int.parse(_info["year"]);
-
   // /// Return song [uri]
   // String get uri;
-
-  /// Deprecated after [2.0.0].
-  @Deprecated("Use [queryArtwork] instead")
-  Uint8List? get artwork => _info["artwork"];
 
   /// Return song only the [fileExtension]
   String get fileExtension => _info["file_extension"];
 
-  /// Deprecated after [2.0.0].
-  @Deprecated("This method will be removed soon")
-  String? get fileParent => _info["file_parent"];
-
   // Bool methods
 
-  /// Deprecated after [2.0.0].
-  @Deprecated("This method will be removed soon")
+  /// Return song type: [isAlarm]
+  ///
+  /// Will always return true or false
   bool? get isAlarm => _info["is_alarm"];
 
-  /// Deprecated after [2.0.0].
-  @Deprecated("This method will be removed soon")
+  /// Return song type: [isAudioBook]
+  ///
+  /// Will always return true or false
+  ///
+  /// Important:
+  ///   * Only Api >= 29/Android 10
+  bool? get isAudioBook => _info["is_audiobook"];
+
+  /// Return song type: [isMusic]
+  ///
+  /// Will always return true or false
   bool? get isMusic => _info["is_music"];
 
-  /// Deprecated after [2.0.0].
-  @Deprecated("This method will be removed soon")
+  /// Return song type: [isNotification]
+  ///
+  /// Will always return true or false
   bool? get isNotification => _info["is_notification"];
 
-  /// Deprecated after [2.0.0].
-  @Deprecated("This method will be removed soon")
+  /// Return song type: [isPodcast]
+  ///
+  /// Will always return true or false
   bool? get isPodcast => _info["is_podcast"];
 
-  /// Deprecated after [2.0.0].
-  @Deprecated("This method will be removed soon")
+  /// Return song type: [isRingtone]
+  ///
+  /// Will always return true or false
   bool? get isRingtone => _info["is_ringtone"];
 
   /// Return a map with all [keys] and [values] from specific song.

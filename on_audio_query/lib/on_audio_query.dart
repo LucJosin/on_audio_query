@@ -33,4 +33,4 @@ export 'package:on_audio_query_platform_interface/details/on_audio_query_helper.
 part 'details/on_audio_query_controller.dart';
 
 //Widget
-part 'widget/queryArtworkWidget.dart';
+part 'widget/query_artwork_widget.dart';
