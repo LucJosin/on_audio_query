@@ -14,13 +14,9 @@ environment:
 
 dependencies:
   # on_audio_query
-  # on_audio_query_platform_interface: ^1.1.0
-  on_audio_query_platform_interface:
-    path: ../on_audio_query_platform_interface
-  # on_audio_query_web: ^1.1.0
-  on_audio_query_web:
-    path: ../on_audio_query_web
-  
+  on_audio_query_platform_interface: ^1.1.0
+  on_audio_query_web: ^1.1.0
+
   # Flutter
   flutter:
     sdk: flutter
