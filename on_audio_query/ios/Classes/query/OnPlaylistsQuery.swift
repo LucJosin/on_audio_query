@@ -43,7 +43,12 @@ class OnPlaylistsQuery {
             // into a [Map<String, dynamic>], all keys are based on [Android]
             // platforms so, if you change some key, will have to change the [Android] too.
             for playlist in cursor {
-                let playlistData = loadPlaylistItem(playlist: playlist)
+                var playlistData = loadPlaylistItem(playlist: playlist)
+                
+                // Count and add the number of songs for every genre.
+                let tmpMediaCount = getMediaCount(type: 1, id: playlistData["_id"] as! Int)
+                playlistData["num_of_songs"] = tmpMediaCount
+                
                 listOfPlaylists.append(playlistData)
             }
             

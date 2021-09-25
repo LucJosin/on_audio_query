@@ -1,9 +1,13 @@
 ## [2.3.0] - [09.23.2021]
 ### Features
-#### Android
-- **[Added]** `quality` to `queryArtwork`.
+#### Android/IOS/Web
 - **[Added]** `[numOfSongs]` to `[PlaylistModel]` and `[GenreModel]`.
 - **[Added]** `Playlist` and `Artist` to `ArtworkType`.
+
+#### Android/IOS
+- **[Added]** `quality` to `queryArtwork`.
+
+#### Android
 - **[Added]** `[isAudioBook]`, `[Genre]` and `[GenreId]` to `[SongModel]`.
 - Re-**[Added]** to `[SongModel]`:
     - `[isAlarm]`.

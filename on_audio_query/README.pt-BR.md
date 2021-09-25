@@ -24,18 +24,12 @@ NOTE: Fique à vontade para ajudar nas traduções
 
 ## Tópicos:
 
-* [Exemplos em Gif](#exemplos-em-gif)
 * [Como instalar](#como-instalar)
 * [Plataformas](#platformas)
 * [Como usar](#como-usar)
 * [Exemplos](#exemplos)
+* [Exemplos em Gif](#exemplos-em-gif)
 * [Licença](#licença)
-
-## Exemplos em Gif:
-| <img src="https://user-images.githubusercontent.com/76869974/112378123-522c1a00-8cc5-11eb-880d-ba67706c415d.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378181-62dc9000-8cc5-11eb-8cb3-c8db71372fa9.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378214-6e2fbb80-8cc5-11eb-996a-d61bb8a620ca.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378250-7687f680-8cc5-11eb-94a1-ea91868d119c.gif"/> |
-|:---:|:---:|:---:|:---:|
-| <img src="https://user-images.githubusercontent.com/76869974/129763885-c0cb3871-39af-45fa-aebf-ebf4113effa2.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129763519-497cab72-6a95-42fd-8237-3f83e954ea50.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129763577-9037d16f-f940-4bcb-ba37-879a0eecf2ac.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129763551-726512a9-bc10-4c75-a167-8928f0c0c212.gif"/> |
-| Músicas | Albums | Playlists | Artistas |
 
 ## Platformas:
 
@@ -69,7 +63,7 @@ NOTE: Fique à vontade para ajudar nas traduções
 Adicione o seguinte codigo para seu `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^2.2.0
+  on_audio_query: ^2.3.0
 ```
 
 #### Solicitar Permissões:
@@ -167,8 +161,6 @@ Todos os tipos de métodos nesse plugin:
 
 ### Artwork Widget
 
-Now `[QueryArtworkWidget]` support all Android versions.
-
 ```dart
   Widget someOtherName() async {
     return QueryArtworkWidget(
@@ -178,7 +170,7 @@ Now `[QueryArtworkWidget]` support all Android versions.
   }
 ```
 
-**See more: <a href="https://pub.dev/documentation/on_audio_query/latest/on_audio_query/QueryArtworkWidget-class.html" target="_blank">QueryArtworkWidget</a>**
+**veja mais: <a href="https://pub.dev/documentation/on_audio_query/latest/on_audio_query/QueryArtworkWidget-class.html" target="_blank">QueryArtworkWidget</a>**
 
 ### Abreviações
 
@@ -187,52 +179,71 @@ Now `[QueryArtworkWidget]` support all Android versions.
 
 ## Exemplos:
 
+#### OnAudioQuery
+```dart
+  final OnAudioQuery _audioQuery = OnAudioQuery();
+```
+
 #### querySongs
 ```dart
   someName() async {
-    //DEFAULT: SongSortType.TITLE, OrderType.ASC_OR_SMALLER, UriType.EXTERNAL and false
-    var something = await OnAudioQuery().querySongs()
+    // DEFAULT: 
+    // SongSortType.TITLE, 
+    // OrderType.ASC_OR_SMALLER,
+    // UriType.EXTERNAL, 
+    List<SongModel> something = await _audioQuery.querySongs();
   }
 ```
 
 #### queryAlbums
 ```dart
   someName() async {
-    //DEFAULT: AlbumSortType.ALBUM, OrderType.ASC_OR_SMALLER and false
-    var something = await OnAudioQuery().queryAlbums()
+    // DEFAULT: 
+    // AlbumSortType.ALBUM, 
+    // OrderType.ASC_OR_SMALLER 
+    List<AlbumModel> something = await _audioQuery.queryAlbums();
   }
 ```
 
 #### queryArtists
 ```dart
   someName() async {
-    //DEFAULT: ArtistSortType.ARTIST, OrderType.ASC_OR_SMALLER and false
-    var something = await OnAudioQuery().queryArtists() 
+    // DEFAULT: 
+    // ArtistSortType.ARTIST, 
+    // OrderType.ASC_OR_SMALLER 
+    List<ArtistModel> something = await _audioQuery.queryArtists();
   }
 ```
 
 #### queryPlaylists
 ```dart
   someName() async {
-    //DEFAULT: PlaylistSortType.NAME, OrderType.ASC_OR_SMALLER and false
-    var something = await OnAudioQuery().queryPlaylists()
+    // DEFAULT: 
+    // PlaylistSortType.NAME, 
+    // OrderType.ASC_OR_SMALLER 
+    List<PlaylistModel> something = await _audioQuery.queryPlaylists();
   }
 ```
 
 #### queryGenres
 ```dart
   someName() async {
-    //DEFAULT: GenreSortType.NAME, OrderType.ASC_OR_SMALLER and false
-    var something = await OnAudioQuery().queryGenres()
+    // DEFAULT: 
+    // GenreSortType.NAME, 
+    // OrderType.ASC_OR_SMALLER 
+    List<GenreModel> something = await _audioQuery.queryGenres();
   }
 ```
 
 #### queryArtwork
-⚠ **Note: Apenas em Android >= Q/10**
 ```dart
   someName() async {
-    //DEFAULT: ArtworkFormat.JPEG, 200 and false
-    var something = await OnAudioQuery().queryArtwork(SongId, ArtworkType.AUDIO ...)
+    // DEFAULT: ArtworkFormat.JPEG, 200 and false
+    Uint8List something = await _audioQuery.queryArtwork(
+        SongId, 
+        ArtworkType.AUDIO, 
+        ...,
+      );
   }
 ```
 
@@ -242,22 +253,57 @@ Ou você pode usar um Widget básico e customizável.
 #### queryWithFilters
 ```dart
   someName() async {
-    // DEFAULT: Args.TITLE and false
-    // ArgsTypes: AudiosArgs, AlbumsArgs, PlaylistsArgs, ArtistsArgs, GenresArgs
-    List<dynamic> something = await OnAudioQuery().queryWithFilters(
+    // Aqui nós iremos pesquisar por uma [música](WithFiltersType.AUDIOS) usando o seu 
+    // [artista](AudiosArgs.ARTIST)
+    List<dynamic> something = await _audioQuery.queryWithFilters(
+        // O [texto] para pesquisar
         "Sam Smith", 
-        WithFiltersType.ARTISTS,
-      );
+        // O tipo de pesquisa que você quer.
+        // Todos os tipos:
+        //   * WithFiltersType.AUDIOS
+        //   * WithFiltersType.ALBUMS
+        //   * WithFiltersType.PLAYLISTS
+        //   * WithFiltersType.ARTISTS
+        //   * WithFiltersType.GENRES
+        WithFiltersType.AUDIOS,
+        // Este método possui [args] como parâmetro. Com este valor você pode criar
+        // uma pesquisa mais 'avançada'.
+        args: AudiosArgs.ARTIST,
+    );
 
-    // Depois de receber o resultado do [queryWithFilters], converta a lista usando:
+    // Outro exemplo:
+
+    // Aqui nós iremos pesquisar por uma [música](WithFiltersType.AUDIOS) usando o seu
+    // [album](AudiosArgs.ALBUM)
+    List<dynamic> something = await _audioQuery.queryWithFilters(
+        // O [texto] para pesquisar
+        "In the Lonely Hour", 
+        // O tipo de pesquisa que você quer.
+        // Todos os tipos:
+        //   * WithFiltersType.AUDIOS
+        //   * WithFiltersType.ALBUMS
+        //   * WithFiltersType.PLAYLISTS
+        //   * WithFiltersType.ARTISTS
+        //   * WithFiltersType.GENRES
+        WithFiltersType.AUDIOS,
+        // Este método possui [args] como parâmetro. Com este valor você pode criar
+        // uma pesquisa mais 'avançada'.
+        args: AudiosArgs.ALBUM,
+    );
+
+    // Depois de adquirir o resultado do [queryWithFilters], converta para uma lista usando:
     List<TypeModel> convertedList = something.toTypeModel();
 
-    // Example:
-    List<SongModel> convertedSongs = something.toArtistModel(); 
+    // Exemplo:
+    List<SongModel> convertedSongs = something.toSongModel(); 
   }
 ```
 
-**Veja mais em [QueryArtworkWidget](https://pub.dev/documentation/on_audio_query/latest/on_audio_query/QueryArtworkWidget-class.html)**
+## Exemplos em Gif:
+| <img src="https://user-images.githubusercontent.com/76869974/112378123-522c1a00-8cc5-11eb-880d-ba67706c415d.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378181-62dc9000-8cc5-11eb-8cb3-c8db71372fa9.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378214-6e2fbb80-8cc5-11eb-996a-d61bb8a620ca.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/112378250-7687f680-8cc5-11eb-94a1-ea91868d119c.gif"/> |
+|:---:|:---:|:---:|:---:|
+| <img src="https://user-images.githubusercontent.com/76869974/129763885-c0cb3871-39af-45fa-aebf-ebf4113effa2.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129763519-497cab72-6a95-42fd-8237-3f83e954ea50.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129763577-9037d16f-f940-4bcb-ba37-879a0eecf2ac.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129763551-726512a9-bc10-4c75-a167-8928f0c0c212.gif"/> |
+| Músicas | Albums | Playlists | Artistas |
 
 ## LICENÇA:
 

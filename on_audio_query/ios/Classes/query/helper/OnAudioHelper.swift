@@ -16,6 +16,8 @@ public func loadSongItem(song: MPMediaItem) -> [String: Any?] {
         "album_id": song.albumPersistentID,
         "artist": song.artist,
         "artist_id": song.artistPersistentID,
+        "genre": song.genre,
+        "genre_id": song.genrePersistentID,
         "bookmark": Int(song.bookmarkTime),
         "composer": song.composer,
         "date_added": Int(song.dateAdded.timeIntervalSince1970),
@@ -171,6 +173,29 @@ public func formatGenreList(args: [String: Any], allGenres: [[String: Any?]]) ->
         tempList.reverse()
     }
     return tempList
+}
+
+public func getMediaCount(type: Int, id: Int) -> Int {
+    var cursor: MPMediaQuery? = nil
+    var filter: MPMediaPropertyPredicate? = nil
+    
+    if (type == 0) {
+        filter = MPMediaPropertyPredicate.init(value: id, forProperty: MPMediaItemPropertyGenrePersistentID)
+        cursor = MPMediaQuery.genres()
+    } else {
+        filter = MPMediaPropertyPredicate.init(value: id, forProperty: MPMediaPlaylistPropertyPersistentID)
+        cursor = MPMediaQuery.playlists()
+    }
+    
+    if (cursor != nil && filter != nil) {
+        cursor?.addFilterPredicate(filter!)
+        
+        if (cursor!.collections?.count != nil) {
+            return cursor!.collections!.count
+        }
+    }
+    
+    return -1;
 }
 
 func loadPlaylistItem(playlist: MPMediaItemCollection) -> [String: Any?] {

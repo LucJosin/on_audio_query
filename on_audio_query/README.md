@@ -180,7 +180,7 @@ All types of methods on this plugin:
 
 #### OnAudioQuery
 ```dart
-final OnAudioQuery _audioQuery = OnAudioQuery();
+  final OnAudioQuery _audioQuery = OnAudioQuery();
 ```
 
 #### querySongs
@@ -265,7 +265,7 @@ Or you can use a basic and custom Widget.
         //   * WithFiltersType.ARTISTS
         //   * WithFiltersType.GENRES
         WithFiltersType.AUDIOS,
-        // This method has [args] has parameter. With this value you can create
+        // This method has [args] as parameter. With this value you can create
         // a more 'advanced' search.
         args: AudiosArgs.ARTIST,
     );
@@ -285,7 +285,7 @@ Or you can use a basic and custom Widget.
         //   * WithFiltersType.ARTISTS
         //   * WithFiltersType.GENRES
         WithFiltersType.AUDIOS,
-        // This method has [args] has parameter. With this value you can create
+        // This method has [args] as parameter. With this value you can create
         // a more 'advanced' search.
         args: AudiosArgs.ALBUM,
     );

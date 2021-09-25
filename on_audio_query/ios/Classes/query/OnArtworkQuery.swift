@@ -24,6 +24,11 @@ class OnArtworkQuery {
         let id = args["id"] as! Int
         // The size of the image.
         let size = args["size"] as! Int
+        // The size of the image.
+        var quality = args["quality"] as! Int
+        if (quality > 100) {
+            quality = 100
+        }
         // The format [JPEG] or [PNG].
         let format = args["format"] as! Int
         // The uri [0]: Song and [1]: Album.
@@ -35,12 +40,24 @@ class OnArtworkQuery {
         // TODO: Add option to [Playlist] artwork.
         // If [uri] is 0: artwork from [Song]
         // If [uri] is 1: artwork from [Album]
-        if uri == 0 {
+        // If [uri] is 2: artwork from [Playlist]
+        // If [uri] is 3: artwork from [Genre]
+        switch uri {
+        case 0:
             filter = MPMediaPropertyPredicate.init(value: id, forProperty: MPMediaItemPropertyPersistentID)
             cursor = MPMediaQuery.songs()
-        } else {
+        case 1:
             filter = MPMediaPropertyPredicate.init(value: id, forProperty: MPMediaItemPropertyAlbumPersistentID)
             cursor = MPMediaQuery.albums()
+        case 2:
+            // TODO
+            filter = MPMediaPropertyPredicate.init(value: id, forProperty: MPMediaPlaylistPropertyPersistentID)
+            cursor = MPMediaQuery.playlists()
+        case 3:
+            filter = MPMediaPropertyPredicate.init(value: id, forProperty: MPMediaItemPropertyArtistPersistentID)
+            cursor = MPMediaQuery.artist()
+        default:
+            break
         }
         
         // If [cursor] is "nil" or has no permission, just return to dart.
@@ -56,20 +73,21 @@ class OnArtworkQuery {
             cursor?.addFilterPredicate(cloudFilter)
             
             // Query everything in background for a better performance.
-            loadArtwork(cursor: cursor, size: size, format: format, uri: uri)
+            loadArtwork(cursor: cursor, size: size, format: format, uri: uri, quality: quality)
         } else {
             // There's no permission so, return null to avoid crashes.
             result(nil)
         }
     }
     
-    private func loadArtwork(cursor: MPMediaQuery!, size: Int, format: Int, uri: Int) {
+    private func loadArtwork(cursor: MPMediaQuery!, size: Int, format: Int, uri: Int, quality: Int) {
         DispatchQueue.global(qos: .userInitiated).async {
             var tempArtwork: Data?
             var tempItem: MPMediaItem?
+            let fixedQuality = Double(quality) / 100.0
             
-            // If [uri] is 0: artwork from [Song]
-            // If [uri] is 1: artwork from [Album]
+            // If [uri] is 0: artwork is from [Song]
+            // If [uri] is 1, 2 or 3: artwork is from [Album], [Playlist] or [Artist]
             if uri == 0 {
                 // Since all id are unique, we can safely call the first item.
                 tempItem = cursor!.items?.first
@@ -82,7 +100,7 @@ class OnArtworkQuery {
             // If [format] is 0: will be [PNG]
             if format == 0 {
                 // TODO: Add option to choose the [compressionQuality]
-                tempArtwork = tempItem?.artwork?.image(at: CGSize(width: size, height: size))?.jpegData(compressionQuality: 1)
+                tempArtwork = tempItem?.artwork?.image(at: CGSize(width: size, height: size))?.jpegData(compressionQuality: fixedQuality)
             } else {
                 // [PNG] format will return a high image quality.
                 tempArtwork = tempItem?.artwork?.image(at: CGSize(width: size, height: size))?.pngData()
