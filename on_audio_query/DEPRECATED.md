@@ -1,4 +1,4 @@
-## [2.3.0] - [09.23.2021] -> [X.X.X] - [XX.XX.XXXX]
+## [2.3.0] - [09.25.2021] -> [X.X.X] - [XX.XX.2021]
 ### Deprecated
 - `[DEFAULT]` from `[SongSortType]`.
     - Use `[TITLE]` instead.

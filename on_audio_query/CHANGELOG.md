@@ -1,4 +1,4 @@
-## [2.3.0] - [09.23.2021]
+## [2.3.0] - [09.25.2021]
 ### Features
 #### Android/IOS/Web
 - **[Added]** `[numOfSongs]` to `[PlaylistModel]` and `[GenreModel]`.
