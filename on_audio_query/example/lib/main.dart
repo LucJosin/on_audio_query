@@ -32,7 +32,7 @@ class Songs extends StatefulWidget {
 }
 
 class _SongsState extends State<Songs> {
-  OnAudioQuery audioQuery = OnAudioQuery();
+  final OnAudioQuery _audioQuery = OnAudioQuery();
 
   @override
   void initState() {
@@ -43,9 +43,9 @@ class _SongsState extends State<Songs> {
   requestPermission() async {
     // Web platform don't support permissions methods.
     if (!kIsWeb) {
-      bool permissionStatus = await audioQuery.permissionsStatus();
+      bool permissionStatus = await _audioQuery.permissionsStatus();
       if (!permissionStatus) {
-        await audioQuery.permissionsRequest();
+        await _audioQuery.permissionsRequest();
       }
       setState(() {});
     }
@@ -59,10 +59,12 @@ class _SongsState extends State<Songs> {
         elevation: 2,
       ),
       body: FutureBuilder<List<SongModel>>(
-        future: OnAudioQuery().querySongs(
-          sortType: SongSortType.TITLE,
+        // Default values:
+        future: _audioQuery.querySongs(
+          sortType: null,
           orderType: OrderType.ASC_OR_SMALLER,
           uriType: UriType.EXTERNAL,
+          ignoreCase: true,
         ),
         builder: (context, item) {
           // Loading content

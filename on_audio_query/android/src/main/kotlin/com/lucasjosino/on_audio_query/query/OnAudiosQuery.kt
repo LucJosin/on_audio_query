@@ -48,8 +48,9 @@ class OnAudiosQuery : ViewModel() {
 
         // Sort: Type and Order.
         sortType = checkSongSortType(
-            call.argument<Int>("sortType")!!,
-            call.argument<Int>("orderType")!!
+            call.argument<Int>("sortType"),
+            call.argument<Int>("orderType")!!,
+            call.argument<Boolean>("ignoreCase")!!
         )
         // Check uri:
         //   * [0]: External.
@@ -77,8 +78,9 @@ class OnAudiosQuery : ViewModel() {
     //Loading in Background
     private suspend fun loadSongs(): ArrayList<MutableMap<String, Any?>> =
         withContext(Dispatchers.IO) {
+
             // Setup the cursor with [uri], [projection] and [sortType].
-            val cursor = resolver.query(uri, songProjection, null, null, sortType)
+            val cursor = resolver.query(uri, songProjection(), null, null, sortType)
             // Empty list.
             val songList: ArrayList<MutableMap<String, Any?>> = ArrayList()
 

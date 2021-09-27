@@ -43,12 +43,14 @@ class OnAudioQuery {
   /// * [orderType] is used to define if order will be Ascending or Descending.
   /// * [sortType] is used to define list sort.
   /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
+  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
   ///
   /// Important:
   ///
   /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
-  /// * If [sortType] is null, will be set to [title].
+  /// * If [sortType] is null, will be set to [DEFAULT].
   /// * If [uriType] is null, will be set to [EXTERNAL].
+  /// * If [ignoreCase] is null, will be set to [true].
   ///
   /// Platforms:
   ///
@@ -61,11 +63,13 @@ class OnAudioQuery {
     SongSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool? ignoreCase,
   }) async {
     return platform.querySongs(
       sortType: sortType,
       orderType: orderType,
       uriType: uriType,
+      ignoreCase: ignoreCase,
     );
   }
 
@@ -76,13 +80,14 @@ class OnAudioQuery {
   /// * [orderType] is used to define if order will be Ascending or Descending.
   /// * [sortType] is used to define list sort.
   /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
+  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
   ///
   /// Important:
   ///
   /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
   /// * If [sortType] is null, will be set to [AlbumName].
   /// * If [uriType] is null, will be set to [EXTERNAL].
-  /// * If Android >= Q/10 [artwork] will return null, in this case, it's necessary use [queryArtwork].
+  /// * If [ignoreCase] is null, will be set to [true].
   ///
   /// Platforms:
   ///
@@ -95,11 +100,13 @@ class OnAudioQuery {
     AlbumSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool? ignoreCase,
   }) async {
     return platform.queryAlbums(
       sortType: sortType,
       orderType: orderType,
       uriType: uriType,
+      ignoreCase: ignoreCase,
     );
   }
 
@@ -110,13 +117,14 @@ class OnAudioQuery {
   /// * [orderType] is used to define if order will be Ascending or Descending.
   /// * [sortType] is used to define list sort.
   /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
+  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
   ///
   /// Important:
   ///
   /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
   /// * If [sortType] is null, will be set to [ArtistName].
   /// * If [uriType] is null, will be set to [EXTERNAL].
-  /// * Mp3 only support one image, artist image don't exist.
+  /// * If [ignoreCase] is null, will be set to [true].
   ///
   /// Platforms:
   ///
@@ -129,11 +137,13 @@ class OnAudioQuery {
     ArtistSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool? ignoreCase,
   }) async {
     return platform.queryArtists(
       sortType: sortType,
       orderType: orderType,
       uriType: uriType,
+      ignoreCase: ignoreCase,
     );
   }
 
@@ -144,12 +154,14 @@ class OnAudioQuery {
   /// * [orderType] is used to define if order will be Ascending or Descending.
   /// * [sortType] is used to define list sort.
   /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
+  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
   ///
   /// Important:
   ///
   /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
   /// * If [sortType] is null, will be set to [PlaylistName].
   /// * If [uriType] is null, will be set to [EXTERNAL].
+  /// * If [ignoreCase] is null, will be set to [true].
   ///
   /// Platforms:
   ///
@@ -162,11 +174,13 @@ class OnAudioQuery {
     PlaylistSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool? ignoreCase,
   }) async {
     return platform.queryPlaylists(
       sortType: sortType,
       orderType: orderType,
       uriType: uriType,
+      ignoreCase: ignoreCase,
     );
   }
 
@@ -177,12 +191,14 @@ class OnAudioQuery {
   /// * [orderType] is used to define if order will be Ascending or Descending.
   /// * [sortType] is used to define list sort.
   /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
+  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
   ///
   /// Important:
   ///
   /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
   /// * If [sortType] is null, will be set to [GenreName].
   /// * If [uriType] is null, will be set to [EXTERNAL].
+  /// * If [ignoreCase] is null, will be set to [true].
   ///
   /// Platforms:
   ///
@@ -195,11 +211,13 @@ class OnAudioQuery {
     GenreSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool? ignoreCase,
   }) async {
     return platform.queryGenres(
       sortType: sortType,
       orderType: orderType,
       uriType: uriType,
+      ignoreCase: ignoreCase,
     );
   }
 

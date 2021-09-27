@@ -1,6 +1,6 @@
 # on_audio_query_platform_interface
 
-A common platform interface for the [`on_audio_query`][../on_audio_query] plugin.
+A common platform interface for the [`on_audio_query`](https://github.com/LucasPJS/on_audio_query) plugin.
 
 This interface allows platform-specific implementations of the `on_audio_query`
 plugin, as well as the plugin itself, to ensure they are supporting the

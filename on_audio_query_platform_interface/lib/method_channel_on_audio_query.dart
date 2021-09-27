@@ -19,16 +19,17 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
     SongSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool? ignoreCase,
   }) async {
     final List<dynamic> resultSongs = await _channel.invokeMethod(
       "querySongs",
       {
-        "sortType":
-            sortType != null ? sortType.index : SongSortType.TITLE.index,
+        "sortType": sortType?.index,
         "orderType": orderType != null
             ? orderType.index
             : OrderType.ASC_OR_SMALLER.index,
         "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
+        "ignoreCase": ignoreCase ?? true,
       },
     );
     return resultSongs.map((e) => SongModel(e)).toList();
@@ -39,16 +40,17 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
     AlbumSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool? ignoreCase,
   }) async {
     final List<dynamic> resultAlbums = await _channel.invokeMethod(
       "queryAlbums",
       {
-        "sortType":
-            sortType != null ? sortType.index : AlbumSortType.ALBUM.index,
+        "sortType": sortType?.index,
         "orderType": orderType != null
             ? orderType.index
             : OrderType.ASC_OR_SMALLER.index,
-        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index
+        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
+        "ignoreCase": ignoreCase ?? true,
       },
     );
     return resultAlbums.map((albumInfo) => AlbumModel(albumInfo)).toList();
@@ -59,16 +61,17 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
     ArtistSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool? ignoreCase,
   }) async {
     final List<dynamic> resultArtists = await _channel.invokeMethod(
       "queryArtists",
       {
-        "sortType":
-            sortType != null ? sortType.index : ArtistSortType.ARTIST.index,
+        "sortType": sortType?.index,
         "orderType": orderType != null
             ? orderType.index
             : OrderType.ASC_OR_SMALLER.index,
-        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index
+        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
+        "ignoreCase": ignoreCase ?? true,
       },
     );
     return resultArtists.map((artistInfo) => ArtistModel(artistInfo)).toList();
@@ -79,16 +82,17 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
     PlaylistSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool? ignoreCase,
   }) async {
     final List<dynamic> resultPlaylists = await _channel.invokeMethod(
       "queryPlaylists",
       {
-        "sortType":
-            sortType != null ? sortType.index : PlaylistSortType.PLAYLIST.index,
+        "sortType": sortType?.index,
         "orderType": orderType != null
             ? orderType.index
             : OrderType.ASC_OR_SMALLER.index,
-        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index
+        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
+        "ignoreCase": ignoreCase ?? true,
       },
     );
     return resultPlaylists
@@ -101,16 +105,17 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
     GenreSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool? ignoreCase,
   }) async {
     final List<dynamic> resultGenres = await _channel.invokeMethod(
       "queryGenres",
       {
-        "sortType":
-            sortType != null ? sortType.index : GenreSortType.GENRE.index,
+        "sortType": sortType?.index,
         "orderType": orderType != null
             ? orderType.index
             : OrderType.ASC_OR_SMALLER.index,
-        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index
+        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
+        "ignoreCase": ignoreCase ?? true,
       },
     );
     return resultGenres.map((genreInfo) => GenreModel(genreInfo)).toList();

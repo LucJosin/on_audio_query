@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_this
+
 import 'dart:html';
 
 import 'package:on_audio_query_platform_interface/details/on_audio_query_helper.dart';
@@ -170,4 +172,8 @@ extension OnIdGenerator on String {
 
 extension OnStringFormatter on String? {
   String get orEmpty => this == null ? "" : this!;
+
+  String isCase(bool ignoreCase) {
+    return ignoreCase ? this.orEmpty : this.orEmpty.toLowerCase();
+  }
 }

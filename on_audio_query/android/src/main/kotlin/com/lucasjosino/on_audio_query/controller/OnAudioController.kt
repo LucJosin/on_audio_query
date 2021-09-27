@@ -1,6 +1,7 @@
 package com.lucasjosino.on_audio_query.controller
 
 import android.content.Context
+import android.util.Log
 import com.lucasjosino.on_audio_query.query.*
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
