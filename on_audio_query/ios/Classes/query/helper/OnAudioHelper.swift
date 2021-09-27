@@ -34,6 +34,7 @@ public func formatSongList(args: [String: Any], allSongs: [[String: Any?]]) -> [
     var tempList = allSongs
     let order = args["orderType"] as? Int
     let sortType = args["sortType"] as? Int
+    let ignoreCase = args["ignoreCase"] as! Bool
     
     //
     switch sortType {
@@ -51,7 +52,7 @@ public func formatSongList(args: [String: Any], allSongs: [[String: Any?]]) -> [
         }
     case 6:
         tempList.sort { (val1, val2) -> Bool in
-            (val1["_display_name"] as! String) > (val2["_display_name"] as! String)
+            ((val1["_display_name"] as! String).isCase(ignoreCase: ignoreCase)) > ((val2["_display_name"] as! String).isCase(ignoreCase: ignoreCase))
         }
     default:
         break
@@ -217,4 +218,14 @@ func loadPlaylistItem(playlist: MPMediaItemCollection) -> [String: Any?] {
         "artwork": artwork
     ]
     return playlistData
+}
+
+extension String {
+    func isCase(ignoreCase: Bool) -> String {
+        if (ignoreCase) {
+            return self
+        } else {
+            return self.lowercased()
+        }
+    }
 }

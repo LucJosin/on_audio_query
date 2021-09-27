@@ -10,7 +10,7 @@
 
 ### Fixes
 #### Android
-- **[Fixed]** `error` when trying to build using `Android`. - [#32](https://github.com/LucasPJS/on_audio_query/issues/32)
+- **[Fixed]** `error` when trying to build using `Android`. - [#32](https://github.com/LucasPJS/on_audio_query/issues/32) & [#33](https://github.com/LucasPJS/on_audio_query/issues/33)
 - **[Fixed]** `error` related to android song projection. - [#31](https://github.com/LucasPJS/on_audio_query/issues/31)
 - **[Fixed]** `'bug'` when using `SongSortType.TITLE`. This is now a `'feature'` and can be controlled using `[ignoreCase]`. - [#29](https://github.com/LucasPJS/on_audio_query/issues/29)
 
