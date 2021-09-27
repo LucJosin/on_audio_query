@@ -1,4 +1,4 @@
-## [2.3.1] - [09.26.2021]
+## [2.3.1] - [09.27.2021]
 ### Features
 #### Android/Web
 - **[Added]** `[ignoreCase]` to:
