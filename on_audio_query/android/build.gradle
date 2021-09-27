@@ -2,7 +2,7 @@ group 'com.lucasjosino.on_audio_query'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.4.32'
+    ext.kotlin_version = '1.5.31'
     repositories {
         google()
         mavenCentral()
