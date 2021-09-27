@@ -43,7 +43,7 @@ class OnAlbumsQuery : ViewModel() {
 
         // Sort: Type and Order.
         sortType = checkAlbumSortType(
-            call.argument<Int>("sortType")!!,
+            call.argument<Int>("sortType"),
             call.argument<Int>("orderType")!!,
             call.argument<Boolean>("ignoreCase")!!
         )

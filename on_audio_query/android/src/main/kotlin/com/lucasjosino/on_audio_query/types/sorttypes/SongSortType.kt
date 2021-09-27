@@ -4,7 +4,7 @@ import android.annotation.SuppressLint
 import android.provider.MediaStore
 
 @SuppressLint("InlinedApi")
-fun checkSongSortType(sortType: Int, order: Int, ignoreCase: Boolean): String {
+fun checkSongSortType(sortType: Int?, order: Int, ignoreCase: Boolean): String {
     //[ASC] = Ascending Order
     //[DESC] = Descending Order
     //TODO: **Review this code later**

@@ -40,7 +40,7 @@ class OnArtistsQuery : ViewModel() {
 
         // Sort: Type and Order
         sortType = checkArtistSortType(
-            call.argument<Int>("sortType")!!,
+            call.argument<Int>("sortType"),
             call.argument<Int>("orderType")!!,
             call.argument<Boolean>("ignoreCase")!!
         )

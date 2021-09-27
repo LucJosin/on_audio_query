@@ -40,7 +40,7 @@ class OnPlaylistQuery : ViewModel() {
 
         // Sort: Type and Order.
         sortType = checkGenreSortType(
-            call.argument<Int>("sortType")!!,
+            call.argument<Int>("sortType"),
             call.argument<Int>("orderType")!!,
             call.argument<Boolean>("ignoreCase")!!
         )

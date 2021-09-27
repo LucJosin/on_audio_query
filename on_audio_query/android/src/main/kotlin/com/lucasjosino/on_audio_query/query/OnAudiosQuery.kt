@@ -48,7 +48,7 @@ class OnAudiosQuery : ViewModel() {
 
         // Sort: Type and Order.
         sortType = checkSongSortType(
-            call.argument<Int>("sortType")!!,
+            call.argument<Int>("sortType"),
             call.argument<Int>("orderType")!!,
             call.argument<Boolean>("ignoreCase")!!
         )

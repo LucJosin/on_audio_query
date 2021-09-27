@@ -59,10 +59,12 @@ class _SongsState extends State<Songs> {
         elevation: 2,
       ),
       body: FutureBuilder<List<SongModel>>(
+        // Default values:
         future: _audioQuery.querySongs(
-          sortType: SongSortType.TITLE,
+          sortType: null,
           orderType: OrderType.ASC_OR_SMALLER,
           uriType: UriType.EXTERNAL,
+          ignoreCase: true,
         ),
         builder: (context, item) {
           // Loading content

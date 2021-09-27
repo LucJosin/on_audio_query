@@ -2,7 +2,7 @@ package com.lucasjosino.on_audio_query.types.sorttypes
 
 import android.provider.MediaStore
 
-fun checkAlbumSortType(sortType: Int, order: Int, ignoreCase: Boolean): String {
+fun checkAlbumSortType(sortType: Int?, order: Int, ignoreCase: Boolean): String {
     //[ASC] = Ascending Order
     //[DESC] = Descending Order
     //TODO: **Review this code later**
