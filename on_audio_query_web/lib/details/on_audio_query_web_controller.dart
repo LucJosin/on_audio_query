@@ -28,6 +28,7 @@ class _OnAudioQueryWebController {
   Future<List<SongModel>> querySongs([
     SongSortType? sortType,
     OrderType? orderType,
+    bool ignoreCase = true,
   ]) async {
     List<SongModel> tmpList = [];
     // Get all audios.
@@ -90,7 +91,9 @@ class _OnAudioQueryWebController {
 
       case SongSortType.ARTIST:
         tmpList.sort(
-          (val1, val2) => val1.artist.orEmpty.compareTo(val2.artist.orEmpty),
+          (val1, val2) => val1.artist.orEmpty.isCase(ignoreCase).compareTo(
+                val2.artist.orEmpty.isCase(ignoreCase),
+              ),
         );
         // TODO: Check this method. This will put all null values at the end of the list.
         tmpList.sort((val1, val2) => val1.artist == null ? 1 : 0);
@@ -98,7 +101,9 @@ class _OnAudioQueryWebController {
 
       case SongSortType.ALBUM:
         tmpList.sort(
-          (val1, val2) => val1.album.orEmpty.compareTo(val2.album.orEmpty),
+          (val1, val2) => val1.album.orEmpty.isCase(ignoreCase).compareTo(
+                val2.album.orEmpty.isCase(ignoreCase),
+              ),
         );
         break;
 
@@ -117,7 +122,9 @@ class _OnAudioQueryWebController {
 
       case SongSortType.DISPLAY_NAME:
         tmpList.sort(
-          (val1, val2) => val1.displayName.compareTo(val2.displayName),
+          (val1, val2) => val1.displayName.isCase(ignoreCase).compareTo(
+                val2.displayName.isCase(ignoreCase),
+              ),
         );
         break;
 
@@ -138,6 +145,7 @@ class _OnAudioQueryWebController {
     AlbumSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool ignoreCase = true,
   ]) async {
     // This "helper" list will avoid duplicate values inside the final list.
     List<String> helperList = [];
@@ -176,12 +184,16 @@ class _OnAudioQueryWebController {
     // ```
     switch (sortType) {
       case AlbumSortType.ALBUM:
-        tmpList.sort((val1, val2) => val1.album.compareTo(val2.album));
+        tmpList.sort((val1, val2) => val1.album.isCase(ignoreCase).compareTo(
+              val2.album.isCase(ignoreCase),
+            ));
         break;
 
       case AlbumSortType.ARTIST:
         tmpList.sort(
-          (val1, val2) => val1.artist.orEmpty.compareTo(val2.artist.orEmpty),
+          (val1, val2) => val1.artist.orEmpty.isCase(ignoreCase).compareTo(
+                val2.artist.orEmpty.isCase(ignoreCase),
+              ),
         );
         break;
 
@@ -208,6 +220,7 @@ class _OnAudioQueryWebController {
     ArtistSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool ignoreCase = true,
   ]) async {
     // This "helper" list will avoid duplicate values inside the final list.
     List<String> helperList = [];
@@ -253,7 +266,9 @@ class _OnAudioQueryWebController {
     // ```
     switch (sortType) {
       case ArtistSortType.ARTIST:
-        tmpList.sort((val1, val2) => val1.artist.compareTo(val2.artist));
+        tmpList.sort((val1, val2) => val1.artist.isCase(ignoreCase).compareTo(
+              val2.artist.isCase(ignoreCase),
+            ));
         break;
 
       case ArtistSortType.NUM_OF_TRACKS:
@@ -303,6 +318,7 @@ class _OnAudioQueryWebController {
     GenreSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool ignoreCase = true,
   ]) async {
     // This "helper" list will avoid duplicate values inside the final list.
     List<String> helperList = [];
@@ -337,7 +353,9 @@ class _OnAudioQueryWebController {
     // Now we sort the list based on [sortType].
     switch (sortType) {
       case GenreSortType.GENRE:
-        tmpList.sort((val1, val2) => val1.genre.compareTo(val2.genre));
+        tmpList.sort((val1, val2) => val1.genre.isCase(ignoreCase).compareTo(
+              val2.genre.isCase(ignoreCase),
+            ));
         break;
 
       default:

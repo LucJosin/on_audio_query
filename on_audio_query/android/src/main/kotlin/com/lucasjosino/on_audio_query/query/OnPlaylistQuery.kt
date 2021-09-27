@@ -41,7 +41,8 @@ class OnPlaylistQuery : ViewModel() {
         // Sort: Type and Order.
         sortType = checkGenreSortType(
             call.argument<Int>("sortType")!!,
-            call.argument<Int>("orderType")!!
+            call.argument<Int>("orderType")!!,
+            call.argument<Boolean>("ignoreCase")!!
         )
         // Check uri:
         //   * [0]: External.

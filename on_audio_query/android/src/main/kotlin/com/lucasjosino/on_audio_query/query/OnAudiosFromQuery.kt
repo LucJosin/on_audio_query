@@ -100,7 +100,7 @@ class OnAudiosFromQuery : ViewModel() {
         withContext(Dispatchers.IO) {
             // TODO: Add a [sortType].
             // Setup the cursor with [uri], [projection], [selection](where) and [values](whereVal).
-            val cursor = resolver.query(uri, songProjection, where, arrayOf(whereVal), null)
+            val cursor = resolver.query(uri, songProjection(), where, arrayOf(whereVal), null)
             // Empty list.
             val songsFromList: ArrayList<MutableMap<String, Any?>> = ArrayList()
 
@@ -168,7 +168,7 @@ class OnAudiosFromQuery : ViewModel() {
         withContext(Dispatchers.IO) {
 
             val songsFrom: ArrayList<MutableMap<String, Any?>> = ArrayList()
-            val cursor = resolver.query(pUri, songProjection, null, null, null)
+            val cursor = resolver.query(pUri, songProjection(), null, null, null)
             while (cursor != null && cursor.moveToNext()) {
                 val tempData: MutableMap<String, Any?> = HashMap()
                 for (media in cursor.columnNames) {

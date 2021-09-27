@@ -21,13 +21,13 @@ fun checkWithFiltersType(sortType: Int): Uri {
 
 fun checkProjection(withType: Uri): Array<String>? {
     return when (withType) {
-        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI -> songProjection
+        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI -> songProjection()
         // [Album] projection is null because we need all items.
         MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI -> null
         MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI -> playlistProjection
         MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI -> artistProjection
         MediaStore.Audio.Genres.EXTERNAL_CONTENT_URI -> genreProjection
-        else -> songProjection
+        else -> songProjection()
     }
 }
 

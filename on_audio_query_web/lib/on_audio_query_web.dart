@@ -45,6 +45,7 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     SongSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool? ignoreCase,
   }) async {
     return _controller.querySongs(sortType, orderType);
   }
@@ -54,8 +55,9 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     AlbumSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool? ignoreCase,
   }) async {
-    return _controller.queryAlbums();
+    return _controller.queryAlbums(sortType, orderType);
   }
 
   @override
@@ -63,8 +65,9 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     ArtistSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool? ignoreCase,
   }) async {
-    return _controller.queryArtists();
+    return _controller.queryArtists(sortType, orderType);
   }
 
   @override
@@ -72,8 +75,9 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     GenreSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool? ignoreCase,
   }) async {
-    return _controller.queryGenres();
+    return _controller.queryGenres(sortType, orderType);
   }
 
   @override

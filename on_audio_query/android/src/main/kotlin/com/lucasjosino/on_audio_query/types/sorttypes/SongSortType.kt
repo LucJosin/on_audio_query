@@ -4,19 +4,23 @@ import android.annotation.SuppressLint
 import android.provider.MediaStore
 
 @SuppressLint("InlinedApi")
-fun checkSongSortType(sortType: Int, order: Int): String {
+fun checkSongSortType(sortType: Int, order: Int, ignoreCase: Boolean): String {
     //[ASC] = Ascending Order
     //[DESC] = Descending Order
     //TODO: **Review this code later**
-    val pOrder: String = if (order == 0) " ASC" else " DESC"
+    val orderAndCase: String = if (ignoreCase) {
+        if (order == 0) " COLLATE NOCASE ASC" else " COLLATE NOCASE DESC"
+    } else {
+        if (order == 0) " ASC" else " DESC"
+    }
     return when (sortType) {
-        0 -> MediaStore.Audio.Media.TITLE + pOrder
-        1 -> MediaStore.Audio.Media.ARTIST + pOrder
-        2 -> MediaStore.Audio.Media.ALBUM + pOrder
-        3 -> MediaStore.Audio.Media.DURATION + pOrder
-        4 -> MediaStore.Audio.Media.DATE_ADDED + pOrder
-        5 -> MediaStore.Audio.Media.SIZE + pOrder
-        6 -> MediaStore.Audio.Media.DISPLAY_NAME + pOrder
-        else -> MediaStore.Audio.Media.TITLE //
+        0 -> MediaStore.Audio.Media.TITLE + orderAndCase
+        1 -> MediaStore.Audio.Media.ARTIST + orderAndCase
+        2 -> MediaStore.Audio.Media.ALBUM + orderAndCase
+        3 -> MediaStore.Audio.Media.DURATION + orderAndCase
+        4 -> MediaStore.Audio.Media.DATE_ADDED + orderAndCase
+        5 -> MediaStore.Audio.Media.SIZE + orderAndCase
+        6 -> MediaStore.Audio.Media.DISPLAY_NAME + orderAndCase
+        else -> MediaStore.Audio.Media.DEFAULT_SORT_ORDER + orderAndCase
     }
 }

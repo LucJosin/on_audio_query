@@ -58,6 +58,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
     SongSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool? ignoreCase,
   }) {
     throw UnimplementedError('querySongs() has not been implemented.');
   }
@@ -88,6 +89,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
     AlbumSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool? ignoreCase,
   }) {
     throw UnimplementedError('queryAlbums() has not been implemented.');
   }
@@ -118,6 +120,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
     ArtistSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool? ignoreCase,
   }) {
     throw UnimplementedError('queryArtists() has not been implemented.');
   }
@@ -147,6 +150,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
     PlaylistSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool? ignoreCase,
   }) {
     throw UnimplementedError('queryPlaylists() has not been implemented.');
   }
@@ -176,6 +180,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
     GenreSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
+    bool? ignoreCase,
   }) {
     throw UnimplementedError('queryGenres() has not been implemented.');
   }

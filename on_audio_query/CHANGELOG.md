@@ -1,3 +1,27 @@
+## [2.3.1] - [09.26.2021]
+### Features
+#### Android/Web
+- **[Added]** `[ignoreCase]` to:
+    - `[querySongs]`.
+    - `[queryAlbums]`.
+    - `[queryArtists]`.
+    - `[queryPlaylists]`.
+    - `[queryGenres]`.
+
+### Fixes
+#### Android
+- **[Fixed]** `error` when trying to build using `Android`. - [#32](https://github.com/LucasPJS/on_audio_query/issues/32)
+- **[Fixed]** `error` related to android song projection. - [#31](https://github.com/LucasPJS/on_audio_query/issues/31)
+- **[Fixed]** `'bug'` when using `SongSortType.TITLE`. This is now a `'feature'` and can be controlled using `[ignoreCase]`. - [#29](https://github.com/LucasPJS/on_audio_query/issues/29)
+
+### Documentation
+- Updated `README` documentation.
+
+### Changes
+#### Android
+- Updated `[Kotlin]` and `[Dependencies]` versions.
+- Moved from `[JCenter]` to `[MavenCentral]`.
+
 ## [2.3.0] - [09.25.2021]
 ### Features
 #### Android/IOS/Web
