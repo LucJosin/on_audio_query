@@ -19,8 +19,8 @@
 
 NOTE: Feel free to help with readme translations
 
-* [English](README.md)
-* [Portuguese](README.pt-BR.md)
+* [English](https://github.com/LucasPJS/on_audio_query/blob/main/on_audio_query/README.md)
+* [Portuguese](https://github.com/LucasPJS/on_audio_query/blob/main/on_audio_query/README.pt-BR.md)
 
 ### Topics:
 
@@ -136,7 +136,7 @@ All types of methods on this plugin:
 | [`queryPlaylists`](#queryplaylists) | `(SortType, OrderType, UriType, RequestPermission)` | `List<PlaylistModel>` | <br>
 | [`queryGenres`](#querygenres) | `(SortType, OrderType, UriType, RequestPermission)` | `List<GenreModel>` | <br>
 | [`queryAudiosFrom`]() | `(Type, Where, RequestPermission)` | `List<SongModel>` | <br>
-| [`queryWithFilters`](#queryWithFilters) | `(ArgsVal, WithFiltersType, Args, RequestPermission)` | `List<dynamic>` | <br>
+| [`queryWithFilters`](#querywithfilters) | `(ArgsVal, WithFiltersType, Args, RequestPermission)` | `List<dynamic>` | <br>
 | [`queryArtwork`](#queryArtwork) | `(Id, Type, Format, Size, RequestPermission)` | `Uint8List?` | <br>
 
 ### Playlist methods
@@ -247,7 +247,7 @@ All types of methods on this plugin:
 ```
 
 Or you can use a basic and custom Widget.
-**See example [QueryArtworkWidget](#queryartworkwidget)**
+**See example [QueryArtworkWidget](#artworkwidget)**
 
 #### queryWithFilters
 ```dart
@@ -298,7 +298,7 @@ Or you can use a basic and custom Widget.
   }
 ```
 
-ArgsTypes: [AudiosArgs](https://shorturl.at/lvwCJ), [AlbumsArgs](https://shorturl.at/iuOTY), [PlaylistsArgs](https://shorturl.at/ovyB5), [ArtistsArgs](https://shorturl.at/yMY06) and [GenresArgs](https://shorturl.at/bitKP)
+ArgsTypes: [AudiosArgs](https://pub.dev/documentation/on_audio_query_platform_interface/latest/on_audio_query_helper/AudiosArgs-class.html), [AlbumsArgs](https://pub.dev/documentation/on_audio_query_platform_interface/latest/on_audio_query_helper/AlbumsArgs-class.html), [PlaylistsArgs](https://pub.dev/documentation/on_audio_query_platform_interface/latest/on_audio_query_helper/PlaylistsArgs-class.html), [ArtistsArgs](https://pub.dev/documentation/on_audio_query_platform_interface/latest/on_audio_query_helper/ArtistsArgs-class.html) and [GenresArgs](https://pub.dev/documentation/on_audio_query_platform_interface/latest/on_audio_query_helper/GenresArgs-class.html)
 
 ## Gif Examples:
 | <img src="https://user-images.githubusercontent.com/76869974/129740857-33f38b27-06a3-4959-bb31-2ae97d6b66ff.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129741012-1215b292-d700-466f-9c41-552df0ad5e89.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129741188-e6803432-24d7-4e39-bfde-cc6765e13663.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129741151-b820edc9-ddbf-4446-b67a-6e254cb5a46d.gif"/> |
