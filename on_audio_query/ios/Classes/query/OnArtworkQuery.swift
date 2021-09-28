@@ -55,7 +55,7 @@ class OnArtworkQuery {
             cursor = MPMediaQuery.playlists()
         case 3:
             filter = MPMediaPropertyPredicate.init(value: id, forProperty: MPMediaItemPropertyArtistPersistentID)
-            cursor = MPMediaQuery.artist()
+            cursor = MPMediaQuery.artists()
         default:
             break
         }
@@ -84,7 +84,7 @@ class OnArtworkQuery {
         DispatchQueue.global(qos: .userInitiated).async {
             var tempArtwork: Data?
             var tempItem: MPMediaItem?
-            let fixedQuality = Double(quality) / 100.0
+            let fixedQuality = CGFloat(Double(quality) / 100.0)
             
             // If [uri] is 0: artwork is from [Song]
             // If [uri] is 1, 2 or 3: artwork is from [Album], [Playlist] or [Artist]

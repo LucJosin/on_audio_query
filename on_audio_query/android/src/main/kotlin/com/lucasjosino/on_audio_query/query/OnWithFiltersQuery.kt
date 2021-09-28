@@ -44,7 +44,7 @@ class OnWithFiltersQuery : ViewModel() {
         withType = checkWithFiltersType(call.argument<Int>("withType")!!)
 
         // The [args] are converted to [String] before send to [MethodChannel].
-        argsVal = call.argument<String>("argsVal")!! + "%"
+        argsVal = "%" + call.argument<String>("argsVal")!! + "%"
 
         // A dynamic [projection] to every type of "query".
         projection = checkProjection(withType)

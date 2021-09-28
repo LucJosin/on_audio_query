@@ -1,3 +1,18 @@
+## [2.4.0] - [09.28.2021]
+### Features
+#### Android
+- **[Added]** a better 'search' method to `[queryWithFilters]`, now the query uses 'contains' when 'querying'. - [#35](https://github.com/LucasPJS/on_audio_query/issues/35)
+
+### Fixes
+#### IOS
+- **[Fixed]** error with wrong `[MPMediaQuery]` type and wrong value from `[jpegData]`. - [#37](https://github.com/LucasPJS/on_audio_query/issues/37)
+
+#### Documentation
+- Updated broken `README` links. - [#36](https://github.com/LucasPJS/on_audio_query/issues/36)
+
+### Documentation
+- Updated `README` documentation.
+
 ## [2.3.1] - [09.27.2021]
 ### Features
 #### Android/Web
