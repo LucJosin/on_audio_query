@@ -4,7 +4,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'on_audio_query'
-  s.version          = '2.0.0'
+  s.version          = '2.4.1'
   s.summary          = 'Flutter Plugin used to query audios/songs infos [title, artist, album, etc..] from device storage.'
   s.description      = <<-DESC
 A new flutter plugin project.

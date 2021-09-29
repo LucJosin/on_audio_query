@@ -13,7 +13,7 @@ class OnAlbumsQuery {
     
     func queryAlbums() {
         // The sortType, this method will never be will.
-        let sortType = args["sortType"] as! Int
+        let sortType = args["sortType"] as? Int ?? 0
         
         // Choose the type(To match android side, let's call "cursor").
         let cursor = MPMediaQuery.albums()
