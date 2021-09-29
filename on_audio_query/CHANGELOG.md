@@ -1,9 +1,8 @@
 ## [2.4.1] - [09.29.2021]
-### Features
+### Fixes
 #### Dart
 - **[Fixed]** wrong type of `numOfSongs` from `[SongModel]`. - [#39](https://github.com/LucasPJS/on_audio_query/issues/39)
 
-### Fixes
 #### IOS
 - **[Fixed]** wrong filter configuration when using `[queryWithFilters]`.
 - **[Fixed]** crash when using any `'query'` method with a null `sortType`. - [#43](https://github.com/LucasPJS/on_audio_query/issues/43)
