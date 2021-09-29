@@ -14,7 +14,7 @@ class GenreModel {
   String get genre => _info["name"];
 
   ///Return genre [numOfSongs]
-  String get numOfSongs => _info["num_of_songs"];
+  int get numOfSongs => _info["num_of_songs"];
 
   /// Return a map with all [keys] and [values] from specific genre.
   Map get getMap => _info;
