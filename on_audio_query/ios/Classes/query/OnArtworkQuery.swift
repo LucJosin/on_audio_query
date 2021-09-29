@@ -36,12 +36,11 @@ class OnArtworkQuery {
         
         // (To match android side, let's call "cursor").
         var cursor: MPMediaQuery?
-        var filter: MPMediaPropertyPredicate
-        // TODO: Add option to [Playlist] artwork.
+        var filter: MPMediaPropertyPredicate?
         // If [uri] is 0: artwork from [Song]
         // If [uri] is 1: artwork from [Album]
         // If [uri] is 2: artwork from [Playlist]
-        // If [uri] is 3: artwork from [Genre]
+        // If [uri] is 3: artwork from [Artist]
         switch uri {
         case 0:
             filter = MPMediaPropertyPredicate.init(value: id, forProperty: MPMediaItemPropertyPersistentID)
@@ -50,20 +49,20 @@ class OnArtworkQuery {
             filter = MPMediaPropertyPredicate.init(value: id, forProperty: MPMediaItemPropertyAlbumPersistentID)
             cursor = MPMediaQuery.albums()
         case 2:
-            // TODO
             filter = MPMediaPropertyPredicate.init(value: id, forProperty: MPMediaPlaylistPropertyPersistentID)
             cursor = MPMediaQuery.playlists()
         case 3:
             filter = MPMediaPropertyPredicate.init(value: id, forProperty: MPMediaItemPropertyArtistPersistentID)
             cursor = MPMediaQuery.artists()
         default:
-            break
+            filter = nil
+            cursor = nil
         }
         
         // If [cursor] is "nil" or has no permission, just return to dart.
         let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
-        if cursor != nil && hasPermission {
-            cursor?.addFilterPredicate(filter)
+        if cursor != nil && filter != nil && hasPermission {
+            cursor?.addFilterPredicate(filter!)
             
             // This filter will avoid audios/songs outside phone library(cloud).
             let cloudFilter = MPMediaPropertyPredicate.init(
@@ -97,9 +96,8 @@ class OnArtworkQuery {
             }
             
             // If [format] is 0: will be [JPEG]
-            // If [format] is 0: will be [PNG]
+            // If [format] is 1: will be [PNG]
             if format == 0 {
-                // TODO: Add option to choose the [compressionQuality]
                 tempArtwork = tempItem?.artwork?.image(at: CGSize(width: size, height: size))?.jpegData(compressionQuality: fixedQuality)
             } else {
                 // [PNG] format will return a high image quality.
