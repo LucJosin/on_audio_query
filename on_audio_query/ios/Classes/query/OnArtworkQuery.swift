@@ -62,7 +62,7 @@ class OnArtworkQuery {
         // If [cursor] is "nil" or has no permission, just return to dart.
         let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
         if cursor != nil && filter != nil && hasPermission {
-            cursor?.addFilterPredicate(filter)
+            cursor?.addFilterPredicate(filter!)
             
             // This filter will avoid audios/songs outside phone library(cloud).
             let cloudFilter = MPMediaPropertyPredicate.init(
