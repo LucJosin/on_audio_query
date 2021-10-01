@@ -1,3 +1,11 @@
+## [2.4.2] - [10.01.2021]
+### Fixes
+#### IOS
+- **[Fixed]** no artwork returning from `[queryArtwork]` when using `ArtworkType.ALBUM`. - [#45](https://github.com/LucasPJS/on_audio_query/issues/45)
+
+### Documentation
+- Updated `README` documentation.
+
 ## [2.4.1] - [09.29.2021]
 ### Fixes
 #### Dart
@@ -7,6 +15,9 @@
 - **[Fixed]** wrong filter configuration when using `[queryWithFilters]`.
 - **[Fixed]** crash when using any `'query'` method with a null `sortType`. - [#43](https://github.com/LucasPJS/on_audio_query/issues/43)
 - **[Fixed]** error with wrong `[MPMediaQuery]` filter. - [#38](https://github.com/LucasPJS/on_audio_query/issues/38)
+
+### Documentation
+- Updated `README` documentation.
 
 ## [2.4.0] - [09.28.2021]
 ### Features
