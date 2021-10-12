@@ -329,13 +329,18 @@ class OnAudioQuery {
     int? size,
     int? quality,
   }) async {
-    return platform.queryArtwork(
+    Uint8List? artwork = await platform.queryArtwork(
       id,
       type,
       format: format,
       size: size,
       quality: quality,
     );
+    return artwork != null
+        ? artwork.isNotEmpty
+            ? artwork
+            : null
+        : null;
   }
 
   /// Used to return Songs Info from a specific [Folder] based in [SongModel].
