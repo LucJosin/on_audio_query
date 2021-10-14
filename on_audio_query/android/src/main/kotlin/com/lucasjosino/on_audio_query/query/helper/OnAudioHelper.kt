@@ -135,31 +135,47 @@ class OnAudioHelper {
             1 -> MediaStore.Audio.Media.ALBUM_ID + "=?"
             2 -> null
             3 -> MediaStore.Audio.Media.ARTIST_ID + "=?"
+            4 -> null
             else -> return null
         }
 
         var dataOrId: String? = null
         var cursor: Cursor? = null
         try {
-            if (type == 2 && selection == null) {
-                cursor = resolver.query(
-                    MediaStore.Audio.Playlists.Members.getContentUri("external", id.toLong()),
-                    arrayOf(
-                        MediaStore.Audio.Playlists.Members.DATA,
-                        MediaStore.Audio.Playlists.Members.AUDIO_ID
-                    ),
-                    null,
-                    null,
-                    null
-                )
-            } else {
-                cursor = resolver.query(
-                    MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                    arrayOf(MediaStore.Audio.Media.DATA, MediaStore.Audio.Media._ID),
-                    selection,
-                    arrayOf(id.toString()),
-                    null
-                )
+            when (true) {
+                (type == 2 && selection == null) -> {
+                    cursor = resolver.query(
+                        MediaStore.Audio.Playlists.Members.getContentUri("external", id.toLong()),
+                        arrayOf(
+                            MediaStore.Audio.Playlists.Members.DATA,
+                            MediaStore.Audio.Playlists.Members.AUDIO_ID
+                        ),
+                        null,
+                        null,
+                        null
+                    )
+                }
+                (type == 4 && selection == null) -> {
+                    cursor = resolver.query(
+                        MediaStore.Audio.Genres.Members.getContentUri("external", id.toLong()),
+                        arrayOf(
+                            MediaStore.Audio.Genres.Members.DATA,
+                            MediaStore.Audio.Genres.Members.AUDIO_ID
+                        ),
+                        null,
+                        null,
+                        null
+                    )
+                }
+                else -> {
+                    cursor = resolver.query(
+                        MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                        arrayOf(MediaStore.Audio.Media.DATA, MediaStore.Audio.Media._ID),
+                        selection,
+                        arrayOf(id.toString()),
+                        null
+                    )
+                }
             }
         } catch (e: Exception) {
 //            Log.i("on_audio_error", e.toString())
@@ -171,16 +187,21 @@ class OnAudioHelper {
             // Try / Catch to avoid problems. Everytime someone request the first song from a playlist and
             // this playlist is empty will crash the app, so we just 'print' the error.
             try {
-                dataOrId = if (Build.VERSION.SDK_INT >= 29 && (type == 2 || type == 3)) {
-                    cursor.getString(1)
-                } else {
-                    cursor.getString(0)
-                }
+                dataOrId =
+                    if (Build.VERSION.SDK_INT >= 29 && (type == 2 || type == 3 || type == 4)) {
+                        cursor.getString(1)
+                    } else {
+                        cursor.getString(0)
+                    }
             } catch (e: Exception) {
                 Log.i("on_audio_error", e.toString())
             }
         }
         cursor?.close()
+
+        if (dataOrId != null) {
+            Log.i("dataOrId", dataOrId)
+        }
 
         return dataOrId
     }

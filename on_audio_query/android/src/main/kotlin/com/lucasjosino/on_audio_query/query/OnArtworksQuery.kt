@@ -81,7 +81,12 @@ class OnArtworksQuery : ViewModel() {
                 resultArtList = loadArt()
             }
 
-            //Flutter UI will start, but, information still loading
+            // Sometimes android will extract a 'wrong' or 'empty' artwork. Just set as null.
+            if (resultArtList != null && resultArtList.isEmpty()) {
+                resultArtList = null
+            }
+
+            // Flutter UI will start, but, information still loading
             result.success(resultArtList)
         }
     }
@@ -110,7 +115,7 @@ class OnArtworksQuery : ViewModel() {
                 //
                 // Due old problems with [MethodChannel] the [id] is defined as [Number].
                 // Here we convert to [Long]
-                val query = if (type == 2 || type == 3) {
+                val query = if (type == 2 || type == 3 || type == 4) {
                     val item = helper.loadFirstItem(type, id, resolver) ?: return@withContext null
                     ContentUris.withAppendedId(uri, item.toLong())
                 } else {

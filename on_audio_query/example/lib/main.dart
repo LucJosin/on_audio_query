@@ -58,14 +58,9 @@ class _SongsState extends State<Songs> {
         title: const Text("OnAudioQueryExample"),
         elevation: 2,
       ),
-      body: FutureBuilder<List<SongModel>>(
+      body: FutureBuilder<List<GenreModel>>(
         // Default values:
-        future: _audioQuery.querySongs(
-          sortType: null,
-          orderType: OrderType.ASC_OR_SMALLER,
-          uriType: UriType.EXTERNAL,
-          ignoreCase: true,
-        ),
+        future: _audioQuery.queryGenres(),
         builder: (context, item) {
           // Loading content
           if (item.data == null) return const CircularProgressIndicator();
@@ -80,14 +75,14 @@ class _SongsState extends State<Songs> {
             itemCount: item.data!.length,
             itemBuilder: (context, index) {
               return ListTile(
-                title: Text(item.data![index].title),
-                subtitle: Text(item.data![index].artist ?? "No Artist"),
+                title: Text(item.data![index].genre),
+                subtitle: Text(item.data![index].id.toString()),
                 trailing: const Icon(Icons.arrow_forward_rounded),
                 // This Widget will query/load image. Just add the id and type.
                 // You can use/create your own widget/method using [queryArtwork].
                 leading: QueryArtworkWidget(
                   id: item.data![index].id,
-                  type: ArtworkType.AUDIO,
+                  type: ArtworkType.GENRE,
                 ),
               );
             },
