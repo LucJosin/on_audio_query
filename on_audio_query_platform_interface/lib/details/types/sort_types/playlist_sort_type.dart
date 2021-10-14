@@ -9,12 +9,4 @@ enum PlaylistSortType {
 
   /// [DATE_ADDED] will return playlist based in [data_added].
   DATE_ADDED,
-
-  /// Deprecated after [2.3.0].
-  @Deprecated("Use [PLAYLIST] instead")
-  DEFAULT,
-
-  /// Deprecated after [2.3.0].
-  @Deprecated("Use [DATE_ADDED] instead")
-  DATA_ADDED,
 }

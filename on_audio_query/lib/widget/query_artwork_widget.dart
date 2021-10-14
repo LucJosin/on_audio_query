@@ -18,7 +18,7 @@ part of on_audio_query;
 ///
 /// A simple example on how you can use the [queryArtwork].
 ///
-/// See more: [QueryArtworkWidget](https://shorturl.at/rBR68)
+/// See more: [QueryArtworkWidget](https://pub.dev/documentation/on_audio_query/latest/on_audio_query/QueryArtworkWidget-class.html)
 class QueryArtworkWidget extends StatelessWidget {
   /// Used to find and get image.
   ///
@@ -163,7 +163,7 @@ class QueryArtworkWidget extends StatelessWidget {
   ///
   /// A simple example on how you can use the [queryArtwork].
   ///
-  /// See more: [QueryArtworkWidget](https://shorturl.at/rBR68)
+  /// See more: [QueryArtworkWidget](https://pub.dev/documentation/on_audio_query/latest/on_audio_query/QueryArtworkWidget-class.html)
   const QueryArtworkWidget({
     Key? key,
     required this.id,

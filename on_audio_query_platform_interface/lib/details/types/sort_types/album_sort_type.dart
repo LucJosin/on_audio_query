@@ -12,12 +12,4 @@ enum AlbumSortType {
 
   ///[NUM_OF_SONGS] will return album list based in [number_of_songs].
   NUM_OF_SONGS,
-
-  /// Deprecated after [2.3.0].
-  @Deprecated("Use [ALBUM] instead")
-  DEFAULT,
-
-  /// Deprecated after [2.3.0].
-  @Deprecated("Use [ALBUM] instead")
-  ALBUM_NAME,
 }
