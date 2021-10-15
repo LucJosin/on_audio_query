@@ -55,8 +55,7 @@ class OnAudioHelper {
     //This method will separate [String] from [Int]
     fun loadAlbumItem(itemProperty: String, cursor: Cursor): Any? {
         return when (itemProperty) {
-            "_id",
-            "album_id" -> {
+            "_id" -> {
                 // The [album] id from Android >= 30/R is a [Long] instead of [Int].
                 if (Build.VERSION.SDK_INT >= 30) {
                     cursor.getLong(cursor.getColumnIndex(itemProperty))
@@ -142,6 +141,12 @@ class OnAudioHelper {
         var dataOrId: String? = null
         var cursor: Cursor? = null
         try {
+            // Type 2 or 4 we use a different uri.
+            //
+            // Type 2 == Playlist
+            // Type 4 == Genre
+            //
+            // And the others we use the normal uri.
             when (true) {
                 (type == 2 && selection == null) -> {
                     cursor = resolver.query(
@@ -198,10 +203,6 @@ class OnAudioHelper {
             }
         }
         cursor?.close()
-
-        if (dataOrId != null) {
-            Log.i("dataOrId", dataOrId)
-        }
 
         return dataOrId
     }

@@ -64,6 +64,7 @@ class OnArtworksQuery : ViewModel() {
         //   * [1]: Album.
         //   * [2]: Playlist.
         //   * [3]: Artist.
+        //   * [4]: Genre.
         uri = checkArtworkType(call.argument<Int>("type")!!)
         // Define the [type]:
         type = call.argument<Int>("type")!!
@@ -106,12 +107,13 @@ class OnArtworksQuery : ViewModel() {
         if (Build.VERSION.SDK_INT >= 29) {
             // Try / Catch to avoid problems.
             try {
-                // If [type] is 2 or 3, we need to 'get' the first item from playlist or artist.
+                // If [type] is 2, 3 or 4, we need to 'get' the first item from playlist or artist.
                 // We'll use the first artist song to 'simulate' the artwork.
                 //
                 // Type:
-                //   * [3]: Artist.
                 //   * [2]: Playlist.
+                //   * [3]: Artist.
+                //   * [4]: Genre.
                 //
                 // Due old problems with [MethodChannel] the [id] is defined as [Number].
                 // Here we convert to [Long]

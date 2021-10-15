@@ -1,4 +1,9 @@
-## [2.3.0] - [09.25.2021] -> [2.5.0] - [10.14.2021]
+## [2.5.0] - [10.XX.2021] -> [X.X.X] - [XX.XX.XXXX]
+### Deprecated
+- `[albumId]` from `[AlbumModel]`.
+    - Use `[id]` instead.
+
+## [2.3.0] - [09.25.2021] -> [2.5.0] - [10.XX.2021]
 ### Deprecated
 - `[DEFAULT]` from `[SongSortType]`.
     - Use `[TITLE]` instead.
