@@ -1,9 +1,9 @@
-## [2.5.0] - [10.XX.2021] -> [X.X.X] - [XX.XX.XXXX]
+## [2.5.0] - [10.15.2021] -> [X.X.X] - [XX.XX.XXXX]
 ### Deprecated
 - `[albumId]` from `[AlbumModel]`.
     - Use `[id]` instead.
 
-## [2.3.0] - [09.25.2021] -> [2.5.0] - [10.XX.2021]
+## [2.3.0] - [09.25.2021] -> [2.5.0] - [10.15.2021]
 ### Deprecated
 - `[DEFAULT]` from `[SongSortType]`.
     - Use `[TITLE]` instead.
@@ -27,7 +27,7 @@
 - `[DATA_ADDED]` from `[PlaylistSortType]`.
     - Use `[DATE_ADDED]` instead.
 
-## [2.0.0] - [06.23.2021] -> [2.3.0] - [09.23.2021]
+## [2.0.0] - [06.23.2021] -> [2.3.0] - [09.25.2021]
 ### Deprecated
 - `[albumName]` from `[AlbumModel]`.
     - Use `[album]` instead.

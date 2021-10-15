@@ -1,3 +1,32 @@
+## [2.5.0-alpha.0] - [10.15.2021]
+### Features
+#### All platforms
+- **[Added]** `artwork` to genres. - [#41](https://github.com/LucasPJS/on_audio_query/issues/41)
+- **[Added]** `sortType`, `orderType` and `ignoreCase` to `[queryAudiosFrom]`.
+
+#### Android
+- Re-**[Added]** `path` parameter to `[querySongs]`. - [#48](https://github.com/LucasPJS/on_audio_query/issues/48)
+
+#### Web
+- **[Added]** `path` parameter to `[querySongs]`.
+
+### Fixes
+#### Android
+- **[Fixed]** empty `Uint8List` when using `[queryArtwork]` on Android 7. - [#47](https://github.com/LucasPJS/on_audio_query/issues/47)
+- **[Fixed]** null `albumId` when using Android 9 or below. - [#53](https://github.com/LucasPJS/on_audio_query/issues/53)
+
+### Documentation
+- Updated `README` documentation. New `[queryAudiosFrom]` section.
+- Updated `DEPRECATED` documentation.
+
+### Changes
+- Downgraded `Kotlin` and `Gradle` version. - [#51](https://github.com/LucasPJS/on_audio_query/issues/51)
+
+### ⚠ Important Changes
+#### @Deprecated
+- `[albumId]` from `[AlbumModel]`.
+    - Use `[id]` instead.
+
 ## [2.4.2] - [10.01.2021]
 ### Fixes
 #### IOS

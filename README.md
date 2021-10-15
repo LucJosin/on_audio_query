@@ -63,7 +63,7 @@ NOTE: Feel free to help with readme translations
 Add the following code to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^2.4.1
+  on_audio_query: ^2.5.0
 ```
 
 ### Request Permission:
@@ -135,7 +135,7 @@ All types of methods on this plugin:
 | [`queryArtists`](#queryartists) | `(SortType, OrderType, UriType, RequestPermission)` | `List<ArtistModel>` | <br>
 | [`queryPlaylists`](#queryplaylists) | `(SortType, OrderType, UriType, RequestPermission)` | `List<PlaylistModel>` | <br>
 | [`queryGenres`](#querygenres) | `(SortType, OrderType, UriType, RequestPermission)` | `List<GenreModel>` | <br>
-| [`queryAudiosFrom`]() | `(Type, Where, RequestPermission)` | `List<SongModel>` | <br>
+| [`queryAudiosFrom`](#queryaudiosfrom) | `(Type, Where, RequestPermission)` | `List<SongModel>` | <br>
 | [`queryWithFilters`](#querywithfilters) | `(ArgsVal, WithFiltersType, Args, RequestPermission)` | `List<dynamic>` | <br>
 | [`queryArtwork`](#queryArtwork) | `(Id, Type, Format, Size, RequestPermission)` | `Uint8List?` | <br>
 
@@ -247,7 +247,21 @@ All types of methods on this plugin:
 ```
 
 Or you can use a basic and custom Widget.
-**See example [QueryArtworkWidget](#artworkwidget)**
+**See example [QueryArtworkWidget](#artwork-widget)**
+
+#### queryAudiosFrom
+You can use this method to 'query' the songs from any section(Album, Artist, Playlist or Genre). 
+```dart
+  someName() async {
+    List<SongModel> something = await _audioQuery.queryAudiosFrom(
+        AudiosFromType.ALBUM_ID, 
+        albumId,
+        // You can also define a sortType
+        sortType: SongSortType.TITLE, // Default
+        orderType: OrderType.ASC_OR_SMALLER, // Default
+      );
+  }
+```
 
 #### queryWithFilters
 ```dart
