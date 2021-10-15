@@ -3,10 +3,10 @@ part of on_audio_query_web;
 /// A [controller] to keep the main method more "clean".
 class _OnAudioQueryWebController {
   /// This method will get/load all audios files(mp3) from the user's [assets] folder.
-  Future<List> _getInternalFiles([String? path = 'AssetManifest.json']) async {
-    // Confirm that path isn't null or empty.
-    if (path == null && path!.isEmpty) return [];
-    String assets = await rootBundle.loadString(path);
+  Future<List> _getInternalFiles([String? path]) async {
+    // Confirm that path isn't empty.
+    if (path != null && path.isEmpty) return [];
+    String assets = await rootBundle.loadString(path ?? 'AssetManifest.json');
     Map decoded = json.decode(assets);
     List audioFiles = decoded.keys
         .where(
@@ -147,7 +147,6 @@ class _OnAudioQueryWebController {
   Future<List<AlbumModel>> queryAlbums([
     AlbumSortType? sortType,
     OrderType? orderType,
-    UriType? uriType,
     bool ignoreCase = true,
   ]) async {
     // This "helper" list will avoid duplicate values inside the final list.
@@ -222,7 +221,6 @@ class _OnAudioQueryWebController {
   Future<List<ArtistModel>> queryArtists([
     ArtistSortType? sortType,
     OrderType? orderType,
-    UriType? uriType,
     bool ignoreCase = true,
   ]) async {
     // This "helper" list will avoid duplicate values inside the final list.
@@ -320,7 +318,6 @@ class _OnAudioQueryWebController {
   Future<List<GenreModel>> queryGenres([
     GenreSortType? sortType,
     OrderType? orderType,
-    UriType? uriType,
     bool ignoreCase = true,
   ]) async {
     // This "helper" list will avoid duplicate values inside the final list.
@@ -380,7 +377,7 @@ class _OnAudioQueryWebController {
     Object where, [
     SongSortType? sortType,
     OrderType? orderType,
-    bool? ignoreCase = true,
+    bool ignoreCase = true,
   ]) async {
     List<SongModel> tmpList = [];
     // Get all audios.
@@ -481,7 +478,7 @@ class _OnAudioQueryWebController {
 
       case SongSortType.ARTIST:
         tmpList.sort(
-          (val1, val2) => val1.artist.orEmpty.isCase(ignoreCase!).compareTo(
+          (val1, val2) => val1.artist.orEmpty.isCase(ignoreCase).compareTo(
                 val2.artist.orEmpty.isCase(ignoreCase),
               ),
         );
@@ -491,7 +488,7 @@ class _OnAudioQueryWebController {
 
       case SongSortType.ALBUM:
         tmpList.sort(
-          (val1, val2) => val1.album.orEmpty.isCase(ignoreCase!).compareTo(
+          (val1, val2) => val1.album.orEmpty.isCase(ignoreCase).compareTo(
                 val2.album.orEmpty.isCase(ignoreCase),
               ),
         );
@@ -512,7 +509,7 @@ class _OnAudioQueryWebController {
 
       case SongSortType.DISPLAY_NAME:
         tmpList.sort(
-          (val1, val2) => val1.displayName.isCase(ignoreCase!).compareTo(
+          (val1, val2) => val1.displayName.isCase(ignoreCase).compareTo(
                 val2.displayName.isCase(ignoreCase),
               ),
         );
