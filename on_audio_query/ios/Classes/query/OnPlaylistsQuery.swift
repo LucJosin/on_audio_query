@@ -46,7 +46,7 @@ class OnPlaylistsQuery {
                 var playlistData = loadPlaylistItem(playlist: playlist)
                 
                 // Count and add the number of songs for every genre.
-                let tmpMediaCount = getMediaCount(type: 1, id: playlistData["_id"] as! Int)
+                let tmpMediaCount = getMediaCount(type: 1, id: playlistData["_id"] as! UInt64)
                 playlistData["num_of_songs"] = tmpMediaCount
                 
                 listOfPlaylists.append(playlistData)

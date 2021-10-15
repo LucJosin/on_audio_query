@@ -140,7 +140,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "orderType": orderType != null
             ? orderType.index
             : OrderType.ASC_OR_SMALLER.index,
-        "ignroeCase": ignoreCase ?? true,
+        "ignoreCase": ignoreCase ?? true,
       },
     );
     return resultSongsFrom.map((songInfo) => SongModel(songInfo)).toList();
