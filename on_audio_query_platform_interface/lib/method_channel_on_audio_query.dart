@@ -20,6 +20,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
     OrderType? orderType,
     UriType? uriType,
     bool? ignoreCase,
+    String? path,
   }) async {
     final List<dynamic> resultSongs = await _channel.invokeMethod(
       "querySongs",
@@ -30,6 +31,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
             : OrderType.ASC_OR_SMALLER.index,
         "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
         "ignoreCase": ignoreCase ?? true,
+        "path": path,
       },
     );
     return resultSongs.map((e) => SongModel(e)).toList();

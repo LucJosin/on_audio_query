@@ -3,8 +3,10 @@ part of on_audio_query_web;
 /// A [controller] to keep the main method more "clean".
 class _OnAudioQueryWebController {
   /// This method will get/load all audios files(mp3) from the user's [assets] folder.
-  Future<List> _getInternalFiles() async {
-    String assets = await rootBundle.loadString('AssetManifest.json');
+  Future<List> _getInternalFiles([String? path = 'AssetManifest.json']) async {
+    // Confirm that path isn't null or empty.
+    if (path == null && path!.isEmpty) return [];
+    String assets = await rootBundle.loadString(path);
     Map decoded = json.decode(assets);
     List audioFiles = decoded.keys
         .where(
@@ -29,10 +31,11 @@ class _OnAudioQueryWebController {
     SongSortType? sortType,
     OrderType? orderType,
     bool ignoreCase = true,
+    String? path,
   ]) async {
     List<SongModel> tmpList = [];
     // Get all audios.
-    List audios = await _getInternalFiles();
+    List audios = await _getInternalFiles(path);
 
     // For each [audio] inside the [audios], take one and try read the [bytes].
     // Will return a Map with some informations:

@@ -46,6 +46,7 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     OrderType? orderType,
     UriType? uriType,
     bool? ignoreCase,
+    String? path,
   }) async {
     return _controller.querySongs(sortType, orderType);
   }
