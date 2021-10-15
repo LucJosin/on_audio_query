@@ -1,3 +1,6 @@
+## 1.3.0 - [10.15.2021]
+- See more [on_audio_query - CHANGELOG](https://github.com/LucasPJS/on_audio_query/blob/main/on_audio_query/CHANGELOG.md).
+
 ## 1.2.1 - [09.29.2021]
 - See more [on_audio_query - CHANGELOG](https://github.com/LucasPJS/on_audio_query/blob/main/on_audio_query/CHANGELOG.md).
 
