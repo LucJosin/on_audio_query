@@ -124,13 +124,21 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   @override
   Future<List<SongModel>> queryAudiosFrom(
     AudiosFromType type,
-    Object where,
-  ) async {
+    Object where, {
+    SongSortType? sortType,
+    OrderType? orderType,
+    bool? ignoreCase,
+  }) async {
     final List<dynamic> resultSongsFrom = await _channel.invokeMethod(
       "queryAudiosFrom",
       {
         "type": type.index,
         "where": where,
+        "sortType": sortType?.index,
+        "orderType": orderType != null
+            ? orderType.index
+            : OrderType.ASC_OR_SMALLER.index,
+        "ignroeCase": ignoreCase ?? true,
       },
     );
     return resultSongsFrom.map((songInfo) => SongModel(songInfo)).toList();

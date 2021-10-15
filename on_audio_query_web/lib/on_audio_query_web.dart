@@ -83,9 +83,18 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
   @override
   Future<List<SongModel>> queryAudiosFrom(
     AudiosFromType type,
-    Object where,
-  ) async {
-    return _controller.queryAudiosFrom(type, where);
+    Object where, {
+    SongSortType? sortType,
+    OrderType? orderType,
+    bool? ignoreCase,
+  }) async {
+    return _controller.queryAudiosFrom(
+      type,
+      where,
+      sortType,
+      orderType,
+      ignoreCase,
+    );
   }
 
   @override

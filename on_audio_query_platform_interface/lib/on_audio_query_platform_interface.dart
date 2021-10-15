@@ -201,8 +201,11 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<SongModel>> queryAudiosFrom(
     AudiosFromType type,
-    Object where,
-  ) {
+    Object where, {
+    SongSortType? sortType,
+    OrderType? orderType,
+    bool? ignoreCase,
+  }) {
     throw UnimplementedError('queryAudiosFrom() has not been implemented.');
   }
 

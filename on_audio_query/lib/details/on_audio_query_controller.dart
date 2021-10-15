@@ -237,11 +237,17 @@ class OnAudioQuery {
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<SongModel>> queryAudiosFrom(
     AudiosFromType type,
-    Object where,
-  ) async {
+    Object where, {
+    SongSortType? sortType,
+    OrderType? orderType,
+    bool? ignoreCase,
+  }) async {
     return platform.queryAudiosFrom(
       type,
       where,
+      sortType: sortType,
+      orderType: orderType,
+      ignoreCase: ignoreCase,
     );
   }
 
