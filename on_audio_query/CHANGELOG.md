@@ -1,6 +1,6 @@
 ## [2.5.0] - [10.15.2021]
 ### Release
-- `[2.0.0]` release.
+- `[2.5.0]` release.
 
 ### Features
 #### Dart
@@ -8,7 +8,7 @@
 
 ### Fixes
 #### Web
-- **[Fixed]** empty result when using `[queryArtwork]`.
+- **[Fixed]** empty result when using `[querySongs]`.
 - **[Fixed]** error when decoding some images.
 
 See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/main/on_audio_query/CHANGELOG.md):
