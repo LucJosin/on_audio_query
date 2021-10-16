@@ -1,3 +1,19 @@
+## [2.5.0] - [10.15.2021]
+### Release
+- `[2.0.0]` release.
+
+### Features
+#### Dart
+- **[Added]** `errorBuilder` and `frameBuilder` to `[QueryArtworkWidget]`.
+
+### Fixes
+#### Web
+- **[Fixed]** empty result when using `[queryArtwork]`.
+- **[Fixed]** error when decoding some images.
+
+See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/main/on_audio_query/CHANGELOG.md):
+- [2.5.0-alpha.0](#250-alpha0---10152021)
+
 ## [2.5.0-alpha.0] - [10.15.2021]
 ### Features
 #### All platforms

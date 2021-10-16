@@ -159,6 +159,89 @@ class QueryArtworkWidget extends StatelessWidget {
   /// * If [nullArtworkWidget] is null, will be set to [image_not_supported] icon.
   final Widget? nullArtworkWidget;
 
+  /// A builder function that is called if an error occurs during image loading.
+  ///
+  ///
+  /// If this builder is not provided, any exceptions will be reported to
+  /// [FlutterError.onError]. If it is provided, the caller should either handle
+  /// the exception by providing a replacement widget, or rethrow the exception.
+  ///
+  /// Important:
+  ///
+  ///   * If [errorBuilder] is null, will set the [nullArtworkWidget] and if is null
+  ///   will be used a icon(image_not_supported).
+  ///
+  /// The following sample uses [errorBuilder] to show a '😢' in place of the
+  /// image that fails to load, and prints the error to the console.
+  ///
+  /// ```dart
+  /// Widget build(BuildContext context) {
+  ///   return DecoratedBox(
+  ///     decoration: BoxDecoration(
+  ///       color: Colors.white,
+  ///       border: Border.all(),
+  ///       borderRadius: BorderRadius.circular(20),
+  ///     ),
+  ///     child: Image.network(
+  ///       'https://example.does.not.exist/image.jpg',
+  ///       errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+  ///         // Appropriate logging or analytics, e.g.
+  ///         // myAnalytics.recordError(
+  ///         //   'An error occurred loading "https://example.does.not.exist/image.jpg"',
+  ///         //   exception,
+  ///         //   stackTrace,
+  ///         // );
+  ///         return const Text('😢');
+  ///       },
+  ///     ),
+  ///   );
+  /// }
+  /// ```
+  ///
+  /// `From flutter documentation`
+  ///
+  final Widget Function(BuildContext, Object, StackTrace?)? errorBuilder;
+
+  /// A builder function responsible for creating the widget that represents
+  /// this image.
+  ///
+  /// The following sample demonstrates how to use this builder to implement an
+  /// image that fades in once it's been loaded.
+  ///
+  /// This sample contains a limited subset of the functionality that the
+  /// [FadeInImage] widget provides out of the box.
+  ///
+  /// ```dart
+  /// @override
+  /// Widget build(BuildContext context) {
+  ///   return DecoratedBox(
+  ///     decoration: BoxDecoration(
+  ///       color: Colors.white,
+  ///       border: Border.all(),
+  ///       borderRadius: BorderRadius.circular(20),
+  ///     ),
+  ///     child: Image.network(
+  ///       'https://flutter.github.io/assets-for-api-docs/assets/widgets/puffin.jpg',
+  ///       frameBuilder: (BuildContext context, Widget child, int? frame, bool wasSynchronouslyLoaded) {
+  ///         if (wasSynchronouslyLoaded) {
+  ///           return child;
+  ///         }
+  ///         return AnimatedOpacity(
+  ///           child: child,
+  ///           opacity: frame == null ? 0 : 1,
+  ///           duration: const Duration(seconds: 1),
+  ///           curve: Curves.easeOut,
+  ///         );
+  ///       },
+  ///     ),
+  ///   );
+  /// }
+  /// ```
+  ///
+  /// `From flutter documentation`
+  ///
+  final Widget Function(BuildContext, Widget, int?, bool)? frameBuilder;
+
   /// Widget that will help to "query" artwork for song/album.
   ///
   /// A simple example on how you can use the [queryArtwork].
@@ -183,6 +266,8 @@ class QueryArtworkWidget extends StatelessWidget {
     this.artworkBlendMode,
     this.keepOldArtwork,
     this.nullArtworkWidget,
+    this.errorBuilder,
+    this.frameBuilder,
   }) : super(key: key);
 
   @override
@@ -216,6 +301,15 @@ class QueryArtworkWidget extends StatelessWidget {
               color: artworkColor,
               colorBlendMode: artworkBlendMode,
               filterQuality: artworkQuality ?? FilterQuality.low,
+              frameBuilder: frameBuilder,
+              errorBuilder: errorBuilder ??
+                  (context, exception, stackTrace) {
+                    return nullArtworkWidget ??
+                        const Icon(
+                          Icons.image_not_supported,
+                          size: 50,
+                        );
+                  },
             ),
           );
         }
