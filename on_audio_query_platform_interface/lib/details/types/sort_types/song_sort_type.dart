@@ -24,12 +24,4 @@ enum SongSortType {
 
   ///[DISPLAY_NAME] will return song list based in song [display_name].
   DISPLAY_NAME,
-
-  /// Deprecated after [2.3.0].
-  @Deprecated("Use [TITLE] instead")
-  DEFAULT,
-
-  /// Deprecated after [2.3.0].
-  @Deprecated("Use [DATE_ADDED] instead")
-  DATA_ADDED,
 }

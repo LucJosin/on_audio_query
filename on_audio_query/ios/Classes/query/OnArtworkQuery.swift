@@ -54,6 +54,9 @@ class OnArtworkQuery {
         case 3:
             filter = MPMediaPropertyPredicate.init(value: id, forProperty: MPMediaItemPropertyArtistPersistentID)
             cursor = MPMediaQuery.artists()
+        case 4:
+            filter = MPMediaPropertyPredicate.init(value: id, forProperty: MPMediaItemPropertyGenrePersistentID)
+            cursor = MPMediaQuery.genres()
         default:
             filter = nil
             cursor = nil

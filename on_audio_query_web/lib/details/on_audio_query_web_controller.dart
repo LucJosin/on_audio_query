@@ -3,8 +3,10 @@ part of on_audio_query_web;
 /// A [controller] to keep the main method more "clean".
 class _OnAudioQueryWebController {
   /// This method will get/load all audios files(mp3) from the user's [assets] folder.
-  Future<List> _getInternalFiles() async {
-    String assets = await rootBundle.loadString('AssetManifest.json');
+  Future<List> _getInternalFiles([String? path]) async {
+    // Confirm that path isn't empty.
+    if (path != null && path.isEmpty) return [];
+    String assets = await rootBundle.loadString(path ?? 'AssetManifest.json');
     Map decoded = json.decode(assets);
     List audioFiles = decoded.keys
         .where(
@@ -29,10 +31,11 @@ class _OnAudioQueryWebController {
     SongSortType? sortType,
     OrderType? orderType,
     bool ignoreCase = true,
+    String? path,
   ]) async {
     List<SongModel> tmpList = [];
     // Get all audios.
-    List audios = await _getInternalFiles();
+    List audios = await _getInternalFiles(path);
 
     // For each [audio] inside the [audios], take one and try read the [bytes].
     // Will return a Map with some informations:
@@ -144,7 +147,6 @@ class _OnAudioQueryWebController {
   Future<List<AlbumModel>> queryAlbums([
     AlbumSortType? sortType,
     OrderType? orderType,
-    UriType? uriType,
     bool ignoreCase = true,
   ]) async {
     // This "helper" list will avoid duplicate values inside the final list.
@@ -219,7 +221,6 @@ class _OnAudioQueryWebController {
   Future<List<ArtistModel>> queryArtists([
     ArtistSortType? sortType,
     OrderType? orderType,
-    UriType? uriType,
     bool ignoreCase = true,
   ]) async {
     // This "helper" list will avoid duplicate values inside the final list.
@@ -317,7 +318,6 @@ class _OnAudioQueryWebController {
   Future<List<GenreModel>> queryGenres([
     GenreSortType? sortType,
     OrderType? orderType,
-    UriType? uriType,
     bool ignoreCase = true,
   ]) async {
     // This "helper" list will avoid duplicate values inside the final list.
@@ -374,8 +374,11 @@ class _OnAudioQueryWebController {
   /// "place".
   Future<List<SongModel>> queryAudiosFrom(
     AudiosFromType type,
-    Object where,
-  ) async {
+    Object where, [
+    SongSortType? sortType,
+    OrderType? orderType,
+    bool ignoreCase = true,
+  ]) async {
     List<SongModel> tmpList = [];
     // Get all audios.
     List audios = await _getInternalFiles();
@@ -446,6 +449,74 @@ class _OnAudioQueryWebController {
           }
         }
       }
+    }
+
+    // Now we sort the list based on [sortType].
+    //
+    // Some variables has a [Null] value, so we need use the [orEmpty] extension,
+    // this will return a empty string. Using a empty value to [compareTo] will bring
+    // all null values to start of the list so, we use this method to put at the end:
+    //
+    // ```dart
+    //  list.sort((val1, val2) => val1 == null ? 1 : 0);
+    // ```
+    //
+    // If this [Null] value is a [int] we need another method:
+    //
+    // ```dart
+    //  list.sort((val1, val2) {
+    //    if (val1 == null && val2 == null) return -1;
+    //    if (val1 == null && val2 != null) return 1;
+    //    if (val1 != null && val2 == null) return 0;
+    //    return val1!.compareTo(val2!);
+    //  });
+    // ```
+    switch (sortType) {
+      case SongSortType.TITLE:
+        tmpList.sort((val1, val2) => val1.title.compareTo(val2.title));
+        break;
+
+      case SongSortType.ARTIST:
+        tmpList.sort(
+          (val1, val2) => val1.artist.orEmpty.isCase(ignoreCase).compareTo(
+                val2.artist.orEmpty.isCase(ignoreCase),
+              ),
+        );
+        // TODO: Check this method. This will put all null values at the end of the list.
+        tmpList.sort((val1, val2) => val1.artist == null ? 1 : 0);
+        break;
+
+      case SongSortType.ALBUM:
+        tmpList.sort(
+          (val1, val2) => val1.album.orEmpty.isCase(ignoreCase).compareTo(
+                val2.album.orEmpty.isCase(ignoreCase),
+              ),
+        );
+        break;
+
+      case SongSortType.DURATION:
+        tmpList.sort((val1, val2) {
+          if (val1.duration == null && val2.duration == null) return -1;
+          if (val1.duration == null && val2.duration != null) return 1;
+          if (val1.duration != null && val2.duration == null) return 0;
+          return val1.duration!.compareTo(val2.duration!);
+        });
+        break;
+
+      case SongSortType.SIZE:
+        tmpList.sort((val1, val2) => val1.size.compareTo(val2.size));
+        break;
+
+      case SongSortType.DISPLAY_NAME:
+        tmpList.sort(
+          (val1, val2) => val1.displayName.isCase(ignoreCase).compareTo(
+                val2.displayName.isCase(ignoreCase),
+              ),
+        );
+        break;
+
+      default:
+        break;
     }
     return tmpList;
   }
@@ -544,6 +615,9 @@ class _OnAudioQueryWebController {
           break;
         case ArtworkType.ARTIST:
           tmpId = "${song.artist}".generateId();
+          break;
+        case ArtworkType.GENRE:
+          tmpId = "${song.genre}".generateId();
           break;
         case ArtworkType.PLAYLIST:
           return null;

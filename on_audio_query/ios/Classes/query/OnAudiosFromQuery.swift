@@ -13,13 +13,19 @@ class OnAudiosFromQuery {
     }
     
     func queryAudiosFrom() {
+        //
         self.type = args["type"] as! Int
         let wh3re = args["where"] as Any
+        // The sortType.
+        let sortType = args["sortType"] as? Int ?? 0
         
         // Choose the type(To match android side, let's call "cursor").
         var cursor: MPMediaQuery? = checkAudiosFrom(type: type, where: wh3re)
         
-        // TODO: Add sort type to [queryAudiosFrom].
+        // Using native sort from [IOS] you can only use the [Title], [Album] and
+        // [Artist]. The others will be sorted "manually" using [formatSongList] before
+        // send to Dart.
+        cursor?.groupingType = checkSongSortType(sortType: sortType)
         
         // We cannot "query" without permission so, just return a empty list.
         let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
@@ -70,8 +76,9 @@ class OnAudiosFromQuery {
             // After finish the "query", go back to the "main" thread(You can only call flutter
             // inside the main thread).
             DispatchQueue.main.async {
-                // TODO: Add sort type to [queryAudiosFrom].
-                self.result(listOfSongs)
+                // Here we'll check the "custom" sort and define a order to the list.
+                let finalList = formatSongList(args: self.args, allSongs: listOfSongs)
+                self.result(finalList)
             }
         }
     }
@@ -117,8 +124,9 @@ class OnAudiosFromQuery {
             // After finish the "query", go back to the "main" thread(You can only call flutter
             // inside the main thread).
             DispatchQueue.main.async {
-                // TODO: Add sort type to [queryAudiosFrom].
-                self.result(listOfSongs)
+                // Here we'll check the "custom" sort and define a order to the list.
+                let finalList = formatSongList(args: self.args, allSongs: listOfSongs)
+                self.result(finalList)
             }
         }
     }

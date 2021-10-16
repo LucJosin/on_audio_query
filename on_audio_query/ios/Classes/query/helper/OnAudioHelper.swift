@@ -176,7 +176,7 @@ public func formatGenreList(args: [String: Any], allGenres: [[String: Any?]]) ->
     return tempList
 }
 
-public func getMediaCount(type: Int, id: Int) -> Int {
+public func getMediaCount(type: Int, id: UInt64) -> Int {
     var cursor: MPMediaQuery? = nil
     var filter: MPMediaPropertyPredicate? = nil
     

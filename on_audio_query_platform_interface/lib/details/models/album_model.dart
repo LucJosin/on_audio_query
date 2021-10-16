@@ -13,8 +13,9 @@ class AlbumModel {
   /// Return album [album]
   String get album => _info["album"];
 
-  /// Return album [albumId]
-  int get albumId => _info["album_id"];
+  /// Deprecated after [2.3.0].
+  @Deprecated("Use [id] instead")
+  int? get albumId => _info["album_id"];
 
   /// Return album [artist]
   String? get artist => _info["artist"];

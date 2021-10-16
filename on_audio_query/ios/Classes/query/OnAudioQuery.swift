@@ -12,7 +12,7 @@ class OnAudioQuery {
     }
     
     func querySongs() {
-        // The sortType, this method will never be will.
+        // The sortType.
         let sortType = args["sortType"] as? Int ?? 0
         
         // Choose the type(To match android side, let's call "cursor").

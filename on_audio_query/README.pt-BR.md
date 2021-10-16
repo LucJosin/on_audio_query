@@ -63,7 +63,7 @@ NOTE: Fique à vontade para ajudar nas traduções
 Adicione o seguinte codigo para seu `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^2.4.2
+  on_audio_query: ^2.5.0
 ```
 
 #### Solicitar Permissões:
@@ -136,7 +136,7 @@ Todos os tipos de métodos nesse plugin:
 | [`queryArtists`](#queryartists) | `(SortType, OrderType, UriType, RequestPermission)` | `List<ArtistModel>` | <br>
 | [`queryPlaylists`](#queryplaylists) | `(SortType, OrderType, UriType, RequestPermission)` | `List<PlaylistModel>` | <br>
 | [`queryGenres`](#querygenres) | `(SortType, OrderType, UriType, RequestPermission)` | `List<GenreModel>` | <br>
-| [`queryAudiosFrom`]() | `(Type, Where, RequestPermission)` | `List<SongModel>` | <br>
+| [`queryAudiosFrom`](#queryaudiosfrom) | `(Type, Where, RequestPermission)` | `List<SongModel>` | <br>
 | [`queryWithFilters`](#queryWithFilters) | `(ArgsVal, WithFiltersType, Args, RequestPermission)` | `List<dynamic>` | <br>
 | [`queryArtwork`](#queryArtwork) | `(Id, Type, Format, Size, RequestPermission)` | `Uint8List?` | <br>
 
@@ -248,7 +248,21 @@ Todos os tipos de métodos nesse plugin:
 ```
 
 Ou você pode usar um Widget básico e customizável.
-**Veja o exemplo [QueryArtworkWidget](#queryartworkwidget)**
+**Veja o exemplo [QueryArtworkWidget](#artwork-widget)**
+
+#### queryAudiosFrom
+Você pode usar esse método para 'pegar' as músicas de qualquer seção(Album, Artista, Playlist or Gênero). 
+```dart
+  someName() async {
+    List<SongModel> something = await _audioQuery.queryAudiosFrom(
+        AudiosFromType.ALBUM_ID, 
+        albumId,
+        // Você pode também definir um tipo de classificação.
+        sortType: SongSortType.TITLE, // Default
+        orderType: OrderType.ASC_OR_SMALLER, // Default
+      );
+  }
+```
 
 #### queryWithFilters
 ```dart

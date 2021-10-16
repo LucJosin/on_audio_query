@@ -40,12 +40,17 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// * [orderType] is used to define if order will be Ascending or Descending.
   /// * [sortType] is used to define list sort.
   /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
+  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
+  /// * [path] is used to define where the songs will be 'queried'.
+  ///
   ///
   /// Important:
   ///
   /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
   /// * If [sortType] is null, will be set to [title].
   /// * If [uriType] is null, will be set to [EXTERNAL].
+  /// * If [ignoreCase] is null, will be set to [true].
+  /// * If [path] is null, will be set to the default platform [path].
   ///
   /// Platforms:
   ///
@@ -59,6 +64,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
     OrderType? orderType,
     UriType? uriType,
     bool? ignoreCase,
+    String? path,
   }) {
     throw UnimplementedError('querySongs() has not been implemented.');
   }
@@ -70,13 +76,14 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// * [orderType] is used to define if order will be Ascending or Descending.
   /// * [sortType] is used to define list sort.
   /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
+  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
   ///
   /// Important:
   ///
   /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
   /// * If [sortType] is null, will be set to [AlbumName].
   /// * If [uriType] is null, will be set to [EXTERNAL].
-  /// * If Android >= Q/10 [artwork] will return null, in this case, it's necessary use [queryArtwork].
+  /// * If [ignoreCase] is null, will be set to [true].
   ///
   /// Platforms:
   ///
@@ -101,13 +108,14 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// * [orderType] is used to define if order will be Ascending or Descending.
   /// * [sortType] is used to define list sort.
   /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
+  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
   ///
   /// Important:
   ///
   /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
   /// * If [sortType] is null, will be set to [ArtistName].
   /// * If [uriType] is null, will be set to [EXTERNAL].
-  /// * Mp3 only support one image, artist image don't exist.
+  /// * If [ignoreCase] is null, will be set to [true].
   ///
   /// Platforms:
   ///
@@ -132,12 +140,14 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// * [orderType] is used to define if order will be Ascending or Descending.
   /// * [sortType] is used to define list sort.
   /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
+  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
   ///
   /// Important:
   ///
   /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
   /// * If [sortType] is null, will be set to [PlaylistName].
   /// * If [uriType] is null, will be set to [EXTERNAL].
+  /// * If [ignoreCase] is null, will be set to [true].
   ///
   /// Platforms:
   ///
@@ -162,6 +172,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// * [orderType] is used to define if order will be Ascending or Descending.
   /// * [sortType] is used to define list sort.
   /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
+  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
   ///
   /// Important:
   ///
@@ -191,6 +202,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// * [type] is used to define where audio will be query.
   /// * [where] is used to query audios from specific method.
+  /// * [orderType] is used to define if order will be Ascending or Descending.
+  /// * [sortType] is used to define list sort.
+  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
   ///
   /// Platforms:
   ///
@@ -201,8 +215,11 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<SongModel>> queryAudiosFrom(
     AudiosFromType type,
-    Object where,
-  ) {
+    Object where, {
+    SongSortType? sortType,
+    OrderType? orderType,
+    bool? ignoreCase,
+  }) {
     throw UnimplementedError('queryAudiosFrom() has not been implemented.');
   }
 

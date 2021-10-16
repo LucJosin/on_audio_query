@@ -22,6 +22,7 @@ class OnAudiosQuery : ViewModel() {
 
     // Main parameters
     private val helper = OnAudioHelper()
+    private var selection: String? = null
 
     // None of this methods can be null.
     private lateinit var uri: Uri
@@ -31,6 +32,7 @@ class OnAudiosQuery : ViewModel() {
     @SuppressLint("StaticFieldLeak")
     private lateinit var context: Context
 
+
     /**
      * Method to "query" all songs.
      *
@@ -39,6 +41,8 @@ class OnAudiosQuery : ViewModel() {
      *   * [result]
      *   * [call]
      */
+    // Ignore the [Data] deprecation because this plugin support older versions.
+    @Suppress("DEPRECATION")
     fun querySongs(
         context: Context,
         result: MethodChannel.Result,
@@ -56,6 +60,11 @@ class OnAudiosQuery : ViewModel() {
         //   * [0]: External.
         //   * [1]: Internal.
         uri = checkAudiosUriType(call.argument<Int>("uri")!!)
+        // Here we provide a custom 'path'.
+        if (call.argument<String>("path") != null) {
+            val projection = songProjection()
+            selection = projection[0] + " like " + "'%" + call.argument<String>("path") + "/%'"
+        }
 
         // Query everything in background for a better performance.
         viewModelScope.launch {
@@ -80,7 +89,7 @@ class OnAudiosQuery : ViewModel() {
         withContext(Dispatchers.IO) {
 
             // Setup the cursor with [uri], [projection] and [sortType].
-            val cursor = resolver.query(uri, songProjection(), null, null, sortType)
+            val cursor = resolver.query(uri, songProjection(), selection, null, sortType)
             // Empty list.
             val songList: ArrayList<MutableMap<String, Any?>> = ArrayList()
 

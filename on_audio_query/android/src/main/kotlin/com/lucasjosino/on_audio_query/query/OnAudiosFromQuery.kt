@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import com.lucasjosino.on_audio_query.OnAudioQueryPlugin
 import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
 import com.lucasjosino.on_audio_query.types.checkAudiosFromType
+import com.lucasjosino.on_audio_query.types.sorttypes.checkSongSortType
 import com.lucasjosino.on_audio_query.utils.songProjection
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -32,6 +33,7 @@ class OnAudiosFromQuery : ViewModel() {
     private lateinit var context: Context
     private lateinit var where: String
     private lateinit var whereVal: String
+    private lateinit var sortType: String
     private lateinit var resolver: ContentResolver
 
     /**
@@ -54,6 +56,13 @@ class OnAudiosFromQuery : ViewModel() {
         //   * [5]: Genre Id
         //   * [6]: Playlist
         val type = call.argument<Int>("type")!!
+        // Sort: Type and Order.
+        // TODO
+        sortType = checkSongSortType(
+            call.argument<Int>("sortType"),
+            call.argument<Int>("orderType")!!,
+            call.argument<Boolean>("ignoreCase")!!
+        )
 
         // TODO: Add a better way to handle this query
         // This will fix (for now) the problem between Android < 30 && Android > 30
@@ -100,7 +109,7 @@ class OnAudiosFromQuery : ViewModel() {
         withContext(Dispatchers.IO) {
             // TODO: Add a [sortType].
             // Setup the cursor with [uri], [projection], [selection](where) and [values](whereVal).
-            val cursor = resolver.query(uri, songProjection(), where, arrayOf(whereVal), null)
+            val cursor = resolver.query(uri, songProjection(), where, arrayOf(whereVal), sortType)
             // Empty list.
             val songsFromList: ArrayList<MutableMap<String, Any?>> = ArrayList()
 
@@ -168,7 +177,7 @@ class OnAudiosFromQuery : ViewModel() {
         withContext(Dispatchers.IO) {
 
             val songsFrom: ArrayList<MutableMap<String, Any?>> = ArrayList()
-            val cursor = resolver.query(pUri, songProjection(), null, null, null)
+            val cursor = resolver.query(pUri, songProjection(), null, null, sortType)
             while (cursor != null && cursor.moveToNext()) {
                 val tempData: MutableMap<String, Any?> = HashMap()
                 for (media in cursor.columnNames) {
