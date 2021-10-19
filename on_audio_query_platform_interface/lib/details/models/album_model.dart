@@ -21,7 +21,7 @@ class AlbumModel {
   String? get artist => _info["artist"];
 
   /// Return album [artistId]
-  String? get artistId => _info["artist_id"];
+  int? get artistId => _info["artist_id"];
 
   /// Return album [numOfSongs]
   int get numOfSongs => _info["numsongs"];
