@@ -1,3 +1,18 @@
+## [2.5.1] - [10.19.2021]
+### Fixes
+#### Dart
+- **[Fixed]** wrong value returning from `[artistId]` when using `[AlbumModel]`. - [#54](https://github.com/LucasPJS/on_audio_query/issues/54)
+
+#### Android
+- **[Fixed]** missing songs from `[queryAudiosFrom]` when using `GENRE`. - [#46](https://github.com/LucasPJS/on_audio_query/issues/46)
+
+### Documentation
+- Updated `README` documentation.
+
+### ⚠ Important Changes
+#### Dart
+- Now `[artistId]` from `[AlbumModel]` return a `[int]`.
+
 ## [2.5.0] - [10.15.2021]
 ### Release
 - `[2.5.0]` release.

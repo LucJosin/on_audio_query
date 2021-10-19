@@ -107,7 +107,6 @@ class OnAudiosFromQuery : ViewModel() {
     //Loading in Background
     private suspend fun loadSongsFrom(): ArrayList<MutableMap<String, Any?>> =
         withContext(Dispatchers.IO) {
-            // TODO: Add a [sortType].
             // Setup the cursor with [uri], [projection], [selection](where) and [values](whereVal).
             val cursor = resolver.query(uri, songProjection(), where, arrayOf(whereVal), sortType)
             // Empty list.
@@ -125,6 +124,7 @@ class OnAudiosFromQuery : ViewModel() {
                 val tempExtraData = helper.loadSongExtraInfo(uri, tempData)
                 tempData.putAll(tempExtraData)
 
+                //
                 songsFromList.add(tempData)
             }
 
