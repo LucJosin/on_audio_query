@@ -12,7 +12,7 @@
 
 ### Extensões:
 
-<!-- * [on_audio_edit](https://github.com/LucasPJS/on_audio_edit) - Usado para editar audio metadata. -->
+* [on_audio_edit](https://github.com/LucasPJS/on_audio_edit) - Usado para editar audio metadata.
 * [on_audio_room](https://github.com/LucasPJS/on_audio_room) - Usado para guardar audio [Favoritos, Mais tocados, etc..].
 
 ### Traduções:
