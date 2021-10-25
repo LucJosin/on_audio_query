@@ -35,7 +35,7 @@ NOTE: Fique à vontade para ajudar nas traduções
 
 <!-- ✔️ | ❌ -->
 |  Methods  |   Android   |   IOS   |   Web   |
-|--------------|-----------------|-----------------|-----------------|
+|-------|:----------:|:----------:|:----------:|
 | `querySongs` | `✔️` | `✔️` | `✔️` | <br>
 | `queryAlbums` | `✔️` | `✔️` | `✔️` | <br>
 | `queryArtists` | `✔️` | `✔️` | `✔️` | <br>
@@ -63,7 +63,7 @@ NOTE: Fique à vontade para ajudar nas traduções
 Adicione o seguinte codigo para seu `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^2.5.1
+  on_audio_query: ^2.5.2
 ```
 
 #### Solicitar Permissões:

@@ -32,6 +32,7 @@ class OnAudioHelper {
     //This method will separate [String] from [Int]
     fun loadSongItem(itemProperty: String, cursor: Cursor): Any? {
         return when (itemProperty) {
+            // Int
             "_id",
             "album_id",
             "artist_id" -> {
@@ -48,6 +49,18 @@ class OnAudioHelper {
             "date_modified",
             "duration",
             "track" -> cursor.getInt(cursor.getColumnIndex(itemProperty))
+            // Boolean
+            "is_alarm",
+            "is_audiobook",
+            "is_music",
+            "is_notification",
+            "is_podcast",
+            "is_ringtone" -> {
+                val value = cursor.getString(cursor.getColumnIndex(itemProperty))
+                if (value == "0") return false
+                return true
+            }
+            // String
             else -> cursor.getString(cursor.getColumnIndex(itemProperty))
         }
     }
@@ -55,7 +68,7 @@ class OnAudioHelper {
     //This method will separate [String] from [Int]
     fun loadAlbumItem(itemProperty: String, cursor: Cursor): Any? {
         return when (itemProperty) {
-            "_id", 
+            "_id",
             "artist_id" -> {
                 // The [album] id from Android >= 30/R is a [Long] instead of [Int].
                 if (Build.VERSION.SDK_INT >= 30) {

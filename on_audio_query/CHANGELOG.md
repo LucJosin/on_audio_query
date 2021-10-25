@@ -1,3 +1,17 @@
+## [2.5.2] - [10.25.2021]
+### Fixes
+#### Android
+- **[Fixed]** wrong value returning from: - [#56](https://github.com/LucasPJS/on_audio_query/issues/56)
+    - `[is_music]`.
+    - `[is_alarm]`.
+    - `[is_notification]`.
+    - `[is_ringtone]`.
+    - `[is_podcast]`.
+    - `[is_audiobook]`.
+
+### Documentation
+- Updated `README` documentation.
+
 ## [2.5.1] - [10.19.2021]
 ### Fixes
 #### Dart
