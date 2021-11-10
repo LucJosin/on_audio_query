@@ -73,7 +73,7 @@ func loadAlbumItem(album: MPMediaItemCollection) -> [String: Any?] {
         "artist": album.items[0].albumArtist,
         "_id": album.persistentID,
         "album": album.items[0].albumTitle,
-        "artist_id": album.items[0].albumArtistPersistentID,
+        "artist_id": album.items[0].artistPersistentID,
         "album_id": album.items[0].albumPersistentID
     ]
     return albumData

@@ -43,13 +43,16 @@ class OnPlaylistsQuery {
             // into a [Map<String, dynamic>], all keys are based on [Android]
             // platforms so, if you change some key, will have to change the [Android] too.
             for playlist in cursor {
-                var playlistData = loadPlaylistItem(playlist: playlist)
-                
-                // Count and add the number of songs for every genre.
-                let tmpMediaCount = getMediaCount(type: 1, id: playlistData["_id"] as! UInt64)
-                playlistData["num_of_songs"] = tmpMediaCount
-                
-                listOfPlaylists.append(playlistData)
+                // If the first song file don't has a assetURL, is a Cloud item.
+                if !playlist.items[0].isCloudItem && playlist.items[0].assetURL != nil {
+                    var playlistData = loadPlaylistItem(playlist: playlist)
+                    
+                    // Count and add the number of songs for every genre.
+                    let tmpMediaCount = getMediaCount(type: 1, id: playlistData["_id"] as! UInt64)
+                    playlistData["num_of_songs"] = tmpMediaCount
+                    
+                    listOfPlaylists.append(playlistData)
+                }
             }
             
             // After finish the "query", go back to the "main" thread(You can only call flutter

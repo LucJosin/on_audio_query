@@ -45,8 +45,11 @@ class OnArtistsQuery {
             // into a [Map<String, dynamic>], all keys are based on [Android]
             // platforms so, if you change some key, will have to change the [Android] too.
             for artist in cursor {
-                let artistData = loadArtistItem(artist: artist)
-                listOfArtists.append(artistData)
+                // If the first song file don't has a assetURL, is a Cloud item.
+                if !artist.items[0].isCloudItem && artist.items[0].assetURL != nil {
+                    let artistData = loadArtistItem(artist: artist)
+                    listOfArtists.append(artistData)
+                }
             }
             
             // After finish the "query", go back to the "main" thread(You can only call flutter

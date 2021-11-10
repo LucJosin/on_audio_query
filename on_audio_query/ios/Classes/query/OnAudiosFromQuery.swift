@@ -69,8 +69,11 @@ class OnAudiosFromQuery {
             // into a [Map<String, dynamic>], all keys are based on [Android]
             // platforms so, if you change some key, will have to change the [Android] too.
             for song in cursor.items! {
-                let songData = loadSongItem(song: song)
-                listOfSongs.append(songData)
+                // If the song file don't has a assetURL, is a Cloud item.
+                if !song.isCloudItem && song.assetURL != nil {
+                    let songData = loadSongItem(song: song)
+                    listOfSongs.append(songData)
+                }
             }
             
             // After finish the "query", go back to the "main" thread(You can only call flutter
@@ -105,8 +108,11 @@ class OnAudiosFromQuery {
                     if iPlaylist.name == iWhere as? String {
                         //For each song, format and add to the list
                         for song in playlist.items {
-                            let songData = loadSongItem(song: song)
-                            listOfSongs.append(songData)
+                            // If the song file don't has a assetURL, is a Cloud item.
+                            if !song.isCloudItem && song.assetURL != nil {
+                                let songData = loadSongItem(song: song)
+                                listOfSongs.append(songData)
+                            }
                         }
                     }
                 } else {
@@ -114,8 +120,11 @@ class OnAudiosFromQuery {
                     if iPlaylist.persistentID == iWhere as! Int {
                         //For each song, format and add to the list
                         for song in playlist.items {
-                            let songData = loadSongItem(song: song)
-                            listOfSongs.append(songData)
+                            // If the song file don't has a assetURL, is a Cloud item.
+                            if !song.isCloudItem && song.assetURL != nil {
+                                let songData = loadSongItem(song: song)
+                                listOfSongs.append(songData)
+                            }
                         }
                     }
                 }

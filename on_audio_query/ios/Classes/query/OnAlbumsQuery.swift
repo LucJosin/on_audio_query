@@ -48,8 +48,10 @@ class OnAlbumsQuery {
             // into a [Map<String, dynamic>], all keys are based on [Android]
             // platforms so, if you change some key, will have to change the [Android] too.
             for album in cursor {
-                let albumData = loadAlbumItem(album: album)
-                listOfAlbums.append(albumData)
+                if !album.items[0].isCloudItem && album.items[0].assetURL != nil {
+                    let albumData = loadAlbumItem(album: album)
+                    listOfAlbums.append(albumData)
+                }
             }
             
             // After finish the "query", go back to the "main" thread(You can only call flutter

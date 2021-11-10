@@ -92,8 +92,11 @@ class OnWithFiltersQuery {
                 // into a [Map<String, dynamic>], all keys are based on [Android]
                 // platforms so, if you change some key, will have to change the [Android] too.
                 for song in cursor.items! {
-                    let songData = loadSongItem(song: song)
-                    listOfItems.append(songData)
+                    // If the song file don't has a assetURL, is a Cloud item.
+                    if !song.isCloudItem && song.assetURL != nil {
+                        let songData = loadSongItem(song: song)
+                        listOfItems.append(songData)
+                    }
                 }
                 //
             } else {
@@ -103,15 +106,18 @@ class OnWithFiltersQuery {
                 // have to change the [Android] too.
                 for item in cursor.collections! {
                     var itemData: [String: Any?] = [:]
-                    switch type {
-                    case 1:
-                        itemData = loadAlbumItem(album: item)
-                    case 3:
-                        itemData = loadArtistItem(artist: item)
-                    case 4:
-                        itemData = loadGenreItem(genre: item)
-                    default:
-                        break
+                    // If the first song file don't has a assetURL, is a Cloud item.
+                    if !item.items[0].isCloudItem && item.items[0].assetURL != nil {
+                        switch type {
+                        case 1:
+                            itemData = loadAlbumItem(album: item)
+                        case 3:
+                            itemData = loadArtistItem(artist: item)
+                        case 4:
+                            itemData = loadGenreItem(genre: item)
+                        default:
+                            break
+                        }
                     }
                     listOfItems.append(itemData)
                 }
@@ -139,7 +145,8 @@ class OnWithFiltersQuery {
                 let iPlaylist = playlist as! MPMediaPlaylist
                 
                 // Check if some playlist contains the defined argument.
-                if iPlaylist.name!.contains(argVal) {
+                // If the first song file don't has a assetURL, is a Cloud item.
+                if iPlaylist.name!.contains(argVal) && !iPlaylist.items[0].isCloudItem {
                     playlistData = loadPlaylistItem(playlist: playlist)
                 }
                 listOfPlaylist.append(playlistData)

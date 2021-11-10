@@ -45,13 +45,15 @@ class OnGenresQuery {
             // into a [Map<String, dynamic>], all keys are based on [Android]
             // platforms so, if you change some key, will have to change the [Android] too.
             for genre in cursor {
-                var genreData = loadGenreItem(genre: genre)
-                
-                // Count and add the number of songs for every genre.
-                let tmpMediaCount = getMediaCount(type: 0, id: genreData["_id"] as! UInt64)
-                genreData["num_of_songs"] = tmpMediaCount
-                
-                listOfGenres.append(genreData)
+                if !genre.items[0].isCloudItem && genre.items[0].assetURL != nil {
+                    var genreData = loadGenreItem(genre: genre)
+                    
+                    // Count and add the number of songs for every genre.
+                    let tmpMediaCount = getMediaCount(type: 0, id: genreData["_id"] as! UInt64)
+                    genreData["num_of_songs"] = tmpMediaCount
+                    
+                    listOfGenres.append(genreData)
+                }
             }
             
             // After finish the "query", go back to the "main" thread(You can only call flutter

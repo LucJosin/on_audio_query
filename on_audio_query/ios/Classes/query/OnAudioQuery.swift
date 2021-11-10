@@ -48,8 +48,11 @@ class OnAudioQuery {
             // into a [Map<String, dynamic>], all keys are based on [Android]
             // platforms so, if you change some key, will have to change the [Android] too.
             for song in cursor.items! {
-                let songData = loadSongItem(song: song)
-                listOfSongs.append(songData)
+                // If the song file don't has a assetURL, is a Cloud item.
+                if !song.isCloudItem && song.assetURL != nil {
+                    let songData = loadSongItem(song: song)
+                    listOfSongs.append(songData)
+                }
             }
             
             // After finish the "query", go back to the "main" thread(You can only call flutter

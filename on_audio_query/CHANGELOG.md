@@ -1,3 +1,12 @@
+## [2.5.3] - [11.10.2021]
+### Fixes
+#### IOS
+- **[Fixed]** song/artist/album from `Apple Music` returning when 'querying' - [#61](https://github.com/LucasPJS/on_audio_query/issues/61)
+- **[Fixed]** wrong `artistId` returning from `[AlbumModel]` - [#60](https://github.com/LucasPJS/on_audio_query/issues/60)
+
+### Documentation
+- Updated `README` documentation.
+
 ## [2.5.2] - [10.25.2021]
 ### Fixes
 #### Android
