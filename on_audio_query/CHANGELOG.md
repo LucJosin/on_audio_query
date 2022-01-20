@@ -1,3 +1,7 @@
+## [2.5.3+1] - [01.20.2022]
+### Changes
+- **[Updated]** all Github links.
+
 ## [2.5.3] - [11.10.2021]
 ### Fixes
 #### IOS
