@@ -1,13 +1,13 @@
 /*
 =============
 Author: Lucas Josino
-Github: https://github.com/LucasPJS
+Github: https://github.com/LucJosin
 Website: https://lucasjosino.com/
 =============
 Plugin/Id: on_audio_query#0
-Homepage: https://github.com/LucasPJS/on_audio_query
+Homepage: https://github.com/LucJosin/on_audio_query
 Pub: https://pub.dev/packages/on_audio_query
-License: https://github.com/LucasPJS/on_audio_query/blob/main/LICENSE
+License: https://github.com/LucJosin/on_audio_query/blob/main/LICENSE
 Copyright: © 2021, Lucas Josino. All rights reserved.
 =============
 */
@@ -60,7 +60,7 @@ class OnAudioQuery {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<SongModel>> querySongs({
     SongSortType? sortType,
     OrderType? orderType,
@@ -99,7 +99,7 @@ class OnAudioQuery {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<AlbumModel>> queryAlbums({
     AlbumSortType? sortType,
     OrderType? orderType,
@@ -136,7 +136,7 @@ class OnAudioQuery {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<ArtistModel>> queryArtists({
     ArtistSortType? sortType,
     OrderType? orderType,
@@ -173,7 +173,7 @@ class OnAudioQuery {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<PlaylistModel>> queryPlaylists({
     PlaylistSortType? sortType,
     OrderType? orderType,
@@ -210,7 +210,7 @@ class OnAudioQuery {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<GenreModel>> queryGenres({
     GenreSortType? sortType,
     OrderType? orderType,
@@ -241,7 +241,7 @@ class OnAudioQuery {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<SongModel>> queryAudiosFrom(
     AudiosFromType type,
     Object where, {
@@ -293,7 +293,7 @@ class OnAudioQuery {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<dynamic>> queryWithFilters(
     String argsVal,
     WithFiltersType withType, {
@@ -334,7 +334,7 @@ class OnAudioQuery {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<Uint8List?> queryArtwork(
     int id,
     ArtworkType type, {
@@ -373,7 +373,7 @@ class OnAudioQuery {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<SongModel>> queryFromFolder(
     String path, {
     SongSortType? sortType,
@@ -400,7 +400,7 @@ class OnAudioQuery {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<String>> queryAllPath() async {
     return platform.queryAllPath();
   }
@@ -425,7 +425,7 @@ class OnAudioQuery {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> createPlaylist(
     String name, {
     String? author,
@@ -450,7 +450,7 @@ class OnAudioQuery {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> removePlaylist(int playlistId) async {
     return platform.removePlaylist(playlistId);
   }
@@ -468,7 +468,7 @@ class OnAudioQuery {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> addToPlaylist(int playlistId, int audioId) async {
     return platform.addToPlaylist(playlistId, audioId);
   }
@@ -486,7 +486,7 @@ class OnAudioQuery {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> removeFromPlaylist(int playlistId, int audioId) async {
     return platform.removeFromPlaylist(playlistId, audioId);
   }
@@ -505,7 +505,7 @@ class OnAudioQuery {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> moveItemTo(int playlistId, int from, int to) async {
     return platform.moveItemTo(playlistId, from, to);
   }
@@ -523,7 +523,7 @@ class OnAudioQuery {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> renamePlaylist(int playlistId, String newName) async {
     return renamePlaylist(playlistId, newName);
   }
@@ -543,7 +543,7 @@ class OnAudioQuery {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> permissionsStatus() async {
     return platform.permissionsStatus();
   }
@@ -561,7 +561,7 @@ class OnAudioQuery {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> permissionsRequest() async {
     return platform.permissionsRequest();
   }
@@ -583,7 +583,7 @@ class OnAudioQuery {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucasPJS/on_audio_query/blob/main/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<DeviceModel> queryDeviceInfo() async {
     return platform.queryDeviceInfo();
   }

@@ -1,8 +1,8 @@
 ## [2.5.3] - [11.10.2021]
 ### Fixes
 #### IOS
-- **[Fixed]** song/artist/album from `Apple Music` returning when 'querying' - [#61](https://github.com/LucasPJS/on_audio_query/issues/61)
-- **[Fixed]** wrong `artistId` returning from `[AlbumModel]` - [#60](https://github.com/LucasPJS/on_audio_query/issues/60)
+- **[Fixed]** song/artist/album from `Apple Music` returning when 'querying' - [#61](https://github.com/LucJosin/on_audio_query/issues/61)
+- **[Fixed]** wrong `artistId` returning from `[AlbumModel]` - [#60](https://github.com/LucJosin/on_audio_query/issues/60)
 
 ### Documentation
 - Updated `README` documentation.
@@ -10,7 +10,7 @@
 ## [2.5.2] - [10.25.2021]
 ### Fixes
 #### Android
-- **[Fixed]** wrong value returning from: - [#56](https://github.com/LucasPJS/on_audio_query/issues/56)
+- **[Fixed]** wrong value returning from: - [#56](https://github.com/LucJosin/on_audio_query/issues/56)
     - `[is_music]`.
     - `[is_alarm]`.
     - `[is_notification]`.
@@ -24,10 +24,10 @@
 ## [2.5.1] - [10.19.2021]
 ### Fixes
 #### Dart
-- **[Fixed]** wrong value returning from `[artistId]` when using `[AlbumModel]`. - [#54](https://github.com/LucasPJS/on_audio_query/issues/54)
+- **[Fixed]** wrong value returning from `[artistId]` when using `[AlbumModel]`. - [#54](https://github.com/LucJosin/on_audio_query/issues/54)
 
 #### Android
-- **[Fixed]** missing songs from `[queryAudiosFrom]` when using `GENRE`. - [#46](https://github.com/LucasPJS/on_audio_query/issues/46)
+- **[Fixed]** missing songs from `[queryAudiosFrom]` when using `GENRE`. - [#46](https://github.com/LucJosin/on_audio_query/issues/46)
 
 ### Documentation
 - Updated `README` documentation.
@@ -49,32 +49,32 @@
 - **[Fixed]** empty result when using `[querySongs]`.
 - **[Fixed]** error when decoding some images.
 
-See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/main/on_audio_query/CHANGELOG.md):
+See all development [changes](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/CHANGELOG.md):
 - [2.5.0-alpha.0](#250-alpha0---10152021)
 
 ## [2.5.0-alpha.0] - [10.15.2021]
 ### Features
 #### All platforms
-- **[Added]** `artwork` to genres. - [#41](https://github.com/LucasPJS/on_audio_query/issues/41)
+- **[Added]** `artwork` to genres. - [#41](https://github.com/LucJosin/on_audio_query/issues/41)
 - **[Added]** `sortType`, `orderType` and `ignoreCase` to `[queryAudiosFrom]`.
 
 #### Android
-- Re-**[Added]** `path` parameter to `[querySongs]`. - [#48](https://github.com/LucasPJS/on_audio_query/issues/48)
+- Re-**[Added]** `path` parameter to `[querySongs]`. - [#48](https://github.com/LucJosin/on_audio_query/issues/48)
 
 #### Web
 - **[Added]** `path` parameter to `[querySongs]`.
 
 ### Fixes
 #### Android
-- **[Fixed]** empty `Uint8List` when using `[queryArtwork]` on Android 7. - [#47](https://github.com/LucasPJS/on_audio_query/issues/47)
-- **[Fixed]** null `albumId` when using Android 9 or below. - [#53](https://github.com/LucasPJS/on_audio_query/issues/53)
+- **[Fixed]** empty `Uint8List` when using `[queryArtwork]` on Android 7. - [#47](https://github.com/LucJosin/on_audio_query/issues/47)
+- **[Fixed]** null `albumId` when using Android 9 or below. - [#53](https://github.com/LucJosin/on_audio_query/issues/53)
 
 ### Documentation
 - Updated `README` documentation. New `[queryAudiosFrom]` section.
 - Updated `DEPRECATED` documentation.
 
 ### Changes
-- Downgraded `Kotlin` and `Gradle` version. - [#51](https://github.com/LucasPJS/on_audio_query/issues/51)
+- Downgraded `Kotlin` and `Gradle` version. - [#51](https://github.com/LucJosin/on_audio_query/issues/51)
 
 ### ⚠ Important Changes
 #### @Deprecated
@@ -84,7 +84,7 @@ See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/ma
 ## [2.4.2] - [10.01.2021]
 ### Fixes
 #### IOS
-- **[Fixed]** no artwork returning from `[queryArtwork]` when using `ArtworkType.ALBUM`. - [#45](https://github.com/LucasPJS/on_audio_query/issues/45)
+- **[Fixed]** no artwork returning from `[queryArtwork]` when using `ArtworkType.ALBUM`. - [#45](https://github.com/LucJosin/on_audio_query/issues/45)
 
 ### Documentation
 - Updated `README` documentation.
@@ -92,12 +92,12 @@ See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/ma
 ## [2.4.1] - [09.29.2021]
 ### Fixes
 #### Dart
-- **[Fixed]** wrong type of `numOfSongs` from `[SongModel]`. - [#39](https://github.com/LucasPJS/on_audio_query/issues/39)
+- **[Fixed]** wrong type of `numOfSongs` from `[SongModel]`. - [#39](https://github.com/LucJosin/on_audio_query/issues/39)
 
 #### IOS
 - **[Fixed]** wrong filter configuration when using `[queryWithFilters]`.
-- **[Fixed]** crash when using any `'query'` method with a null `sortType`. - [#43](https://github.com/LucasPJS/on_audio_query/issues/43)
-- **[Fixed]** error with wrong `[MPMediaQuery]` filter. - [#38](https://github.com/LucasPJS/on_audio_query/issues/38)
+- **[Fixed]** crash when using any `'query'` method with a null `sortType`. - [#43](https://github.com/LucJosin/on_audio_query/issues/43)
+- **[Fixed]** error with wrong `[MPMediaQuery]` filter. - [#38](https://github.com/LucJosin/on_audio_query/issues/38)
 
 ### Documentation
 - Updated `README` documentation.
@@ -105,14 +105,14 @@ See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/ma
 ## [2.4.0] - [09.28.2021]
 ### Features
 #### Android
-- **[Added]** a better 'search' method to `[queryWithFilters]`, now the query uses 'contains' when 'querying'. - [#35](https://github.com/LucasPJS/on_audio_query/issues/35)
+- **[Added]** a better 'search' method to `[queryWithFilters]`, now the query uses 'contains' when 'querying'. - [#35](https://github.com/LucJosin/on_audio_query/issues/35)
 
 ### Fixes
 #### IOS
-- **[Fixed]** error with wrong `[MPMediaQuery]` type and wrong value from `[jpegData]`. - [#37](https://github.com/LucasPJS/on_audio_query/issues/37)
+- **[Fixed]** error with wrong `[MPMediaQuery]` type and wrong value from `[jpegData]`. - [#37](https://github.com/LucJosin/on_audio_query/issues/37)
 
 #### Documentation
-- Updated broken `README` links. - [#36](https://github.com/LucasPJS/on_audio_query/issues/36)
+- Updated broken `README` links. - [#36](https://github.com/LucJosin/on_audio_query/issues/36)
 
 ### Documentation
 - Updated `README` documentation.
@@ -129,9 +129,9 @@ See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/ma
 
 ### Fixes
 #### Android
-- **[Fixed]** `error` when trying to build using `Android`. - [#32](https://github.com/LucasPJS/on_audio_query/issues/32) & [#33](https://github.com/LucasPJS/on_audio_query/issues/33)
-- **[Fixed]** `error` related to android song projection. - [#31](https://github.com/LucasPJS/on_audio_query/issues/31)
-- **[Fixed]** `'bug'` when using `SongSortType.TITLE`. This is now a `'feature'` and can be controlled using `[ignoreCase]`. - [#29](https://github.com/LucasPJS/on_audio_query/issues/29)
+- **[Fixed]** `error` when trying to build using `Android`. - [#32](https://github.com/LucJosin/on_audio_query/issues/32) & [#33](https://github.com/LucJosin/on_audio_query/issues/33)
+- **[Fixed]** `error` related to android song projection. - [#31](https://github.com/LucJosin/on_audio_query/issues/31)
+- **[Fixed]** `'bug'` when using `SongSortType.TITLE`. This is now a `'feature'` and can be controlled using `[ignoreCase]`. - [#29](https://github.com/LucJosin/on_audio_query/issues/29)
 
 ### Documentation
 - Updated `README` documentation.
@@ -170,7 +170,7 @@ See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/ma
 - Updated `OnAudioQuery` and `OnAudioQueryExample` documentation to support new `[Flutter 2.5]`.
 
 ### Changes
-- **[Changed]** wrong name `DATA_ADDED` to `DATE_ADDED` for both `[SongSortType]` and `[PlaylistSortType]`. - [#27](https://github.com/LucasPJS/on_audio_query/issues/27)
+- **[Changed]** wrong name `DATA_ADDED` to `DATE_ADDED` for both `[SongSortType]` and `[PlaylistSortType]`. - [#27](https://github.com/LucJosin/on_audio_query/issues/27)
 
 ### ⚠ Important Changes
 #### Dart
@@ -199,7 +199,7 @@ See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/ma
 
 ### Fixes
 #### IOS
-- **[Fixed]** wrong value returning from `[permissionsStatus]`. - [#24](https://github.com/LucasPJS/on_audio_query/issues/24)
+- **[Fixed]** wrong value returning from `[permissionsStatus]`. - [#24](https://github.com/LucJosin/on_audio_query/issues/24)
 
 ### Documentation
 - Updated `README` documentation.
@@ -208,8 +208,8 @@ See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/ma
 ### Fixes
 #### Android
 - **[Fixed]** duplicate `media` from `[queryWithFilters]`.
-- **[Fixed]** `crash` when calling `[queryWithFilters]`. - [#23](https://github.com/LucasPJS/on_audio_query/issues/23)
-- **[Fixed]** `null` artwork returning from `[queryArtwork]` on Android 11/R. - [#21](https://github.com/LucasPJS/on_audio_query/issues/21)
+- **[Fixed]** `crash` when calling `[queryWithFilters]`. - [#23](https://github.com/LucJosin/on_audio_query/issues/23)
+- **[Fixed]** `null` artwork returning from `[queryArtwork]` on Android 11/R. - [#21](https://github.com/LucJosin/on_audio_query/issues/21)
 
 ### Documentation
 - Updated `README` documentation.
@@ -218,7 +218,7 @@ See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/ma
 ## [2.1.1] - [08.23.2021]
 ### Fixes
 #### Android
-- **[Fixed]** error when using `[removeFromPlaylist]`. - [#22](https://github.com/LucasPJS/on_audio_query/issues/22)
+- **[Fixed]** error when using `[removeFromPlaylist]`. - [#22](https://github.com/LucJosin/on_audio_query/issues/22)
 
 ### Documentation
 - Updated `README` documentation.
@@ -251,7 +251,7 @@ See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/ma
 ### Release
 - `[2.0.0]` release.
 
-See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/main/CHANGELOG.md):
+See all development [changes](https://github.com/LucJosin/on_audio_query/blob/main/CHANGELOG.md):
 - [2.0.0-beta.3](#200-beta3---08172021---github-only)
 - [2.0.0-beta.2](#200-beta2---08152021)
 - [2.0.0-beta.1](#200-beta1---08142021)
@@ -324,7 +324,7 @@ See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/ma
 - Updated `on_audio_query` documentation.
 - Updated `README` documentation.
 - Updated `DEPRECATED` documentation.
-- Created [`PLATFORMS`](https://github.com/LucasPJS/on_audio_query/blob/2.0.0-dev/PLATFORMS.md) file.
+- Created [`PLATFORMS`](https://github.com/LucJosin/on_audio_query/blob/2.0.0-dev/PLATFORMS.md) file.
 
 ### ⚠ Important Changes
 #### Dart
@@ -468,7 +468,7 @@ See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/ma
 ## [1.1.3] - [07.18.2021]
 ### Fixes
 #### Android
-- **[Fixed]** `[cursor]` problem when using `[AudiosFromType.GENRE_NAME]` or `[AudiosFromType.GENRE_ID]` on `[queryAudiosFrom]`. - [#16](https://github.com/LucasPJS/on_audio_query/issues/16) and [#12](https://github.com/LucasPJS/on_audio_query/issues/12)
+- **[Fixed]** `[cursor]` problem when using `[AudiosFromType.GENRE_NAME]` or `[AudiosFromType.GENRE_ID]` on `[queryAudiosFrom]`. - [#16](https://github.com/LucJosin/on_audio_query/issues/16) and [#12](https://github.com/LucJosin/on_audio_query/issues/12)
 
 ### Documentation
 - Updated `README` documentation.
@@ -488,11 +488,11 @@ See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/ma
 ## [1.1.1] - [06.23.2021]
 ### Features
 #### Dart/Android
-- Added `[uri]` to `[SongModel]`. - [Added #10](https://github.com/LucasPJS/on_audio_query/issues/10)
+- Added `[uri]` to `[SongModel]`. - [Added #10](https://github.com/LucJosin/on_audio_query/issues/10)
 
 ### Fixes
 #### Android
-- **[Fixed]** `java.lang.Integer cannot be cast to java.lang.Long` from `[queryArtworks]`. - [#11](https://github.com/LucasPJS/on_audio_query/issues/11)
+- **[Fixed]** `java.lang.Integer cannot be cast to java.lang.Long` from `[queryArtworks]`. - [#11](https://github.com/LucJosin/on_audio_query/issues/11)
 
 ### Documentation
 - Updated `README` documentation.
@@ -515,7 +515,7 @@ See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/ma
 
 ### Fixes
 #### Android
-- **[Fixed]** incompatibility with `[permission_handler]`. - [#3](https://github.com/LucasPJS/on_audio_query/issues/3) - Thanks [@mvanbeusekom](https://github.com/mvanbeusekom)
+- **[Fixed]** incompatibility with `[permission_handler]`. - [#3](https://github.com/LucJosin/on_audio_query/issues/3) - Thanks [@mvanbeusekom](https://github.com/mvanbeusekom)
 
 #### Dart
 - **[Fixed]** wrong name. From `[dataAdded]` to `[dateAdded]`.
@@ -543,7 +543,7 @@ See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/ma
 
 ### Fixes
 #### Android
-- **[Fixed]** Now `[queryArtworks]` will return null. - [#6](https://github.com/LucasPJS/on_audio_query/issues/6)
+- **[Fixed]** Now `[queryArtworks]` will return null. - [#6](https://github.com/LucJosin/on_audio_query/issues/6)
 
 ### Documentation
 - Updated `README` documentation.
@@ -557,11 +557,11 @@ See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/ma
 #### Dart/Android
 - Added `[queryFromFolder]`.
 - Added `[queryAllPath]`.
-- Added `[_display_name_wo_ext]` (`[displayName]` without extension) to `[SongModel]`. - [Added #5](https://github.com/LucasPJS/on_audio_query/issues/5)
+- Added `[_display_name_wo_ext]` (`[displayName]` without extension) to `[SongModel]`. - [Added #5](https://github.com/LucJosin/on_audio_query/issues/5)
 - Added `[file_extension]` (Only file extension) to `[SongModel]`.
 - Added `[file_parent]` (All the path before file) to `[SongModel]`.
 - Added `[Genre]` to `[queryAudiosFrom]`.
-- Added `[ALBUM_ID]`, `[ARTIST_ID]` and `[PLAYLIST_ID]` to `[AudiosFromType]`. - [Added #2](https://github.com/LucasPJS/on_audio_query/issues/2)
+- Added `[ALBUM_ID]`, `[ARTIST_ID]` and `[PLAYLIST_ID]` to `[AudiosFromType]`. - [Added #2](https://github.com/LucJosin/on_audio_query/issues/2)
 
 ### Documentation
 - Updated `README` documentation.
@@ -582,7 +582,7 @@ See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/ma
 ## [1.0.6] - [04.08.2021]
 ### Fixes
 #### Android
-- **[Fixed]** `[queryArtwork]` returning null album image in Android 11. - [#1](https://github.com/LucasPJS/on_audio_query/issues/1)
+- **[Fixed]** `[queryArtwork]` returning null album image in Android 11. - [#1](https://github.com/LucJosin/on_audio_query/issues/1)
 
 ### Documentation
 - Updated `README` documentation.
@@ -757,7 +757,7 @@ See all development [changes](https://github.com/LucasPJS/on_audio_query/blob/ma
  -->
 
 <!-- 
- https://github.com/LucasPJS/on_audio_query/issues/
+ https://github.com/LucJosin/on_audio_query/issues/
  - **[Added]** (Text)- [#Issue](Link)
  - **[Fixed]** (Text)- [#Issue](Link)
  - **[Changed]** (Text)- [#Issue](Link)

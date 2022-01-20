@@ -7,20 +7,20 @@
 
 ## Help:
 
-**Any problem? [Issues](https://github.com/LucasPJS/on_audio_query/issues)** <br>
-**Any suggestion? [Pull request](https://github.com/LucasPJS/on_audio_query/pulls)**
+**Any problem? [Issues](https://github.com/LucJosin/on_audio_query/issues)** <br>
+**Any suggestion? [Pull request](https://github.com/LucJosin/on_audio_query/pulls)**
 
 ### Extensions:
 
-* [on_audio_edit](https://github.com/LucasPJS/on_audio_edit) - Used to edit audio metadata.
-* [on_audio_room](https://github.com/LucasPJS/on_audio_room) - Used to store audio [Favorites, Most Played, etc..].
+* [on_audio_edit](https://github.com/LucJosin/on_audio_edit) - Used to edit audio metadata.
+* [on_audio_room](https://github.com/LucJosin/on_audio_room) - Used to store audio [Favorites, Most Played, etc..].
 
 ### Translations:
 
 NOTE: Feel free to help with readme translations
 
-* [English](https://github.com/LucasPJS/on_audio_query/blob/main/on_audio_query/README.md)
-* [Portuguese](https://github.com/LucasPJS/on_audio_query/blob/main/on_audio_query/README.pt-BR.md)
+* [English](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/README.md)
+* [Portuguese](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/README.pt-BR.md)
 
 ### Topics:
 
@@ -57,13 +57,13 @@ NOTE: Feel free to help with readme translations
 ✔️ -> Supported <br>
 ❌ -> Not Supported <br>
 
-**[See all platforms methods support](https://github.com/LucasPJS/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)**
+**[See all platforms methods support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)**
 
 ## How to Install:
 Add the following code to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^2.5.3
+  on_audio_query: ^2.5.3+1
 ```
 
 ### Request Permission:
@@ -322,6 +322,6 @@ ArgsTypes: [AudiosArgs](https://pub.dev/documentation/on_audio_query_platform_in
 
 ## LICENSE:
 
-* [LICENSE](https://github.com/LucasPJS/on_audio_query/blob/main/on_audio_query/LICENSE)
+* [LICENSE](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/LICENSE)
 
 > * [Back to top](#on_audio_query)

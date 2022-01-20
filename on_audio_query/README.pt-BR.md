@@ -7,13 +7,13 @@
 
 ## Ajuda:
 
-**Algum problema? [Issues](https://github.com/LucasPJS/on_audio_query/issues)** <br>
-**Alguma sugestão? [Pull request](https://github.com/LucasPJS/on_audio_query/pulls)**
+**Algum problema? [Issues](https://github.com/LucJosin/on_audio_query/issues)** <br>
+**Alguma sugestão? [Pull request](https://github.com/LucJosin/on_audio_query/pulls)**
 
 ### Extensões:
 
-* [on_audio_edit](https://github.com/LucasPJS/on_audio_edit) - Usado para editar audio metadata.
-* [on_audio_room](https://github.com/LucasPJS/on_audio_room) - Usado para guardar audio [Favoritos, Mais tocados, etc..].
+* [on_audio_edit](https://github.com/LucJosin/on_audio_edit) - Usado para editar audio metadata.
+* [on_audio_room](https://github.com/LucJosin/on_audio_room) - Usado para guardar audio [Favoritos, Mais tocados, etc..].
 
 ### Traduções:
 
@@ -57,7 +57,7 @@ NOTE: Fique à vontade para ajudar nas traduções
 ✔️ -> Tem suporte <br>
 ❌ -> Não tem suporte <br>
 
-**[Veja todos os suportes](https://github.com/LucasPJS/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)**
+**[Veja todos os suportes](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)**
 
 ## Como instalar:
 Adicione o seguinte codigo para seu `pubspec.yaml`:
@@ -323,6 +323,6 @@ ArgsTypes: [AudiosArgs](https://pub.dev/documentation/on_audio_query_platform_in
 
 ## LICENÇA:
 
-* [LICENSE](https://github.com/LucasPJS/on_audio_query/blob/main/on_audio_query/LICENSE)
+* [LICENSE](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/LICENSE)
 
 > * [Voltar ao Topo](#on_audio_query)
