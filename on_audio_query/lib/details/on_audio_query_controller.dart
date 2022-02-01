@@ -2,12 +2,12 @@
 =============
 Author: Lucas Josino
 Github: https://github.com/LucJosin
-Website: https://lucasjosino.com/
+Website: https://www.lucasjosino.com/
 =============
 Plugin/Id: on_audio_query#0
 Homepage: https://github.com/LucJosin/on_audio_query
 Pub: https://pub.dev/packages/on_audio_query
-License: https://github.com/LucJosin/on_audio_query/blob/main/LICENSE
+License: https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/LICENSE
 Copyright: © 2021, Lucas Josino. All rights reserved.
 =============
 */
@@ -528,7 +528,7 @@ class OnAudioQuery {
     return renamePlaylist(playlistId, newName);
   }
 
-  //Permissions methods
+  // Permissions methods
 
   /// Used to check Android permissions status
   ///
@@ -566,7 +566,7 @@ class OnAudioQuery {
     return platform.permissionsRequest();
   }
 
-  //Device Information
+  // Device Information
 
   /// Used to return Device Info
   ///
@@ -586,5 +586,46 @@ class OnAudioQuery {
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<DeviceModel> queryDeviceInfo() async {
     return platform.queryDeviceInfo();
+  }
+
+  // Others
+
+  /// Used to scan the given [path]
+  ///
+  /// Will return:
+  ///
+  /// * A boolean indicating if the path was scanned or not.
+  ///
+  /// Usage:
+  ///
+  /// * When using the [Android] platform. After deleting a media using the [dart:io],
+  /// call this method to update the media. If the media was successfully and the path
+  /// not scanned. Will keep showing on [querySongs].
+  ///
+  /// Example:
+  ///
+  /// ```dart
+  /// OnAudioQuery _audioQuery = OnAudioQuery();
+  /// File file = File('path');
+  ///
+  /// try {
+  ///   if (file.existsSync()) {
+  ///     file.deleteSync();
+  ///     _audioQuery.scanMedia(file.path); // Scan the media 'path'
+  ///   }
+  /// } catch (e) {
+  ///   debugPrint('$e');
+  /// }
+  /// ```
+  ///
+  /// Platforms:
+  ///
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `❌` | `❌` | <br>
+  ///
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  Future<bool> scanMedia(String path) async {
+    return await platform.scanMedia(path);
   }
 }

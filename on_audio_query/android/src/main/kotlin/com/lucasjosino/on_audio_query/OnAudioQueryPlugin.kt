@@ -2,12 +2,12 @@
 =============
 Author: Lucas Josino
 Github: https://github.com/LucJosin
-Website: https://lucasjosino.com/
+Website: https://www.lucasjosino.com/
 =============
 Plugin/Id: on_audio_query#0
 Homepage: https://github.com/LucJosin/on_audio_query
 Pub: https://pub.dev/packages/on_audio_query
-License: https://github.com/LucJosin/on_audio_query/blob/main/LICENSE
+License: https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/LICENSE
 Copyright: © 2021, Lucas Josino. All rights reserved.
 =============
 */
@@ -18,6 +18,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
+import android.media.MediaScannerConnection
 import androidx.annotation.NonNull
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -78,6 +79,20 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
 
             // Device information
             "queryDeviceInfo" -> queryDeviceInfo(result)
+
+            // This method will scan the given path to update the 'state'.
+            // When deleting a file using 'dart:io', call this method to update the file 'state'.
+            "scan" -> {
+                val sPath: String? = call.argument<String>("path")
+
+                // Check if the given file is null or empty.
+                if (sPath == null || sPath.isEmpty()) result.success(false)
+
+                // Scan and return
+                MediaScannerConnection.scanFile(pContext, arrayOf(sPath), null) { _, _ ->
+                    result.success(true)
+                }
+            }
 
             // All others methods
             else -> onAudioController.onAudioController()

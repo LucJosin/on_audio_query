@@ -54,6 +54,7 @@ Here you'll see a extra information about every method/type etc..
 | `permissionsRequest` | `✔️` | `✔️` | `❌` | <br>
 | `permissionsStatus` | `✔️` | `✔️` | `❌` | <br>
 | `queryDeviceInfo` | `✔️` | `✔️` | `✔️` | <br>
+| `scanMedia` | `✔️` | `❌` | `❌` | <br>
 
 ## SortTypes
 

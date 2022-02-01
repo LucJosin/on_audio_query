@@ -1,4 +1,4 @@
-## [2.5.0] - [10.15.2021] -> [X.X.X] - [XX.XX.XXXX]
+## [2.5.0] - [10.15.2021] -> [2.6.0] - [02.01.2022]
 ### Deprecated
 - `[albumId]` from `[AlbumModel]`.
     - Use `[id]` instead.

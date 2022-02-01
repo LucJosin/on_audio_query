@@ -1,3 +1,19 @@
+## [2.6.0] - [02.01.2022]
+### Features
+- **[Added]** `[scanMedia]` method that will scan the given path and update the `[Android]` MediaStore.
+
+### Fixes
+- **[Fixed]** media showing when calling `[querySongs]` even after deleting with `[dart:io]`. - [#67](https://github.com/LucJosin/on_audio_query/issues/67)
+
+### Changes
+- **[Updated]** some required packages.
+
+### Documentation
+- Updated `README` documentation.
+- Updated `DEPRECATED` documentation.
+- Updated `PLATFORMS` documentation.
+- Updated some `broken` links.
+
 ## [2.5.3+1] - [01.20.2022]
 ### Changes
 - **[Updated]** all Github links.

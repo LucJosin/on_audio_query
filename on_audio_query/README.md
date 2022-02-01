@@ -53,6 +53,7 @@ NOTE: Feel free to help with readme translations
 | `permissionsRequest` | `✔️` | `✔️` | `❌` | <br>
 | `permissionsStatus` | `✔️` | `✔️` | `❌` | <br>
 | `queryDeviceInfo` | `✔️` | `✔️` | `✔️` | <br>
+| `scanMedia` | `✔️` | `❌` | `❌` | <br>
 
 ✔️ -> Supported <br>
 ❌ -> Not Supported <br>
@@ -63,7 +64,7 @@ NOTE: Feel free to help with readme translations
 Add the following code to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^2.5.3+1
+  on_audio_query: ^2.6.0
 ```
 
 ### Request Permission:
