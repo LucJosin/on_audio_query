@@ -1,3 +1,18 @@
+/*
+=============
+Author: Lucas Josino
+Github: https://github.com/LucJosin
+Website: https://www.lucasjosino.com/
+=============
+Plugin/Id: on_audio_query#0
+Homepage: https://github.com/LucJosin/on_audio_query
+Homepage(Platform): https://github.com/LucJosin/on_audio_query/tree/main/on_audio_query_platform_interface
+Pub: https://pub.dev/packages/on_audio_query
+License: https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/LICENSE
+Copyright: © 2021, Lucas Josino. All rights reserved.
+=============
+*/
+
 import 'dart:async';
 import 'dart:typed_data';
 
@@ -305,5 +320,12 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   Future<DeviceModel> queryDeviceInfo() async {
     final Map deviceResult = await _channel.invokeMethod("queryDeviceInfo");
     return DeviceModel(deviceResult);
+  }
+
+  @override
+  Future<bool> scanMedia(String path) async {
+    return await _channel.invokeMethod('scan', {
+      "path": path,
+    });
   }
 }
