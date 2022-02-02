@@ -1,6 +1,6 @@
 # on_audio_query
 [![Pub.dev](https://img.shields.io/pub/v/on_audio_query?color=9cf&label=Pub.dev&style=flat-square)](https://pub.dev/packages/on_audio_query)
-[![Platforms](https://img.shields.io/badge/Platform-Android%20%7C%20IOS%20%7C%20Web-9cf?&style=flat-square)]()
+[![Platforms](https://img.shields.io/badge/Platforms-Android%20%7C%20IOS%20%7C%20Web-9cf?&style=flat-square)]()
 [![Languages](https://img.shields.io/badge/Language-Dart%20%7C%20Kotlin%20%7C%20Swift-9cf?&style=flat-square)]()
 
 `on_audio_query` é um [Flutter](https://flutter.dev/) Plugin usado para adquirir informações de áudios/músicas 🎶 [título, artista, album, etc..] do celular. <br>
@@ -160,6 +160,11 @@ Todos os tipos de métodos nesse plugin:
 | [`permissionsStatus`]() |  | `bool` | <br>
 | [`queryDeviceInfo`]() |  | `DeviceModel` | <br>
 
+### Others methods
+|  Methods  |   Parameters   |   Return   |
+|--------------|-----------------|-----------------|
+| [`scanMedia`](#scanmedia) | `(Path)` | `bool` | <br>
+
 ### Artwork Widget
 
 ```dart
@@ -171,7 +176,7 @@ Todos os tipos de métodos nesse plugin:
   }
 ```
 
-**veja mais: <a href="https://pub.dev/documentation/on_audio_query/latest/on_audio_query/QueryArtworkWidget-class.html" target="_blank">QueryArtworkWidget</a>**
+**Veja mais: <a href="https://pub.dev/documentation/on_audio_query/latest/on_audio_query/QueryArtworkWidget-class.html" target="_blank">QueryArtworkWidget</a>**
 
 ### Abreviações
 
@@ -236,6 +241,24 @@ Todos os tipos de métodos nesse plugin:
   }
 ```
 
+#### scanMedia
+Você irá usar esse método quando atualizar uma media do armazenamento. Esse método irá atualizar o 'estado' da mídia e
+o Android `MediaStore` irá saber esse 'estado'.
+```dart
+  someName() async {
+    OnAudioQuery _audioQuery = OnAudioQuery();
+    File file = File('path');
+    try {
+      if (file.existsSync()) {
+        file.deleteSync();
+        _audioQuery.scanMedia(file.path); // Atualiza o 'caminho' da mídia
+      }
+    } catch (e) {
+      debugPrint('$e');
+    }
+  }
+```
+
 #### queryArtwork
 ```dart
   someName() async {
@@ -244,7 +267,7 @@ Todos os tipos de métodos nesse plugin:
         SongId, 
         ArtworkType.AUDIO, 
         ...,
-      );
+    );
   }
 ```
 

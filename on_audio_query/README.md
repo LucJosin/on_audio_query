@@ -159,6 +159,11 @@ All types of methods on this plugin:
 | [`permissionsStatus`]() |  | `bool` | <br>
 | [`queryDeviceInfo`]() |  | `DeviceModel` | <br>
 
+### Others methods
+|  Methods  |   Parameters   |   Return   |
+|--------------|-----------------|-----------------|
+| [`scanMedia`](#scanmedia) | `(Path)` | `bool` | <br>
+
 ### Artwork Widget
 
 ```dart
@@ -235,6 +240,24 @@ All types of methods on this plugin:
   }
 ```
 
+#### scanMedia
+You'll use this method when updating a media from storage. This method will update the media 'state' and
+Android `MediaStore` will be able to know this 'state'.
+```dart
+  someName() async {
+    OnAudioQuery _audioQuery = OnAudioQuery();
+    File file = File('path');
+    try {
+      if (file.existsSync()) {
+        file.deleteSync();
+        _audioQuery.scanMedia(file.path); // Scan the media 'path'
+      }
+    } catch (e) {
+      debugPrint('$e');
+    }
+  }
+```
+
 #### queryArtwork
 ```dart
   someName() async {
@@ -260,7 +283,7 @@ You can use this method to 'query' the songs from any section(Album, Artist, Pla
         // You can also define a sortType
         sortType: SongSortType.TITLE, // Default
         orderType: OrderType.ASC_OR_SMALLER, // Default
-      );
+    );
   }
 ```
 
