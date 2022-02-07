@@ -9,7 +9,7 @@ import android.provider.MediaStore
 import android.util.Log
 import java.io.File
 
-class OnAudioHelper {
+class QueryHelper {
     //This method will load some extra information about audio/song
     fun loadSongExtraInfo(
         uri: Uri,

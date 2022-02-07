@@ -6,7 +6,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lucasjosino.on_audio_query.OnAudioQueryPlugin
-import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
+import com.lucasjosino.on_audio_query.query.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkAlbumsUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkAlbumSortType
 import io.flutter.plugin.common.MethodCall
@@ -15,11 +15,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/** OnAlbumsQuery */
-class OnAlbumsQuery : ViewModel() {
+/** AlbumsQuery */
+class AlbumsQuery : ViewModel() {
 
     // Main parameters.
-    private val helper = OnAudioHelper()
+    private val helper = QueryHelper()
 
     // None of this methods can be null.
     private lateinit var uri: Uri

@@ -8,7 +8,7 @@ import android.provider.MediaStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lucasjosino.on_audio_query.OnAudioQueryPlugin
-import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
+import com.lucasjosino.on_audio_query.query.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.*
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -16,10 +16,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class OnWithFiltersQuery : ViewModel() {
+class WithFiltersQuery : ViewModel() {
 
     //Main parameters
-    private val helper = OnAudioHelper()
+    private val helper = QueryHelper()
     private val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
     private var projection: Array<String>? = arrayOf()
 

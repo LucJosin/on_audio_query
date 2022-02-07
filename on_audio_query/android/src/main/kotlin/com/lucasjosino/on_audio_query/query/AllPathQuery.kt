@@ -8,8 +8,8 @@ import com.lucasjosino.on_audio_query.OnAudioQueryPlugin
 import io.flutter.plugin.common.MethodChannel
 import java.io.File
 
-/** OnAllPathQuery */
-class OnAllPathQuery {
+/** AllPathQuery */
+class AllPathQuery {
 
     // Main parameters, none of this methods can be null.
     private val uri: Uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI

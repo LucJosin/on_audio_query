@@ -12,7 +12,7 @@ import android.util.Size
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lucasjosino.on_audio_query.OnAudioQueryPlugin
-import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
+import com.lucasjosino.on_audio_query.query.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkArtworkFormat
 import com.lucasjosino.on_audio_query.types.checkArtworkType
 import io.flutter.plugin.common.MethodCall
@@ -23,11 +23,11 @@ import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
 
-/** OnArtworksQuery */
-class OnArtworksQuery : ViewModel() {
+/** ArtworkQuery */
+class ArtworkQuery : ViewModel() {
 
     //Main parameters
-    private val helper = OnAudioHelper()
+    private val helper = QueryHelper()
     private var type: Int = -1
     private var id: Number = 0
     private var quality: Int = 100

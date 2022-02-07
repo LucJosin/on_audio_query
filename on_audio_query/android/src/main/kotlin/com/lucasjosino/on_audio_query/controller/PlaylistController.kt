@@ -10,8 +10,8 @@ import android.util.Log
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
-/** OnPlaylistsController */
-class OnPlaylistsController {
+/** PlaylistController */
+class PlaylistController {
 
     //Main parameters
     private val uri = MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI
