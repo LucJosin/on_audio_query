@@ -5,6 +5,7 @@ import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
 import com.lucasjosino.on_audio_query.OnAudioQueryPlugin
+import com.lucasjosino.on_audio_query.controller.PermissionController
 import io.flutter.plugin.common.MethodChannel
 import java.io.File
 
@@ -26,7 +27,7 @@ class AllPathQuery {
         this.resolver = context.contentResolver
 
         // Request permission status from the main method.
-        val hasPermission = OnAudioQueryPlugin().onPermissionStatus(context)
+        val hasPermission = PermissionController().permissionStatus(context)
         // Empty list.
         var resultAllPath = ArrayList<String>()
 

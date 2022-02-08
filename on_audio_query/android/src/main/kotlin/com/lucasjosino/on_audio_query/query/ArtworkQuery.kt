@@ -11,7 +11,7 @@ import android.os.Build
 import android.util.Size
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lucasjosino.on_audio_query.OnAudioQueryPlugin
+import com.lucasjosino.on_audio_query.controller.PermissionController
 import com.lucasjosino.on_audio_query.query.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkArtworkFormat
 import com.lucasjosino.on_audio_query.types.checkArtworkType
@@ -72,7 +72,7 @@ class ArtworkQuery : ViewModel() {
         // Query everything in background for a better performance.
         viewModelScope.launch {
             // Request permission status from the main method.
-            val hasPermission = OnAudioQueryPlugin().onPermissionStatus(context)
+            val hasPermission = PermissionController().permissionStatus(context)
             // Empty array.
             var resultArtList: ByteArray? = null
 

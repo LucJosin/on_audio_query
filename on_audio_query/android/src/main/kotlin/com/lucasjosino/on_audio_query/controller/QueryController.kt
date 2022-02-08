@@ -12,7 +12,7 @@ class QueryController(
 ) {
 
     //
-    fun onAudioController() {
+    fun call() {
         when (call.method) {
             //Query methods
             "querySongs" -> SongsQuery().querySongs(context, result, call)
@@ -35,6 +35,8 @@ class QueryController(
             )
             "renamePlaylist" -> PlaylistController().renamePlaylist(context, result, call)
             "moveItemTo" -> PlaylistController().moveItemTo(context, result, call)
+            // Called if the requested method doesn't exist.
+            else -> result.notImplemented()
         }
     }
 }

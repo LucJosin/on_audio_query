@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lucasjosino.on_audio_query.OnAudioQueryPlugin
+import com.lucasjosino.on_audio_query.controller.PermissionController
 import com.lucasjosino.on_audio_query.query.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkAlbumsUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkAlbumSortType
@@ -55,7 +56,7 @@ class AlbumsQuery : ViewModel() {
         // Query everything in background for a better performance.
         viewModelScope.launch {
             // Request permission status from the main method.
-            val hasPermission = OnAudioQueryPlugin().onPermissionStatus(context)
+            val hasPermission = PermissionController().permissionStatus(context)
             // Empty list.
             var resultAlbumList = ArrayList<MutableMap<String, Any?>>()
 
