@@ -151,6 +151,18 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 }
             }
 
+            "observersStatus" -> {
+                result.success(
+                    hashMapOf(
+                        "songs_observer" to (songsObserver?.isRunning ?: false),
+                        "albums_observer" to false,
+                        "playlists_observer" to false,
+                        "artists_observer" to false,
+                        "genres_observer" to false
+                    )
+                )
+            }
+
             // All others methods
             else -> queryController.call()
         }

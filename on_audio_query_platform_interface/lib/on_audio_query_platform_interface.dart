@@ -73,7 +73,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<List<SongModel>> querySongs({
     SongSortType? sortType,
     OrderType? orderType,
@@ -109,7 +109,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Stream<List<SongModel>> observeSongs({
     SongSortType? sortType,
     OrderType? orderType,
@@ -142,7 +142,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<List<AlbumModel>> queryAlbums({
     AlbumSortType? sortType,
     OrderType? orderType,
@@ -174,7 +174,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<List<ArtistModel>> queryArtists({
     ArtistSortType? sortType,
     OrderType? orderType,
@@ -206,7 +206,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<List<PlaylistModel>> queryPlaylists({
     PlaylistSortType? sortType,
     OrderType? orderType,
@@ -237,7 +237,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<List<GenreModel>> queryGenres({
     GenreSortType? sortType,
     OrderType? orderType,
@@ -263,7 +263,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<List<SongModel>> queryAudiosFrom(
     AudiosFromType type,
     Object where, {
@@ -309,7 +309,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<List<dynamic>> queryWithFilters(
     String argsVal,
     WithFiltersType withType,
@@ -346,7 +346,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<Uint8List?> queryArtwork(
     int id,
     ArtworkType type, {
@@ -379,7 +379,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<List<SongModel>> queryFromFolder(
     String path, {
     SongSortType? sortType,
@@ -401,7 +401,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<List<String>> queryAllPath() {
     throw UnimplementedError('queryAllPath() has not been implemented.');
   }
@@ -426,7 +426,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<bool> createPlaylist(
     String name, {
     String? author,
@@ -447,7 +447,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<bool> removePlaylist(int playlistId) {
     throw UnimplementedError('removePlaylist() has not been implemented.');
   }
@@ -465,7 +465,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<bool> addToPlaylist(int playlistId, int audioId) {
     throw UnimplementedError('addToPlaylist() has not been implemented.');
   }
@@ -483,7 +483,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<bool> removeFromPlaylist(int playlistId, int audioId) {
     throw UnimplementedError('removeFromPlaylist() has not been implemented.');
   }
@@ -502,7 +502,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<bool> moveItemTo(int playlistId, int from, int to) {
     throw UnimplementedError('moveItemTo() has not been implemented.');
   }
@@ -520,7 +520,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<bool> renamePlaylist(int playlistId, String newName) {
     throw UnimplementedError('renamePlaylist() has not been implemented.');
   }
@@ -540,7 +540,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<bool> permissionsStatus() {
     throw UnimplementedError('permissionsStatus() has not been implemented.');
   }
@@ -558,7 +558,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<bool> permissionsRequest() {
     throw UnimplementedError('permissionsRequest() has not been implemented.');
   }
@@ -580,7 +580,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<DeviceModel> queryDeviceInfo() {
     throw UnimplementedError('queryDeviceInfo() has not been implemented.');
   }
@@ -621,8 +621,31 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<bool> scanMedia(String path) {
-    throw UnimplementedError('queryDeviceInfo() has not been implemented.');
+    throw UnimplementedError('scanMedia() has not been implemented.');
+  }
+
+  /// Used to check the observers(listeners) status of:
+  ///   * [observeSongs]
+  ///   * [observeAlbums]
+  ///   * [observePlaylists]
+  ///   * [observeArtists]
+  ///   * [observeGenres]
+  ///
+  /// Will return:
+  ///
+  /// * A [ObserversModel], every parameters from this model will return a boolean
+  /// indicating if the observers is **RUNNING** or not.
+  ///
+  /// Platforms:
+  ///
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `❌` | `❌` | <br>
+  ///
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  Future<ObserversModel> observersStatus() {
+    throw UnimplementedError('observersStatus() has not been implemented.');
   }
 }

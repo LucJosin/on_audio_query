@@ -10,7 +10,9 @@ part 'models/artist_model.dart';
 part 'models/playlist_model.dart';
 part 'models/genre_model.dart';
 //
-part 'models/device_model.dart';
+part 'models/device/device_model.dart';
+//
+part 'models/observer/observers_model.dart';
 
 //Sort Types
 part 'types/sort_types/song_sort_type.dart';

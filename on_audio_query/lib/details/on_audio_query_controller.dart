@@ -670,4 +670,27 @@ class OnAudioQuery {
   Future<bool> scanMedia(String path) async {
     return await platform.scanMedia(path);
   }
+
+  /// Used to check the observers(listeners) status of:
+  ///   * [observeSongs]
+  ///   * [observeAlbums]
+  ///   * [observePlaylists]
+  ///   * [observeArtists]
+  ///   * [observeGenres]
+  ///
+  /// Will return:
+  ///
+  /// * A [ObserversModel], every parameters from this model will return a boolean
+  /// indicating if the observers is **running** or not.
+  ///
+  /// Platforms:
+  ///
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `❌` | `❌` | <br>
+  ///
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  Future<ObserversModel> observersStatus() async {
+    return await platform.observersStatus();
+  }
 }

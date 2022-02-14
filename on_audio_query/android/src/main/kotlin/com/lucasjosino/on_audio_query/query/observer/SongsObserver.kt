@@ -18,6 +18,8 @@ class SongsObserver(
         private val URI: Uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
     }
 
+    val isRunning: Boolean get() = pIsRunning
+
     //
     private val query: SongsQuery = SongsQuery()
 
@@ -26,7 +28,7 @@ class SongsObserver(
     private var args: Map<*, *>? = null
 
     //
-    private var isRunning: Boolean = false
+    private var pIsRunning: Boolean = false
 
     override fun onChange(selfChange: Boolean) {
         //
@@ -42,7 +44,7 @@ class SongsObserver(
         context.contentResolver.registerContentObserver(URI, true, this)
 
         //
-        isRunning = true
+        pIsRunning = true
 
         // Send the initial result.
         query.init(context, sink = sink, args = args)
@@ -53,7 +55,7 @@ class SongsObserver(
         context.contentResolver.unregisterContentObserver(this)
 
         //
-        isRunning = false
+        pIsRunning = false
 
         //
         sink = null

@@ -1,3 +1,17 @@
+/*
+=============
+Author: Lucas Josino
+Github: https://github.com/LucJosin
+Website: https://www.lucasjosino.com/
+=============
+Plugin/Id: on_audio_query#0
+Homepage: https://github.com/LucJosin/on_audio_query
+Pub: https://pub.dev/packages/on_audio_query
+License: https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/LICENSE
+Copyright: © 2021, Lucas Josino. All rights reserved.
+=============
+*/
+
 import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
@@ -17,8 +31,25 @@ class ObserveSongsState extends State<ObserveSongs> {
       appBar: AppBar(
         title: const Text("ObserveExample"),
         elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.sensors_rounded),
+            onPressed: () async {
+              // The [observersStatus] will return information about every observer.
+              // Will return [true] if the observers is running and [false] if not (or it's null).
+              ObserversModel r = await _audioQuery.observersStatus();
+              debugPrint("$r");
+            },
+          ),
+        ],
       ),
       body: Center(
+        // In this case we'll use the [StreamBuilder] widget.
+        // This widget will automatically [listen] and [dispose] the observer
+        // when the state(page) is closed.
+        //
+        // If you are using another method. Remember to 'cancel' the listener before
+        // close the application or the page.
         child: StreamBuilder<List<SongModel>>(
           // Default values:
           //

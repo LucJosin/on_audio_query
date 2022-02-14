@@ -364,4 +364,10 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
       "path": path,
     });
   }
+
+  @override
+  Future<ObserversModel> observersStatus() async {
+    final Map observersResult = await _channel.invokeMethod('observersStatus');
+    return ObserversModel(observersResult);
+  }
 }
