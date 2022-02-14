@@ -21,11 +21,14 @@ class ObserveSongsState extends State<ObserveSongs> {
       body: Center(
         child: StreamBuilder<List<SongModel>>(
           // Default values:
+          //
+          // sortType: null,
+          // orderType: OrderType.ASC_OR_SMALLER,
+          // uriType: UriType.EXTERNAL,
+          // ignoreCase: true,
           stream: _audioQuery.observeSongs(
-            sortType: null,
-            orderType: OrderType.ASC_OR_SMALLER,
-            uriType: UriType.EXTERNAL,
-            ignoreCase: true,
+            sortType: SongSortType.DATE_ADDED,
+            orderType: OrderType.DESC_OR_GREATER,
           ),
           builder: (context, item) {
             // Loading content
@@ -39,11 +42,33 @@ class ObserveSongsState extends State<ObserveSongs> {
             // List<SongModel> songs = item.data!;
             return ListView.builder(
               itemCount: item.data!.length,
-              itemBuilder: (context, index) {
+              itemBuilder: (_, index) {
+                // A 'Dialog' explaining about this 'dynamic' list.
+                if (index == 0) {
+                  return Container(
+                    height: 100,
+                    width: double.infinity,
+                    margin: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).backgroundColor,
+                      border: Border.all(
+                        color: Theme.of(context).hintColor,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        "Dynamic list. \nEvery change will be notified and will automatically update the UI",
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+                }
+
+                // Normal list.
                 return ListTile(
                   title: Text(item.data![index].title),
                   subtitle: Text(item.data![index].artist ?? "No Artist"),
-                  trailing: const Icon(Icons.arrow_forward_rounded),
                   // This Widget will query/load image. Just add the id and type.
                   // You can use/create your own widget/method using [queryArtwork].
                   leading: QueryArtworkWidget(

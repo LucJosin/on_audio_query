@@ -41,6 +41,8 @@ class _MainState extends State<Main> {
   @override
   void initState() {
     super.initState();
+    // Request to the user, the permissoion to read MediaStore(Android) and
+    // MPMediaLibrary(IOS).
     requestPermission();
   }
 
@@ -49,7 +51,8 @@ class _MainState extends State<Main> {
     if (!kIsWeb) {
       bool permissionStatus = await _audioQuery.permissionsStatus();
       if (!permissionStatus) {
-        await _audioQuery.permissionsRequest();
+        bool r = await _audioQuery.permissionsRequest();
+        debugPrint("$r");
       }
     }
   }
@@ -67,6 +70,12 @@ class _MainState extends State<Main> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             const Text("Select one option:"),
+            // This option will open a 'static' page.
+            //
+            // The only way to show new/deleted items is calling 'setState'.
+            //
+            // - Uses the 'FutureBuilder' widget.
+            // - Will never update the UI automatically.
             GestureDetector(
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(
@@ -82,6 +91,13 @@ class _MainState extends State<Main> {
                 ),
               ),
             ),
+            // This option will open a 'dynamic' page.
+            //
+            // Everytime something change, e.g: add or remove songs, will 'trigger'
+            // a listener and update the UI
+            //
+            // - Uses the 'StreamBuilder' widget.
+            // - Update the UI automatically.
             GestureDetector(
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(
