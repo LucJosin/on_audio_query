@@ -21,9 +21,12 @@ import android.os.Build
 import androidx.annotation.NonNull
 import com.lucasjosino.on_audio_query.controller.PermissionController
 import com.lucasjosino.on_audio_query.controller.QueryController
+import com.lucasjosino.on_audio_query.query.observer.*
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.plugin.common.BinaryMessenger
+import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
@@ -35,26 +38,53 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     companion object {
         // Get the current class name.
         private val TAG = this::class.java.name
+
+        // Method channel name.
+        private const val CHANNEL_NAME = "com.lucasjosino.on_audio_query"
+
+        // Event channels name.
+        private const val SONGS_OBS_CHANNEL_NAME =
+            "com.lucasjosino.on_audio_query/songs_observer"
+        private const val ALBUMS_OBS_CHANNEL_NAME =
+            "com.lucasjosino.on_audio_query/albums_observer"
+        private const val PLAYLISTS_OBS_CHANNEL_NAME =
+            "com.lucasjosino.on_audio_query/playlists_observer"
+        private const val ARTISTS_OBS_CHANNEL_NAME =
+            "com.lucasjosino.on_audio_query/artists_observer"
+        private const val GENRES_OBS_CHANNEL_NAME =
+            "com.lucasjosino.on_audio_query/genres_observer"
     }
 
     // Dart <-> Kotlin communication
-    private val channelName = "com.lucasjosino.on_audio_query"
     private lateinit var channel: MethodChannel
-
-    // Main parameters
-    private var activity: Activity? = null
-    private var binding: ActivityPluginBinding? = null
-    private var permissionController: PermissionController? = null
 
     //
     private lateinit var context: Context
     private lateinit var queryController: QueryController
+    private lateinit var permissionController: PermissionController
+
+    // Main parameters
+    private var activity: Activity? = null
+    private var binding: ActivityPluginBinding? = null
+
+    // Observers
+    private var songsObserver: SongsObserver? = null
+    private var albumsObserver: AlbumsObserver? = null
+    private var playlistsObserver: PlaylistsObserver? = null
+    private var artistsObserver: ArtistsObserver? = null
+    private var genresObserver: GenresObserver? = null
 
     // Dart <-> Kotlin communication
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        this.context = flutterPluginBinding.applicationContext
-        channel = MethodChannel(flutterPluginBinding.binaryMessenger, channelName)
+        // Define the [context]
+        context = flutterPluginBinding.applicationContext
+
+        // Setup the method channel communication.
+        channel = MethodChannel(flutterPluginBinding.binaryMessenger, CHANNEL_NAME)
         channel.setMethodCallHandler(this)
+
+        // Setup all event channel communication.
+        setUpEventChannel(flutterPluginBinding.binaryMessenger)
     }
 
     // Methods will always follow the same route:
@@ -76,25 +106,31 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         // If user deny permission request a pop up will immediately show up
         // If [retryRequest] is null, the message will only show when call method again
         val retryRequest = call.argument<Boolean>("retryRequest") ?: false
+
         // Setup the [PermissionController]
         permissionController = PermissionController(retryRequest)
 
-        //
+        // Detect the method.
         when (call.method) {
             // Permissions
-            "permissionsStatus" -> result.success(permissionController!!.permissionStatus(context))
+            "permissionsStatus" -> result.success(permissionController.permissionStatus(context))
             "permissionsRequest" -> {
-                binding!!.addRequestPermissionsResultListener(permissionController!!)
-                permissionController!!.requestPermission(activity!!, result)
+                // Add to controller the ability to listen the request result.
+                binding!!.addRequestPermissionsResultListener(permissionController)
+
+                // Request the permission.
+                permissionController.requestPermission(activity!!, result)
             }
 
             // Device information
             "queryDeviceInfo" -> {
-                val deviceData: MutableMap<String, Any> = HashMap()
-                deviceData["device_model"] = Build.MODEL
-                deviceData["device_sys_version"] = Build.VERSION.SDK_INT
-                deviceData["device_sys_type"] = "Android"
-                result.success(deviceData)
+                result.success(
+                    hashMapOf<String, Any>(
+                        "device_model" to Build.MODEL,
+                        "device_sys_version" to Build.VERSION.SDK_INT,
+                        "device_sys_type" to "Android"
+                    )
+                )
             }
 
             // This method will scan the given path to update the 'state'.
@@ -106,7 +142,11 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 if (sPath.isEmpty()) result.success(false)
 
                 // Scan and return
-                MediaScannerConnection.scanFile(context, arrayOf(sPath), null) { _, _ ->
+                MediaScannerConnection.scanFile(
+                    context,
+                    arrayOf(sPath),
+                    null
+                ) { _, _ ->
                     result.success(true)
                 }
             }
@@ -123,6 +163,7 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     // Attach the activity and get the [activity] and [binding].
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        // Define the activity and binding.
         this.activity = binding.activity
         this.binding = binding
     }
@@ -132,20 +173,74 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         onAttachedToActivity(binding)
     }
 
-    //
-    override fun onDetachedFromActivityForConfigChanges() {
-        onDetachedFromActivity()
-    }
-
-    //
+    // Detach all parameters.
     override fun onDetachedFromActivity() {
         // Remove the permission listener
-        if (binding != null && permissionController != null) {
-            binding!!.removeRequestPermissionsResultListener(permissionController!!)
+        if (binding != null) {
+            binding!!.removeRequestPermissionsResultListener(permissionController)
         }
 
         // Remove both [activity] and [binding].
         this.activity = null
         this.binding = null
+
+        // Remove all event channel.
+        songsObserver = null
+        songsObserver?.onCancel(null)
+
+        albumsObserver = null
+        albumsObserver?.onCancel(null)
+
+        playlistsObserver = null
+        playlistsObserver?.onCancel(null)
+
+        artistsObserver = null
+        artistsObserver?.onCancel(null)
+
+        genresObserver = null
+        genresObserver?.onCancel(null)
+    }
+
+    //
+    override fun onDetachedFromActivityForConfigChanges() {
+        onDetachedFromActivity()
+    }
+
+    // TODO: Check if this setup consumes much memory.
+    private fun setUpEventChannel(binaryMessenger: BinaryMessenger) {
+        // Songs channel.
+        val songsChannel = EventChannel(
+            binaryMessenger, SONGS_OBS_CHANNEL_NAME
+        )
+        songsObserver = SongsObserver(context)
+        songsChannel.setStreamHandler(songsObserver)
+
+        // Albums channel.
+        val albumsChannel = EventChannel(
+            binaryMessenger, ALBUMS_OBS_CHANNEL_NAME
+        )
+        albumsObserver = AlbumsObserver(context)
+        albumsChannel.setStreamHandler(albumsObserver)
+
+        // Playlists channel.
+        val playlistsChannel = EventChannel(
+            binaryMessenger, PLAYLISTS_OBS_CHANNEL_NAME
+        )
+        playlistsObserver = PlaylistsObserver(context)
+        playlistsChannel.setStreamHandler(playlistsObserver)
+
+        // Artists channel.
+        val artistsChannel = EventChannel(
+            binaryMessenger, ARTISTS_OBS_CHANNEL_NAME
+        )
+        artistsObserver = ArtistsObserver(context)
+        artistsChannel.setStreamHandler(artistsObserver)
+
+        // Genres channel.
+        val genresChannel = EventChannel(
+            binaryMessenger, GENRES_OBS_CHANNEL_NAME
+        )
+        genresObserver = GenresObserver(context)
+        genresChannel.setStreamHandler(genresObserver)
     }
 }

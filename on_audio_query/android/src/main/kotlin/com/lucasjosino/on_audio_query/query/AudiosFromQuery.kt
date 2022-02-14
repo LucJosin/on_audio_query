@@ -8,7 +8,6 @@ import android.os.Build
 import android.provider.MediaStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lucasjosino.on_audio_query.OnAudioQueryPlugin
 import com.lucasjosino.on_audio_query.controller.PermissionController
 import com.lucasjosino.on_audio_query.query.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkAudiosFromType
@@ -109,7 +108,7 @@ class AudiosFromQuery : ViewModel() {
     private suspend fun loadSongsFrom(): ArrayList<MutableMap<String, Any?>> =
         withContext(Dispatchers.IO) {
             // Setup the cursor with [uri], [projection], [selection](where) and [values](whereVal).
-            val cursor = resolver.query(uri, songProjection(), where, arrayOf(whereVal), sortType)
+            val cursor = resolver.query(uri, songProjection, where, arrayOf(whereVal), sortType)
             // Empty list.
             val songsFromList: ArrayList<MutableMap<String, Any?>> = ArrayList()
 
@@ -178,7 +177,7 @@ class AudiosFromQuery : ViewModel() {
         withContext(Dispatchers.IO) {
 
             val songsFrom: ArrayList<MutableMap<String, Any?>> = ArrayList()
-            val cursor = resolver.query(pUri, songProjection(), null, null, sortType)
+            val cursor = resolver.query(pUri, songProjection, null, null, sortType)
             while (cursor != null && cursor.moveToNext()) {
                 val tempData: MutableMap<String, Any?> = HashMap()
                 for (media in cursor.columnNames) {

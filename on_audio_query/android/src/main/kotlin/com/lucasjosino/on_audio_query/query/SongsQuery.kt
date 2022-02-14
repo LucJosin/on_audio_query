@@ -6,12 +6,12 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lucasjosino.on_audio_query.OnAudioQueryPlugin
 import com.lucasjosino.on_audio_query.controller.PermissionController
 import com.lucasjosino.on_audio_query.query.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkAudiosUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkSongSortType
 import com.lucasjosino.on_audio_query.utils.songProjection
+import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
@@ -33,40 +33,67 @@ class SongsQuery : ViewModel() {
     @SuppressLint("StaticFieldLeak")
     private lateinit var context: Context
 
-
-    /**
-     * Method to "query" all songs.
-     *
-     * Parameters:
-     *   * [context]
-     *   * [result]
-     *   * [call]
-     */
-    // Ignore the [Data] deprecation because this plugin support older versions.
-    @Suppress("DEPRECATION")
-    fun querySongs(
+    fun init(
         context: Context,
-        result: MethodChannel.Result,
-        call: MethodCall
+        //
+        result: MethodChannel.Result? = null,
+        call: MethodCall? = null,
+        //
+        sink: EventChannel.EventSink? = null,
+        args: Map<*, *>? = null
     ) {
         this.context = context; resolver = context.contentResolver
 
+        val pSortType: Int?
+        val pOrderType: Int
+        val pIgnoreCase: Boolean
+
+        val pUri: Int
+        val pPath: String?
+
+        if (sink != null && args != null) {
+            pSortType = args["sortType"] as Int?
+            pOrderType = args["orderType"] as Int
+            pIgnoreCase = args["ignoreCase"] as Boolean
+
+            pUri = args["uri"] as Int
+            pPath = args["path"] as String?
+        } else {
+            pSortType = call!!.argument<Int>("sortType")
+            pOrderType = call.argument<Int>("orderType")!!
+            pIgnoreCase = call.argument<Boolean>("ignoreCase")!!
+
+            pUri = call.argument<Int>("uri")!!
+            pPath = call.argument<String>("path")
+        }
+
         // Sort: Type and Order.
         sortType = checkSongSortType(
-            call.argument<Int>("sortType"),
-            call.argument<Int>("orderType")!!,
-            call.argument<Boolean>("ignoreCase")!!
+            pSortType,
+            pOrderType,
+            pIgnoreCase
         )
+
         // Check uri:
         //   * [0]: External.
         //   * [1]: Internal.
-        uri = checkAudiosUriType(call.argument<Int>("uri")!!)
+        uri = checkAudiosUriType(pUri)
+
         // Here we provide a custom 'path'.
-        if (call.argument<String>("path") != null) {
-            val projection = songProjection()
-            selection = projection[0] + " like " + "'%" + call.argument<String>("path") + "/%'"
+        if (pPath != null) {
+            selection = songProjection[0] + " like " + "'%" + pPath + "/%'"
         }
 
+        //
+        querySongs(result, sink)
+    }
+
+    // Ignore the [Data] deprecation because this plugin support older versions.
+    @Suppress("DEPRECATION")
+    private fun querySongs(
+        result: MethodChannel.Result?,
+        sink: EventChannel.EventSink?
+    ) {
         // Query everything in background for a better performance.
         viewModelScope.launch {
             // Request permission status from the main method.
@@ -81,7 +108,11 @@ class SongsQuery : ViewModel() {
             }
 
             //Flutter UI will start, but, information still loading
-            result.success(resultSongList)
+            if (sink != null) {
+                sink.success(resultSongList)
+            } else {
+                result!!.success(resultSongList)
+            }
         }
     }
 
@@ -90,7 +121,7 @@ class SongsQuery : ViewModel() {
         withContext(Dispatchers.IO) {
 
             // Setup the cursor with [uri], [projection] and [sortType].
-            val cursor = resolver.query(uri, songProjection(), selection, null, sortType)
+            val cursor = resolver.query(uri, songProjection, selection, null, sortType)
             // Empty list.
             val songList: ArrayList<MutableMap<String, Any?>> = ArrayList()
 

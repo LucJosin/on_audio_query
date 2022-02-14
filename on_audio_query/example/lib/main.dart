@@ -15,23 +15,27 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:on_audio_query_example/src/observer/observe_songs.dart';
+import 'package:on_audio_query_example/src/query/query_songs.dart';
 
 void main() {
   runApp(
-    const MaterialApp(
-      home: Songs(),
+    MaterialApp(
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      home: const Main(),
     ),
   );
 }
 
-class Songs extends StatefulWidget {
-  const Songs({Key? key}) : super(key: key);
+class Main extends StatefulWidget {
+  const Main({Key? key}) : super(key: key);
 
   @override
-  _SongsState createState() => _SongsState();
+  _MainState createState() => _MainState();
 }
 
-class _SongsState extends State<Songs> {
+class _MainState extends State<Main> {
   final OnAudioQuery _audioQuery = OnAudioQuery();
 
   @override
@@ -47,7 +51,6 @@ class _SongsState extends State<Songs> {
       if (!permissionStatus) {
         await _audioQuery.permissionsRequest();
       }
-      setState(() {});
     }
   }
 
@@ -55,44 +58,47 @@ class _SongsState extends State<Songs> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text("OnAudioQueryExample"),
-        elevation: 2,
+        elevation: 0,
       ),
-      body: FutureBuilder<List<SongModel>>(
-        // Default values:
-        future: _audioQuery.querySongs(
-          sortType: null,
-          orderType: OrderType.ASC_OR_SMALLER,
-          uriType: UriType.EXTERNAL,
-          ignoreCase: true,
-        ),
-        builder: (context, item) {
-          // Loading content
-          if (item.data == null) return const CircularProgressIndicator();
-
-          // When you try "query" without asking for [READ] or [Library] permission
-          // the plugin will return a [Empty] list.
-          if (item.data!.isEmpty) return const Text("Nothing found!");
-
-          // You can use [item.data!] direct or you can create a:
-          // List<SongModel> songs = item.data!;
-          return ListView.builder(
-            itemCount: item.data!.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(item.data![index].title),
-                subtitle: Text(item.data![index].artist ?? "No Artist"),
-                trailing: const Icon(Icons.arrow_forward_rounded),
-                // This Widget will query/load image. Just add the id and type.
-                // You can use/create your own widget/method using [queryArtwork].
-                leading: QueryArtworkWidget(
-                  id: item.data![index].id,
-                  type: ArtworkType.AUDIO,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            const Text("Select one option:"),
+            GestureDetector(
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const QuerySongs(),
                 ),
-              );
-            },
-          );
-        },
+              ),
+              child: Container(
+                height: 200,
+                width: 200,
+                color: Theme.of(context).backgroundColor,
+                child: const Center(
+                  child: Text("Static"),
+                ),
+              ),
+            ),
+            GestureDetector(
+              onTap: () => Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const ObserveSongs(),
+                ),
+              ),
+              child: Container(
+                height: 200,
+                width: 200,
+                color: Theme.of(context).backgroundColor,
+                child: const Center(
+                  child: Text("Dynamic"),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

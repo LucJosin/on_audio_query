@@ -15,7 +15,7 @@ class QueryController(
     fun call() {
         when (call.method) {
             //Query methods
-            "querySongs" -> SongsQuery().querySongs(context, result, call)
+            "querySongs" -> SongsQuery().init(context, result = result, call = call)
             "queryAlbums" -> AlbumsQuery().queryAlbums(context, result, call)
             "queryArtists" -> ArtistsQuery().queryArtists(context, result, call)
             "queryPlaylists" -> PlaylistsQuery().queryPlaylists(context, result, call)

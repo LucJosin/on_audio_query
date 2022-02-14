@@ -13,6 +13,6 @@ fun checkAudiosFromType(sortType: Int): String {
         // Use the [TRIM] to remove all empty space from genre name.
         4 -> "TRIM(\"" + MediaStore.Audio.Media.GENRE + "\")" + " like ?"
         5 -> MediaStore.Audio.Media.GENRE_ID + " like ?"
-        else -> throw Exception("[checkAudiosFromType] value don't exist!")
+        else -> throw Exception("[checkAudiosFromType] value doesn't exist!")
     }
 }

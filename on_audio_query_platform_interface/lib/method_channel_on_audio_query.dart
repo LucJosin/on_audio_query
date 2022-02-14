@@ -24,10 +24,17 @@ import 'package:on_audio_query_platform_interface/details/on_audio_query_helper.
 
 const MethodChannel _channel = MethodChannel('com.lucasjosino.on_audio_query');
 
+const EventChannel _songsObserverChannel = EventChannel(
+  'com.lucasjosino.on_audio_query/songs_observer',
+);
+
 /// An implementation of [OnAudioQueryPlatform] that uses method channels.
 class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   /// The MethodChannel that is being used by this implementation of the plugin.
   MethodChannel get channel => _channel;
+
+  ///
+  Stream<List<SongModel>>? _onSongsObserverChanged;
 
   @override
   Future<List<SongModel>> querySongs({
@@ -50,6 +57,35 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
       },
     );
     return resultSongs.map((e) => SongModel(e)).toList();
+  }
+
+  @override
+  Stream<List<SongModel>> observeSongs({
+    SongSortType? sortType,
+    OrderType? orderType,
+    UriType? uriType,
+    bool? ignoreCase,
+    String? path,
+  }) {
+    _onSongsObserverChanged ??= _songsObserverChannel.receiveBroadcastStream(
+      {
+        "sortType": sortType?.index,
+        "orderType": orderType != null
+            ? orderType.index
+            : OrderType.ASC_OR_SMALLER.index,
+        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
+        "ignoreCase": ignoreCase ?? true,
+        "path": path,
+      },
+    ).asyncMap<List<SongModel>>(
+      (event) => Future.wait(
+        event.map<Future<SongModel>>(
+          (m) async => SongModel(m),
+        ),
+      ),
+    );
+
+    return _onSongsObserverChanged!;
   }
 
   @override
