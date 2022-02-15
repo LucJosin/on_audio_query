@@ -117,7 +117,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
     bool? ignoreCase,
     String? path,
   }) {
-    throw UnimplementedError('queryDeviceInfo() has not been implemented.');
+    throw UnimplementedError('observeSongs() has not been implemented.');
   }
 
   /// Used to return Albums Info based in [AlbumModel].
@@ -152,6 +152,38 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
     throw UnimplementedError('queryAlbums() has not been implemented.');
   }
 
+  /// Used to observer(listen) the albums.
+  ///
+  /// Parameters:
+  ///
+  /// * [orderType] is used to define if order will be Ascending or Descending.
+  /// * [sortType] is used to define list sort.
+  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
+  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
+  ///
+  /// Important:
+  ///
+  /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
+  /// * If [sortType] is null, will be set to [AlbumName].
+  /// * If [uriType] is null, will be set to [EXTERNAL].
+  /// * If [ignoreCase] is null, will be set to [true].
+  ///
+  /// Platforms:
+  ///
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `❌` | `❌` | <br>
+  ///
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  Stream<List<AlbumModel>> observeAlbums({
+    AlbumSortType? sortType,
+    OrderType? orderType,
+    UriType? uriType,
+    bool? ignoreCase,
+  }) {
+    throw UnimplementedError('observeAlbums() has not been implemented.');
+  }
+
   /// Used to return Artists Info based in [ArtistModel].
   ///
   /// Parameters:
@@ -182,6 +214,38 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
     bool? ignoreCase,
   }) {
     throw UnimplementedError('queryArtists() has not been implemented.');
+  }
+
+  /// Used to observer(listen) the artists.
+  ///
+  /// Parameters:
+  ///
+  /// * [orderType] is used to define if order will be Ascending or Descending.
+  /// * [sortType] is used to define list sort.
+  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
+  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
+  ///
+  /// Important:
+  ///
+  /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
+  /// * If [sortType] is null, will be set to [ArtistName].
+  /// * If [uriType] is null, will be set to [EXTERNAL].
+  /// * If [ignoreCase] is null, will be set to [true].
+  ///
+  /// Platforms:
+  ///
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `❌` | `❌` | <br>
+  ///
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  Stream<List<ArtistModel>> observeArtists({
+    ArtistSortType? sortType,
+    OrderType? orderType,
+    UriType? uriType,
+    bool? ignoreCase,
+  }) {
+    throw UnimplementedError('observeArtists() has not been implemented.');
   }
 
   /// Used to return Playlists Info based in [PlaylistModel].

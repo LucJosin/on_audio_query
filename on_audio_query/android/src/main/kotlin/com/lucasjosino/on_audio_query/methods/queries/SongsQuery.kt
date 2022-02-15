@@ -1,6 +1,5 @@
-package com.lucasjosino.on_audio_query.methods
+package com.lucasjosino.on_audio_query.methods.queries
 
-import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
@@ -30,9 +29,6 @@ class SongsQuery : ViewModel() {
     private lateinit var resolver: ContentResolver
     private lateinit var sortType: String
 
-    @SuppressLint("StaticFieldLeak")
-    private lateinit var context: Context
-
     fun init(
         context: Context,
         //
@@ -42,7 +38,7 @@ class SongsQuery : ViewModel() {
         sink: EventChannel.EventSink? = null,
         args: Map<*, *>? = null
     ) {
-        this.context = context; resolver = context.contentResolver
+        resolver = context.contentResolver
 
         val pSortType: Int?
         val pOrderType: Int
@@ -85,12 +81,13 @@ class SongsQuery : ViewModel() {
         }
 
         //
-        querySongs(result, sink)
+        querySongs(context, result, sink)
     }
 
     // Ignore the [Data] deprecation because this plugin support older versions.
     @Suppress("DEPRECATION")
     private fun querySongs(
+        context: Context,
         result: MethodChannel.Result?,
         sink: EventChannel.EventSink?
     ) {

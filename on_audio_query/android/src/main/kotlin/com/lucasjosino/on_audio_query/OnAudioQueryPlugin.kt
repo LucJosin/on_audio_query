@@ -19,9 +19,9 @@ import android.content.Context
 import android.media.MediaScannerConnection
 import android.os.Build
 import androidx.annotation.NonNull
-import com.lucasjosino.on_audio_query.controller.PermissionController
-import com.lucasjosino.on_audio_query.controller.QueryController
-import com.lucasjosino.on_audio_query.query.observer.*
+import com.lucasjosino.on_audio_query.controllers.PermissionController
+import com.lucasjosino.on_audio_query.controllers.QueryController
+import com.lucasjosino.on_audio_query.methods.observers.*
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -155,8 +155,8 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 result.success(
                     hashMapOf(
                         "songs_observer" to (songsObserver?.isRunning ?: false),
-                        "albums_observer" to false,
-                        "playlists_observer" to false,
+                        "albums_observer" to (albumsObserver?.isRunning ?: false),
+                        "playlists_observer" to (artistsObserver?.isRunning ?: false),
                         "artists_observer" to false,
                         "genres_observer" to false
                     )

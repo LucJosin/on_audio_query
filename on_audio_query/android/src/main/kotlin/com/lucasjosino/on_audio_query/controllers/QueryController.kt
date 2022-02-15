@@ -1,7 +1,7 @@
-package com.lucasjosino.on_audio_query.controller
+package com.lucasjosino.on_audio_query.controllers
 
 import android.content.Context
-import com.lucasjosino.on_audio_query.query.*
+import com.lucasjosino.on_audio_query.methods.queries.*
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 
@@ -15,9 +15,9 @@ class QueryController(
     fun call() {
         when (call.method) {
             //Query methods
-            "querySongs" -> SongsQuery().init(context, result = result, call = call)
-            "queryAlbums" -> AlbumsQuery().queryAlbums(context, result, call)
-            "queryArtists" -> ArtistsQuery().queryArtists(context, result, call)
+            "querySongs" -> SongsQuery().init(context, result, call)
+            "queryAlbums" -> AlbumsQuery().init(context, result, call)
+            "queryArtists" -> ArtistsQuery().init(context, result, call)
             "queryPlaylists" -> PlaylistsQuery().queryPlaylists(context, result, call)
             "queryGenres" -> GenresQuery().queryGenres(context, result, call)
             "queryArtwork" -> ArtworkQuery().queryArtwork(context, result, call)

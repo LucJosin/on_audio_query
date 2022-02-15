@@ -1,4 +1,4 @@
-package com.lucasjosino.on_audio_query.methods
+package com.lucasjosino.on_audio_query.methods.queries
 
 import android.content.ContentResolver
 import android.content.Context
@@ -10,6 +10,7 @@ import com.lucasjosino.on_audio_query.methods.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkArtistsUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkArtistSortType
 import com.lucasjosino.on_audio_query.utils.artistProjection
+import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
@@ -27,28 +28,60 @@ class ArtistsQuery : ViewModel() {
     private lateinit var resolver: ContentResolver
     private lateinit var sortType: String
 
-    /**
-     * Method to "query" all artists.
-     *
-     * Parameters:
-     *   * [context]
-     *   * [result]
-     *   * [call]
-     */
-    fun queryArtists(context: Context, result: MethodChannel.Result, call: MethodCall) {
+    //
+    fun init(
+        context: Context,
+        //
+        result: MethodChannel.Result? = null,
+        call: MethodCall? = null,
+        //
+        sink: EventChannel.EventSink? = null,
+        args: Map<*, *>? = null
+    ) {
         resolver = context.contentResolver
+
+        val pSortType: Int?
+        val pOrderType: Int
+        val pIgnoreCase: Boolean
+
+        val pUri: Int
+
+        if (sink != null && args != null) {
+            pSortType = args["sortType"] as Int?
+            pOrderType = args["orderType"] as Int
+            pIgnoreCase = args["ignoreCase"] as Boolean
+
+            pUri = args["uri"] as Int
+        } else {
+            pSortType = call!!.argument<Int>("sortType")
+            pOrderType = call.argument<Int>("orderType")!!
+            pIgnoreCase = call.argument<Boolean>("ignoreCase")!!
+
+            pUri = call.argument<Int>("uri")!!
+        }
 
         // Sort: Type and Order
         sortType = checkArtistSortType(
-            call.argument<Int>("sortType"),
-            call.argument<Int>("orderType")!!,
-            call.argument<Boolean>("ignoreCase")!!
+            pSortType,
+            pOrderType,
+            pIgnoreCase
         )
         // Check uri:
         //   * [0]: External.
         //   * [1]: Internal.
-        uri = checkArtistsUriType(call.argument<Int>("uri")!!)
+        uri = checkArtistsUriType(pUri)
 
+        queryArtists(context, result, sink)
+    }
+
+    /**
+     * Method to "query" all artists.
+     */
+    private fun queryArtists(
+        context: Context,
+        result: MethodChannel.Result?,
+        sink: EventChannel.EventSink?
+    ) {
         // Query everything in background for a better performance.
         viewModelScope.launch {
             // Request permission status from the main method.
@@ -63,7 +96,11 @@ class ArtistsQuery : ViewModel() {
             }
 
             //Flutter UI will start, but, information still loading
-            result.success(resultArtistList)
+            if (sink != null) {
+                sink.success(resultArtistList)
+            } else {
+                result!!.success(resultArtistList)
+            }
         }
     }
 

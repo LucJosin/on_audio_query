@@ -1,4 +1,4 @@
-package com.lucasjosino.on_audio_query.controller
+package com.lucasjosino.on_audio_query.controllers
 
 import android.Manifest
 import android.app.Activity

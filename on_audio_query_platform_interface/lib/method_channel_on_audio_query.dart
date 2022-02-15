@@ -27,6 +27,12 @@ const MethodChannel _channel = MethodChannel('com.lucasjosino.on_audio_query');
 const EventChannel _songsObserverChannel = EventChannel(
   'com.lucasjosino.on_audio_query/songs_observer',
 );
+const EventChannel _albumsObserverChannel = EventChannel(
+  'com.lucasjosino.on_audio_query/albums_observer',
+);
+const EventChannel _artistsObserverChannel = EventChannel(
+  'com.lucasjosino.on_audio_query/artists_observer',
+);
 
 /// An implementation of [OnAudioQueryPlatform] that uses method channels.
 class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
@@ -35,6 +41,8 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
 
   ///
   Stream<List<SongModel>>? _onSongsObserverChanged;
+  Stream<List<AlbumModel>>? _onAlbumsObserverChanged;
+  Stream<List<ArtistModel>>? _onArtistsObserverChanged;
 
   @override
   Future<List<SongModel>> querySongs({
@@ -110,6 +118,33 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   }
 
   @override
+  Stream<List<AlbumModel>> observeAlbums({
+    AlbumSortType? sortType,
+    OrderType? orderType,
+    UriType? uriType,
+    bool? ignoreCase,
+  }) {
+    _onAlbumsObserverChanged ??= _albumsObserverChannel.receiveBroadcastStream(
+      {
+        "sortType": sortType?.index,
+        "orderType": orderType != null
+            ? orderType.index
+            : OrderType.ASC_OR_SMALLER.index,
+        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
+        "ignoreCase": ignoreCase ?? true,
+      },
+    ).asyncMap<List<AlbumModel>>(
+      (event) => Future.wait(
+        event.map<Future<AlbumModel>>(
+          (m) async => AlbumModel(m),
+        ),
+      ),
+    );
+
+    return _onAlbumsObserverChanged!;
+  }
+
+  @override
   Future<List<ArtistModel>> queryArtists({
     ArtistSortType? sortType,
     OrderType? orderType,
@@ -128,6 +163,34 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
       },
     );
     return resultArtists.map((artistInfo) => ArtistModel(artistInfo)).toList();
+  }
+
+  @override
+  Stream<List<ArtistModel>> observeArtists({
+    ArtistSortType? sortType,
+    OrderType? orderType,
+    UriType? uriType,
+    bool? ignoreCase,
+  }) {
+    _onArtistsObserverChanged ??=
+        _artistsObserverChannel.receiveBroadcastStream(
+      {
+        "sortType": sortType?.index,
+        "orderType": orderType != null
+            ? orderType.index
+            : OrderType.ASC_OR_SMALLER.index,
+        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
+        "ignoreCase": ignoreCase ?? true,
+      },
+    ).asyncMap<List<ArtistModel>>(
+      (event) => Future.wait(
+        event.map<Future<ArtistModel>>(
+          (m) async => ArtistModel(m),
+        ),
+      ),
+    );
+
+    return _onArtistsObserverChanged!;
   }
 
   @override
