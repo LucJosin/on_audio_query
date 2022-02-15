@@ -10,6 +10,7 @@ import com.lucasjosino.on_audio_query.methods.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkPlaylistsUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkGenreSortType
 import com.lucasjosino.on_audio_query.utils.playlistProjection
+import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
@@ -27,28 +28,61 @@ class PlaylistsQuery : ViewModel() {
     private lateinit var resolver: ContentResolver
     private lateinit var sortType: String
 
-    /**
-     * Method to "query" all playlists.
-     *
-     * Parameters:
-     *   * [context]
-     *   * [result]
-     *   * [call]
-     */
-    fun queryPlaylists(context: Context, result: MethodChannel.Result, call: MethodCall) {
+    //
+    fun init(
+        context: Context,
+        //
+        result: MethodChannel.Result? = null,
+        call: MethodCall? = null,
+        //
+        sink: EventChannel.EventSink? = null,
+        args: Map<*, *>? = null
+    ) {
         resolver = context.contentResolver
+
+        val pSortType: Int?
+        val pOrderType: Int
+        val pIgnoreCase: Boolean
+
+        val pUri: Int
+
+        if (sink != null && args != null) {
+            pSortType = args["sortType"] as Int?
+            pOrderType = args["orderType"] as Int
+            pIgnoreCase = args["ignoreCase"] as Boolean
+
+            pUri = args["uri"] as Int
+        } else {
+            pSortType = call!!.argument<Int>("sortType")
+            pOrderType = call.argument<Int>("orderType")!!
+            pIgnoreCase = call.argument<Boolean>("ignoreCase")!!
+
+            pUri = call.argument<Int>("uri")!!
+        }
 
         // Sort: Type and Order.
         sortType = checkGenreSortType(
-            call.argument<Int>("sortType"),
-            call.argument<Int>("orderType")!!,
-            call.argument<Boolean>("ignoreCase")!!
+            pSortType,
+            pOrderType,
+            pIgnoreCase
         )
         // Check uri:
         //   * [0]: External.
         //   * [1]: Internal.
-        uri = checkPlaylistsUriType(call.argument<Int>("uri")!!)
+        uri = checkPlaylistsUriType(pUri)
 
+        //
+        queryPlaylists(context, result, sink)
+    }
+
+    /**
+     * Method to "query" all playlists.
+     */
+    private fun queryPlaylists(
+        context: Context,
+        result: MethodChannel.Result?,
+        sink: EventChannel.EventSink?
+    ) {
         // Query everything in background for a better performance.
         viewModelScope.launch {
             // Request permission status from the main method.
@@ -63,7 +97,11 @@ class PlaylistsQuery : ViewModel() {
             }
 
             //Flutter UI will start, but, information still loading
-            result.success(resultPlaylistList)
+            if (sink != null) {
+                sink.success(resultPlaylistList)
+            } else {
+                result!!.success(resultPlaylistList)
+            }
         }
     }
 

@@ -10,6 +10,7 @@ import com.lucasjosino.on_audio_query.methods.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkGenresUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkGenreSortType
 import com.lucasjosino.on_audio_query.utils.genreProjection
+import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
@@ -27,28 +28,61 @@ class GenresQuery : ViewModel() {
     private lateinit var sortType: String
     private lateinit var resolver: ContentResolver
 
-    /**
-     * Method to "query" all genres.
-     *
-     * Parameters:
-     *   * [context]
-     *   * [result]
-     *   * [call]
-     */
-    fun queryGenres(context: Context, result: MethodChannel.Result, call: MethodCall) {
+    //
+    fun init(
+        context: Context,
+        //
+        result: MethodChannel.Result? = null,
+        call: MethodCall? = null,
+        //
+        sink: EventChannel.EventSink? = null,
+        args: Map<*, *>? = null
+    ) {
         resolver = context.contentResolver
+
+        val pSortType: Int?
+        val pOrderType: Int
+        val pIgnoreCase: Boolean
+
+        val pUri: Int
+
+        if (sink != null && args != null) {
+            pSortType = args["sortType"] as Int?
+            pOrderType = args["orderType"] as Int
+            pIgnoreCase = args["ignoreCase"] as Boolean
+
+            pUri = args["uri"] as Int
+        } else {
+            pSortType = call!!.argument<Int>("sortType")
+            pOrderType = call.argument<Int>("orderType")!!
+            pIgnoreCase = call.argument<Boolean>("ignoreCase")!!
+
+            pUri = call.argument<Int>("uri")!!
+        }
 
         // Sort: Type and Order.
         sortType = checkGenreSortType(
-            call.argument<Int>("sortType"),
-            call.argument<Int>("orderType")!!,
-            call.argument<Boolean>("ignoreCase")!!
+            pSortType,
+            pOrderType,
+            pIgnoreCase
         )
         // Check uri:
         //   * [0]: External.
         //   * [1]: Internal.
-        uri = checkGenresUriType(call.argument<Int>("uri")!!)
+        uri = checkGenresUriType(pUri)
 
+        //
+        queryGenres(context, result, sink)
+    }
+
+    /**
+     * Method to "query" all genres.
+     */
+    private fun queryGenres(
+        context: Context,
+        result: MethodChannel.Result?,
+        sink: EventChannel.EventSink?
+    ) {
         // Query everything in background for a better performance.
         viewModelScope.launch {
             // Request permission status from the main method.
@@ -63,7 +97,11 @@ class GenresQuery : ViewModel() {
             }
 
             //Flutter UI will start, but, information still loading
-            result.success(resultGenreList)
+            if (sink != null) {
+                sink.success(resultGenreList)
+            } else {
+                result!!.success(resultGenreList)
+            }
         }
     }
 

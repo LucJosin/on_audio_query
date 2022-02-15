@@ -156,9 +156,9 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                     hashMapOf(
                         "songs_observer" to (songsObserver?.isRunning ?: false),
                         "albums_observer" to (albumsObserver?.isRunning ?: false),
-                        "playlists_observer" to (artistsObserver?.isRunning ?: false),
-                        "artists_observer" to false,
-                        "genres_observer" to false
+                        "artists_observer" to (artistsObserver?.isRunning ?: false),
+                        "playlists_observer" to (playlistsObserver?.isRunning ?: false),
+                        "genres_observer" to (genresObserver?.isRunning ?: false),
                     )
                 )
             }

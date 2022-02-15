@@ -33,6 +33,12 @@ const EventChannel _albumsObserverChannel = EventChannel(
 const EventChannel _artistsObserverChannel = EventChannel(
   'com.lucasjosino.on_audio_query/artists_observer',
 );
+const EventChannel _playlistsObserverChannel = EventChannel(
+  'com.lucasjosino.on_audio_query/playlists_observer',
+);
+const EventChannel _genresObserverChannel = EventChannel(
+  'com.lucasjosino.on_audio_query/genres_observer',
+);
 
 /// An implementation of [OnAudioQueryPlatform] that uses method channels.
 class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
@@ -43,6 +49,8 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   Stream<List<SongModel>>? _onSongsObserverChanged;
   Stream<List<AlbumModel>>? _onAlbumsObserverChanged;
   Stream<List<ArtistModel>>? _onArtistsObserverChanged;
+  Stream<List<PlaylistModel>>? _onPlaylistsObserverChanged;
+  Stream<List<GenreModel>>? _onGenresObserverChanged;
 
   @override
   Future<List<SongModel>> querySongs({
@@ -217,6 +225,34 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   }
 
   @override
+  Stream<List<PlaylistModel>> observePlaylists({
+    PlaylistSortType? sortType,
+    OrderType? orderType,
+    UriType? uriType,
+    bool? ignoreCase,
+  }) {
+    _onPlaylistsObserverChanged ??=
+        _playlistsObserverChannel.receiveBroadcastStream(
+      {
+        "sortType": sortType?.index,
+        "orderType": orderType != null
+            ? orderType.index
+            : OrderType.ASC_OR_SMALLER.index,
+        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
+        "ignoreCase": ignoreCase ?? true,
+      },
+    ).asyncMap<List<PlaylistModel>>(
+      (event) => Future.wait(
+        event.map<Future<PlaylistModel>>(
+          (m) async => PlaylistModel(m),
+        ),
+      ),
+    );
+
+    return _onPlaylistsObserverChanged!;
+  }
+
+  @override
   Future<List<GenreModel>> queryGenres({
     GenreSortType? sortType,
     OrderType? orderType,
@@ -235,6 +271,33 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
       },
     );
     return resultGenres.map((genreInfo) => GenreModel(genreInfo)).toList();
+  }
+
+  @override
+  Stream<List<GenreModel>> observeGenres({
+    GenreSortType? sortType,
+    OrderType? orderType,
+    UriType? uriType,
+    bool? ignoreCase,
+  }) {
+    _onGenresObserverChanged ??= _genresObserverChannel.receiveBroadcastStream(
+      {
+        "sortType": sortType?.index,
+        "orderType": orderType != null
+            ? orderType.index
+            : OrderType.ASC_OR_SMALLER.index,
+        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
+        "ignoreCase": ignoreCase ?? true,
+      },
+    ).asyncMap<List<GenreModel>>(
+      (event) => Future.wait(
+        event.map<Future<GenreModel>>(
+          (m) async => GenreModel(m),
+        ),
+      ),
+    );
+
+    return _onGenresObserverChanged!;
   }
 
   @override

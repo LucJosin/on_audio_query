@@ -304,6 +304,43 @@ class OnAudioQuery {
     );
   }
 
+  /// Used to observer(listen) the playlists.
+  ///
+  /// Parameters:
+  ///
+  /// * [orderType] is used to define if order will be Ascending or Descending.
+  /// * [sortType] is used to define list sort.
+  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
+  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
+  ///
+  /// Important:
+  ///
+  /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
+  /// * If [sortType] is null, will be set to [PlaylistName].
+  /// * If [uriType] is null, will be set to [EXTERNAL].
+  /// * If [ignoreCase] is null, will be set to [true].
+  ///
+  /// Platforms:
+  ///
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `❌` | `❌` | <br>
+  ///
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  Stream<List<PlaylistModel>> observePlaylists({
+    PlaylistSortType? sortType,
+    OrderType? orderType,
+    UriType? uriType,
+    bool? ignoreCase,
+  }) {
+    return platform.observePlaylists(
+      sortType: sortType,
+      orderType: orderType,
+      uriType: uriType,
+      ignoreCase: ignoreCase,
+    );
+  }
+
   /// Used to return Genres Info based in [GenreModel].
   ///
   /// Parameters:
@@ -334,6 +371,42 @@ class OnAudioQuery {
     bool? ignoreCase,
   }) async {
     return platform.queryGenres(
+      sortType: sortType,
+      orderType: orderType,
+      uriType: uriType,
+      ignoreCase: ignoreCase,
+    );
+  }
+
+  /// Used to observer(listen) the genres.
+  ///
+  /// Parameters:
+  ///
+  /// * [orderType] is used to define if order will be Ascending or Descending.
+  /// * [sortType] is used to define list sort.
+  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
+  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
+  ///
+  /// Important:
+  ///
+  /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
+  /// * If [sortType] is null, will be set to [GenreName].
+  /// * If [uriType] is null, will be set to [EXTERNAL].
+  ///
+  /// Platforms:
+  ///
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `❌` | `❌` | <br>
+  ///
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  Stream<List<GenreModel>> observeGenres({
+    GenreSortType? sortType,
+    OrderType? orderType,
+    UriType? uriType,
+    bool? ignoreCase,
+  }) {
+    return platform.observeGenres(
       sortType: sortType,
       orderType: orderType,
       uriType: uriType,
