@@ -1,4 +1,4 @@
-package com.lucasjosino.on_audio_query.query
+package com.lucasjosino.on_audio_query.methods
 
 import android.annotation.SuppressLint
 import android.content.ContentResolver
@@ -7,8 +7,8 @@ import android.net.Uri
 import android.provider.MediaStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lucasjosino.on_audio_query.controller.PermissionController
-import com.lucasjosino.on_audio_query.query.helper.QueryHelper
+import com.lucasjosino.on_audio_query.controllers.PermissionController
+import com.lucasjosino.on_audio_query.methods.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.*
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel

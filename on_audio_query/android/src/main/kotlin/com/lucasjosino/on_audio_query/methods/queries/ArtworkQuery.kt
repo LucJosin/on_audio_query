@@ -1,4 +1,4 @@
-package com.lucasjosino.on_audio_query.query
+package com.lucasjosino.on_audio_query.methods
 
 import android.content.ContentResolver
 import android.content.ContentUris
@@ -11,8 +11,8 @@ import android.os.Build
 import android.util.Size
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lucasjosino.on_audio_query.controller.PermissionController
-import com.lucasjosino.on_audio_query.query.helper.QueryHelper
+import com.lucasjosino.on_audio_query.controllers.PermissionController
+import com.lucasjosino.on_audio_query.methods.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkArtworkFormat
 import com.lucasjosino.on_audio_query.types.checkArtworkType
 import io.flutter.plugin.common.MethodCall

@@ -1,4 +1,4 @@
-package com.lucasjosino.on_audio_query.query.observer
+package com.lucasjosino.on_audio_query.query.observers
 
 import android.content.Context
 import android.database.ContentObserver

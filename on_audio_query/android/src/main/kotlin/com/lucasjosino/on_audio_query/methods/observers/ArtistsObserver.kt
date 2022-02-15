@@ -1,10 +1,10 @@
-package com.lucasjosino.on_audio_query.query.observer
+package com.lucasjosino.on_audio_query.query.observers
 
 import android.content.Context
 import android.database.ContentObserver
 import io.flutter.plugin.common.EventChannel
 
-class PlaylistsObserver(
+class ArtistsObserver(
     private val context: Context
 ) : ContentObserver(null), EventChannel.StreamHandler {
 
