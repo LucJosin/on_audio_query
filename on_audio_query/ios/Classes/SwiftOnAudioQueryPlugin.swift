@@ -8,6 +8,15 @@ public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
         let channel = FlutterMethodChannel(name: "com.lucasjosino.on_audio_query", binaryMessenger: registrar.messenger())
         let instance = SwiftOnAudioQueryPlugin()
+        
+        let mediaObserver = FlutterEventChannel(
+            name: "com.lucasjosino.on_audio_query/songs_observer",
+            binaryMessenger: registrar.messenger()
+        )
+        
+        let mo = SongsObserver()
+        mediaObserver.setStreamHandler(mo)
+        
         registrar.addMethodCallDelegate(instance, channel: channel)
     }
     

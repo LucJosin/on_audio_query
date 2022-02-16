@@ -1,7 +1,7 @@
 import Flutter
 import MediaPlayer
 
-class PlaylistsController {
+class PlaylistController {
     var args: [String: Any]
     var result: FlutterResult
     

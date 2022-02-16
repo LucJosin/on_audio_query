@@ -1,13 +1,15 @@
 import Flutter
 import MediaPlayer
 
-class AudioQuery {
+class SongsQuery {
     var args: [String: Any]
-    var result: FlutterResult
+    var result: FlutterResult?
+    var sink: FlutterEventSink?
     
-    init(call: FlutterMethodCall, result: @escaping FlutterResult) {
+    init(call: FlutterMethodCall?, result: FlutterResult?, sink: FlutterEventSink? = nil, args: [String: Any]? = nil) {
         // To make life easy, add all arguments inside a map.
-        self.args = call.arguments as! [String: Any]
+        self.args = sink != nil ? args! : call!.arguments as! [String: Any]
+        self.sink = sink
         self.result = result
     }
     
@@ -36,7 +38,11 @@ class AudioQuery {
             loadSongs(cursor: cursor)
         } else {
             // There's no permission so, return empty to avoid crashes.
-            result([])
+            if sink != nil {
+                sink!([])
+            } else {
+                result!([])
+            }
         }
     }
     
@@ -60,7 +66,12 @@ class AudioQuery {
             DispatchQueue.main.async {
                 // Here we'll check the "custom" sort and define a order to the list.
                 let finalList = formatSongList(args: self.args, allSongs: listOfSongs)
-                self.result(finalList)
+                if self.sink != nil {
+                    print("finalList - sink")
+                    self.sink!(finalList)
+                } else {
+                    self.result!(finalList)
+                }
             }
         }
     }
