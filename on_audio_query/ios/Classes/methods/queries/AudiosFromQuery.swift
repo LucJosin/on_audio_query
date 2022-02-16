@@ -1,7 +1,7 @@
 import Flutter
 import MediaPlayer
 
-class OnAudiosFromQuery {
+class AudiosFromQuery {
     var args: [String: Any]
     var result: FlutterResult
     var type: Int = -1

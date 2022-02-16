@@ -1,7 +1,7 @@
 import Flutter
 import MediaPlayer
 
-class OnArtistsQuery {
+class AlbumsQuery {
     var args: [String: Any]
     var result: FlutterResult
     
@@ -11,13 +11,16 @@ class OnArtistsQuery {
         self.result = result
     }
     
-    func queryArtists() {
-        // Choose the type(To match android side, let's call "cursor").
-        let cursor = MPMediaQuery.artists()
+    func queryAlbums() {
+        // The sortType, this method will never be will.
+        let sortType = args["sortType"] as? Int ?? 0
         
-        // We don't need to define a sortType here. [IOS] only support
-        // the [Artist]. The others will be sorted "manually" using
-        // [formatSongList] before send to Dart.
+        // Choose the type(To match android side, let's call "cursor").
+        let cursor = MPMediaQuery.albums()
+        // Using native sort from [IOS] you can only use the [Album] and [Artist].
+        // The others will be sorted "manually" using [formatAlbumList] before
+        // send to Dart.
+        cursor.groupingType = checkAlbumSortType(sortType: sortType)
         
         // This filter will avoid audios/songs outside phone library(cloud).
         let cloudFilter = MPMediaPropertyPredicate.init(
@@ -30,25 +33,24 @@ class OnArtistsQuery {
         let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
         if hasPermission {
             // Query everything in background for a better performance.
-            loadArtists(cursor: cursor.collections)
+            loadAlbums(cursor: cursor.collections)
         } else {
             // There's no permission so, return empty to avoid crashes.
             result([])
         }
     }
     
-    private func loadArtists(cursor: [MPMediaItemCollection]!) {
+    private func loadAlbums(cursor: [MPMediaItemCollection]!) {
         DispatchQueue.global(qos: .userInitiated).async {
-            var listOfArtists: [[String: Any?]] = Array()
+            var listOfAlbums: [[String: Any?]] = Array()
             
-            // For each item(artist) inside this "cursor", take one and "format"
+            // For each item(album) inside this "cursor", take one and "format"
             // into a [Map<String, dynamic>], all keys are based on [Android]
             // platforms so, if you change some key, will have to change the [Android] too.
-            for artist in cursor {
-                // If the first song file don't has a assetURL, is a Cloud item.
-                if !artist.items[0].isCloudItem && artist.items[0].assetURL != nil {
-                    let artistData = loadArtistItem(artist: artist)
-                    listOfArtists.append(artistData)
+            for album in cursor {
+                if !album.items[0].isCloudItem && album.items[0].assetURL != nil {
+                    let albumData = loadAlbumItem(album: album)
+                    listOfAlbums.append(albumData)
                 }
             }
             
@@ -56,7 +58,7 @@ class OnArtistsQuery {
             // inside the main thread).
             DispatchQueue.main.async {
                 // Here we'll check the "custom" sort and define a order to the list.
-                let finalList = formatArtistList(args: self.args, allArtists: listOfArtists)
+                let finalList = formatAlbumList(args: self.args, allAlbums: listOfAlbums)
                 self.result(finalList)
             }
         }

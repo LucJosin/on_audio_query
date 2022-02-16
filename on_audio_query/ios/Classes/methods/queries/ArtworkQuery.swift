@@ -1,7 +1,7 @@
 import Flutter
 import MediaPlayer
 
-class OnArtworkQuery {
+class ArtworkQuery {
     var args: [String: Any]
     var result: FlutterResult
     

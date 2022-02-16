@@ -1,7 +1,7 @@
 import Flutter
 import MediaPlayer
 
-class OnGenresQuery {
+class PlaylistsQuery {
     var args: [String: Any]
     var result: FlutterResult
     
@@ -11,13 +11,11 @@ class OnGenresQuery {
         self.result = result
     }
     
-    func queryGenres() {
+    func queryPlaylists() {
         // Choose the type(To match android side, let's call "cursor").
-        let cursor = MPMediaQuery.genres()
+        let cursor = MPMediaQuery.playlists()
         
-        // We don't need to define a sortType here. [IOS] only support
-        // the [Artist]. The others will be sorted "manually" using
-        // [formatSongList] before send to Dart.
+        // TODO: Add sort type to [queryPlaylists].
         
         // This filter will avoid audios/songs outside phone library(cloud).
         let cloudFilter = MPMediaPropertyPredicate.init(
@@ -30,38 +28,38 @@ class OnGenresQuery {
         let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
         if hasPermission {
             // Query everything in background for a better performance.
-            loadGenres(cursor: cursor.collections)
+            loadPlaylists(cursor: cursor.collections)
         } else {
             // There's no permission so, return empty to avoid crashes.
             result([])
         }
     }
     
-    private func loadGenres(cursor: [MPMediaItemCollection]!) {
+    private func loadPlaylists(cursor: [MPMediaItemCollection]!) {
         DispatchQueue.global(qos: .userInitiated).async {
-            var listOfGenres: [[String: Any?]] = Array()
+            var listOfPlaylists: [[String: Any?]] = Array()
             
-            // For each item(genre) inside this "cursor", take one and "format"
+            // For each item(playlist) inside this "cursor", take one and "format"
             // into a [Map<String, dynamic>], all keys are based on [Android]
             // platforms so, if you change some key, will have to change the [Android] too.
-            for genre in cursor {
-                if !genre.items[0].isCloudItem && genre.items[0].assetURL != nil {
-                    var genreData = loadGenreItem(genre: genre)
+            for playlist in cursor {
+                // If the first song file don't has a assetURL, is a Cloud item.
+                if !playlist.items[0].isCloudItem && playlist.items[0].assetURL != nil {
+                    var playlistData = loadPlaylistItem(playlist: playlist)
                     
                     // Count and add the number of songs for every genre.
-                    let tmpMediaCount = getMediaCount(type: 0, id: genreData["_id"] as! UInt64)
-                    genreData["num_of_songs"] = tmpMediaCount
+                    let tmpMediaCount = getMediaCount(type: 1, id: playlistData["_id"] as! UInt64)
+                    playlistData["num_of_songs"] = tmpMediaCount
                     
-                    listOfGenres.append(genreData)
+                    listOfPlaylists.append(playlistData)
                 }
             }
             
             // After finish the "query", go back to the "main" thread(You can only call flutter
             // inside the main thread).
             DispatchQueue.main.async {
-                // Here we'll check the "custom" sort and define a order to the list.
-                let finalList = formatGenreList(args: self.args, allGenres: listOfGenres)
-                self.result(finalList)
+                // TODO: Add sort type to [queryPlaylists].
+                self.result(listOfPlaylists)
             }
         }
     }

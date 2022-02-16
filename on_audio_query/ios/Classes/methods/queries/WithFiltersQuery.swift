@@ -1,7 +1,7 @@
 import Flutter
 import MediaPlayer
 
-class OnWithFiltersQuery {
+class WithFiltersQuery {
     var args: [String: Any]
     var result: FlutterResult
     

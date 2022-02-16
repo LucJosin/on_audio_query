@@ -37,10 +37,16 @@ public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
         //   * Version (IOS version)
         //   * Type (IOS)
         case "queryDeviceInfo":
-            queryDeviceInfo(result: result)
+            result(
+                [
+                    "device_model": UIDevice.current.model,
+                    "device_sys_type": UIDevice.current.systemName,
+                    "device_sys_version": UIDevice.current.systemVersion,
+                ]
+            )
         default:
             //
-            OnAudioController(call: call, result: result).chooseMethod()
+            AudioController(call: call, result: result).chooseMethod()
         }
     }
     
