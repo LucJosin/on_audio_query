@@ -3,11 +3,17 @@ import MediaPlayer
 
 class GenresQuery {
     var args: [String: Any]
-    var result: FlutterResult
+    var result: FlutterResult?
+    var sink: FlutterEventSink?
     
-    init(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        // To make life easy, add all arguments inside a map.
-        self.args = call.arguments as! [String: Any]
+    init(
+        call: FlutterMethodCall? = nil,
+        result: FlutterResult? = nil,
+        sink: FlutterEventSink? = nil,
+        args: [String: Any]? = nil) {
+        // Add all arguments inside a map.
+        self.args = sink != nil ? args! : call!.arguments as! [String: Any]
+        self.sink = sink
         self.result = result
     }
     
@@ -33,7 +39,11 @@ class GenresQuery {
             loadGenres(cursor: cursor.collections)
         } else {
             // There's no permission so, return empty to avoid crashes.
-            result([])
+            if sink != nil {
+                sink!([])
+            } else {
+                result!([])
+            }
         }
     }
     
@@ -61,7 +71,11 @@ class GenresQuery {
             DispatchQueue.main.async {
                 // Here we'll check the "custom" sort and define a order to the list.
                 let finalList = formatGenreList(args: self.args, allGenres: listOfGenres)
-                self.result(finalList)
+                if self.sink != nil {
+                    self.sink!(finalList)
+                } else {
+                    self.result!(finalList)
+                }
             }
         }
     }

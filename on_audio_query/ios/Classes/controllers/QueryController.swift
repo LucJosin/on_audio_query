@@ -1,6 +1,6 @@
 import Flutter
 
-public class AudioController {
+public class QueryController {
     var call: FlutterMethodCall
     var result: FlutterResult
     

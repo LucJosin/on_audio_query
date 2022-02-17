@@ -3,11 +3,17 @@ import MediaPlayer
 
 class AlbumsQuery {
     var args: [String: Any]
-    var result: FlutterResult
+    var result: FlutterResult?
+    var sink: FlutterEventSink?
     
-    init(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        // To make life easy, add all arguments inside a map.
-        self.args = call.arguments as! [String: Any]
+    init(
+        call: FlutterMethodCall? = nil,
+        result: FlutterResult? = nil,
+        sink: FlutterEventSink? = nil,
+        args: [String: Any]? = nil) {
+        // Add all arguments inside a map.
+        self.args = sink != nil ? args! : call!.arguments as! [String: Any]
+        self.sink = sink
         self.result = result
     }
     
@@ -36,7 +42,11 @@ class AlbumsQuery {
             loadAlbums(cursor: cursor.collections)
         } else {
             // There's no permission so, return empty to avoid crashes.
-            result([])
+            if sink != nil {
+                sink!([])
+            } else {
+                result!([])
+            }
         }
     }
     
@@ -59,7 +69,11 @@ class AlbumsQuery {
             DispatchQueue.main.async {
                 // Here we'll check the "custom" sort and define a order to the list.
                 let finalList = formatAlbumList(args: self.args, allAlbums: listOfAlbums)
-                self.result(finalList)
+                if self.sink != nil {
+                    self.sink!(finalList)
+                } else {
+                    self.result!(finalList)
+                }
             }
         }
     }

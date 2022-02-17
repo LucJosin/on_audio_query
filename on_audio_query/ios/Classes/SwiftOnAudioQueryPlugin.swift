@@ -4,20 +4,25 @@ import MediaPlayer
 
 public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
     
+    // Observers
+    private var songsObserver: SongsObserver? = nil
+    private var albumsObserver: AlbumsObserver? = nil
+    private var artistsObserver: ArtistsObserver? = nil
+    private var playlistsObserver: PlaylistsObserver? = nil
+    private var genresObserver: GenresObserver? = nil
+    
     // Dart <-> Swift communication.
     public static func register(with registrar: FlutterPluginRegistrar) {
-        let channel = FlutterMethodChannel(name: "com.lucasjosino.on_audio_query", binaryMessenger: registrar.messenger())
-        let instance = SwiftOnAudioQueryPlugin()
-        
-        let mediaObserver = FlutterEventChannel(
-            name: "com.lucasjosino.on_audio_query/songs_observer",
+        // Setup the method channel communication.
+        let channel = FlutterMethodChannel(
+            name: "com.lucasjosino.on_audio_query",
             binaryMessenger: registrar.messenger()
         )
-        
-        let mo = SongsObserver()
-        mediaObserver.setStreamHandler(mo)
-        
+        let instance = SwiftOnAudioQueryPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
+        
+        // Setup all event channel communication.
+        instance.setUpEventChannel(binary: registrar.messenger())
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
@@ -53,9 +58,19 @@ public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
                     "device_sys_version": UIDevice.current.systemVersion,
                 ]
             )
+        case "observersStatus":
+            result(
+                [
+                    "songs_observer": songsObserver?.isRunning ?? false,
+                    "albums_observer": albumsObserver?.isRunning ?? false,
+                    "artists_observer": artistsObserver?.isRunning ?? false,
+                    "playlists_observer": playlistsObserver?.isRunning ?? false,
+                    "genres_observer": genresObserver?.isRunning ?? false,
+                ]
+            )
         default:
-            //
-            AudioController(call: call, result: result).chooseMethod()
+            // All others methods
+            QueryController(call: call, result: result).chooseMethod()
         }
     }
     
@@ -66,5 +81,47 @@ public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
         } else {
             return false
         }
+    }
+    
+    private func setUpEventChannel(binary: FlutterBinaryMessenger) {
+        // Songs channel.
+        let songsChannel = FlutterEventChannel(
+            name: "com.lucasjosino.on_audio_query/songs_observer",
+            binaryMessenger: binary
+        )
+        songsObserver = SongsObserver()
+        songsChannel.setStreamHandler(songsObserver)
+        
+        // Albums channel.
+        let albumsChannel = FlutterEventChannel(
+            name: "com.lucasjosino.on_audio_query/albums_observer",
+            binaryMessenger: binary
+        )
+        albumsObserver = AlbumsObserver()
+        albumsChannel.setStreamHandler(albumsObserver)
+        
+        // Artists channel.
+        let artistsChannel = FlutterEventChannel(
+            name: "com.lucasjosino.on_audio_query/artists_observer",
+            binaryMessenger: binary
+        )
+        artistsObserver = ArtistsObserver()
+        artistsChannel.setStreamHandler(artistsObserver)
+        
+        // Playlists channel.
+        let playlistsChannel = FlutterEventChannel(
+            name: "com.lucasjosino.on_audio_query/playlists_observer",
+            binaryMessenger: binary
+        )
+        playlistsObserver = PlaylistsObserver()
+        playlistsChannel.setStreamHandler(playlistsObserver)
+        
+        // Genres channel.
+        let genresChannel = FlutterEventChannel(
+            name: "com.lucasjosino.on_audio_query/genres_observer",
+            binaryMessenger: binary
+        )
+        genresObserver = GenresObserver()
+        genresChannel.setStreamHandler(genresObserver)
     }
 }

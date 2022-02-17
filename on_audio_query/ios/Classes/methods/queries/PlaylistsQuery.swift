@@ -3,11 +3,17 @@ import MediaPlayer
 
 class PlaylistsQuery {
     var args: [String: Any]
-    var result: FlutterResult
+    var result: FlutterResult?
+    var sink: FlutterEventSink?
     
-    init(call: FlutterMethodCall, result: @escaping FlutterResult) {
-        // To make life easy, add all arguments inside a map.
-        self.args = call.arguments as! [String: Any]
+    init(
+        call: FlutterMethodCall? = nil,
+        result: FlutterResult? = nil,
+        sink: FlutterEventSink? = nil,
+        args: [String: Any]? = nil) {
+        // Add all arguments inside a map.
+        self.args = sink != nil ? args! : call!.arguments as! [String: Any]
+        self.sink = sink
         self.result = result
     }
     
@@ -31,7 +37,11 @@ class PlaylistsQuery {
             loadPlaylists(cursor: cursor.collections)
         } else {
             // There's no permission so, return empty to avoid crashes.
-            result([])
+            if sink != nil {
+                sink!([])
+            } else {
+                result!([])
+            }
         }
     }
     
@@ -59,7 +69,11 @@ class PlaylistsQuery {
             // inside the main thread).
             DispatchQueue.main.async {
                 // TODO: Add sort type to [queryPlaylists].
-                self.result(listOfPlaylists)
+                if self.sink != nil {
+                    self.sink!(listOfPlaylists)
+                } else {
+                    self.result!(listOfPlaylists)
+                }
             }
         }
     }

@@ -6,12 +6,16 @@ class SongsQuery {
     var result: FlutterResult?
     var sink: FlutterEventSink?
     
-    init(call: FlutterMethodCall?, result: FlutterResult?, sink: FlutterEventSink? = nil, args: [String: Any]? = nil) {
-        // To make life easy, add all arguments inside a map.
-        self.args = sink != nil ? args! : call!.arguments as! [String: Any]
-        self.sink = sink
-        self.result = result
-    }
+    init(
+        call: FlutterMethodCall? = nil,
+        result: FlutterResult? = nil,
+        sink: FlutterEventSink? = nil,
+        args: [String: Any]? = nil) {
+            // Add all arguments inside a map.
+            self.args = sink != nil ? args! : call!.arguments as! [String: Any]
+            self.sink = sink
+            self.result = result
+        }
     
     func querySongs() {
         // The sortType.
@@ -67,7 +71,6 @@ class SongsQuery {
                 // Here we'll check the "custom" sort and define a order to the list.
                 let finalList = formatSongList(args: self.args, allSongs: listOfSongs)
                 if self.sink != nil {
-                    print("finalList - sink")
                     self.sink!(finalList)
                 } else {
                     self.result!(finalList)
