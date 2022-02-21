@@ -615,7 +615,7 @@ class OnAudioQuery {
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
-  Future<bool> createPlaylist(
+  Future<int?> createPlaylist(
     String name, {
     String? author,
     String? desc,
