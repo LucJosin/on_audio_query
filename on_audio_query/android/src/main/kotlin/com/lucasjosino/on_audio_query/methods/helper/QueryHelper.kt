@@ -44,6 +44,7 @@ class QueryHelper {
                 }
             }
             "_size",
+            "audio_id",
             "bookmark",
             "date_added",
             "date_modified",

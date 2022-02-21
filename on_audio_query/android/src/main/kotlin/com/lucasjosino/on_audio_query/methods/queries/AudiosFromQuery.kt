@@ -6,6 +6,7 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lucasjosino.on_audio_query.controllers.PermissionController
@@ -27,6 +28,7 @@ class AudiosFromQuery : ViewModel() {
     private val uri: Uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
     private var pId = 0
     private var pUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
+    private var isPlaylist = false
 
     // None of this methods can be null.
     @SuppressLint("StaticFieldLeak")
@@ -153,7 +155,10 @@ class AudiosFromQuery : ViewModel() {
         //
         pUri = if (type == 4 || type == 5) {
             MediaStore.Audio.Genres.Members.getContentUri("external", pId.toLong())
-        } else MediaStore.Audio.Playlists.Members.getContentUri("external", pId.toLong())
+        } else {
+            isPlaylist = true
+            MediaStore.Audio.Playlists.Members.getContentUri("external", pId.toLong())
+        }
 
         // Query everything in background for a better performance.
         viewModelScope.launch {
@@ -175,9 +180,20 @@ class AudiosFromQuery : ViewModel() {
 
     private suspend fun loadSongsFromPlaylistOrGenre(): ArrayList<MutableMap<String, Any?>> =
         withContext(Dispatchers.IO) {
-
             val songsFrom: ArrayList<MutableMap<String, Any?>> = ArrayList()
-            val cursor = resolver.query(pUri, songProjection, null, null, sortType)
+
+            // If the [uri] is from a playlist. Add a extra 'projection'.
+            var projection: Array<String> = arrayOf()
+            if (isPlaylist) {
+                val p = songProjection.toCollection(ArrayList())
+                p.add(MediaStore.Audio.Playlists.Members.AUDIO_ID)
+                projection = p.toTypedArray()
+            }
+
+            //
+            val cursor = resolver.query(pUri, projection, null, null, sortType)
+
+            //
             while (cursor != null && cursor.moveToNext()) {
                 val tempData: MutableMap<String, Any?> = HashMap()
                 for (media in cursor.columnNames) {
@@ -188,9 +204,14 @@ class AudiosFromQuery : ViewModel() {
                 val tempExtraData = helper.loadSongExtraInfo(uri, tempData)
                 tempData.putAll(tempExtraData)
 
+                //
                 songsFrom.add(tempData)
             }
+
+            //
             cursor?.close()
+
+            //
             return@withContext songsFrom
         }
 

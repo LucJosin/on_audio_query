@@ -10,6 +10,12 @@ class SongModel {
   /// Return song [id]
   int get id => _info["_id"];
 
+  /// Return song [id] from a playlist.
+  ///
+  /// This getter will only return a value when calling from:
+  /// [QueryAudiosFrom] with [AudiosFromType.PLAYLIST]
+  int? get audioId => _info["audio_id"];
+
   /// Return song [data]
   String get data => _info["_data"];
 
