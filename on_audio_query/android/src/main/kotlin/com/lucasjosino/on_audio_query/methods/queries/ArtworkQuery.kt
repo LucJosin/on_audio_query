@@ -30,8 +30,8 @@ class ArtworkQuery : ViewModel() {
     private val helper = QueryHelper()
     private var type: Int = -1
     private var id: Number = 0
-    private var quality: Int = 100
-    private var size: Int = 200
+    private var quality: Int = 50
+    private var size: Int = 100
 
     // None of this methods can be null.
     private lateinit var uri: Uri
@@ -49,16 +49,22 @@ class ArtworkQuery : ViewModel() {
     fun queryArtwork(context: Context, result: MethodChannel.Result, call: MethodCall) {
         resolver = context.contentResolver
 
-        // The [id] of the song/album. If the [size] is null, will be [200].
-        id = call.argument<Number>("id")!!; size = call.argument<Int>("size")!!
+        // The [id] of the song/album.
+        id = call.argument<Number>("id")!!
+        
+        // If the [size] is null, will be [100].
+        size = call.argument<Int>("size")!!
+
         // Define the quality of image.
-        // The [quality] value cannot be greater than 100 so, we check and if is, set to [100].
+        // The [quality] value cannot be greater than 100 so, we check and if is, set to [50].
         quality = call.argument<Int>("quality")!!
-        if (quality > 100) quality = 100
+        if (quality > 100) quality = 50
+
         // Check format:
         //   * [0]: JPEG
         //   * [1]: PNG
         format = checkArtworkFormat(call.argument<Int>("format")!!)
+
         // Check uri:
         //   * [0]: Song.
         //   * [1]: Album.
@@ -66,6 +72,7 @@ class ArtworkQuery : ViewModel() {
         //   * [3]: Artist.
         //   * [4]: Genre.
         uri = checkArtworkType(call.argument<Int>("type")!!)
+
         // Define the [type]:
         type = call.argument<Int>("type")!!
 

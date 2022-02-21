@@ -350,8 +350,8 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "type": type.index,
         "id": id,
         "format": format != null ? format.index : ArtworkFormat.JPEG.index,
-        "size": size ?? 200,
-        "quality": (quality != null && quality <= 100) ? size : 100,
+        "size": size ?? 100,
+        "quality": (quality != null && quality <= 100) ? size : 50,
       },
     );
     return finalArtworks;
@@ -388,12 +388,12 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   }
 
   @override
-  Future<bool> createPlaylist(
+  Future<int?> createPlaylist(
     String name, {
     String? author,
     String? desc,
   }) async {
-    final bool resultCreatePl = await _channel.invokeMethod(
+    final int? resultCreatePl = await _channel.invokeMethod(
       "createPlaylist",
       {
         "playlistName": name,
