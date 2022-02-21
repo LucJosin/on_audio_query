@@ -554,7 +554,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Future<bool> createPlaylist(
+  Future<int?> createPlaylist(
     String name, {
     String? author,
     String? desc,
