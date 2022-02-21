@@ -21,6 +21,7 @@ fun checkSongSortType(sortType: Int?, order: Int, ignoreCase: Boolean): String {
         4 -> MediaStore.Audio.Media.DATE_ADDED + orderAndCase
         5 -> MediaStore.Audio.Media.SIZE + orderAndCase
         6 -> MediaStore.Audio.Media.DISPLAY_NAME + orderAndCase
+        7 -> MediaStore.Audio.Media.TRACK + orderAndCase
         else -> MediaStore.Audio.Media.DEFAULT_SORT_ORDER + orderAndCase
     }
 }

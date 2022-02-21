@@ -24,4 +24,7 @@ enum SongSortType {
 
   ///[DISPLAY_NAME] will return song list based in song [display_name].
   DISPLAY_NAME,
+
+  ///[DISPLAY_NAME] will return song list based in song [display_name].
+  TRACK,
 }
