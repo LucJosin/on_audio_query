@@ -200,6 +200,13 @@ class AudiosFromQuery : ViewModel() {
                     tempData[media] = helper.loadSongItem(media, cursor)
                 }
 
+                // Switch the values from '_id' and 'audio_id'
+                if (isPlaylist) {
+                    val tmpId = tempData["_id"]
+                    tempData["_id"] = tempData["audio_id"]
+                    tempData["audio_id"] = tmpId
+                }
+
                 //Get a extra information from audio, e.g: extension, uri, etc..
                 val tempExtraData = helper.loadSongExtraInfo(uri, tempData)
                 tempData.putAll(tempExtraData)
