@@ -12,6 +12,7 @@ public func loadSongItem(song: MPMediaItem) -> [String: Any?] {
         "_display_name": "\(song.artist ?? "") - \(song.title ?? "").\(fileExt)",
         "_display_name_wo_ext": "\(song.artist ?? "") - \(song.title ?? "")",
         "_size": sizeInBytes,
+        "audio_id": nil,
         "album": song.albumTitle,
         "album_id": song.albumPersistentID,
         "artist": song.artist,
@@ -53,6 +54,10 @@ public func formatSongList(args: [String: Any], allSongs: [[String: Any?]]) -> [
     case 6:
         tempList.sort { (val1, val2) -> Bool in
             ((val1["_display_name"] as! String).isCase(ignoreCase: ignoreCase)) > ((val2["_display_name"] as! String).isCase(ignoreCase: ignoreCase))
+        }
+    case 7:
+        tempList.sort { (val1, val2) -> Bool in
+            (val1["track"] as! Int) > (val2["track"] as! Int)
         }
     default:
         break

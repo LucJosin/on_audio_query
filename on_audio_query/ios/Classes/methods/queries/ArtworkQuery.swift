@@ -22,21 +22,26 @@ class ArtworkQuery {
         // None of this arguments can be null.
         // The id of the [Song] or [Album].
         let id = args["id"] as! Int
+        
         // The size of the image.
         let size = args["size"] as! Int
+        
         // The size of the image.
         var quality = args["quality"] as! Int
         if (quality > 100) {
-            quality = 100
+            quality = 50
         }
+        
         // The format [JPEG] or [PNG].
         let format = args["format"] as! Int
+        
         // The uri [0]: Song and [1]: Album.
         let uri = args["type"] as! Int
         
         // (To match android side, let's call "cursor").
         var cursor: MPMediaQuery?
         var filter: MPMediaPropertyPredicate?
+        
         // If [uri] is 0: artwork from [Song]
         // If [uri] is 1: artwork from [Album]
         // If [uri] is 2: artwork from [Playlist]
