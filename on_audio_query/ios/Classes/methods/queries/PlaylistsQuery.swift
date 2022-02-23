@@ -53,16 +53,18 @@ class PlaylistsQuery {
             // into a [Map<String, dynamic>], all keys are based on [Android]
             // platforms so, if you change some key, will have to change the [Android] too.
             for playlist in cursor {
-                // If the first song file don't has a assetURL, is a Cloud item.
-                if !playlist.items[0].isCloudItem && playlist.items[0].assetURL != nil {
-                    var playlistData = loadPlaylistItem(playlist: playlist)
-                    
+                var playlistData = loadPlaylistItem(playlist: playlist)
+                
+                // If the first song file doesn't has a assetURL, is probably a Cloud item.
+                if !playlist.items.isEmpty && !playlist.items[0].isCloudItem && playlist.items[0].assetURL != nil {
                     // Count and add the number of songs for every genre.
                     let tmpMediaCount = getMediaCount(type: 1, id: playlistData["_id"] as! UInt64)
                     playlistData["num_of_songs"] = tmpMediaCount
-                    
-                    listOfPlaylists.append(playlistData)
+                } else {
+                    playlistData["num_of_songs"] = 0
                 }
+                
+                listOfPlaylists.append(playlistData)
             }
             
             // After finish the "query", go back to the "main" thread(You can only call flutter
