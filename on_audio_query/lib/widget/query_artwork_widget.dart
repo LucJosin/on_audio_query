@@ -270,6 +270,15 @@ class QueryArtworkWidget extends StatelessWidget {
     this.frameBuilder,
   }) : super(key: key);
 
+  OnAudioQuery get _audioQuery => OnAudioQuery();
+
+  Widget Function(dynamic, dynamic, dynamic) _handleImageError() {
+    return (context, exception, stackTrace) {
+      return nullArtworkWidget ??
+          const Icon(Icons.image_not_supported, size: 50);
+    };
+  }
+
   @override
   Widget build(BuildContext context) {
     if (quality != null && quality! > 100) {
@@ -278,46 +287,58 @@ class QueryArtworkWidget extends StatelessWidget {
       );
     }
     return FutureBuilder<Uint8List?>(
-      future: OnAudioQuery().queryArtwork(
+      future: _audioQuery.queryArtwork(
         id,
         type,
         format: format ?? ArtworkFormat.JPEG,
-        size: size ?? 200,
-        quality: quality ?? 100,
+        size: size ?? 100,
+        quality: quality ?? 50,
       ),
       builder: (context, item) {
-        if (item.data != null && item.data!.isNotEmpty) {
-          return ClipRRect(
-            borderRadius: artworkBorder ?? BorderRadius.circular(50),
-            clipBehavior: artworkClipBehavior ?? Clip.antiAlias,
-            child: Image.memory(
-              item.data!,
-              gaplessPlayback: keepOldArtwork ?? false,
-              repeat: artworkRepeat ?? ImageRepeat.noRepeat,
-              scale: artworkScale ?? 1.0,
-              width: artworkWidth ?? 50,
-              height: artworkHeight ?? 50,
-              fit: artworkFit ?? BoxFit.cover,
-              color: artworkColor,
-              colorBlendMode: artworkBlendMode,
-              filterQuality: artworkQuality ?? FilterQuality.low,
-              frameBuilder: frameBuilder,
-              errorBuilder: errorBuilder ??
-                  (context, exception, stackTrace) {
-                    return nullArtworkWidget ??
-                        const Icon(
-                          Icons.image_not_supported,
-                          size: 50,
-                        );
-                  },
-            ),
+        // When you try 'query' without asking for [READ] permission the plugin
+        // will throw a [PlatformException].
+        //
+        // This 'no permission' code exception is: 403.
+        if (item.hasError) {
+          // Define error as PlatformException.
+          var error = item.error as PlatformException;
+          debugPrint(error.message);
+
+          // Return a different image.
+          return const Icon(
+            Icons.no_encryption_gmailerrorred,
+            size: 50,
           );
         }
-        return nullArtworkWidget ??
-            const Icon(
-              Icons.image_not_supported,
-              size: 50,
-            );
+
+        // No artwork was found or the bytes are empty.
+        if (item.data == null || item.data!.isEmpty) {
+          return nullArtworkWidget ??
+              const Icon(
+                Icons.image_not_supported,
+                size: 50,
+              );
+        }
+
+        // No errors found, the data(image) is valid. Build the image widget.
+        return ClipRRect(
+          borderRadius: artworkBorder ?? BorderRadius.circular(50),
+          clipBehavior: artworkClipBehavior ?? Clip.antiAlias,
+          child: Image.memory(
+            item.data!,
+            gaplessPlayback: keepOldArtwork ?? false,
+            repeat: artworkRepeat ?? ImageRepeat.noRepeat,
+            scale: artworkScale ?? 1.0,
+            width: artworkWidth ?? 50,
+            height: artworkHeight ?? 50,
+            fit: artworkFit ?? BoxFit.cover,
+            color: artworkColor,
+            colorBlendMode: artworkBlendMode,
+            filterQuality: artworkQuality ?? FilterQuality.low,
+            frameBuilder: frameBuilder,
+            errorBuilder: errorBuilder ?? _handleImageError(),
+          ),
+        );
       },
     );
   }

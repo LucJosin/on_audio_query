@@ -76,25 +76,33 @@ class ArtworkQuery : ViewModel() {
         // Define the [type]:
         type = call.argument<Int>("type")!!
 
+        // Request permission status from the 'main' method.
+        val hasPermission: Boolean = PermissionController().permissionStatus(context)
+
+        // We cannot 'query' without permission so, throw a PlatformException.
+        if (!hasPermission) {
+            // Method from 'MethodChannel' (method)
+            result.error(
+                "403",
+                "The app doesn't have permission to read files.",
+                "Call the [permissionsRequest] method or install a external plugin to handle the app permission."
+            )
+
+            // 'Exit' the function
+            return
+        }
+
         // Query everything in background for a better performance.
         viewModelScope.launch {
-            // Request permission status from the main method.
-            val hasPermission = PermissionController().permissionStatus(context)
-            // Empty array.
-            var resultArtList: ByteArray? = null
-
-            // We cannot "query" without permission so, just return null.
-            if (hasPermission) {
-                // Start querying
-                resultArtList = loadArt()
-            }
+            // Start 'querying'.
+            var resultArtList: ByteArray? = loadArt()
 
             // Sometimes android will extract a 'wrong' or 'empty' artwork. Just set as null.
             if (resultArtList != null && resultArtList.isEmpty()) {
                 resultArtList = null
             }
 
-            // Flutter UI will start, but, information still loading
+            // After loading the information, send the 'result'.
             result.success(resultArtList)
         }
     }

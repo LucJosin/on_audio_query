@@ -46,8 +46,8 @@ class _QuerySongsState extends State<QuerySongs> {
             orderType: OrderType.DESC_OR_GREATER,
           ),
           builder: (context, item) {
-            // When you try 'query' without asking for [READ] permission the
-            // plugin will throw a [PlatformException].
+            // When you try 'query' without asking for [READ] permission the plugin
+            // will throw a [PlatformException].
             //
             // This 'no permission' code exception is: 403.
             if (item.hasError) {

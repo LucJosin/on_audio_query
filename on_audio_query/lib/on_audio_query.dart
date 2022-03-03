@@ -20,6 +20,7 @@ import 'dart:typed_data';
 
 //Dart/Flutter
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 //Platform Interface
 import 'package:on_audio_query_platform_interface/details/on_audio_query_helper.dart';
