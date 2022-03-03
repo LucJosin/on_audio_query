@@ -83,25 +83,37 @@ class PlaylistsQuery : ViewModel() {
         result: MethodChannel.Result?,
         sink: EventChannel.EventSink?
     ) {
+        // Request permission status from the 'main' method.
+        val hasPermission: Boolean = PermissionController().permissionStatus(context)
+
+        // We cannot 'query' without permission so, throw a PlatformException.
+        // Only one 'channel' will be 'functional'. If is null, ignore, if not, send the error.
+        if (!hasPermission) {
+            // Method from 'EventChannel' (observer)
+            sink?.error(
+                "403",
+                "The app doesn't have permission to read files.",
+                "Call the [permissionsRequest] method or install a external plugin to handle the app permission."
+            )
+            // Method from 'MethodChannel' (method)
+            result?.error(
+                "403",
+                "The app doesn't have permission to read files.",
+                "Call the [permissionsRequest] method or install a external plugin to handle the app permission."
+            )
+
+            // 'Exit' the function
+            return
+        }
+
         // Query everything in background for a better performance.
         viewModelScope.launch {
-            // Request permission status from the main method.
-            val hasPermission = PermissionController().permissionStatus(context)
-            // Empty list.
-            var resultPlaylistList = ArrayList<MutableMap<String, Any?>>()
+            // Start 'querying'.
+            val resultPlaylistList: ArrayList<MutableMap<String, Any?>> = loadPlaylists()
 
-            // We cannot "query" without permission so, just return a empty list.
-            if (hasPermission) {
-                // Start querying
-                resultPlaylistList = loadPlaylists()
-            }
-
-            //Flutter UI will start, but, information still loading
-            if (sink != null) {
-                sink.success(resultPlaylistList)
-            } else {
-                result!!.success(resultPlaylistList)
-            }
+            // After loading the information, send the 'result'.
+            sink?.success(resultPlaylistList)
+            result?.success(resultPlaylistList)
         }
     }
 
