@@ -114,7 +114,7 @@ class SongsQuery : ViewModel() {
 
         // Query everything in background for a better performance.
         viewModelScope.launch {
-            // Start 'querying'
+            // Start 'querying'.
             val resultSongList: ArrayList<MutableMap<String, Any?>> = loadSongs()
 
             // After loading the information, send the 'result'.
