@@ -26,3 +26,11 @@ part 'types/artwork_type.dart';
 part 'types/audios_from_type.dart';
 part 'types/with_filters_type.dart';
 part 'types/uri_type.dart';
+part 'types/audio_type.dart';
+
+// Filter
+part 'filter/media_filter.dart';
+
+// Filter Columns
+part 'filter/columns/media_columns.dart';
+part 'filter/columns/song_columns.dart';

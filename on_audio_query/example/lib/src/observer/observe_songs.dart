@@ -58,9 +58,11 @@ class ObserveSongsState extends State<ObserveSongs> {
           // orderType: OrderType.ASC_OR_SMALLER,
           // uriType: UriType.EXTERNAL,
           // ignoreCase: true,
+          // toQuery: const {},
+          // toRemove: const {},
+          // type: const {AudioType.IS_MUSIC : true},
           stream: _audioQuery.observeSongs(
-            sortType: SongSortType.DATE_ADDED,
-            orderType: OrderType.DESC_OR_GREATER,
+            filter: MediaFilter.forSongs(),
           ),
           builder: (context, item) {
             // When you try 'query' without asking for [READ] permission the
