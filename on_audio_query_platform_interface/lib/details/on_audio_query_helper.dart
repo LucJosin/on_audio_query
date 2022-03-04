@@ -34,3 +34,7 @@ part 'filter/media_filter.dart';
 // Filter Columns
 part 'filter/columns/media_columns.dart';
 part 'filter/columns/song_columns.dart';
+part 'filter/columns/album_columns.dart';
+part 'filter/columns/artist_columns.dart';
+part 'filter/columns/playlist_columns.dart';
+part 'filter/columns/genre_columns.dart';
