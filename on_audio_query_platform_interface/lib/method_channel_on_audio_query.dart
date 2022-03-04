@@ -22,22 +22,23 @@ import 'on_audio_query_platform_interface.dart';
 
 import 'package:on_audio_query_platform_interface/details/on_audio_query_helper.dart';
 
-const MethodChannel _channel = MethodChannel('com.lucasjosino.on_audio_query');
+const String _channelName = 'com.lucasjosino.on_audio_query';
+const MethodChannel _channel = MethodChannel(_channelName);
 
 const EventChannel _songsObserverChannel = EventChannel(
-  'com.lucasjosino.on_audio_query/songs_observer',
+  '$_channelName/songs_observer',
 );
 const EventChannel _albumsObserverChannel = EventChannel(
-  'com.lucasjosino.on_audio_query/albums_observer',
+  '$_channelName/albums_observer',
 );
 const EventChannel _artistsObserverChannel = EventChannel(
-  'com.lucasjosino.on_audio_query/artists_observer',
+  '$_channelName/artists_observer',
 );
 const EventChannel _playlistsObserverChannel = EventChannel(
-  'com.lucasjosino.on_audio_query/playlists_observer',
+  '$_channelName/playlists_observer',
 );
 const EventChannel _genresObserverChannel = EventChannel(
-  'com.lucasjosino.on_audio_query/genres_observer',
+  '$_channelName/genres_observer',
 );
 
 /// An implementation of [OnAudioQueryPlatform] that uses method channels.
@@ -45,7 +46,10 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   /// The MethodChannel that is being used by this implementation of the plugin.
   MethodChannel get channel => _channel;
 
-  ///
+  /// Default filter for all methods.
+  static const MediaFilter _defaultFilter = MediaFilter.init();
+
+  /// Observers
   Stream<List<SongModel>>? _onSongsObserverChanged;
   Stream<List<AlbumModel>>? _onAlbumsObserverChanged;
   Stream<List<ArtistModel>>? _onArtistsObserverChanged;
@@ -54,53 +58,86 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
 
   @override
   Future<List<SongModel>> querySongs({
+    MediaFilter? filter,
+    // Deprecated
     SongSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
     bool? ignoreCase,
     String? path,
   }) async {
+    // If the filter is null, use the 'default'.
+    filter ??= _defaultFilter;
+
+    // Fix the 'type' filter.
+    //
+    // Convert the 'AudioType' into 'int'.
+    // The 'true' and 'false' value into '1' or '2'.
+    Map<int, int> fixedMap = {};
+    filter.type.forEach((key, value) {
+      //
+      fixedMap[key.index] = value == true ? 1 : 0;
+    });
+
+    // Invoke the channel.
     final List<dynamic> resultSongs = await _channel.invokeMethod(
       "querySongs",
       {
-        "sortType": sortType?.index,
-        "orderType": orderType != null
-            ? orderType.index
-            : OrderType.ASC_OR_SMALLER.index,
-        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
-        "ignoreCase": ignoreCase ?? true,
-        "path": path,
+        "sortType": filter.songSortType?.index,
+        "orderType": filter.orderType.index,
+        "uri": filter.uriType.index,
+        "ignoreCase": filter.ignoreCase,
+        "toQuery": filter.toQuery,
+        "toRemove": filter.toRemove,
+        "type": fixedMap,
       },
     );
+
+    // Convert the result into a list of [SongModel] and return.
     return resultSongs.map((e) => SongModel(e)).toList();
   }
 
   @override
   Stream<List<SongModel>> observeSongs({
+    MediaFilter? filter,
+    // Deprecated
     SongSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
     bool? ignoreCase,
     String? path,
   }) {
+    // If the filter is null, use the 'default'.
+    filter ??= _defaultFilter;
+
+    // Fix the 'type' filter.
+    //
+    // Convert the 'AudioType' into 'int'.
+    // The 'true' and 'false' value into '1' or '2'.
+    Map<int, int> fixedMap = {};
+    filter.type.forEach((key, value) {
+      //
+      fixedMap[key.index] = value == true ? 1 : 0;
+    });
+
+    // Invoke the observer.
     _onSongsObserverChanged ??= _songsObserverChannel.receiveBroadcastStream(
       {
-        "sortType": sortType?.index,
-        "orderType": orderType != null
-            ? orderType.index
-            : OrderType.ASC_OR_SMALLER.index,
-        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
-        "ignoreCase": ignoreCase ?? true,
-        "path": path,
+        "sortType": filter.songSortType?.index,
+        "orderType": filter.orderType.index,
+        "uri": filter.uriType.index,
+        "ignoreCase": filter.ignoreCase,
+        "toQuery": filter.toQuery,
+        "toRemove": filter.toRemove,
+        "type": fixedMap,
       },
     ).asyncMap<List<SongModel>>(
       (event) => Future.wait(
-        event.map<Future<SongModel>>(
-          (m) async => SongModel(m),
-        ),
+        event.map<Future<SongModel>>((m) async => SongModel(m)),
       ),
     );
 
+    // Convert the result into a list of [SongModel] and return.
     return _onSongsObserverChanged!;
   }
 
@@ -308,19 +345,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
     OrderType? orderType,
     bool? ignoreCase,
   }) async {
-    final List<dynamic> resultSongsFrom = await _channel.invokeMethod(
-      "queryAudiosFrom",
-      {
-        "type": type.index,
-        "where": where,
-        "sortType": sortType?.index,
-        "orderType": orderType != null
-            ? orderType.index
-            : OrderType.ASC_OR_SMALLER.index,
-        "ignoreCase": ignoreCase ?? true,
-      },
-    );
-    return resultSongsFrom.map((songInfo) => SongModel(songInfo)).toList();
+    return [];
   }
 
   @override
@@ -329,11 +354,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
     WithFiltersType withType,
     dynamic args,
   ) async {
-    final List<dynamic> resultFilters = await _channel.invokeMethod(
-      "queryWithFilters",
-      {"withType": withType.index, "args": args.index ?? 0, "argsVal": argsVal},
-    );
-    return resultFilters;
+    return [];
   }
 
   @override
@@ -349,7 +370,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
       {
         "type": type.index,
         "id": id,
-        "format": format != null ? format.index : ArtworkFormat.JPEG.index,
+        "format": format?.index ?? ArtworkFormat.JPEG.index,
         "size": size ?? 100,
         "quality": (quality != null && quality <= 100) ? size : 50,
       },
@@ -364,28 +385,11 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
     OrderType? orderType,
     UriType? uriType,
   }) async {
-    final List<dynamic> resultFromFolder = await _channel.invokeMethod(
-      "queryFromFolder",
-      {
-        "sortType":
-            sortType != null ? sortType.index : SongSortType.TITLE.index,
-        "orderType": orderType != null
-            ? orderType.index
-            : OrderType.ASC_OR_SMALLER.index,
-        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
-        "path": path
-      },
-    );
-    return resultFromFolder.map((songInfo) => SongModel(songInfo)).toList();
+    return [];
   }
 
   @override
-  Future<List<String>> queryAllPath() async {
-    final List<dynamic> resultAllPath = await _channel.invokeMethod(
-      "queryAllPath",
-    );
-    return resultAllPath.cast<String>();
-  }
+  Future<List<String>> queryAllPath() async => [];
 
   @override
   Future<int?> createPlaylist(

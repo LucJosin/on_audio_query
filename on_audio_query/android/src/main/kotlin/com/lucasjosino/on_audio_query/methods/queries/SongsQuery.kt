@@ -3,10 +3,12 @@ package com.lucasjosino.on_audio_query.methods.queries
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lucasjosino.on_audio_query.controllers.PermissionController
 import com.lucasjosino.on_audio_query.methods.helper.QueryHelper
+import com.lucasjosino.on_audio_query.types.checkAudioType
 import com.lucasjosino.on_audio_query.types.checkAudiosUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkSongSortType
 import com.lucasjosino.on_audio_query.utils.songProjection
@@ -22,13 +24,14 @@ class SongsQuery : ViewModel() {
 
     // Main parameters
     private val helper = QueryHelper()
-    private var selection: String? = null
+    private var selection: String = ""
 
     // None of this methods can be null.
     private lateinit var uri: Uri
     private lateinit var resolver: ContentResolver
     private lateinit var sortType: String
 
+    @Suppress("UNCHECKED_CAST")
     fun init(
         context: Context,
         //
@@ -43,24 +46,30 @@ class SongsQuery : ViewModel() {
         val pSortType: Int?
         val pOrderType: Int
         val pIgnoreCase: Boolean
-
         val pUri: Int
-        val pPath: String?
+
+        val toQuery: MutableMap<Int, ArrayList<String>>
+        val toRemove: MutableMap<Int, ArrayList<String>>
+        val type: MutableMap<Int, Int>
 
         if (sink != null && args != null) {
             pSortType = args["sortType"] as Int?
             pOrderType = args["orderType"] as Int
             pIgnoreCase = args["ignoreCase"] as Boolean
-
             pUri = args["uri"] as Int
-            pPath = args["path"] as String?
+
+            toQuery = args["toQuery"] as MutableMap<Int, ArrayList<String>>
+            toRemove = args["toRemove"] as MutableMap<Int, ArrayList<String>>
+            type = args["type"] as MutableMap<Int, Int>
         } else {
             pSortType = call!!.argument<Int>("sortType")
             pOrderType = call.argument<Int>("orderType")!!
             pIgnoreCase = call.argument<Boolean>("ignoreCase")!!
-
             pUri = call.argument<Int>("uri")!!
-            pPath = call.argument<String>("path")
+
+            toQuery = call.argument<MutableMap<Int, ArrayList<String>>>("toQuery")!!
+            toRemove = call.argument<MutableMap<Int, ArrayList<String>>>("toRemove")!!
+            type = call.argument<MutableMap<Int, Int>>("type")!!
         }
 
         // Sort: Type and Order.
@@ -75,12 +84,31 @@ class SongsQuery : ViewModel() {
         //   * [1]: Internal.
         uri = checkAudiosUriType(pUri)
 
-        // Here we provide a custom 'path'.
-        if (pPath != null) {
-            selection = songProjection[0] + " like " + "'%" + pPath + "/%'"
+        // Add item/items to 'query'.
+        for ((id, values) in toQuery) {
+            for (value in values) {
+                selection += songProjection[id] + " LIKE '%" + value + "%' " + "AND "
+            }
         }
 
-        //
+        // Remove item/items from 'query'.
+        for ((id, values) in toRemove) {
+            for (value in values) {
+                selection += songProjection[id] + " NOT LIKE '%" + value + "%' " + "AND "
+            }
+        }
+
+        // Add/Remove audio type. E.g: Is Music, Notification, Alarm, etc..
+        for (audioType in type) {
+            selection += checkAudioType(audioType.key) + "=" + "${audioType.value} " + "AND "
+        }
+
+        // Remove the 'AND ' keyword from selection.
+        if (selection.endsWith("AND ")) {
+            selection = selection.removeSuffix("AND ")
+        }
+
+        // Init the 'query'.
         querySongs(context, result, sink)
     }
 

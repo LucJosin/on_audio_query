@@ -42,12 +42,14 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
 
   @override
   Future<List<SongModel>> querySongs({
+    MediaFilter? filter,
     SongSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
     bool? ignoreCase,
     String? path,
   }) async {
+    // TODO: Fix web platform..
     return _controller.querySongs(sortType, orderType, ignoreCase!, path);
   }
 

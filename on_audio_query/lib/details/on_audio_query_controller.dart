@@ -62,18 +62,19 @@ class OnAudioQuery {
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<SongModel>> querySongs({
-    SongSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
-    String? path,
+    MediaFilter? filter,
+    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
+        SongSortType? sortType,
+    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
+        OrderType? orderType,
+    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
+        UriType? uriType,
+    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
+        bool? ignoreCase,
+    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead") String? path,
   }) async {
     return platform.querySongs(
-      sortType: sortType,
-      orderType: orderType,
-      uriType: uriType,
-      ignoreCase: ignoreCase,
-      path: path,
+      filter: filter,
     );
   }
 
@@ -100,22 +101,23 @@ class OnAudioQuery {
   ///
   /// |   Android   |   IOS   |   Web   |
   /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `❌` | `❌` | <br>
+  /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Stream<List<SongModel>> observeSongs({
-    SongSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
-    String? path,
+    MediaFilter? filter,
+    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
+        SongSortType? sortType,
+    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
+        OrderType? orderType,
+    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
+        UriType? uriType,
+    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
+        bool? ignoreCase,
+    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead") String? path,
   }) {
     return platform.observeSongs(
-      sortType: sortType,
-      orderType: orderType,
-      uriType: uriType,
-      ignoreCase: ignoreCase,
-      path: path,
+      filter: filter,
     );
   }
 
@@ -176,7 +178,7 @@ class OnAudioQuery {
   ///
   /// |   Android   |   IOS   |   Web   |
   /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `❌` | `❌` | <br>
+  /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Stream<List<AlbumModel>> observeAlbums({
@@ -250,7 +252,7 @@ class OnAudioQuery {
   ///
   /// |   Android   |   IOS   |   Web   |
   /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `❌` | `❌` | <br>
+  /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Stream<List<ArtistModel>> observeArtists({
@@ -324,7 +326,7 @@ class OnAudioQuery {
   ///
   /// |   Android   |   IOS   |   Web   |
   /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `❌` | `❌` | <br>
+  /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Stream<List<PlaylistModel>> observePlaylists({
@@ -397,7 +399,7 @@ class OnAudioQuery {
   ///
   /// |   Android   |   IOS   |   Web   |
   /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `❌` | `❌` | <br>
+  /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Stream<List<GenreModel>> observeGenres({
@@ -431,6 +433,9 @@ class OnAudioQuery {
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
+  @Deprecated(
+    "Deprecated after [3.0.0]. Use one of the [query] methods instead",
+  )
   Future<List<SongModel>> queryAudiosFrom(
     AudiosFromType type,
     Object where, {
@@ -483,6 +488,9 @@ class OnAudioQuery {
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
+  @Deprecated(
+    "Deprecated after [3.0.0]. Use one of the [query] methods instead",
+  )
   Future<List<dynamic>> queryWithFilters(
     String argsVal,
     WithFiltersType withType, {
@@ -563,6 +571,9 @@ class OnAudioQuery {
   /// | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
+  @Deprecated(
+    "Deprecated after [3.0.0]. Use one of the [query] methods instead",
+  )
   Future<List<SongModel>> queryFromFolder(
     String path, {
     SongSortType? sortType,
@@ -590,6 +601,7 @@ class OnAudioQuery {
   /// | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
+  @Deprecated("Deprecated after [3.0.0]")
   Future<List<String>> queryAllPath() async {
     return platform.queryAllPath();
   }
