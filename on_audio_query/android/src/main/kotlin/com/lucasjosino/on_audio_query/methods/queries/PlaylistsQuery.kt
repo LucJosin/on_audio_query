@@ -10,6 +10,7 @@ import com.lucasjosino.on_audio_query.methods.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkPlaylistsUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkGenreSortType
 import com.lucasjosino.on_audio_query.utils.playlistProjection
+import com.lucasjosino.on_audio_query.utils.songProjection
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -22,13 +23,14 @@ class PlaylistsQuery : ViewModel() {
 
     //Main parameters
     private val helper = QueryHelper()
+    private var selection: String = ""
 
     // None of this methods can be null.
     private lateinit var uri: Uri
     private lateinit var resolver: ContentResolver
     private lateinit var sortType: String
 
-    //
+    @Suppress("UNCHECKED_CAST")
     fun init(
         context: Context,
         //
@@ -43,21 +45,27 @@ class PlaylistsQuery : ViewModel() {
         val pSortType: Int?
         val pOrderType: Int
         val pIgnoreCase: Boolean
-
         val pUri: Int
+
+        val toQuery: MutableMap<Int, ArrayList<String>>
+        val toRemove: MutableMap<Int, ArrayList<String>>
 
         if (sink != null && args != null) {
             pSortType = args["sortType"] as Int?
             pOrderType = args["orderType"] as Int
             pIgnoreCase = args["ignoreCase"] as Boolean
-
             pUri = args["uri"] as Int
+
+            toQuery = args["toQuery"] as MutableMap<Int, ArrayList<String>>
+            toRemove = args["toRemove"] as MutableMap<Int, ArrayList<String>>
         } else {
             pSortType = call!!.argument<Int>("sortType")
             pOrderType = call.argument<Int>("orderType")!!
             pIgnoreCase = call.argument<Boolean>("ignoreCase")!!
-
             pUri = call.argument<Int>("uri")!!
+
+            toQuery = call.argument<MutableMap<Int, ArrayList<String>>>("toQuery")!!
+            toRemove = call.argument<MutableMap<Int, ArrayList<String>>>("toRemove")!!
         }
 
         // Sort: Type and Order.
@@ -70,6 +78,23 @@ class PlaylistsQuery : ViewModel() {
         //   * [0]: External.
         //   * [1]: Internal.
         uri = checkPlaylistsUriType(pUri)
+
+        // Add item/items to 'query'.
+        for ((id, values) in toQuery) {
+            for (value in values) {
+                selection += playlistProjection[id] + " LIKE '%" + value + "%' " + "AND "
+            }
+        }
+
+        // Remove item/items from 'query'.
+        for ((id, values) in toRemove) {
+            for (value in values) {
+                selection += playlistProjection[id] + " NOT LIKE '%" + value + "%' " + "AND "
+            }
+        }
+
+        // Remove the 'AND ' keyword from selection.
+        selection = selection.removeSuffix("AND ")
 
         //
         queryPlaylists(context, result, sink)
@@ -121,7 +146,7 @@ class PlaylistsQuery : ViewModel() {
     private suspend fun loadPlaylists(): ArrayList<MutableMap<String, Any?>> =
         withContext(Dispatchers.IO) {
             // Setup the cursor with [uri] and [projection].
-            val cursor = resolver.query(uri, playlistProjection, null, null, null)
+            val cursor = resolver.query(uri, playlistProjection, selection, null, null)
             // Empty list.
             val playlistList: ArrayList<MutableMap<String, Any?>> = ArrayList()
 

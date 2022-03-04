@@ -22,13 +22,14 @@ class GenresQuery : ViewModel() {
 
     // Main parameters.
     private val helper = QueryHelper()
+    private var selection: String = ""
 
     // None of this methods can be null.
     private lateinit var uri: Uri
     private lateinit var sortType: String
     private lateinit var resolver: ContentResolver
 
-    //
+    @Suppress("UNCHECKED_CAST")
     fun init(
         context: Context,
         //
@@ -43,21 +44,27 @@ class GenresQuery : ViewModel() {
         val pSortType: Int?
         val pOrderType: Int
         val pIgnoreCase: Boolean
-
         val pUri: Int
+
+        val toQuery: MutableMap<Int, ArrayList<String>>
+        val toRemove: MutableMap<Int, ArrayList<String>>
 
         if (sink != null && args != null) {
             pSortType = args["sortType"] as Int?
             pOrderType = args["orderType"] as Int
             pIgnoreCase = args["ignoreCase"] as Boolean
-
             pUri = args["uri"] as Int
+
+            toQuery = args["toQuery"] as MutableMap<Int, ArrayList<String>>
+            toRemove = args["toRemove"] as MutableMap<Int, ArrayList<String>>
         } else {
             pSortType = call!!.argument<Int>("sortType")
             pOrderType = call.argument<Int>("orderType")!!
             pIgnoreCase = call.argument<Boolean>("ignoreCase")!!
-
             pUri = call.argument<Int>("uri")!!
+
+            toQuery = call.argument<MutableMap<Int, ArrayList<String>>>("toQuery")!!
+            toRemove = call.argument<MutableMap<Int, ArrayList<String>>>("toRemove")!!
         }
 
         // Sort: Type and Order.
@@ -70,6 +77,23 @@ class GenresQuery : ViewModel() {
         //   * [0]: External.
         //   * [1]: Internal.
         uri = checkGenresUriType(pUri)
+
+        // Add item/items to 'query'.
+        for ((id, values) in toQuery) {
+            for (value in values) {
+                selection += genreProjection[id] + " LIKE '%" + value + "%' " + "AND "
+            }
+        }
+
+        // Remove item/items from 'query'.
+        for ((id, values) in toRemove) {
+            for (value in values) {
+                selection += genreProjection[id] + " NOT LIKE '%" + value + "%' " + "AND "
+            }
+        }
+
+        // Remove the 'AND ' keyword from selection.
+        selection = selection.removeSuffix("AND ")
 
         //
         queryGenres(context, result, sink)
@@ -121,7 +145,7 @@ class GenresQuery : ViewModel() {
     private suspend fun loadGenres(): ArrayList<MutableMap<String, Any?>> =
         withContext(Dispatchers.IO) {
             // Setup the cursor with [uri], [projection] and [sortType].
-            val cursor = resolver.query(uri, genreProjection, null, null, sortType)
+            val cursor = resolver.query(uri, genreProjection, selection, null, sortType)
             // Empty list.
             val genreList: ArrayList<MutableMap<String, Any?>> = ArrayList()
 
