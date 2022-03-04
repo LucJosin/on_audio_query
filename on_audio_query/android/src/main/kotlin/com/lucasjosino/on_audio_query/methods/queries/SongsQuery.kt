@@ -3,7 +3,6 @@ package com.lucasjosino.on_audio_query.methods.queries
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lucasjosino.on_audio_query.controllers.PermissionController
@@ -31,6 +30,7 @@ class SongsQuery : ViewModel() {
     private lateinit var resolver: ContentResolver
     private lateinit var sortType: String
 
+    // TODO: Fix 'UNCHECKED_CAST'. Maybe converting 'call' and 'args' to 'Map<String, Any?>'. And remove the 'sink' check.
     @Suppress("UNCHECKED_CAST")
     fun init(
         context: Context,
@@ -104,9 +104,7 @@ class SongsQuery : ViewModel() {
         }
 
         // Remove the 'AND ' keyword from selection.
-        if (selection.endsWith("AND ")) {
-            selection = selection.removeSuffix("AND ")
-        }
+        selection = selection.removeSuffix("AND ")
 
         // Init the 'query'.
         querySongs(context, result, sink)

@@ -55,6 +55,7 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
 
   @override
   Future<List<AlbumModel>> queryAlbums({
+    MediaFilter? filter,
     AlbumSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
@@ -65,6 +66,7 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
 
   @override
   Future<List<ArtistModel>> queryArtists({
+    MediaFilter? filter,
     ArtistSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
@@ -75,6 +77,7 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
 
   @override
   Future<List<GenreModel>> queryGenres({
+    MediaFilter? filter,
     GenreSortType? sortType,
     OrderType? orderType,
     UriType? uriType,

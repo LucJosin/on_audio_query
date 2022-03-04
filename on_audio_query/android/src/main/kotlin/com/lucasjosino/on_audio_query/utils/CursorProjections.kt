@@ -11,9 +11,9 @@ val songProjection: Array<String>
     @SuppressLint("InlinedApi")
     get() : Array<String> {
         val tmpProjection = arrayListOf(
+            MediaStore.Audio.Media._ID,
             MediaStore.Audio.Media.DATA, // TODO: Deprecated
             MediaStore.Audio.Media.DISPLAY_NAME,
-            MediaStore.Audio.Media._ID,
             MediaStore.Audio.Media.SIZE,
             MediaStore.Audio.Media.ALBUM,
             MediaStore.Audio.Media.ALBUM_ARTIST,
@@ -47,18 +47,23 @@ val songProjection: Array<String>
         return tmpProjection.toTypedArray()
     }
 
-
-// Query playlists projection
-// Ignore the [Data] deprecation because this plugin support older versions.
-@Suppress("DEPRECATION")
-val playlistProjection: Array<String>
-    get() = arrayOf(
-        MediaStore.Audio.Playlists.DATA,
-        MediaStore.Audio.Playlists._ID,
-        MediaStore.Audio.Playlists.DATE_ADDED,
-        MediaStore.Audio.Playlists.DATE_MODIFIED,
-        MediaStore.Audio.Playlists.NAME
+val albumProjection get() : Array<String>  {
+    val tmpProjection = arrayListOf(
+        MediaStore.Audio.Albums.ALBUM_ID,
+        MediaStore.Audio.Albums.ALBUM,
+        MediaStore.Audio.Albums.ARTIST,
+        MediaStore.Audio.Albums.FIRST_YEAR,
+        MediaStore.Audio.Albums.LAST_YEAR,
+        MediaStore.Audio.Albums.NUMBER_OF_SONGS,
+        MediaStore.Audio.Albums.NUMBER_OF_SONGS_FOR_ARTIST,
     )
+
+    if (Build.VERSION.SDK_INT > 29) {
+        tmpProjection.add(3, MediaStore.Audio.Albums.ARTIST_ID) // Only Api >= 29
+    }
+
+    return tmpProjection.toTypedArray()
+}
 
 //Query artists projection
 val artistProjection: Array<String>
@@ -67,6 +72,18 @@ val artistProjection: Array<String>
         MediaStore.Audio.Artists.ARTIST,
         MediaStore.Audio.Artists.NUMBER_OF_ALBUMS,
         MediaStore.Audio.Artists.NUMBER_OF_TRACKS
+    )
+
+// Query playlists projection
+// Ignore the [Data] deprecation because this plugin support older versions.
+@Suppress("DEPRECATION")
+val playlistProjection: Array<String>
+    get() = arrayOf(
+        MediaStore.Audio.Playlists._ID,
+        MediaStore.Audio.Playlists.DATA,
+        MediaStore.Audio.Playlists.DATE_ADDED,
+        MediaStore.Audio.Playlists.DATE_MODIFIED,
+        MediaStore.Audio.Playlists.NAME
     )
 
 //Query genres projection

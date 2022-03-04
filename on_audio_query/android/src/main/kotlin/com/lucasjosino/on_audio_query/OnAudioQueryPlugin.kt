@@ -37,22 +37,17 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     companion object {
         // Get the current class name.
-        private val TAG = this::class.java.name
+        private val TAG: String = this::class.java.name
 
         // Method channel name.
         private const val CHANNEL_NAME = "com.lucasjosino.on_audio_query"
 
         // Event channels name.
-        private const val SONGS_OBS_CHANNEL_NAME =
-            "com.lucasjosino.on_audio_query/songs_observer"
-        private const val ALBUMS_OBS_CHANNEL_NAME =
-            "com.lucasjosino.on_audio_query/albums_observer"
-        private const val PLAYLISTS_OBS_CHANNEL_NAME =
-            "com.lucasjosino.on_audio_query/playlists_observer"
-        private const val ARTISTS_OBS_CHANNEL_NAME =
-            "com.lucasjosino.on_audio_query/artists_observer"
-        private const val GENRES_OBS_CHANNEL_NAME =
-            "com.lucasjosino.on_audio_query/genres_observer"
+        private const val SONGS_OBS_CHANNEL_NAME = "$CHANNEL_NAME/songs_observer"
+        private const val ALBUMS_OBS_CHANNEL_NAME = "$CHANNEL_NAME/albums_observer"
+        private const val PLAYLISTS_OBS_CHANNEL_NAME = "$CHANNEL_NAME/playlists_observer"
+        private const val ARTISTS_OBS_CHANNEL_NAME = "$CHANNEL_NAME/artists_observer"
+        private const val GENRES_OBS_CHANNEL_NAME = "$CHANNEL_NAME/genres_observer"
     }
 
     // Dart <-> Kotlin communication
@@ -103,8 +98,8 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             )
         }
 
-        // If user deny permission request a pop up will immediately show up
-        // If [retryRequest] is null, the message will only show when call method again
+        // If user deny permission request a pop up will immediately show up.
+        // If [retryRequest] is null, the message will only show after calling the method again.
         val retryRequest = call.argument<Boolean>("retryRequest") ?: false
 
         // Setup the [PermissionController]
@@ -136,6 +131,7 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             // This method will scan the given path to update the 'state'.
             // When deleting a file using 'dart:io', call this method to update the file 'state'.
             "scan" -> {
+                // TODO: Add option to scan multiple paths.
                 val sPath: String = call.argument<String>("path")!!
 
                 // Check if the given file is empty.
@@ -197,20 +193,20 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         this.binding = null
 
         // Remove all event channel.
-        songsObserver = null
         songsObserver?.onCancel(null)
+        songsObserver = null
 
-        albumsObserver = null
         albumsObserver?.onCancel(null)
+        albumsObserver = null
 
-        playlistsObserver = null
         playlistsObserver?.onCancel(null)
+        playlistsObserver = null
 
-        artistsObserver = null
         artistsObserver?.onCancel(null)
+        artistsObserver = null
 
-        genresObserver = null
         genresObserver?.onCancel(null)
+        genresObserver = null
     }
 
     //
@@ -221,37 +217,27 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     // TODO: Check if this setup consumes much memory.
     private fun setUpEventChannel(binaryMessenger: BinaryMessenger) {
         // Songs channel.
-        val songsChannel = EventChannel(
-            binaryMessenger, SONGS_OBS_CHANNEL_NAME
-        )
+        val songsChannel = EventChannel(binaryMessenger, SONGS_OBS_CHANNEL_NAME)
         songsObserver = SongsObserver(context)
         songsChannel.setStreamHandler(songsObserver)
 
         // Albums channel.
-        val albumsChannel = EventChannel(
-            binaryMessenger, ALBUMS_OBS_CHANNEL_NAME
-        )
+        val albumsChannel = EventChannel(binaryMessenger, ALBUMS_OBS_CHANNEL_NAME)
         albumsObserver = AlbumsObserver(context)
         albumsChannel.setStreamHandler(albumsObserver)
 
         // Playlists channel.
-        val playlistsChannel = EventChannel(
-            binaryMessenger, PLAYLISTS_OBS_CHANNEL_NAME
-        )
+        val playlistsChannel = EventChannel(binaryMessenger, PLAYLISTS_OBS_CHANNEL_NAME)
         playlistsObserver = PlaylistsObserver(context)
         playlistsChannel.setStreamHandler(playlistsObserver)
 
         // Artists channel.
-        val artistsChannel = EventChannel(
-            binaryMessenger, ARTISTS_OBS_CHANNEL_NAME
-        )
+        val artistsChannel = EventChannel(binaryMessenger, ARTISTS_OBS_CHANNEL_NAME)
         artistsObserver = ArtistsObserver(context)
         artistsChannel.setStreamHandler(artistsObserver)
 
         // Genres channel.
-        val genresChannel = EventChannel(
-            binaryMessenger, GENRES_OBS_CHANNEL_NAME
-        )
+        val genresChannel = EventChannel(binaryMessenger, GENRES_OBS_CHANNEL_NAME)
         genresObserver = GenresObserver(context)
         genresChannel.setStreamHandler(genresObserver)
     }

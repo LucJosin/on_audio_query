@@ -6,6 +6,7 @@ part of on_audio_query_helper;
 /// Each type has a subtype, [10] in total.
 ///
 /// If [Args] are null, will automatically select the first one, [TITLE] or [NAME]
+@Deprecated("Deprecated after [3.0.0]. Use one of the [query] methods instead")
 enum WithFiltersType {
   /// Filter [AUDIOS].
   ///

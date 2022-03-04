@@ -3,6 +3,7 @@
 part of on_audio_query_helper;
 
 /// Defines where audios will be acquired.
+@Deprecated("Deprecated after [3.0.0]. Use one of the [query] methods instead")
 enum AudiosFromType {
   /// Audios from specific Album name.
   ALBUM,

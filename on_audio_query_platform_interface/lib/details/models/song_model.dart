@@ -12,8 +12,7 @@ class SongModel {
 
   /// Return song [id] from a playlist.
   ///
-  /// This getter will only return a value when calling from:
-  /// [QueryAudiosFrom] with [AudiosFromType.PLAYLIST]
+  // TODO: Fix [audio_id] after [3.0.0]
   int? get audioId => _info["audio_id"];
 
   /// Return song [data]
@@ -76,45 +75,28 @@ class SongModel {
   /// Return song [track]
   int? get track => _info["track"];
 
-  // /// Return song [uri]
-  // String get uri;
-
   /// Return song only the [fileExtension]
   String get fileExtension => _info["file_extension"];
 
-  // Bool methods
-
   /// Return song type: [isAlarm]
-  ///
-  /// Will always return true or false
   bool? get isAlarm => _info["is_alarm"];
 
   /// Return song type: [isAudioBook]
-  ///
-  /// Will always return true or false
   ///
   /// Important:
   ///   * Only Api >= 29/Android 10
   bool? get isAudioBook => _info["is_audiobook"];
 
   /// Return song type: [isMusic]
-  ///
-  /// Will always return true or false
   bool? get isMusic => _info["is_music"];
 
   /// Return song type: [isNotification]
-  ///
-  /// Will always return true or false
   bool? get isNotification => _info["is_notification"];
 
   /// Return song type: [isPodcast]
-  ///
-  /// Will always return true or false
   bool? get isPodcast => _info["is_podcast"];
 
   /// Return song type: [isRingtone]
-  ///
-  /// Will always return true or false
   bool? get isRingtone => _info["is_ringtone"];
 
   /// Return a map with all [keys] and [values] from specific song.
