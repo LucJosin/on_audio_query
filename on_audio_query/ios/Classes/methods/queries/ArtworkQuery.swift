@@ -67,9 +67,26 @@ class ArtworkQuery {
             cursor = nil
         }
         
-        // If [cursor] is "nil" or has no permission, just return to dart.
+        // Request permission status from the 'main' method.
         let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
-        if cursor != nil && filter != nil && hasPermission {
+        
+        // We cannot 'query' without permission so, throw a PlatformException.
+        if !hasPermission {
+            // Method from 'MethodChannel' (method)
+            self.result(
+                FlutterError.init(
+                    code: "403",
+                    message: "The app doesn't have permission to read files.",
+                    details: "Call the [permissionsRequest] method or install a external plugin to handle the app permission."
+                )
+            )
+            
+            // 'Exit' the function
+            return
+        }
+        
+        //
+        if cursor != nil && filter != nil {
             cursor?.addFilterPredicate(filter!)
             
             // This filter will avoid audios/songs outside phone library(cloud).
@@ -82,7 +99,7 @@ class ArtworkQuery {
             // Query everything in background for a better performance.
             loadArtwork(cursor: cursor, size: size, format: format, uri: uri, quality: quality)
         } else {
-            // There's no permission so, return null to avoid crashes.
+            // Return to Flutter
             result(nil)
         }
     }
