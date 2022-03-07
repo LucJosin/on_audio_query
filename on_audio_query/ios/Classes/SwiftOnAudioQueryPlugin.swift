@@ -4,6 +4,9 @@ import MediaPlayer
 
 public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
     
+    // Channel Name
+    static let channelName: String = "com.lucasjosino.on_audio_query"
+    
     // Observers
     private var songsObserver: SongsObserver? = nil
     private var albumsObserver: AlbumsObserver? = nil
@@ -15,7 +18,7 @@ public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
     public static func register(with registrar: FlutterPluginRegistrar) {
         // Setup the method channel communication.
         let channel = FlutterMethodChannel(
-            name: "com.lucasjosino.on_audio_query",
+            name: "\(channelName)",
             binaryMessenger: registrar.messenger()
         )
         let instance = SwiftOnAudioQueryPlugin()
@@ -84,9 +87,11 @@ public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
     }
     
     private func setUpEventChannel(binary: FlutterBinaryMessenger) {
+        let cName = SwiftOnAudioQueryPlugin.channelName
+        
         // Songs channel.
         let songsChannel = FlutterEventChannel(
-            name: "com.lucasjosino.on_audio_query/songs_observer",
+            name: "\(cName)/songs_observer",
             binaryMessenger: binary
         )
         songsObserver = SongsObserver()
@@ -94,7 +99,7 @@ public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
         
         // Albums channel.
         let albumsChannel = FlutterEventChannel(
-            name: "com.lucasjosino.on_audio_query/albums_observer",
+            name: "\(cName)/albums_observer",
             binaryMessenger: binary
         )
         albumsObserver = AlbumsObserver()
@@ -102,7 +107,7 @@ public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
         
         // Artists channel.
         let artistsChannel = FlutterEventChannel(
-            name: "com.lucasjosino.on_audio_query/artists_observer",
+            name: "\(cName)/artists_observer",
             binaryMessenger: binary
         )
         artistsObserver = ArtistsObserver()
@@ -110,7 +115,7 @@ public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
         
         // Playlists channel.
         let playlistsChannel = FlutterEventChannel(
-            name: "com.lucasjosino.on_audio_query/playlists_observer",
+            name: "\(cName)/playlists_observer",
             binaryMessenger: binary
         )
         playlistsObserver = PlaylistsObserver()
@@ -118,7 +123,7 @@ public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
         
         // Genres channel.
         let genresChannel = FlutterEventChannel(
-            name: "com.lucasjosino.on_audio_query/genres_observer",
+            name: "\(cName)/genres_observer",
             binaryMessenger: binary
         )
         genresObserver = GenresObserver()

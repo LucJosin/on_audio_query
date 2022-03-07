@@ -35,19 +35,36 @@ class SongsQuery {
         )
         cursor.addFilterPredicate(cloudFilter)
         
-        // We cannot "query" without permission so, just return a empty list.
+        // Request permission status from the 'main' method.
         let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
-        if hasPermission {
-            // Query everything in background for a better performance.
-            loadSongs(cursor: cursor)
-        } else {
-            // There's no permission so, return empty to avoid crashes.
-            if sink != nil {
-                sink!([])
-            } else {
-                result!([])
-            }
+        
+        // We cannot 'query' without permission so, throw a PlatformException.
+        // Only one 'channel' will be 'functional'. If is null, ignore, if not, send the error.
+        if !hasPermission {
+            // Method from 'EventChannel' (observer)
+            self.sink?(
+                FlutterError.init(
+                    code: "403",
+                    message: "The app doesn't have permission to read files.",
+                    details: "Call the [permissionsRequest] method or install a external plugin to handle the app permission."
+                )
+            )
+            
+            // Method from 'MethodChannel' (method)
+            self.result?(
+                FlutterError.init(
+                    code: "403",
+                    message: "The app doesn't have permission to read files.",
+                    details: "Call the [permissionsRequest] method or install a external plugin to handle the app permission."
+                )
+            )
+            
+            // 'Exit' the function
+            return
         }
+        
+        // Query everything in background for a better performance.
+        loadSongs(cursor: cursor)
     }
     
     private func loadSongs(cursor: MPMediaQuery!) {
@@ -70,11 +87,10 @@ class SongsQuery {
             DispatchQueue.main.async {
                 // Here we'll check the "custom" sort and define a order to the list.
                 let finalList = formatSongList(args: self.args, allSongs: listOfSongs)
-                if self.sink != nil {
-                    self.sink!(finalList)
-                } else {
-                    self.result!(finalList)
-                }
+                
+                // After loading the information, send the 'result'.
+                self.sink?(finalList)
+                self.result?(finalList)
             }
         }
     }
