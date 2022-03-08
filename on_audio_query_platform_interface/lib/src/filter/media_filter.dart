@@ -48,7 +48,9 @@ class MediaFilter {
     this.ignoreCase = true,
     this.toQuery = const {},
     this.toRemove = const {},
-    this.type = const {},
+    this.type = const {
+      AudioType.IS_MUSIC: true,
+    },
   });
 
   ///

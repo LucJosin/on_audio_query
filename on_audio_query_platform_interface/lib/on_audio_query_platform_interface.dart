@@ -25,7 +25,13 @@ import './src/controllers/types_controller.dart';
 import 'src/filter/media_filter.dart';
 
 //
-export './src/controllers/columns_controller.dart';
+export './src/controllers/columns_controller.dart'
+    hide
+        SongColumns,
+        AlbumColumns,
+        ArtistColumns,
+        PlaylistColumns,
+        GenreColumns;
 export './src/controllers/models_controller.dart';
 export './src/controllers/sorts_controller.dart';
 export './src/controllers/types_controller.dart';

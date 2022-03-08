@@ -13,31 +13,35 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 =============
 */
 
-library on_audio_query_web;
-
 import 'dart:async';
-import 'dart:convert';
-import 'dart:html' as html;
 import 'dart:typed_data';
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
-import 'package:flutter/services.dart';
-import 'package:id3/id3.dart';
-import 'src/extensions/format_extension.dart';
-
-part 'src/on_audio_query_web_controller.dart';
-part 'src/types/with_filters_type.dart';
+import 'src/methods/query_helper.dart';
+import 'src/methods/queries/songs_query.dart';
+import 'src/methods/queries/albums_query.dart';
+import 'src/methods/queries/artists_query.dart';
+import 'src/methods/queries/genres_query.dart';
+import 'src/methods/queries/artwork_query.dart';
 
 /// A web implementation of the OnAudioQueryWeb plugin.
 class OnAudioQueryPlugin extends OnAudioQueryPlatform {
-  final _OnAudioQueryWebController _controller = _OnAudioQueryWebController();
-
   /// Registers this class as the default instance of [OnAudioQueryPlatform].
   static void registerWith(Registrar registrar) {
     OnAudioQueryPlatform.instance = OnAudioQueryPlugin();
   }
+
+  // Helper
+  final QueryHelper _helper = QueryHelper();
+
+  // Query methods
+  final SongsQuery _songsQuery = SongsQuery();
+  final AlbumsQuery _albumsQuery = AlbumsQuery();
+  final ArtistsQuery _artistsQuery = ArtistsQuery();
+  final GenresQuery _genresQuery = GenresQuery();
+  final ArtworkQuery _artworkQuery = ArtworkQuery();
 
   @override
   Future<List<SongModel>> querySongs({
@@ -49,7 +53,7 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     String? path,
   }) async {
     // TODO: Fix web platform..
-    return _controller.querySongs(sortType, orderType, ignoreCase!, path);
+    return _songsQuery.querySongs(sortType, orderType, ignoreCase!, path);
   }
 
   @override
@@ -60,7 +64,7 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     UriType? uriType,
     bool? ignoreCase,
   }) async {
-    return _controller.queryAlbums(sortType, orderType, ignoreCase!);
+    return _albumsQuery.queryAlbums(sortType, orderType, ignoreCase!);
   }
 
   @override
@@ -71,7 +75,7 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     UriType? uriType,
     bool? ignoreCase,
   }) async {
-    return _controller.queryArtists(sortType, orderType, ignoreCase!);
+    return _artistsQuery.queryArtists(sortType, orderType, ignoreCase!);
   }
 
   @override
@@ -82,7 +86,7 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     UriType? uriType,
     bool? ignoreCase,
   }) async {
-    return _controller.queryGenres(sortType, orderType, ignoreCase!);
+    return _genresQuery.queryGenres(sortType, orderType, ignoreCase!);
   }
 
   @override
@@ -93,13 +97,7 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     OrderType? orderType,
     bool? ignoreCase,
   }) async {
-    return _controller.queryAudiosFrom(
-      type,
-      where,
-      sortType,
-      orderType,
-      ignoreCase!,
-    );
+    return [];
   }
 
   @override
@@ -108,17 +106,16 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     WithFiltersType withType,
     dynamic args,
   ) async {
-    return _controller.queryWithFilters(argsVal, withType, args);
+    return [];
   }
 
   @override
   Future<DeviceModel> queryDeviceInfo() async {
-    Map tmpMap = {
-      "device_model": _controller.parseUserAgentToBrowserName(),
+    return DeviceModel({
+      "device_model": _helper.parseUserAgentToBrowserName(),
       "device_sys_type": "Web",
       "device_sys_version": -1,
-    };
-    return DeviceModel(tmpMap);
+    });
   }
 
   @override
@@ -129,6 +126,6 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     int? size,
     int? quality,
   }) async {
-    return _controller.queryArtwork(id, type, format, size, quality);
+    return _artworkQuery.queryArtwork(id, type, format, size, quality);
   }
 }

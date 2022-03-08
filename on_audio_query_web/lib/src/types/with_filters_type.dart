@@ -1,4 +1,6 @@
-part of on_audio_query_web;
+import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
+
+import '/src/extensions/format_extension.dart';
 
 List<SongModel> checkSongsArgs(
   String argsVal,
