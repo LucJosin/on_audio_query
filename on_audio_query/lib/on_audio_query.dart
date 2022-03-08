@@ -12,25 +12,10 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 =============
 */
 
-library on_audio_query;
+// Export the interface
+export 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart'
+    hide OnAudioQueryPlatform;
 
-//
-import 'dart:async';
-import 'dart:typed_data';
-
-//Dart/Flutter
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-
-//Platform Interface
-import 'package:on_audio_query_platform_interface/details/on_audio_query_helper.dart';
-import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
-
-//
-export 'package:on_audio_query_platform_interface/details/on_audio_query_helper.dart';
-
-//Controller
-part 'details/on_audio_query_controller.dart';
-
-//Widget
-part 'widget/query_artwork_widget.dart';
+// Export the [OnAudioQuery] and [QueryArtworkWidget]
+export './src/on_audio_query_controller.dart';
+export './src/widget/query_artwork_widget.dart';

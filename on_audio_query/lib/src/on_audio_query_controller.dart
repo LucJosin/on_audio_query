@@ -6,57 +6,20 @@ Website: https://www.lucasjosino.com/
 =============
 Plugin/Id: on_audio_query#0
 Homepage: https://github.com/LucJosin/on_audio_query
-Homepage(Platform): https://github.com/LucJosin/on_audio_query/tree/main/on_audio_query_platform_interface
 Pub: https://pub.dev/packages/on_audio_query
 License: https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/LICENSE
 Copyright: © 2021, Lucas Josino. All rights reserved.
 =============
 */
 
-import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:plugin_platform_interface/plugin_platform_interface.dart';
+import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
-import 'method_channel_on_audio_query.dart';
-import './src/controllers/models_controller.dart';
-import './src/controllers/sorts_controller.dart';
-import './src/controllers/types_controller.dart';
-import 'src/filter/media_filter.dart';
-
-//
-export './src/controllers/columns_controller.dart';
-export './src/controllers/models_controller.dart';
-export './src/controllers/sorts_controller.dart';
-export './src/controllers/types_controller.dart';
-export 'src/filter/media_filter.dart';
-
-/// The interface that implementations of on_audio_query must implement.
-///
-/// Platform implementations should extend this class rather than implement it as `on_audio_query`
-/// does not consider newly added methods to be breaking changes. Extending this class
-/// (using `extends`) ensures that the subclass will get the default implementation, while
-/// platform implementations that `implements` this interface will be broken by newly added
-/// [OnAudioQueryPlatform] methods.
-abstract class OnAudioQueryPlatform extends PlatformInterface {
-  /// Constructs a OnAudioQueryPlatform.
-  OnAudioQueryPlatform() : super(token: _token);
-
-  static final Object _token = Object();
-
-  static OnAudioQueryPlatform _instance = MethodChannelOnAudioQuery();
-
-  /// The default instance of [OnAudioQueryPlatform] to use.
-  ///
-  /// Defaults to [MethodChannelOnAudioQuery].
-  static OnAudioQueryPlatform get instance => _instance;
-
-  /// Platform-specific plugins should set this with their own platform-specific
-  /// class that extends [OnAudioQueryPlatform] when they register themselves.
-  static set instance(OnAudioQueryPlatform instance) {
-    PlatformInterface.verify(instance, _token);
-    _instance = instance;
-  }
+///Interface and Main method for use on_audio_query
+class OnAudioQuery {
+  /// The platform interface that drives this plugin
+  static OnAudioQueryPlatform get platform => OnAudioQueryPlatform.instance;
 
   /// Used to return Songs Info based in [SongModel].
   ///
@@ -68,11 +31,10 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
   /// * [path] is used to define where the songs will be 'queried'.
   ///
-  ///
   /// Important:
   ///
   /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
-  /// * If [sortType] is null, will be set to [title].
+  /// * If [sortType] is null, will be set to [DEFAULT].
   /// * If [uriType] is null, will be set to [EXTERNAL].
   /// * If [ignoreCase] is null, will be set to [true].
   /// * If [path] is null, will be set to the default platform [path].
@@ -83,7 +45,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<SongModel>> querySongs({
     MediaFilter? filter,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -95,8 +57,8 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         bool? ignoreCase,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead") String? path,
-  }) {
-    throw UnimplementedError('querySongs() has not been implemented.');
+  }) async {
+    return platform.querySongs(filter: filter);
   }
 
   /// Used to observer(listen) the songs.
@@ -122,9 +84,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// |   Android   |   IOS   |   Web   |
   /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `❌` | `❌` | <br>
+  /// | `✔️` | `✔️` | `❌` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Stream<List<SongModel>> observeSongs({
     MediaFilter? filter,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -137,7 +99,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
         bool? ignoreCase,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead") String? path,
   }) {
-    throw UnimplementedError('observeSongs() has not been implemented.');
+    return platform.observeSongs(filter: filter);
   }
 
   /// Used to return Albums Info based in [AlbumModel].
@@ -162,7 +124,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<AlbumModel>> queryAlbums({
     MediaFilter? filter,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -173,8 +135,8 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
         UriType? uriType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         bool? ignoreCase,
-  }) {
-    throw UnimplementedError('queryAlbums() has not been implemented.');
+  }) async {
+    return platform.queryAlbums(filter: filter);
   }
 
   /// Used to observer(listen) the albums.
@@ -197,7 +159,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// |   Android   |   IOS   |   Web   |
   /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `❌` | `❌` | <br>
+  /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Stream<List<AlbumModel>> observeAlbums({
@@ -211,7 +173,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         bool? ignoreCase,
   }) {
-    throw UnimplementedError('observeAlbums() has not been implemented.');
+    return platform.observeAlbums(filter: filter);
   }
 
   /// Used to return Artists Info based in [ArtistModel].
@@ -236,7 +198,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<ArtistModel>> queryArtists({
     MediaFilter? filter,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -247,8 +209,8 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
         UriType? uriType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         bool? ignoreCase,
-  }) {
-    throw UnimplementedError('queryArtists() has not been implemented.');
+  }) async {
+    return platform.queryArtists(filter: filter);
   }
 
   /// Used to observer(listen) the artists.
@@ -271,7 +233,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// |   Android   |   IOS   |   Web   |
   /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `❌` | `❌` | <br>
+  /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Stream<List<ArtistModel>> observeArtists({
@@ -285,7 +247,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         bool? ignoreCase,
   }) {
-    throw UnimplementedError('observeArtists() has not been implemented.');
+    return platform.observeArtists(filter: filter);
   }
 
   /// Used to return Playlists Info based in [PlaylistModel].
@@ -310,7 +272,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<PlaylistModel>> queryPlaylists({
     MediaFilter? filter,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -321,8 +283,8 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
         UriType? uriType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         bool? ignoreCase,
-  }) {
-    throw UnimplementedError('queryPlaylists() has not been implemented.');
+  }) async {
+    return platform.queryPlaylists(filter: filter);
   }
 
   /// Used to observer(listen) the playlists.
@@ -345,7 +307,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// |   Android   |   IOS   |   Web   |
   /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `❌` | `❌` | <br>
+  /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Stream<List<PlaylistModel>> observePlaylists({
@@ -359,7 +321,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         bool? ignoreCase,
   }) {
-    throw UnimplementedError('observePlaylists() has not been implemented.');
+    return platform.observePlaylists(filter: filter);
   }
 
   /// Used to return Genres Info based in [GenreModel].
@@ -376,6 +338,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
   /// * If [sortType] is null, will be set to [GenreName].
   /// * If [uriType] is null, will be set to [EXTERNAL].
+  /// * If [ignoreCase] is null, will be set to [true].
   ///
   /// Platforms:
   ///
@@ -383,7 +346,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<GenreModel>> queryGenres({
     MediaFilter? filter,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -394,8 +357,8 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
         UriType? uriType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         bool? ignoreCase,
-  }) {
-    throw UnimplementedError('queryGenres() has not been implemented.');
+  }) async {
+    return platform.queryGenres(filter: filter);
   }
 
   /// Used to observer(listen) the genres.
@@ -417,7 +380,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   ///
   /// |   Android   |   IOS   |   Web   |
   /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `❌` | `❌` | <br>
+  /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Stream<List<GenreModel>> observeGenres({
@@ -431,7 +394,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         bool? ignoreCase,
   }) {
-    throw UnimplementedError('observeGenres() has not been implemented.');
+    return platform.observeGenres(filter: filter);
   }
 
   /// Used to return Songs/Audios Info from a specific queryType based in [SongModel].
@@ -450,7 +413,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   @Deprecated(
     "Deprecated after [3.0.0]. Use one of the [query] methods instead",
   )
@@ -460,8 +423,8 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
     SongSortType? sortType,
     OrderType? orderType,
     bool? ignoreCase,
-  }) {
-    throw UnimplementedError('queryAudiosFrom() has not been implemented.');
+  }) async {
+    return [];
   }
 
   /// Used to return Songs Info based in Something. Works like a "Search".
@@ -499,16 +462,16 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   @Deprecated(
     "Deprecated after [3.0.0]. Use one of the [query] methods instead",
   )
   Future<List<dynamic>> queryWithFilters(
     String argsVal,
-    WithFiltersType withType,
+    WithFiltersType withType, {
     dynamic args,
-  ) {
-    throw UnimplementedError('queryWithFilters() has not been implemented.');
+  }) async {
+    return [];
   }
 
   /// Used to return Songs Artwork.
@@ -539,15 +502,21 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<Uint8List?> queryArtwork(
     int id,
     ArtworkType type, {
     ArtworkFormat? format,
     int? size,
     int? quality,
-  }) {
-    throw UnimplementedError('queryArtwork() has not been implemented.');
+  }) async {
+    return platform.queryArtwork(
+      id,
+      type,
+      format: format,
+      size: size,
+      quality: quality,
+    );
   }
 
   /// Used to return Songs Info from a specific [Folder] based in [SongModel].
@@ -572,7 +541,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   @Deprecated(
     "Deprecated after [3.0.0]. Use one of the [query] methods instead",
   )
@@ -581,8 +550,8 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
     SongSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
-  }) {
-    throw UnimplementedError('queryFromFolder() has not been implemented.');
+  }) async {
+    return [];
   }
 
   /// Used to return Songs path.
@@ -597,10 +566,10 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   @Deprecated("Deprecated after [3.0.0]")
-  Future<List<String>> queryAllPath() {
-    throw UnimplementedError('queryAllPath() has not been implemented.');
+  Future<List<String>> queryAllPath() async {
+    return [];
   }
 
   //Playlist methods
@@ -623,13 +592,17 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<int?> createPlaylist(
     String name, {
     String? author,
     String? desc,
-  }) {
-    throw UnimplementedError('createPlaylist() has not been implemented.');
+  }) async {
+    return platform.createPlaylist(
+      name,
+      author: author,
+      desc: desc,
+    );
   }
 
   /// Used to remove/delete a Playlist
@@ -644,9 +617,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Future<bool> removePlaylist(int playlistId) {
-    throw UnimplementedError('removePlaylist() has not been implemented.');
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
+  Future<bool> removePlaylist(int playlistId) async {
+    return platform.removePlaylist(playlistId);
   }
 
   /// Used to add a specific song/audio to a specific Playlist
@@ -662,9 +635,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Future<bool> addToPlaylist(int playlistId, int audioId) {
-    throw UnimplementedError('addToPlaylist() has not been implemented.');
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
+  Future<bool> addToPlaylist(int playlistId, int audioId) async {
+    return platform.addToPlaylist(playlistId, audioId);
   }
 
   /// Used to remove a specific song/audio from a specific Playlist
@@ -680,9 +653,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Future<bool> removeFromPlaylist(int playlistId, int audioId) {
-    throw UnimplementedError('removeFromPlaylist() has not been implemented.');
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
+  Future<bool> removeFromPlaylist(int playlistId, int audioId) async {
+    return platform.removeFromPlaylist(playlistId, audioId);
   }
 
   /// Used to change song/audio position from a specific Playlist
@@ -699,9 +672,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Future<bool> moveItemTo(int playlistId, int from, int to) {
-    throw UnimplementedError('moveItemTo() has not been implemented.');
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
+  Future<bool> moveItemTo(int playlistId, int from, int to) async {
+    return platform.moveItemTo(playlistId, from, to);
   }
 
   /// Used to rename a specific Playlist
@@ -717,9 +690,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Future<bool> renamePlaylist(int playlistId, String newName) {
-    throw UnimplementedError('renamePlaylist() has not been implemented.');
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
+  Future<bool> renamePlaylist(int playlistId, String newName) async {
+    return renamePlaylist(playlistId, newName);
   }
 
   // Permissions methods
@@ -737,9 +710,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Future<bool> permissionsStatus() {
-    throw UnimplementedError('permissionsStatus() has not been implemented.');
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
+  Future<bool> permissionsStatus() async {
+    return platform.permissionsStatus();
   }
 
   /// Used to request Android permissions.
@@ -755,9 +728,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Future<bool> permissionsRequest() {
-    throw UnimplementedError('permissionsRequest() has not been implemented.');
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
+  Future<bool> permissionsRequest() async {
+    return platform.permissionsRequest();
   }
 
   // Device Information
@@ -777,9 +750,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Future<DeviceModel> queryDeviceInfo() {
-    throw UnimplementedError('queryDeviceInfo() has not been implemented.');
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
+  Future<DeviceModel> queryDeviceInfo() async {
+    return platform.queryDeviceInfo();
   }
 
   // Others
@@ -818,9 +791,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// |--------------|-----------------|-----------------|
   /// | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Future<bool> scanMedia(String path) {
-    throw UnimplementedError('scanMedia() has not been implemented.');
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  Future<bool> scanMedia(String path) async {
+    return await platform.scanMedia(path);
   }
 
   /// Used to check the observers(listeners) status of:
@@ -833,7 +806,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// Will return:
   ///
   /// * A [ObserversModel], every parameters from this model will return a boolean
-  /// indicating if the observers is **RUNNING** or not.
+  /// indicating if the observers is **running** or not.
   ///
   /// Platforms:
   ///
@@ -842,7 +815,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Future<ObserversModel> observersStatus() {
-    throw UnimplementedError('observersStatus() has not been implemented.');
+  Future<ObserversModel> observersStatus() async {
+    return await platform.observersStatus();
   }
 }

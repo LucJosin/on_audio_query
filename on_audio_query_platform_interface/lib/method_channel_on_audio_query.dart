@@ -20,8 +20,6 @@ import 'package:flutter/services.dart';
 
 import 'on_audio_query_platform_interface.dart';
 
-import 'package:on_audio_query_platform_interface/details/on_audio_query_helper.dart';
-
 const String _channelName = 'com.lucasjosino.on_audio_query';
 const MethodChannel _channel = MethodChannel(_channelName);
 
