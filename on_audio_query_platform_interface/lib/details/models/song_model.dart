@@ -102,8 +102,67 @@ class SongModel {
   /// Return a map with all [keys] and [values] from specific song.
   Map get getMap => _info;
 
-  @override
-  String toString() {
-    return _info.toString();
+  ///
+  SongModel copyWith({
+    int? id,
+    int? audioId,
+    String? data,
+    String? uri,
+    String? displayName,
+    String? displayNameWOExt,
+    int? size,
+    String? album,
+    int? albumId,
+    String? artist,
+    int? artistId,
+    String? genre,
+    int? genreId,
+    int? bookmark,
+    String? composer,
+    int? dateAdded,
+    int? dateModified,
+    int? duration,
+    String? title,
+    int? track,
+    String? fileExtension,
+    bool? isAlarm,
+    bool? isAudioBook,
+    bool? isMusic,
+    bool? isNotification,
+    bool? isPodcast,
+    bool? isRingtone,
+  }) {
+    return SongModel({
+      "_id": id ?? this.id,
+      "audio_id": audioId ?? this.audioId,
+      "_data": data ?? this.data,
+      "_uri": uri ?? this.uri,
+      "_display_name": displayName ?? this.displayName,
+      "_display_name_wo_ext": displayNameWOExt ?? this.displayNameWOExt,
+      "_size": size ?? this.size,
+      "album": album ?? this.album,
+      "album_id": albumId ?? this.albumId,
+      "artist": artist ?? this.artist,
+      "artist_id": artistId ?? this.artistId,
+      "genre": genre ?? this.genre,
+      "genre_id": genreId ?? this.genreId,
+      "bookmark": bookmark ?? this.bookmark,
+      "composer": composer ?? this.composer,
+      "date_added": dateAdded ?? this.dateAdded,
+      "date_modified": dateModified ?? this.dateModified,
+      "duration": duration ?? this.duration,
+      "title": title ?? this.title,
+      "track": track ?? this.track,
+      "file_extension": fileExtension ?? this.fileExtension,
+      "is_alarm": isAlarm ?? this.isAlarm,
+      "is_audiobook": isAudioBook ?? this.isAudioBook,
+      "is_music": isMusic ?? this.isMusic,
+      "is_notification": isNotification ?? this.isNotification,
+      "is_podcast": isPodcast ?? this.isPodcast,
+      "is_ringtone": isRingtone ?? this.isRingtone,
+    });
   }
+
+  @override
+  String toString() => '$_info';
 }

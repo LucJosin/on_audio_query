@@ -22,8 +22,21 @@ class ArtistModel {
   /// Return a map with all [keys] and [values] from specific artist.
   Map get getMap => _info;
 
-  @override
-  String toString() {
-    return _info.toString();
+  ///
+  ArtistModel copyWith({
+    int? id,
+    String? artist,
+    int? numberOfAlbums,
+    int? numberOfTracks,
+  }) {
+    return ArtistModel({
+      "_id": id ?? this.id,
+      "artist": artist ?? this.artist,
+      "number_of_albums": numberOfAlbums ?? this.numberOfAlbums,
+      "number_of_tracks": numberOfTracks ?? this.numberOfTracks,
+    });
   }
+
+  @override
+  String toString() => '$_info';
 }

@@ -19,8 +19,19 @@ class GenreModel {
   /// Return a map with all [keys] and [values] from specific genre.
   Map get getMap => _info;
 
-  @override
-  String toString() {
-    return _info.toString();
+  ///
+  GenreModel copyWith({
+    int? id,
+    String? genre,
+    int? numOfSongs,
+  }) {
+    return GenreModel({
+      "_id": id ?? this.id,
+      "name": genre ?? this.genre,
+      "num_of_songs": numOfSongs ?? this.numOfSongs,
+    });
   }
+
+  @override
+  String toString() => '$_info';
 }

@@ -20,7 +20,5 @@ class DeviceModel {
   Map get getMap => _info;
 
   @override
-  String toString() {
-    return _info.toString();
-  }
+  String toString() => '$_info';
 }

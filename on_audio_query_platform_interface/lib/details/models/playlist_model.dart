@@ -28,8 +28,25 @@ class PlaylistModel {
   /// Return a map with all [keys] and [values] from specific playlist.
   Map get getMap => _info;
 
-  @override
-  String toString() {
-    return _info.toString();
+  ///
+  PlaylistModel copyWith({
+    int? id,
+    String? playlist,
+    String? data,
+    int? dateAdded,
+    int? dateModified,
+    int? numOfSongs,
+  }) {
+    return PlaylistModel({
+      "_id": id ?? this.id,
+      "name": playlist ?? this.playlist,
+      "_data": data ?? this.data,
+      "date_added": dateAdded ?? this.dateAdded,
+      "date_modified": dateModified ?? this.dateModified,
+      "num_of_songs": numOfSongs ?? this.numOfSongs,
+    });
   }
+
+  @override
+  String toString() => '$_info';
 }

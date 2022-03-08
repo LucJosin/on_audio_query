@@ -23,7 +23,5 @@ class ObserversModel {
   bool get genresObserver => _info["genres_observer"];
 
   @override
-  String toString() {
-    return _info.toString();
-  }
+  String toString() => '$_info';
 }
