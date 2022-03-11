@@ -2,16 +2,29 @@ import Flutter
 import MediaPlayer
 
 class PlaylistsQuery {
-    var args: [String: Any]
-    var result: FlutterResult?
-    var sink: FlutterEventSink?
+    // Main parameters
+    private var args: [String: Any]
+    private var result: FlutterResult?
+    private var sink: FlutterEventSink?
+    
+    // Song projection (to filter).
+    private let playlistProjection: [String?] = [
+        "_id",
+        nil,
+        "date_added",
+        "date_modified",
+        "name"
+    ]
     
     init(
+        // Call from 'MethodChannel' (method).
         call: FlutterMethodCall? = nil,
         result: FlutterResult? = nil,
+        // Call from 'EventChannel' (observer).
         sink: FlutterEventSink? = nil,
-        args: [String: Any]? = nil) {
-        // Add all arguments inside a map.
+        args: [String: Any]? = nil
+    ) {
+        // Get all arguments inside the map.
         self.args = sink != nil ? args! : call!.arguments as! [String: Any]
         self.sink = sink
         self.result = result
@@ -24,11 +37,11 @@ class PlaylistsQuery {
         // TODO: Add sort type to [queryPlaylists].
         
         // This filter will avoid audios/songs outside phone library(cloud).
-        let cloudFilter = MPMediaPropertyPredicate.init(
+        cursor.addFilterPredicate(MPMediaPropertyPredicate.init(
             value: false,
-            forProperty: MPMediaItemPropertyIsCloudItem
-        )
-        cursor.addFilterPredicate(cloudFilter)
+            forProperty: MPMediaItemPropertyIsCloudItem,
+            comparisonType: .equalTo
+        ))
         
         // Request permission status from the 'main' method.
         let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
@@ -58,31 +71,48 @@ class PlaylistsQuery {
             return
         }
         
+        // If [items] is null. Call early return with empty list.
+        if cursor.collections == nil {
+            // Empty list.
+            self.sink?([])
+            self.result?([])
+            
+            // 'Exit' the function.
+            return
+        }
+        
         // Query everything in background for a better performance.
-        loadPlaylists(cursor: cursor.collections)
-    }
-    
-    private func loadPlaylists(cursor: [MPMediaItemCollection]!) {
         DispatchQueue.global(qos: .userInitiated).async {
             var listOfPlaylists: [[String: Any?]] = Array()
             
             // For each item(playlist) inside this "cursor", take one and "format"
             // into a [Map<String, dynamic>], all keys are based on [Android]
             // platforms so, if you change some key, will have to change the [Android] too.
-            for playlist in cursor {
-                var playlistData = loadPlaylistItem(playlist: playlist)
+            for playlist in cursor.collections! {
+                var playlistData = self.loadPlaylistItem(playlist: playlist)
                 
-                // If the first song file doesn't has a assetURL, is probably a Cloud item.
+                // If the first song file doesn't has a [assetURL], is probably a Cloud item.
                 if !playlist.items.isEmpty && !playlist.items[0].isCloudItem && playlist.items[0].assetURL != nil {
                     // Count and add the number of songs for every genre.
-                    let tmpMediaCount = getMediaCount(type: 1, id: playlistData["_id"] as! UInt64)
-                    playlistData["num_of_songs"] = tmpMediaCount
+                    let mediaCount = (playlistData["_id"] as! UInt64).getMediaCount(type: 1)
+                    playlistData["num_of_songs"] = mediaCount
                 } else {
                     playlistData["num_of_songs"] = 0
                 }
                 
                 listOfPlaylists.append(playlistData)
             }
+            
+            // Define the [toQuery] and [toRemove] filter.
+            let toQuery = self.args["toQuery"] as! [Int: [String]]
+            let toRemove = self.args["toRemove"] as! [Int: [String]]
+            
+            // 'Build' the filter.
+            listOfPlaylists = listOfPlaylists.mediaFilter(
+                mediaProjection: self.playlistProjection,
+                toQuery: toQuery,
+                toRemove: toRemove
+            )
             
             // After finish the "query", go back to the "main" thread(You can only call flutter
             // inside the main thread).
@@ -94,5 +124,32 @@ class PlaylistsQuery {
                 self.result?(listOfPlaylists)
             }
         }
+    }
+    
+    private func loadPlaylistItem(playlist: MPMediaItemCollection) -> [String: Any?] {
+        //Get the artwork from the first song inside the playlist
+        var artwork: Data? = nil
+        
+        //
+        if playlist.items.count >= 1 {
+            artwork = playlist.items[0].artwork?.image(
+                at: CGSize(width: 150, height: 150)
+            )?.jpegData(compressionQuality: 1)
+        }
+        
+        //
+        let id = playlist.value(forProperty: MPMediaPlaylistPropertyPersistentID) as? Int
+        let dateAdded = playlist.value(forProperty: "dateCreated") as? Date
+        let dateModified = playlist.value(forProperty: "dateModified") as? Date
+        
+        //
+        return [
+            "_id": id,
+            "name": playlist.value(forProperty: MPMediaPlaylistPropertyName),
+            "date_added": Int(dateAdded!.timeIntervalSince1970),
+            "date_modified": Int(dateModified!.timeIntervalSince1970),
+            "number_of_tracks": playlist.items.count,
+            "artwork": artwork
+        ]
     }
 }
