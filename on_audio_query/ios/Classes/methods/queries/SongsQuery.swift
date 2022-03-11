@@ -34,10 +34,10 @@ class SongsQuery {
     ]
     
     init(
-        // Call from 'MethodChannel' (method)
+        // Call from 'MethodChannel' (method).
         call: FlutterMethodCall? = nil,
         result: FlutterResult? = nil,
-        // Call from 'EventChannel' (observer)
+        // Call from 'EventChannel' (observer).
         sink: FlutterEventSink? = nil,
         args: [String: Any]? = nil
     ) {
@@ -48,7 +48,7 @@ class SongsQuery {
     }
     
     func querySongs() {
-        // The sortType. If nil, will be set as [Title].
+        // The sortType. If 'nil', will be set as [Title].
         let sortType = args["sortType"] as? Int ?? 0
         
         // Choose the type(To match android side, let's call "cursor").
@@ -103,6 +103,16 @@ class SongsQuery {
             return
         }
         
+        // If [items] is null. Call early return with empty list.
+        if cursor.items == nil {
+            // Empty list.
+            self.sink?([])
+            self.result?([])
+            
+            // 'Exit' the function.
+            return
+        }
+        
         // Query everything in background for a better performance.
         DispatchQueue.global(qos: .userInitiated).async {
             var listOfSongs: [[String: Any?]] = Array()
@@ -117,6 +127,17 @@ class SongsQuery {
                     listOfSongs.append(songData)
                 }
             }
+            
+            // Define the [toQuery] and [toRemove] filter.
+            let toQuery = self.args["toQuery"] as! [Int: [String]]
+            let toRemove = self.args["toRemove"] as! [Int: [String]]
+            
+            // 'Build' the filter.
+            listOfSongs = listOfSongs.mediaFilter(
+                mediaProjection: self.songProjection,
+                toQuery: toQuery,
+                toRemove: toRemove
+            )
             
             // After finish the "query", go back to the "main" thread(You can only call flutter
             // inside the main thread).
@@ -167,56 +188,6 @@ class SongsQuery {
         let order = args["orderType"] as? Int
         let sortType = args["sortType"] as? Int
         let ignoreCase = args["ignoreCase"] as! Bool
-        
-        // Define the 'toQuery' and 'toRemove' filter.
-        let toQuery = args["toQuery"] as! [Int: [String]]
-        let toRemove = args["toRemove"] as! [Int: [String]]
-        
-        // For every 'row' from 'toQuery', add the 'filter'.
-        for (id, values) in toQuery {
-            
-            // If the given [id] doesn't exist. Skip to next.
-            if songProjection[id] == nil {
-                continue
-            }
-            
-            // The [id] is a valid value. Now, for every item/word from values
-            // remove all that doesn't match.
-            for value in values {
-                // Remove all items.
-                allSongsCopy.removeAll(where: { songs in
-                    // Check if contains.
-                    return songs.contains(where: { key, val in
-                        // If the [key] and [projection] match, check if the value *contains*.
-                        // If so, keep the 'song'. If not, remove it.
-                        return key == songProjection[id] && !String(describing: val).contains(value)
-                    })
-                })
-            }
-        }
-        
-        // For every 'row' from 'toQuery', add the 'filter'.
-        for (id, values) in toRemove {
-            
-            // If the given [id] doesn't exist. Skip to next.
-            if songProjection[id] == nil {
-                continue
-            }
-            
-            // The [id] is a valid value. Now, for every item/word from values
-            // remove all that does match.
-            for value in values {
-                // Remove all items.
-                allSongsCopy.removeAll(where: { songs in
-                    // Check if contains.
-                    return songs.contains(where: { key, val in
-                        // If the [key] and [projection] match, check if the value *contains*.
-                        // If so, remove the 'song'. If not, keep it.
-                        return key == songProjection[id] && String(describing: val).contains(value)
-                    })
-                })
-            }
-        }
         
         // Sort the list 'manually'.
         switch sortType {
