@@ -21,9 +21,6 @@ class QueryController(
             "queryPlaylists" -> PlaylistsQuery().init(context, result, call)
             "queryGenres" -> GenresQuery().init(context, result, call)
             "queryArtwork" -> ArtworkQuery().queryArtwork(context, result, call)
-            "queryAudiosFrom" -> AudiosFromQuery().querySongsFrom(context, result, call)
-            "queryWithFilters" -> WithFiltersQuery().queryWithFilters(context, result, call)
-            "queryAllPath" -> AllPathQuery().queryAllPath(context, result)
             //Playlists methods
             "createPlaylist" -> PlaylistController().createPlaylist(context, result, call)
             "removePlaylist" -> PlaylistController().removePlaylist(context, result, call)

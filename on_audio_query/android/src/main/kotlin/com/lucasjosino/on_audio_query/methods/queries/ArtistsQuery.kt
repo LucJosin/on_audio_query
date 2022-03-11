@@ -3,6 +3,7 @@ package com.lucasjosino.on_audio_query.methods.queries
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
+import android.provider.MediaStore
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -10,8 +11,6 @@ import com.lucasjosino.on_audio_query.controllers.PermissionController
 import com.lucasjosino.on_audio_query.methods.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkArtistsUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkArtistSortType
-import com.lucasjosino.on_audio_query.utils.artistProjection
-import com.lucasjosino.on_audio_query.utils.songProjection
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -31,65 +30,62 @@ class ArtistsQuery : ViewModel() {
     private lateinit var resolver: ContentResolver
     private lateinit var sortType: String
 
+    // Artists projection
+    private val artistProjection: Array<String>
+        get() = arrayOf(
+            MediaStore.Audio.Artists._ID,
+            MediaStore.Audio.Artists.ARTIST,
+            MediaStore.Audio.Artists.NUMBER_OF_ALBUMS,
+            MediaStore.Audio.Artists.NUMBER_OF_TRACKS
+        )
+
     @Suppress("UNCHECKED_CAST")
     fun init(
         context: Context,
-        //
+        // Call from 'MethodChannel' (method).
         result: MethodChannel.Result? = null,
         call: MethodCall? = null,
-        //
+        // Call from 'EventChannel' (observer).
         sink: EventChannel.EventSink? = null,
         args: Map<*, *>? = null
     ) {
+        // Define the [resolver]. This method is used to call the [query].
         resolver = context.contentResolver
 
-        val pSortType: Int?
-        val pOrderType: Int
-        val pIgnoreCase: Boolean
-        val pUri: Int
+        // Define the [args]. Will be delivered from:
+        // [result](From MethodChannel) or [sink](From EventChannel)
+        val pArgs: Map<String, Any?> = (args ?: call?.arguments) as Map<String, Any?>
 
-        val toQuery: MutableMap<Int, ArrayList<String>>
-        val toRemove: MutableMap<Int, ArrayList<String>>
+        // Define all 'basic' filters.
+        val pSortType: Int? = pArgs["sortType"] as Int?
+        val pOrderType: Int = pArgs["orderType"] as Int
+        val pIgnoreCase: Boolean = pArgs["ignoreCase"] as Boolean
+        val pUri: Int = pArgs["uri"] as Int
 
-        if (sink != null && args != null) {
-            pSortType = args["sortType"] as Int?
-            pOrderType = args["orderType"] as Int
-            pIgnoreCase = args["ignoreCase"] as Boolean
-            pUri = args["uri"] as Int
-
-            toQuery = args["toQuery"] as MutableMap<Int, ArrayList<String>>
-            toRemove = args["toRemove"] as MutableMap<Int, ArrayList<String>>
-        } else {
-            pSortType = call!!.argument<Int>("sortType")
-            pOrderType = call.argument<Int>("orderType")!!
-            pIgnoreCase = call.argument<Boolean>("ignoreCase")!!
-            pUri = call.argument<Int>("uri")!!
-
-            toQuery = call.argument<MutableMap<Int, ArrayList<String>>>("toQuery")!!
-            toRemove = call.argument<MutableMap<Int, ArrayList<String>>>("toRemove")!!
-        }
+        // Define the [toQuery] and [toRemove] filters.
+        val toQuery: Map<Int, ArrayList<String>> = pArgs["toQuery"] as Map<Int, ArrayList<String>>
+        val toRemove: Map<Int, ArrayList<String>> = pArgs["toRemove"] as Map<Int, ArrayList<String>>
 
         // Sort: Type and Order
-        sortType = checkArtistSortType(
-            pSortType,
-            pOrderType,
-            pIgnoreCase
-        )
+        sortType = checkArtistSortType(pSortType, pOrderType, pIgnoreCase)
+
         // Check uri:
         //   * [0]: External.
         //   * [1]: Internal.
         uri = checkArtistsUriType(pUri)
 
-        // Add item/items to 'query'.
-        for ((id, values) in toQuery) {
+        // For every 'row' from 'toQuery', *keep* the media that contains the 'filter'.
+        for ((id: Int, values: ArrayList<String>) in toQuery) {
             for (value in values) {
+                // The comparison type: contains
                 selection += artistProjection[id] + " LIKE '%" + value + "%' " + "AND "
             }
         }
 
-        // Remove item/items from 'query'.
-        for ((id, values) in toRemove) {
+        // For every 'row' from 'toRemove', *remove* the media that contains the 'filter'.
+        for ((id: Int, values: ArrayList<String>) in toRemove) {
             for (value in values) {
+                // The comparison type: contains
                 selection += artistProjection[id] + " NOT LIKE '%" + value + "%' " + "AND "
             }
         }
@@ -97,19 +93,6 @@ class ArtistsQuery : ViewModel() {
         // Remove the 'AND ' keyword from selection.
         selection = selection.removeSuffix("AND ")
 
-        Log.d("selection", selection)
-
-        queryArtists(context, result, sink)
-    }
-
-    /**
-     * Method to "query" all artists.
-     */
-    private fun queryArtists(
-        context: Context,
-        result: MethodChannel.Result?,
-        sink: EventChannel.EventSink?
-    ) {
         // Request permission status from the 'main' method.
         val hasPermission: Boolean = PermissionController().permissionStatus(context)
 
@@ -170,13 +153,3 @@ class ArtistsQuery : ViewModel() {
             return@withContext artistList
         }
 }
-
-//Extras:
-
-//I/OnArtistCursor[All/Audio]: [
-// _id
-// artist
-// artist_key
-// number_of_albums
-// number_of_tracks
-// ]
