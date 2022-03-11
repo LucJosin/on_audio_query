@@ -24,10 +24,6 @@ public class QueryController {
             GenresQuery(call: call, result: result).queryGenres()
         case "queryPlaylists":
             PlaylistsQuery(call: call, result: result).queryPlaylists()
-        case "queryAudiosFrom":
-            AudiosFromQuery(call: call, result: result).queryAudiosFrom()
-        case "queryWithFilters":
-            WithFiltersQuery(call: call, result: result).queryWithFilters()
         case "queryArtwork":
             ArtworkQuery(call: call, result: result).queryArtwork()
         // The playlist for [IOS] is completely limited, the developer can only:
