@@ -2,38 +2,78 @@ import Flutter
 import MediaPlayer
 
 class SongsQuery {
-    var args: [String: Any]
-    var result: FlutterResult?
-    var sink: FlutterEventSink?
+    // Main parameters
+    private var args: [String: Any]
+    private var result: FlutterResult?
+    private var sink: FlutterEventSink?
+    
+    // Song projection (to filter).
+    private let songProjection: [String?] = [
+        "_id",
+        "_data",
+        "_display_name",
+        nil,
+        "album",
+        nil,
+        "album_id",
+        "artist",
+        "artist_id",
+        nil,
+        "composer",
+        nil,
+        nil,
+        nil,
+        "title",
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+        nil,
+    ]
     
     init(
+        // Call from 'MethodChannel' (method)
         call: FlutterMethodCall? = nil,
         result: FlutterResult? = nil,
+        // Call from 'EventChannel' (observer)
         sink: FlutterEventSink? = nil,
-        args: [String: Any]? = nil) {
-            // Add all arguments inside a map.
-            self.args = sink != nil ? args! : call!.arguments as! [String: Any]
-            self.sink = sink
-            self.result = result
-        }
+        args: [String: Any]? = nil
+    ) {
+        // Get all arguments inside the map.
+        self.args = sink != nil ? args! : (call!.arguments as! [String: Any])
+        self.sink = sink
+        self.result = result
+    }
     
     func querySongs() {
-        // The sortType.
+        // The sortType. If nil, will be set as [Title].
         let sortType = args["sortType"] as? Int ?? 0
         
         // Choose the type(To match android side, let's call "cursor").
         let cursor = MPMediaQuery.songs()
-        // Using native sort from [IOS] you can only use the [Title], [Album] and
-        // [Artist]. The others will be sorted "manually" using [formatSongList] before
-        // send to Dart.
-        cursor.groupingType = checkSongSortType(sortType: sortType)
+        
+        // Make sure that only audios with 'music' type will be 'queried'.
+        cursor.addFilterPredicate(MPMediaPropertyPredicate.init(
+            value: MPMediaType.music.rawValue,
+            forProperty: MPMediaItemPropertyMediaType,
+            comparisonType: .equalTo
+        ))
         
         // This filter will avoid audios/songs outside phone library(cloud).
-        let cloudFilter = MPMediaPropertyPredicate.init(
+        //
+        // Sometimes this filter won't work.
+        cursor.addFilterPredicate(MPMediaPropertyPredicate.init(
             value: false,
-            forProperty: MPMediaItemPropertyIsCloudItem
-        )
-        cursor.addFilterPredicate(cloudFilter)
+            forProperty: MPMediaItemPropertyIsCloudItem,
+            comparisonType: .equalTo
+        ))
+        
+        // Using native sort from [IOS] you can only use the [Title], [Album] and
+        // [Artist]. The others will be sorted 'manually' using [formatSongList] before
+        // sending to Dart.
+        cursor.groupingType = checkSongSortType(sortType: sortType)
         
         // Request permission status from the 'main' method.
         let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
@@ -41,7 +81,7 @@ class SongsQuery {
         // We cannot 'query' without permission so, throw a PlatformException.
         // Only one 'channel' will be 'functional'. If is null, ignore, if not, send the error.
         if !hasPermission {
-            // Method from 'EventChannel' (observer)
+            // Call from 'EventChannel' (observer)
             self.sink?(
                 FlutterError.init(
                     code: "403",
@@ -50,7 +90,7 @@ class SongsQuery {
                 )
             )
             
-            // Method from 'MethodChannel' (method)
+            // Call from 'MethodChannel' (method)
             self.result?(
                 FlutterError.init(
                     code: "403",
@@ -64,10 +104,6 @@ class SongsQuery {
         }
         
         // Query everything in background for a better performance.
-        loadSongs(cursor: cursor)
-    }
-    
-    private func loadSongs(cursor: MPMediaQuery!) {
         DispatchQueue.global(qos: .userInitiated).async {
             var listOfSongs: [[String: Any?]] = Array()
             
@@ -77,7 +113,7 @@ class SongsQuery {
             for song in cursor.items! {
                 // If the song file don't has a assetURL, is a Cloud item.
                 if !song.isCloudItem && song.assetURL != nil {
-                    let songData = loadSongItem(song: song)
+                    let songData = self.loadSongItem(song: song)
                     listOfSongs.append(songData)
                 }
             }
@@ -86,12 +122,129 @@ class SongsQuery {
             // inside the main thread).
             DispatchQueue.main.async {
                 // Here we'll check the "custom" sort and define a order to the list.
-                let finalList = formatSongList(args: self.args, allSongs: listOfSongs)
+                let finalList = self.formatSongList(allSongs: listOfSongs)
                 
                 // After loading the information, send the 'result'.
                 self.sink?(finalList)
                 self.result?(finalList)
             }
         }
+    }
+    
+    private func loadSongItem(song: MPMediaItem) -> [String: Any?] {
+        let fileExt = song.assetURL?.pathExtension ?? ""
+        let sizeInBytes = song.value(forProperty: "fileSize") as? Int
+        return [
+            "_id": song.persistentID,
+            "_data": song.assetURL?.absoluteString,
+            "_uri": song.assetURL?.absoluteString,
+            "_display_name": "\(song.artist ?? "") - \(song.title ?? "").\(fileExt)",
+            "_display_name_wo_ext": "\(song.artist ?? "") - \(song.title ?? "")",
+            "_size": sizeInBytes,
+            "audio_id": nil,
+            "album": song.albumTitle,
+            "album_id": song.albumPersistentID,
+            "artist": song.artist,
+            "artist_id": song.artistPersistentID,
+            "genre": song.genre,
+            "genre_id": song.genrePersistentID,
+            "bookmark": Int(song.bookmarkTime),
+            "composer": song.composer,
+            "date_added": Int(song.dateAdded.timeIntervalSince1970),
+            "date_modified": 0,
+            "duration": Int(song.playbackDuration * 1000),
+            "title": song.title,
+            "track": song.albumTrackNumber,
+            "file_extension": fileExt,
+        ]
+    }
+    
+    private func formatSongList(allSongs: [[String: Any?]]) -> [[String: Any?]] {
+        // Define a copy of all songs.
+        var allSongsCopy = allSongs
+        
+        // Define all 'basic' filters.
+        let order = args["orderType"] as? Int
+        let sortType = args["sortType"] as? Int
+        let ignoreCase = args["ignoreCase"] as! Bool
+        
+        // Define the 'toQuery' and 'toRemove' filter.
+        let toQuery = args["toQuery"] as! [Int: [String]]
+        let toRemove = args["toRemove"] as! [Int: [String]]
+        
+        // For every 'row' from 'toQuery', add the 'filter'.
+        for (id, values) in toQuery {
+            
+            // If the given [id] doesn't exist. Skip to next.
+            if songProjection[id] == nil {
+                continue
+            }
+            
+            // The [id] is a valid value. Now, for every item/word from values
+            // remove all that doesn't match.
+            for value in values {
+                // Remove all items.
+                allSongsCopy.removeAll(where: { songs in
+                    // Check if contains.
+                    return songs.contains(where: { key, val in
+                        // If the [key] and [projection] match, check if the value *contains*.
+                        // If so, keep the 'song'. If not, remove it.
+                        return key == songProjection[id] && !String(describing: val).contains(value)
+                    })
+                })
+            }
+        }
+        
+        // For every 'row' from 'toQuery', add the 'filter'.
+        for (id, values) in toRemove {
+            
+            // If the given [id] doesn't exist. Skip to next.
+            if songProjection[id] == nil {
+                continue
+            }
+            
+            // The [id] is a valid value. Now, for every item/word from values
+            // remove all that does match.
+            for value in values {
+                // Remove all items.
+                allSongsCopy.removeAll(where: { songs in
+                    // Check if contains.
+                    return songs.contains(where: { key, val in
+                        // If the [key] and [projection] match, check if the value *contains*.
+                        // If so, remove the 'song'. If not, keep it.
+                        return key == songProjection[id] && String(describing: val).contains(value)
+                    })
+                })
+            }
+        }
+        
+        // Sort the list 'manually'.
+        switch sortType {
+        case 3:
+            allSongsCopy.sort { (val1, val2) in
+                (val1["duration"] as! Double) > (val2["duration"] as! Double)
+            }
+        case 4:
+            allSongsCopy.sort { (val1, val2) in
+                (val1["date_added"] as! Int) > (val2["date_added"] as! Int)
+            }
+        case 5:
+            allSongsCopy.sort { (val1, val2) in
+                (val1["_size"] as! Int) > (val2["_size"] as! Int)
+            }
+        case 6:
+            allSongsCopy.sort { (val1, val2) in
+                ((val1["_display_name"] as! String).isCase(ignoreCase: ignoreCase)) > ((val2["_display_name"] as! String).isCase(ignoreCase: ignoreCase))
+            }
+        case 7:
+            allSongsCopy.sort { (val1, val2) in
+                (val1["track"] as! Int) > (val2["track"] as! Int)
+            }
+        default:
+            break
+        }
+        
+        // The order value is [1], reverse the list.
+        return order == 1 ? allSongsCopy.reversed() : allSongsCopy
     }
 }
