@@ -58,6 +58,7 @@ class GenresQuery : ViewModel() {
         val pOrderType: Int = pArgs["orderType"] as Int
         val pIgnoreCase: Boolean = pArgs["ignoreCase"] as Boolean
         val pUri: Int = pArgs["uri"] as Int
+        val pLimit: Int? = pArgs["limit"] as Int?
 
         // Define the [toQuery] and [toRemove] filters.
         val toQuery: Map<Int, ArrayList<String>> = pArgs["toQuery"] as Map<Int, ArrayList<String>>
@@ -65,6 +66,9 @@ class GenresQuery : ViewModel() {
 
         // Sort: Type and Order.
         sortType = checkGenreSortType(pSortType, pOrderType, pIgnoreCase)
+
+        // Add a 'query' limit(if not null).
+        if (pLimit != null) sortType += " LIMIT $pLimit"
 
         // Check uri:
         //   * [0]: External.

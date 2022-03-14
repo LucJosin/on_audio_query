@@ -84,10 +84,20 @@ class GenresQuery {
         DispatchQueue.global(qos: .userInitiated).async {
             var listOfGenres: [[String: Any?]] = Array()
             
+            // Define the 'query' limit.
+            let limit: Int? = self.args["limit"] as? Int
+            
             // For each item(genre) inside this "cursor", take one and "format"
             // into a [Map<String, dynamic>], all keys are based on [Android]
             // platforms so, if you change some key, will have to change the [Android] too.
             for genre in cursor.collections! {
+                // When list count reach the [limit]. Break the loop.
+                //
+                // If [limit] value is 'nil', continue.
+                if listOfGenres.count == limit {
+                    break
+                }
+                
                 if !genre.items[0].isCloudItem && genre.items[0].assetURL != nil {
                     var genreData = self.loadGenreItem(genre: genre)
                     

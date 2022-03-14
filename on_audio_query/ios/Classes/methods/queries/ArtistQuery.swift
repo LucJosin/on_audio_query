@@ -86,10 +86,20 @@ class ArtistsQuery {
         DispatchQueue.global(qos: .userInitiated).async {
             var listOfArtists: [[String: Any?]] = Array()
             
+            // Define the 'query' limit.
+            let limit: Int? = self.args["limit"] as? Int
+            
             // For each item(artist) inside this "cursor", take one and "format"
             // into a [Map<String, dynamic>], all keys are based on [Android]
             // platforms so, if you change some key, will have to change the [Android] too.
             for artist in cursor.collections! {
+                // When list count reach the [limit]. Break the loop.
+                //
+                // If [limit] value is 'nil', continue.
+                if listOfArtists.count == limit {
+                    break
+                }
+                
                 // If the first song file don't has a assetURL, is a Cloud item.
                 if !artist.items[0].isCloudItem && artist.items[0].assetURL != nil {
                     let artistData = self.loadArtistItem(artist: artist)

@@ -51,16 +51,9 @@ class SongsQuery {
         // The sortType. If 'nil', will be set as [Title].
         let sortType = args["sortType"] as? Int ?? 0
         
-        // Choose the type(To match android side, let's call "cursor").
-        let cursor = MPMediaQuery.songs()
-        
-        // Make sure that only audios with 'music' type will be 'queried'.
-        cursor.addFilterPredicate(MPMediaPropertyPredicate.init(
-            value: MPMediaType.music.rawValue,
-            forProperty: MPMediaItemPropertyMediaType,
-            comparisonType: .equalTo
-        ))
-        
+        // Define the query (To match android side, let's call "cursor").
+        let cursor: MPMediaQuery = MPMediaQuery.init()
+    
         // This filter will avoid audios/songs outside phone library(cloud).
         //
         // Sometimes this filter won't work.
@@ -103,24 +96,56 @@ class SongsQuery {
             return
         }
         
-        // If [items] is null. Call early return with empty list.
-        if cursor.items == nil {
-            // Empty list.
-            self.sink?([])
-            self.result?([])
+        // Define the 'new' items.
+        var cursorItems: [MPMediaItem] = []
+        
+        // Get all defined types.
+        let types = args["type"] as! [Int: Int]
+        
+        // TODO: Can 'MPMediaQuery' support differents [values] to the same [property]?
+        // TODO: Add ringtones
+        // https://github.com/CQH/iOS-Sounds-and-Ringtones/blob/master/iOS%20Sounds%20and%20Ringtones/DirectoriesTableViewController.swift#L85
+        
+        // To support others audios type we need a 'workaround'.
+        //
+        // Define the filter [type], get the audio list, add to the [cursorItems]
+        // and remove the filter.
+        for (type, _) in types {
+            // Define the current filter.
+            let currentFilter = MPMediaPropertyPredicate.init(
+                value: checkAudioType(sortType: type),
+                forProperty: MPMediaItemPropertyMediaType,
+                comparisonType: .equalTo
+            )
             
-            // 'Exit' the function.
-            return
+            // Add the filter to the 'cursor'.
+            cursor.addFilterPredicate(currentFilter)
+            
+            // Get this list and 'append' to another list.
+            cursorItems.append(contentsOf: cursor.items ?? [])
+            
+            // Remove the filter.
+            cursor.removeFilterPredicate(currentFilter)
         }
         
         // Query everything in background for a better performance.
         DispatchQueue.global(qos: .userInitiated).async {
             var listOfSongs: [[String: Any?]] = Array()
             
+            // Define the 'query' limit.
+            let limit: Int? = self.args["limit"] as? Int
+            
             // For each item(song) inside this "cursor", take one and "format"
             // into a [Map<String, dynamic>], all keys are based on [Android]
             // platforms so, if you change some key, will have to change the [Android] too.
-            for song in cursor.items! {
+            for song in cursorItems {
+                // When list count reach the [limit]. Break the loop.
+                //
+                // If [limit] value is 'nil', continue.
+                if listOfSongs.count == limit {
+                    break
+                }
+                
                 // If the song file don't has a assetURL, is a Cloud item.
                 if !song.isCloudItem && song.assetURL != nil {
                     let songData = self.loadSongItem(song: song)

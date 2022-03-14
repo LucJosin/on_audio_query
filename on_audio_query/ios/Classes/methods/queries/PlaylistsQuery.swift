@@ -85,10 +85,20 @@ class PlaylistsQuery {
         DispatchQueue.global(qos: .userInitiated).async {
             var listOfPlaylists: [[String: Any?]] = Array()
             
+            // Define the 'query' limit.
+            let limit: Int? = self.args["limit"] as? Int
+            
             // For each item(playlist) inside this "cursor", take one and "format"
             // into a [Map<String, dynamic>], all keys are based on [Android]
             // platforms so, if you change some key, will have to change the [Android] too.
             for playlist in cursor.collections! {
+                // When list count reach the [limit]. Break the loop.
+                //
+                // If [limit] value is 'nil', continue.
+                if listOfPlaylists.count == limit {
+                    break
+                }
+                
                 var playlistData = self.loadPlaylistItem(playlist: playlist)
                 
                 // If the first song file doesn't has a [assetURL], is probably a Cloud item.

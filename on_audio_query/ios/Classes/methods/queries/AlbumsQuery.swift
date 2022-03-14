@@ -96,10 +96,20 @@ class AlbumsQuery {
         DispatchQueue.global(qos: .userInitiated).async {
             var listOfAlbums: [[String: Any?]] = Array()
             
+            // Define the 'query' limit.
+            let limit: Int? = self.args["limit"] as? Int
+            
             // For each item(album) inside this "cursor", take one and "format"
             // into a [Map<String, dynamic>], all keys are based on [Android]
             // platforms so, if you change some key, will have to change the [Android] too.
             for album in cursor.collections! {
+                // When list count reach the [limit]. Break the loop.
+                //
+                // If [limit] value is 'nil', continue.
+                if listOfAlbums.count == limit {
+                    break
+                }
+                
                 if !album.items[0].isCloudItem && album.items[0].assetURL != nil {
                     let albumData = self.loadAlbumItem(album: album)
                     listOfAlbums.append(albumData)
