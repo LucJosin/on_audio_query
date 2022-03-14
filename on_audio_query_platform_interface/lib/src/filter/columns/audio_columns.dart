@@ -3,7 +3,7 @@
 part of columns_controller;
 
 ///
-class SongColumns {
+class AudioColumns {
   ///
   int get ID => 0;
 
@@ -37,17 +37,6 @@ class SongColumns {
   ///
   int get TITLE => 14;
 
-  // int get TRACK => 15;
-
-  // int get IS_ALARM => 17;
-
-  // int get IS_MUSIC => 18;
-
-  // int get IS_NOTIFICATION => 19;
-
-  // int get IS_PODCAST => 20;
-
-  // int get IS_RINGTONE => 21;
-
-  // int get IS_AUDIOBOOK => 22;
+  ///
+  int get DURATION => 13;
 }

@@ -44,7 +44,7 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
   final ArtworkQuery _artworkQuery = ArtworkQuery();
 
   @override
-  Future<List<SongModel>> querySongs({
+  Future<List<AudioModel>> querySongs({
     MediaFilter? filter,
     SongSortType? sortType,
     OrderType? orderType,
@@ -90,7 +90,7 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
   }
 
   @override
-  Future<List<SongModel>> queryAudiosFrom(
+  Future<List<AudioModel>> queryAudiosFrom(
     AudiosFromType type,
     Object where, {
     SongSortType? sortType,

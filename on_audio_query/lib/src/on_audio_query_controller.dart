@@ -21,7 +21,7 @@ class OnAudioQuery {
   /// The platform interface that drives this plugin
   static OnAudioQueryPlatform get platform => OnAudioQueryPlatform.instance;
 
-  /// Used to return Songs Info based in [SongModel].
+  /// Used to return Songs Info based in [AudioModel].
   ///
   /// Parameters:
   ///
@@ -46,7 +46,7 @@ class OnAudioQuery {
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
-  Future<List<SongModel>> querySongs({
+  Future<List<AudioModel>> querySongs({
     MediaFilter? filter,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         SongSortType? sortType,
@@ -87,7 +87,7 @@ class OnAudioQuery {
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Stream<List<SongModel>> observeSongs({
+  Stream<List<AudioModel>> observeSongs({
     MediaFilter? filter,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         SongSortType? sortType,

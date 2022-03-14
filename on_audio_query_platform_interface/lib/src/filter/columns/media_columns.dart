@@ -1,11 +1,11 @@
 // ignore_for_file: non_constant_identifier_names
 
-part of columns_controller;
+import '../../controllers/columns_controller.dart';
 
 ///
 abstract class MediaColumns {
   ///
-  static SongColumns get Song => SongColumns();
+  static AudioColumns get Audio => AudioColumns();
 
   ///
   static AlbumColumns get Album => AlbumColumns();

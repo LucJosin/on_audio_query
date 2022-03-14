@@ -45,17 +45,31 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   MethodChannel get channel => _channel;
 
   /// Default filter for all methods.
-  static const MediaFilter _defaultFilter = MediaFilter.init();
+  static final MediaFilter _defaultFilter = MediaFilter.init();
 
   /// Observers
-  Stream<List<SongModel>>? _onSongsObserverChanged;
+  Stream<List<AudioModel>>? _onSongsObserverChanged;
   Stream<List<AlbumModel>>? _onAlbumsObserverChanged;
   Stream<List<ArtistModel>>? _onArtistsObserverChanged;
   Stream<List<PlaylistModel>>? _onPlaylistsObserverChanged;
   Stream<List<GenreModel>>? _onGenresObserverChanged;
 
   @override
-  Future<List<SongModel>> querySongs({
+  Future<List<T>> queryBuilder<T>({String? builder}) async {
+    return [] as List<T>;
+  }
+
+  @override
+  Future<List<AudioModel>> querySongs({MediaFilter? filter}) async {
+    // If the filter is null, use the 'default'.
+    filter ??= MediaFilter.forSongs();
+
+    // Both queries will used the same method.
+    return queryAudios(filter: filter);
+  }
+
+  @override
+  Future<List<AudioModel>> queryAudios({
     MediaFilter? filter,
     // Deprecated
     SongSortType? sortType,
@@ -88,15 +102,16 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "toQuery": filter.toQuery,
         "toRemove": filter.toRemove,
         "type": fixedMap,
+        "limit": filter.limit,
       },
     );
 
     // Convert the result into a list of [SongModel] and return.
-    return resultSongs.map((e) => SongModel(e)).toList();
+    return resultSongs.map((e) => AudioModel(e)).toList();
   }
 
   @override
-  Stream<List<SongModel>> observeSongs({
+  Stream<List<AudioModel>> observeSongs({
     MediaFilter? filter,
     // Deprecated
     SongSortType? sortType,
@@ -128,10 +143,11 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "toQuery": filter.toQuery,
         "toRemove": filter.toRemove,
         "type": fixedMap,
+        "limit": filter.limit,
       },
-    ).asyncMap<List<SongModel>>(
+    ).asyncMap<List<AudioModel>>(
       (event) => Future.wait(
-        event.map<Future<SongModel>>((m) async => SongModel(m)),
+        event.map<Future<AudioModel>>((m) async => AudioModel(m)),
       ),
     );
 
@@ -160,6 +176,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "ignoreCase": filter.ignoreCase,
         "toQuery": filter.toQuery,
         "toRemove": filter.toRemove,
+        "limit": filter.limit,
       },
     );
 
@@ -187,6 +204,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "ignoreCase": filter.ignoreCase,
         "toQuery": filter.toQuery,
         "toRemove": filter.toRemove,
+        "limit": filter.limit,
       },
     ).asyncMap<List<AlbumModel>>(
       (event) => Future.wait(
@@ -219,6 +237,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "ignoreCase": filter.ignoreCase,
         "toQuery": filter.toQuery,
         "toRemove": filter.toRemove,
+        "limit": filter.limit,
       },
     );
 
@@ -247,6 +266,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "ignoreCase": filter.ignoreCase,
         "toQuery": filter.toQuery,
         "toRemove": filter.toRemove,
+        "limit": filter.limit,
       },
     ).asyncMap<List<ArtistModel>>(
       (event) => Future.wait(
@@ -279,6 +299,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "ignoreCase": filter.ignoreCase,
         "toQuery": filter.toQuery,
         "toRemove": filter.toRemove,
+        "limit": filter.limit,
       },
     );
 
@@ -309,6 +330,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "ignoreCase": filter.ignoreCase,
         "toQuery": filter.toQuery,
         "toRemove": filter.toRemove,
+        "limit": filter.limit,
       },
     ).asyncMap<List<PlaylistModel>>(
       (event) => Future.wait(
@@ -341,6 +363,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "ignoreCase": filter.ignoreCase,
         "toQuery": filter.toQuery,
         "toRemove": filter.toRemove,
+        "limit": filter.limit,
       },
     );
 
@@ -368,6 +391,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "ignoreCase": filter.ignoreCase,
         "toQuery": filter.toQuery,
         "toRemove": filter.toRemove,
+        "limit": filter.limit,
       },
     ).asyncMap<List<GenreModel>>(
       (event) => Future.wait(
@@ -380,7 +404,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   }
 
   @override
-  Future<List<SongModel>> queryAudiosFrom(
+  Future<List<AudioModel>> queryAudiosFrom(
     AudiosFromType type,
     Object where, {
     SongSortType? sortType,

@@ -1,64 +1,86 @@
+import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
+
 import '../controllers/sorts_controller.dart';
 import '../controllers/types_controller.dart';
 
 ///
 class MediaFilter {
   ///
-  final SongSortType? songSortType;
+  SongSortType? songSortType;
 
   ///
-  final AlbumSortType? albumSortType;
+  AlbumSortType? albumSortType;
 
   ///
-  final ArtistSortType? artistSortType;
+  ArtistSortType? artistSortType;
 
   ///
-  final PlaylistSortType? playlistSortType;
+  PlaylistSortType? playlistSortType;
 
   ///
-  final GenreSortType? genreSortType;
+  GenreSortType? genreSortType;
 
   ///
-  final OrderType orderType;
+  OrderType orderType;
 
   ///
-  final UriType uriType;
+  UriType uriType;
 
   ///
-  final bool ignoreCase;
+  bool ignoreCase;
 
   ///
-  final Map<AudioType, bool> type;
+  int? limit;
 
   ///
-  final Map<int, List<String>> toQuery;
+  Map<AudioType, bool> type;
 
   ///
-  final Map<int, List<String>> toRemove;
+  Map<int, List<String>> toQuery;
 
   ///
-  const MediaFilter.init({
+  Map<int, List<String>> toRemove;
+
+  ///
+  MediaFilter.init({
     this.songSortType,
     this.albumSortType,
     this.artistSortType,
     this.playlistSortType,
     this.genreSortType,
+    this.limit,
     this.orderType = OrderType.ASC_OR_SMALLER,
     this.uriType = UriType.EXTERNAL,
     this.ignoreCase = true,
     this.toQuery = const {},
     this.toRemove = const {},
-    this.type = const {
-      AudioType.IS_MUSIC: true,
-    },
+    this.type = const {},
   });
+
+  ///
+  MediaFilter.forAudios({
+    this.songSortType,
+    this.limit,
+    this.orderType = OrderType.ASC_OR_SMALLER,
+    this.uriType = UriType.EXTERNAL,
+    this.ignoreCase = true,
+    this.toQuery = const {},
+    this.toRemove = const {},
+    this.type = const {},
+  })  : albumSortType = null,
+        artistSortType = null,
+        playlistSortType = null,
+        genreSortType = null;
 
   ///
   MediaFilter.forSongs({
     this.songSortType,
+    this.limit,
     this.orderType = OrderType.ASC_OR_SMALLER,
     this.uriType = UriType.EXTERNAL,
     this.ignoreCase = true,
+    // TODO: Add more specific 'query'.
+    // E.g: ComparisonType.LIKE, ComparisonType.NOT_LIKE, ComparisonType.EQUAL_OR_SMALLER
     this.toQuery = const {},
     this.toRemove = const {},
     this.type = const {
@@ -72,6 +94,7 @@ class MediaFilter {
   ///
   MediaFilter.forAlbums({
     this.albumSortType,
+    this.limit,
     this.orderType = OrderType.ASC_OR_SMALLER,
     this.uriType = UriType.EXTERNAL,
     this.ignoreCase = true,
@@ -86,6 +109,7 @@ class MediaFilter {
   ///
   MediaFilter.forArtists({
     this.artistSortType,
+    this.limit,
     this.orderType = OrderType.ASC_OR_SMALLER,
     this.uriType = UriType.EXTERNAL,
     this.ignoreCase = true,
@@ -100,6 +124,7 @@ class MediaFilter {
   ///
   MediaFilter.forPlaylists({
     this.playlistSortType,
+    this.limit,
     this.orderType = OrderType.ASC_OR_SMALLER,
     this.uriType = UriType.EXTERNAL,
     this.ignoreCase = true,
@@ -114,6 +139,7 @@ class MediaFilter {
   ///
   MediaFilter.forGenres({
     this.genreSortType,
+    this.limit,
     this.orderType = OrderType.ASC_OR_SMALLER,
     this.uriType = UriType.EXTERNAL,
     this.ignoreCase = true,

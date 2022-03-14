@@ -21,7 +21,7 @@ class ArtworkQuery {
     int? quality,
   ]) async {
     // TODO: Add a better way to handle this method.
-    List<SongModel> allSongs = await SongsQuery().querySongs();
+    List<AudioModel> allSongs = await SongsQuery().querySongs();
 
     for (var song in allSongs) {
       int tmpId = -1;

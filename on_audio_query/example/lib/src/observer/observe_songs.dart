@@ -51,7 +51,7 @@ class ObserveSongsState extends State<ObserveSongs> {
         //
         // If you are using another method. Remember to 'cancel' the listener before
         // close the application or the page.
-        child: StreamBuilder<List<SongModel>>(
+        child: StreamBuilder<List<AudioModel>>(
           // Default values:
           //
           // sortType: null,

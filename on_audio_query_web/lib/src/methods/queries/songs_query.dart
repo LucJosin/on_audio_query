@@ -9,13 +9,13 @@ class SongsQuery {
   final QueryHelper _helper = QueryHelper();
 
   /// Method used to "query" all the songs and their informations.
-  Future<List<SongModel>> querySongs([
+  Future<List<AudioModel>> querySongs([
     SongSortType? sortType,
     OrderType? orderType,
     bool ignoreCase = true,
     String? path,
   ]) async {
-    List<SongModel> tmpList = [];
+    List<AudioModel> tmpList = [];
     // Get all audios.
     List audios = await _helper.getInternalFiles(path);
 
@@ -44,7 +44,7 @@ class SongsQuery {
           );
 
           // Temporary and the final list.
-          tmpList.add(SongModel(formattedAudio));
+          tmpList.add(AudioModel(formattedAudio));
         }
       }
     }

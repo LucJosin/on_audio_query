@@ -4,7 +4,7 @@ import '../controllers/models_controller.dart';
 ///
 /// ModelTypes:
 ///
-///   * [SongModel].
+///   * [AudioModel].
 ///   * [AlbumModel].
 ///   * [PlaylistModel].
 ///   * [ArtistModel].
@@ -17,7 +17,7 @@ import '../controllers/models_controller.dart';
 /// life easy you can use this method to convert into any model.
 extension OnModelFormatter on List<dynamic> {
   /// Used to convert a [List dynamic] into a [List SongModel].
-  List<SongModel> toSongModel() => map((e) => SongModel(e)).toList();
+  List<AudioModel> toSongModel() => map((e) => AudioModel(e)).toList();
 
   /// Used to convert a [List dynamic] into a [List AlbumModel].
   List<AlbumModel> toAlbumModel() => map((e) => AlbumModel(e)).toList();

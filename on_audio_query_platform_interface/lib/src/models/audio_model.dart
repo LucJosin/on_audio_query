@@ -1,9 +1,8 @@
 part of models_controller;
 
-/// [SongModel] that contains all [Song] Information.
-@Deprecated("Deprecated after [3.0.0]. Use [AudioModel] instead")
-class SongModel {
-  SongModel(this._info);
+/// [AudioModel] that contains all [Song] Information.
+class AudioModel {
+  AudioModel(this._info);
 
   //The type dynamic is used for both but, the map is always based in [String, dynamic]
   final Map<dynamic, dynamic> _info;
@@ -104,10 +103,9 @@ class SongModel {
   Map get getMap => _info;
 
   ///
-  AudioModel toAudioModel() => AudioModel(_info);
 
   ///
-  SongModel copyWith({
+  AudioModel copyWith({
     int? id,
     int? audioId,
     String? data,
@@ -136,7 +134,7 @@ class SongModel {
     bool? isPodcast,
     bool? isRingtone,
   }) {
-    return SongModel({
+    return AudioModel({
       "_id": id ?? this.id,
       "audio_id": audioId ?? this.audioId,
       "_data": data ?? this.data,

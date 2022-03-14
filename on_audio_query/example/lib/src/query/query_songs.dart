@@ -34,7 +34,7 @@ class _QuerySongsState extends State<QuerySongs> {
         elevation: 0,
       ),
       body: Center(
-        child: FutureBuilder<List<SongModel>>(
+        child: FutureBuilder<List<AudioModel>>(
           // Default values:
           //
           // sortType: null,

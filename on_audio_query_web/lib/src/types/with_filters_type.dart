@@ -2,10 +2,10 @@ import 'package:on_audio_query_platform_interface/on_audio_query_platform_interf
 
 import '/src/extensions/format_extension.dart';
 
-List<SongModel> checkSongsArgs(
+List<AudioModel> checkSongsArgs(
   String argsVal,
   dynamic args,
-  List<SongModel> tmpList,
+  List<AudioModel> tmpList,
 ) {
   switch (args) {
     case AudiosArgs.TITLE:

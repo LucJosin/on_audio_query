@@ -1,7 +1,10 @@
 library models_controller;
 
-// Media Models
+// Deprecated
 part '../models/song_model.dart';
+
+// Media Models
+part '../models/audio_model.dart';
 part '../models/album_model.dart';
 part '../models/artist_model.dart';
 part '../models/playlist_model.dart';
