@@ -112,15 +112,6 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Stream<List<AudioModel>> observeSongs({
     MediaFilter? filter,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        SongSortType? sortType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        OrderType? orderType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        UriType? uriType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        bool? ignoreCase,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead") String? path,
   }) {
     throw UnimplementedError('observeSongs() has not been implemented.');
   }

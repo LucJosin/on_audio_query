@@ -16,6 +16,8 @@ dependencies:
   # on_audio_query
   on_audio_query_platform_interface:
     path: ../on_audio_query_platform_interface
+  on_audio_query_windows:
+    path: ../on_audio_query_windows
   on_audio_query_web:
     path: ../on_audio_query_web
 
@@ -40,5 +42,7 @@ flutter:
         pluginClass: OnAudioQueryPlugin
       ios:
         pluginClass: OnAudioQueryPlugin
+      windows:
+        default_package: on_audio_query_windows
       web:
         default_package: on_audio_query_web
