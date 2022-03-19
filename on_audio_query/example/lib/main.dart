@@ -12,6 +12,8 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 =============
 */
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -48,7 +50,7 @@ class _MainState extends State<Main> {
 
   requestPermission() async {
     // Web platform don't support permissions methods.
-    if (!kIsWeb) {
+    if (!kIsWeb && !Platform.isWindows && !Platform.isLinux) {
       bool permissionStatus = await _audioQuery.permissionsStatus();
       if (!permissionStatus) {
         bool r = await _audioQuery.permissionsRequest();

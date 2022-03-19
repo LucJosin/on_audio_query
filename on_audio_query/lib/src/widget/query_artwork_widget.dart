@@ -306,15 +306,23 @@ class QueryArtworkWidget extends StatelessWidget {
         //
         // This 'no permission' code exception is: 403.
         if (item.hasError) {
-          // Define error as PlatformException.
-          var error = item.error as PlatformException;
-          debugPrint(error.message);
+          if (item.error is PlatformException) {
+            // Define error as PlatformException.
+            var error = item.error as PlatformException;
+            debugPrint(error.message);
 
-          // Return a different image.
-          return const Icon(
-            Icons.no_encryption_gmailerrorred,
-            size: 50,
-          );
+            // Return a 'different' image.
+            return const Icon(
+              Icons.no_encryption_gmailerrorred,
+              size: 50,
+            );
+          } else {
+            // Return a 'error' image.
+            return const Icon(
+              Icons.error_outline,
+              size: 50,
+            );
+          }
         }
 
         // No artwork was found or the bytes are empty.

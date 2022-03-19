@@ -61,6 +61,37 @@ class OnAudioQuery {
     return platform.querySongs(filter: filter);
   }
 
+  /// Used to return Songs Info based in [AudioModel].
+  ///
+  /// Parameters:
+  ///
+  /// * [orderType] is used to define if order will be Ascending or Descending.
+  /// * [sortType] is used to define list sort.
+  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
+  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
+  /// * [path] is used to define where the songs will be 'queried'.
+  ///
+  /// Important:
+  ///
+  /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
+  /// * If [sortType] is null, will be set to [DEFAULT].
+  /// * If [uriType] is null, will be set to [EXTERNAL].
+  /// * If [ignoreCase] is null, will be set to [true].
+  /// * If [path] is null, will be set to the default platform [path].
+  ///
+  /// Platforms:
+  ///
+  /// |   Android   |   IOS   |   Web   |
+  /// |--------------|-----------------|-----------------|
+  /// | `✔️` | `✔️` | `✔️` | <br>
+  ///
+  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
+  Future<List<AudioModel>> queryAudios({
+    MediaFilter? filter,
+  }) async {
+    return platform.queryAudios(filter: filter);
+  }
+
   /// Used to observer(listen) the songs.
   ///
   /// Parameters:

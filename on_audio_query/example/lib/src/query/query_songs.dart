@@ -44,7 +44,7 @@ class _QuerySongsState extends State<QuerySongs> {
           // toQuery: const {},
           // toRemove: const {},
           // type: const {AudioType.IS_MUSIC : true},
-          future: _audioQuery.querySongs(
+          future: _audioQuery.queryAudios(
             filter: MediaFilter.forSongs(),
           ),
           builder: (context, item) {
@@ -53,15 +53,17 @@ class _QuerySongsState extends State<QuerySongs> {
             //
             // This 'no permission' code exception is: 403.
             if (item.hasError) {
-              // Define error as PlatformException.
-              var error = item.error as PlatformException;
+              // If the error is a [PlatformException] send the default message.
+              if (item.error is PlatformException) {
+                // Define error as PlatformException.
+                var error = item.error as PlatformException;
 
-              // If the exception code is [403] the app doesn't have permission to
-              // [READ].
-              String message = error.code == "403" ? error.message! : "$error";
-
-              // Return this information or call [permissionsRequest] method.
-              return Text(message);
+                // Return this information or call [permissionsRequest] method.
+                return Text(error.message!);
+              } else {
+                // Send the 'unknown' exception.
+                return Text('${item.error}');
+              }
             }
 
             // Waiting content.
