@@ -1,0 +1,1 @@
+../../../../common/lib/src/interfaces/observer_interface.dart

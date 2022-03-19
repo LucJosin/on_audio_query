@@ -1,0 +1,1 @@
+../../../../../common/lib/src/methods/queries/artists_query.dart
