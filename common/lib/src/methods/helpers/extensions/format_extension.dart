@@ -25,6 +25,7 @@ extension OnIdGenerator on String {
   ///
   /// int finalId = int.parse(idAsString); //839711074105000
   /// ```
+  // TODO: Fix wrong audio id. Remove artist
   int generateAudioId() {
     if (isEmpty) return 0;
     List<String> splitted = split(" : ");
@@ -39,6 +40,10 @@ extension OnIdGenerator on String {
     List tmpId = (title.substring(0, titleLength) + end).codeUnits;
     String idAsString = "";
     for (int item in tmpId) {
+      //
+      if (idAsString.length == 15) break;
+
+      //
       idAsString += item.toString();
     }
 
@@ -77,6 +82,10 @@ extension OnIdGenerator on String {
     List tmpId = substring(0, itemLength).codeUnits;
     String idAsString = "";
     for (int item in tmpId) {
+      //
+      if (idAsString.length == 15) break;
+
+      //
       idAsString += item.toString();
     }
 
