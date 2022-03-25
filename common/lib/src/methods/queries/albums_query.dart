@@ -1,6 +1,9 @@
+import 'package:flutter/foundation.dart';
+
 import 'package:id3/id3.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
+import 'audios_query.dart';
 import '../helpers/query_helper_stub.dart'
     if (dart.library.io) '../helpers/query_helper_io.dart'
     if (dart.library.html) '../helpers/query_helper_html.dart';
@@ -10,16 +13,91 @@ class AlbumsQuery {
   //
   final QueryHelper _helper = QueryHelper();
 
+  // Default filter.
+  final MediaFilter _defaultFilter = MediaFilter.forAlbums();
+
+  // Album projection.
+  List<String?> albumProjection = [
+    "_id",
+    "album",
+    "artist",
+    "artist_id",
+    null,
+    null,
+    "numsongs",
+    null,
+  ];
+
   /// Method used to "query" all the albums and their informations.
-  Future<List<AlbumModel>> queryAlbums({
-    MediaFilter? filter,
-  }) async {
+  Future<List<AlbumModel>> queryAlbums({MediaFilter? filter}) async {
+    // If the parameters filter is null, use the default filter.
+    filter ??= _defaultFilter;
+
+    // Retrive all (or limited) files path.
+    List<String> audiosPath = await _helper.getFilesPath(limit: filter.limit);
+
+    // Since all the 'query' is made 'manually'. If we have multiple (100+) audio
+    // files, will take more than 10 seconds to load everything. So, we need to use
+    // the flutter isolate (compute) to load this files on another 'thread'.
+    List<Map<String, Object?>> listOfAlbums = await compute(
+      _fetchListOfAlbums,
+      audiosPath,
+    );
+
+    // 'Build' the filter.
+    List<AlbumModel> albums = _helper.mediaFilter<AlbumModel>(
+      filter,
+      listOfAlbums,
+      albumProjection,
+    );
+
+    // Now we sort the list based on [sortType].
+    //
+    // Some variables has a [Null] value, so we need use the [orEmpty] extension,
+    // this will return a empty string. Using a empty value to [compareTo] will bring
+    // all null values to start of the list so, we use this method to put at the end:
+    //
+    // ```dart
+    //  list.sort((v1, v2) => v1 == null ? 1 : 0);
+    // ```
+    switch (filter.albumSortType) {
+      case AlbumSortType.ALBUM:
+        albums.sort((v1, v2) => v1.album
+            .isCase(filter!.ignoreCase)
+            .compareTo(v2.album.isCase(filter.ignoreCase)));
+        break;
+
+      case AlbumSortType.ARTIST:
+        albums.sort(
+          (v1, v2) => v1.artist.orEmpty
+              .isCase(filter!.ignoreCase)
+              .compareTo(v2.artist.orEmpty.isCase(filter.ignoreCase)),
+        );
+        break;
+
+      case AlbumSortType.NUM_OF_SONGS:
+        albums.sort(
+          (v1, v2) => v1.numOfSongs.compareTo(v2.numOfSongs),
+        );
+        break;
+
+      default:
+        break;
+    }
+
+    // Now we sort the order of the list based on [orderType].
+    return filter.orderType.index == 1 ? albums.reversed.toList() : albums;
+  }
+
+  // This method will be used on another isolate.
+  Future<List<Map<String, Object?>>> _fetchListOfAlbums(
+    List<String> audiosPath,
+  ) async {
     // This "helper" list will avoid duplicate values inside the final list.
     List<String> hList = [];
-    List<AlbumModel> tmpList = [];
 
-    //
-    List<String>? audiosPath = _helper.getFilesPath();
+    // Define a empty list of audios.
+    List<Map<String, Object?>> listOfAlbums = [];
 
     // For each [audio] inside the [audios], take one and try read the [bytes].
     for (var path in audiosPath) {
@@ -31,11 +109,10 @@ class AlbumsQuery {
         //
         Map<String, dynamic>? data = mp3instance.getMetaTags();
 
-        //
-        if (data == null) continue;
+        String? album = data?["Album"] as String?;
 
         //
-        String album = data["Album"];
+        if (data == null || album == null) continue;
 
         // If [data] is null, the file probably has some wrong [bytes].
         // To avoid duplicate items, check if [helperList] already has this name.
@@ -43,75 +120,36 @@ class AlbumsQuery {
 
         // "format" into a [Map<String, dynamic>], all keys are based on [Android]
         // platforms so, if you change some key, will have to change the [Android] too.
-        AlbumModel formattedAudio = await _formatAlbum(data, path);
+        Map<String, Object?> formattedAudio = await _formatAlbum(data, path);
 
         // Temporary and the final list.
-        tmpList.add(formattedAudio);
+        listOfAlbums.add(formattedAudio);
 
         //
         hList.add(album);
       }
     }
 
-    // Now we sort the list based on [sortType].
-    //
-    // Some variables has a [Null] value, so we need use the [orEmpty] extension,
-    // this will return a empty string. Using a empty value to [compareTo] will bring
-    // all null values to start of the list so, we use this method to put at the end:
-    //
-    // ```dart
-    //  list.sort((val1, val2) => val1 == null ? 1 : 0);
-    // ```
-    switch (filter!.albumSortType) {
-      case AlbumSortType.ALBUM:
-        tmpList.sort((val1, val2) => val1.album
-            .isCase(
-              filter.ignoreCase,
-            )
-            .compareTo(
-              val2.album.isCase(filter.ignoreCase),
-            ));
-        break;
-
-      case AlbumSortType.ARTIST:
-        tmpList.sort(
-          (val1, val2) => val1.artist.orEmpty
-              .isCase(
-                filter.ignoreCase,
-              )
-              .compareTo(
-                val2.artist.orEmpty.isCase(filter.ignoreCase),
-              ),
-        );
-        break;
-
-      case AlbumSortType.NUM_OF_SONGS:
-        tmpList.sort(
-          (val1, val2) => val1.numOfSongs.compareTo(val2.numOfSongs),
-        );
-        break;
-
-      default:
-        break;
-    }
-
-    // Now we sort the order of the list based on [orderType].
-    return filter.orderType.index == 1 ? tmpList.reversed.toList() : tmpList;
+    // Back to the 'main' isolate.
+    return listOfAlbums;
   }
 
-  Future<AlbumModel> _formatAlbum(Map album, String data) async {
-    // var songs = await OnAudioQueryPlugin().queryAudiosFrom(
-    //   AudiosFromType.ALBUM,
-    //   this["Album"],
-    // );
-    return AlbumModel({
+  //
+  Future<Map<String, Object?>> _formatAlbum(Map album, String data) async {
+    //
+    var audios = await AudiosQuery().queryAudios(
+      filter: MediaFilter.forAudios(toQuery: {
+        MediaColumns.Album.ALBUM: [album["Album"]]
+      }),
+    );
+
+    //
+    return {
       "_id": "${album["Album"]}".generateId(),
       "album": album["Album"],
-      "album_id": "${album["Album"]}".generateId(),
       "artist": "${album["Artist"]}",
       "artist_id": "${album["Artist"]}".generateId(),
-      // "numsongs": songs.length,
-      "album_art": null,
-    });
+      "numsongs": audios.length,
+    };
   }
 }
