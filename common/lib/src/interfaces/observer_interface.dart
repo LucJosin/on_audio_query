@@ -6,7 +6,7 @@ abstract class ObserverInterface {
   Stream<dynamic> get stream;
 
   ///
-  void startObserver(Map args) {}
+  void startObserver(Map<String, dynamic> args) {}
 
   ///
   void onChange() {}

@@ -1,8 +1,5 @@
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
-import '../controllers/sorts_controller.dart';
-import '../controllers/types_controller.dart';
-
 ///
 class MediaFilter {
   ///

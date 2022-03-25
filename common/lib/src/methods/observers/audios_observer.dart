@@ -23,21 +23,39 @@ class AudiosObserver implements ObserverInterface {
   // [Internal] variable to detect when the observer is running or not.
   bool _isRunning = false;
 
+  //
   @override
   bool get isRunning => _isRunning;
 
+  //
   @override
   Stream<List<AudioModel>> get stream => _controller.stream;
 
   @override
-  Future<void> startObserver(Map args) async {
+  Future<void> startObserver(Map<String, dynamic> args) async {
+    //
+    bool followDir = args["followDir"] ?? true;
+
+    //
+    String? path = args["path"];
+
     //
     if (!_isRunning) {
-      print(_helper.defaultMusicDirectory);
       //
-      Stream<FileSystemEvent> toWatch = _helper.defaultMusicDirectory.watch(
-        recursive: true,
-      );
+      Directory dirToWatch;
+
+      //
+      dirToWatch = Directory(path ?? _helper.defaultMusicPath);
+
+      //
+      if (!await dirToWatch.exists()) {
+        _controller.addError(NullThrownError());
+        stopObserver();
+        return;
+      }
+
+      //
+      Stream<FileSystemEvent> toWatch = dirToWatch.watch(recursive: followDir);
 
       //
       _toWatchStream = toWatch.listen(
@@ -70,7 +88,10 @@ class AudiosObserver implements ObserverInterface {
   }
 
   @override
-  void onError(dynamic error) async => _controller.addError(error);
+  void onError(dynamic error) async {
+    _controller.addError(error);
+    stopObserver();
+  }
 
   @override
   void stopObserver() {
