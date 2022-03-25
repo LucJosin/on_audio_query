@@ -16,6 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
+import '../widgets/dialog_widget.dart';
+
 class ObserveSongs extends StatefulWidget {
   const ObserveSongs({Key? key}) : super(key: key);
 
@@ -42,6 +44,15 @@ class ObserveSongsState extends State<ObserveSongs> {
               debugPrint("$r");
             },
           ),
+          // A 'Dialog' explaining about this 'dynamic' list.
+          IconButton(
+            onPressed: () => buildDialog(
+              context,
+              'Dynamic list',
+              'Every change will be notified and will automatically update the UI',
+            ),
+            icon: const Icon(Icons.info_outline),
+          )
         ],
       ),
       body: Center(
@@ -62,7 +73,9 @@ class ObserveSongsState extends State<ObserveSongs> {
           // toRemove: const {},
           // type: const {AudioType.IS_MUSIC : true},
           stream: _audioQuery.observeSongs(
-            filter: MediaFilter.forSongs(),
+            filter: MediaFilter.forSongs(
+              limit: 50, // Debug
+            ),
           ),
           builder: (context, item) {
             // When you try 'query' without asking for [READ] permission the plugin
@@ -94,28 +107,6 @@ class ObserveSongsState extends State<ObserveSongs> {
             return ListView.builder(
               itemCount: item.data!.length,
               itemBuilder: (_, index) {
-                // A 'Dialog' explaining about this 'dynamic' list.
-                if (index == 0) {
-                  return Container(
-                    height: 100,
-                    width: double.infinity,
-                    margin: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).backgroundColor,
-                      border: Border.all(
-                        color: Theme.of(context).hintColor,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        "Dynamic list. \nEvery change will be notified and will automatically update the UI",
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  );
-                }
-
                 // Normal list.
                 return ListTile(
                   title: Text(item.data![index].title),

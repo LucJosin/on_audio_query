@@ -16,6 +16,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 
+import '../widgets/dialog_widget.dart';
+
 class QuerySongs extends StatefulWidget {
   const QuerySongs({Key? key}) : super(key: key);
 
@@ -32,6 +34,17 @@ class _QuerySongsState extends State<QuerySongs> {
       appBar: AppBar(
         title: const Text("QueryExample"),
         elevation: 0,
+        actions: [
+          // A 'Dialog' explaining about this 'constant' list.
+          IconButton(
+            onPressed: () => buildDialog(
+              context,
+              'Constant list',
+              'The only way to \'update\' this list is calling: setState',
+            ),
+            icon: const Icon(Icons.info_outline),
+          )
+        ],
       ),
       body: Center(
         child: FutureBuilder<List<AudioModel>>(
@@ -45,7 +58,9 @@ class _QuerySongsState extends State<QuerySongs> {
           // toRemove: const {},
           // type: const {AudioType.IS_MUSIC : true},
           future: _audioQuery.queryAudios(
-            filter: MediaFilter.forSongs(),
+            filter: MediaFilter.forAudios(
+              limit: 50, // Debug
+            ),
           ),
           builder: (context, item) {
             // When you try 'query' without asking for [READ] permission the plugin
@@ -77,32 +92,10 @@ class _QuerySongsState extends State<QuerySongs> {
             return ListView.builder(
               itemCount: item.data!.length,
               itemBuilder: (_, index) {
-                // A 'Dialog' explaining about this 'static' list.
-                if (index == 0) {
-                  return Container(
-                    height: 100,
-                    width: double.infinity,
-                    margin: const EdgeInsets.all(20),
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).backgroundColor,
-                      border: Border.all(
-                        color: Theme.of(context).hintColor,
-                      ),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        "Static list. \nThe only way to 'update' this list is calling: setState",
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  );
-                }
-
                 // Normal list.
                 return ListTile(
                   title: Text(item.data![index].title),
-                  subtitle: Text(item.data![index].artist ?? "No Artist"),
+                  subtitle: Text(item.data![index].artist ?? '<Unknown>'),
                   // This Widget will query/load image. Just add the id and type.
                   // You can use/create your own widget/method using [queryArtwork].
                   leading: QueryArtworkWidget(
