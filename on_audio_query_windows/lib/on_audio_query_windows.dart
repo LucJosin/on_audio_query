@@ -94,6 +94,7 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
   }) async {
     return await _artworkQuery.queryArtwork(
       id,
+      _audiosQuery,
       type,
       format,
       size,
