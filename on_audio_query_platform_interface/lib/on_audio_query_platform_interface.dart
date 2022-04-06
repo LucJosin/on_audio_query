@@ -30,7 +30,6 @@ export './src/filter/columns/media_columns.dart';
 export './src/controllers/models_controller.dart';
 export './src/controllers/sorts_controller.dart';
 export './src/controllers/types_controller.dart';
-export './src/controllers/types_controller.dart';
 
 /// The interface that implementations of on_audio_query must implement.
 ///
@@ -73,7 +72,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Future<List<AudioModel>> querySongs({MediaFilter? filter}) {
+  Future<List<AudioModel>> querySongs({MediaFilter? filter, bool? isAsset}) {
     throw UnimplementedError('querySongs() has not been implemented.');
   }
 
@@ -88,6 +87,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<List<AudioModel>> queryAudios({
     MediaFilter? filter,
+    bool? isAsset,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         SongSortType? sortType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -127,6 +127,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<List<AlbumModel>> queryAlbums({
     MediaFilter? filter,
+    bool? isAsset,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         AlbumSortType? sortType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -173,6 +174,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<List<ArtistModel>> queryArtists({
     MediaFilter? filter,
+    bool? isAsset,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         ArtistSortType? sortType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -265,6 +267,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<List<GenreModel>> queryGenres({
     MediaFilter? filter,
+    bool? isAsset,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         GenreSortType? sortType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")

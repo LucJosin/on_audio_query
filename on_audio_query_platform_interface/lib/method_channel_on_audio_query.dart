@@ -60,17 +60,21 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   }
 
   @override
-  Future<List<AudioModel>> querySongs({MediaFilter? filter}) async {
+  Future<List<AudioModel>> querySongs({
+    MediaFilter? filter,
+    bool? isAsset,
+  }) async {
     // If the filter is null, use the 'default'.
     filter ??= MediaFilter.forSongs();
 
     // Both queries will used the same method.
-    return queryAudios(filter: filter);
+    return queryAudios(filter: filter, isAsset: isAsset);
   }
 
   @override
   Future<List<AudioModel>> queryAudios({
     MediaFilter? filter,
+    bool? isAsset,
     // Deprecated
     SongSortType? sortType,
     OrderType? orderType,
@@ -103,6 +107,13 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "toRemove": filter.toRemove,
         "type": fixedMap,
         "limit": filter.limit,
+        // Desktop and Web
+        "isAsset": isAsset,
+        // Desktop
+        // "saveArtwork": _saveArtwork,
+        // "saveArtworkTmp": _saveArtworkTmp,
+        // "createM3U": _createM3U,
+        // "savePath": _savePath,
       },
     );
 
@@ -113,6 +124,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   @override
   Stream<List<AudioModel>> observeSongs({
     MediaFilter? filter,
+    bool? isAsset,
     // Deprecated
     SongSortType? sortType,
     OrderType? orderType,
@@ -144,6 +156,8 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "toRemove": filter.toRemove,
         "type": fixedMap,
         "limit": filter.limit,
+        // Deskotop and Web
+        "isAsset": isAsset,
       },
     ).asyncMap<List<AudioModel>>(
       (event) => Future.wait(
@@ -158,6 +172,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   @override
   Future<List<AlbumModel>> queryAlbums({
     MediaFilter? filter,
+    bool? isAsset,
     AlbumSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
@@ -177,6 +192,8 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "toQuery": filter.toQuery,
         "toRemove": filter.toRemove,
         "limit": filter.limit,
+        // Desktop and Web
+        "isAsset": isAsset,
       },
     );
 
@@ -219,6 +236,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   @override
   Future<List<ArtistModel>> queryArtists({
     MediaFilter? filter,
+    bool? isAsset,
     ArtistSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
@@ -238,6 +256,8 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "toQuery": filter.toQuery,
         "toRemove": filter.toRemove,
         "limit": filter.limit,
+        // Desktop and Web
+        "isAsset": isAsset,
       },
     );
 
@@ -345,6 +365,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   @override
   Future<List<GenreModel>> queryGenres({
     MediaFilter? filter,
+    bool? isAsset,
     GenreSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
@@ -364,6 +385,8 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "toQuery": filter.toQuery,
         "toRemove": filter.toRemove,
         "limit": filter.limit,
+        // Desktop and Web
+        "isAsset": isAsset,
       },
     );
 

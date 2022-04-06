@@ -31,13 +31,17 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
   @override
   Future<List<AudioModel>> queryAudios({
     MediaFilter? filter,
+    bool? isAsset,
     SongSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
     bool? ignoreCase,
     String? path,
   }) async {
-    return await _audiosQuery.queryAudios(filter: filter);
+    return await _audiosQuery.queryAudios(
+      filter: filter,
+      isAsset: isAsset,
+    );
   }
 
   @override
@@ -54,34 +58,46 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
   @override
   Future<List<AlbumModel>> queryAlbums({
     MediaFilter? filter,
+    bool? isAsset,
     AlbumSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
     bool? ignoreCase,
   }) async {
-    return await _albumsQuery.queryAlbums(filter: filter);
+    return await _albumsQuery.queryAlbums(
+      filter: filter,
+      isAsset: isAsset,
+    );
   }
 
   @override
   Future<List<ArtistModel>> queryArtists({
     MediaFilter? filter,
+    bool? isAsset,
     ArtistSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
     bool? ignoreCase,
   }) async {
-    return await _artistsQuery.queryArtists(filter: filter);
+    return await _artistsQuery.queryArtists(
+      filter: filter,
+      isAsset: isAsset,
+    );
   }
 
   @override
   Future<List<GenreModel>> queryGenres({
     MediaFilter? filter,
+    bool? isAsset,
     GenreSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
     bool? ignoreCase,
   }) async {
-    return await _genresQuery.queryGenres(filter: filter);
+    return await _genresQuery.queryGenres(
+      filter: filter,
+      isAsset: isAsset,
+    );
   }
 
   @override

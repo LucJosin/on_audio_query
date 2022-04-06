@@ -48,6 +48,7 @@ class OnAudioQuery {
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<AudioModel>> querySongs({
     MediaFilter? filter,
+    bool? isAsset = false,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         SongSortType? sortType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -58,7 +59,7 @@ class OnAudioQuery {
         bool? ignoreCase,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead") String? path,
   }) async {
-    return platform.querySongs(filter: filter);
+    return platform.querySongs(filter: filter, isAsset: isAsset);
   }
 
   /// Used to return Songs Info based in [AudioModel].
@@ -88,8 +89,9 @@ class OnAudioQuery {
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<AudioModel>> queryAudios({
     MediaFilter? filter,
+    bool? isAsset = false,
   }) async {
-    return platform.queryAudios(filter: filter);
+    return platform.queryAudios(filter: filter, isAsset: isAsset);
   }
 
   /// Used to observer(listen) the songs.
@@ -158,6 +160,7 @@ class OnAudioQuery {
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<AlbumModel>> queryAlbums({
     MediaFilter? filter,
+    bool? isAsset = false,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         AlbumSortType? sortType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -167,7 +170,7 @@ class OnAudioQuery {
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         bool? ignoreCase,
   }) async {
-    return platform.queryAlbums(filter: filter);
+    return platform.queryAlbums(filter: filter, isAsset: isAsset);
   }
 
   /// Used to observer(listen) the albums.
@@ -232,6 +235,7 @@ class OnAudioQuery {
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<ArtistModel>> queryArtists({
     MediaFilter? filter,
+    bool? isAsset = false,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         ArtistSortType? sortType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -241,7 +245,7 @@ class OnAudioQuery {
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         bool? ignoreCase,
   }) async {
-    return platform.queryArtists(filter: filter);
+    return platform.queryArtists(filter: filter, isAsset: isAsset);
   }
 
   /// Used to observer(listen) the artists.
@@ -380,6 +384,7 @@ class OnAudioQuery {
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<GenreModel>> queryGenres({
     MediaFilter? filter,
+    bool? isAsset = false,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         GenreSortType? sortType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -389,7 +394,7 @@ class OnAudioQuery {
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         bool? ignoreCase,
   }) async {
-    return platform.queryGenres(filter: filter);
+    return platform.queryGenres(filter: filter, isAsset: isAsset);
   }
 
   /// Used to observer(listen) the genres.
@@ -428,23 +433,7 @@ class OnAudioQuery {
     return platform.observeGenres(filter: filter);
   }
 
-  /// Used to return Songs/Audios Info from a specific queryType based in [SongModel].
-  ///
-  /// Parameters:
-  ///
-  /// * [type] is used to define where audio will be query.
-  /// * [where] is used to query audios from specific method.
-  /// * [orderType] is used to define if order will be Ascending or Descending.
-  /// * [sortType] is used to define list sort.
-  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
-  ///
-  /// Platforms:
-  ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `✔️` | <br>
-  ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
+  /// Deprecated after [3.0.0]. Use one of the [query] methods instead
   @Deprecated(
     "Deprecated after [3.0.0]. Use one of the [query] methods instead",
   )
@@ -458,42 +447,7 @@ class OnAudioQuery {
     return [];
   }
 
-  /// Used to return Songs Info based in Something. Works like a "Search".
-  ///
-  /// Parameters:
-  ///
-  /// * [withType] The type of search based in [WithFiltersType].
-  /// * [args] is used to define what you're looking for.
-  /// * [argsVal] The "key".
-  ///
-  /// Before you use:
-  ///
-  /// * [queryWithFilters] implements all types based in [WithFiltersType], this method return always a [dynamic] List.
-  /// * After call this method you will need to specify the [Model]. See [Example1].
-  ///
-  /// Example1:
-  ///
-  /// ```dart
-  ///   //Using [FutureBuilder]
-  ///   //I changed [>] to [-]
-  ///   builder: (context, AsyncSnapshot-List-dynamic-- item) {
-  ///     List-SongModel- = item.data!.map((e) => SongModel(e)).toList(); //Ex1
-  ///     List-ArtistModel- = item.data!.map((e) => ArtistModel(e)).toList(); //Ex2
-  ///   ...}
-  /// ```
-  ///
-  /// Important:
-  ///
-  /// * If [args] is null, will be set to [Title] or [Name].
-  /// * If Android >= Q/10 [artwork] will return null, in this case, it's necessary use [queryArtwork].
-  ///
-  /// Platforms:
-  ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `✔️` | <br>
-  ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
+  /// Deprecated after [3.0.0]. Use one of the [query] methods instead
   @Deprecated(
     "Deprecated after [3.0.0]. Use one of the [query] methods instead",
   )
@@ -550,29 +504,7 @@ class OnAudioQuery {
     );
   }
 
-  /// Used to return Songs Info from a specific [Folder] based in [SongModel].
-  ///
-  /// Parameters:
-  ///
-  /// * [path] is used to define where the plugin will search for audio.
-  /// * [orderType] is used to define if order will be Ascending or Descending.
-  /// * [sortType] is used to define list sort.
-  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
-  ///
-  /// Important:
-  ///
-  /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
-  /// * If [sortType] is null, will be set to [title].
-  /// * If [uriType] is null, will be set to [EXTERNAL].
-  /// * If Android >= Q/10 [artwork] will return null, in this case, it's necessary use [queryArtwork].
-  ///
-  /// Platforms:
-  ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `❌` | `❌` | <br>
-  ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
+  /// Deprecated after [3.0.0]. Use one of the [query] methods instead
   @Deprecated(
     "Deprecated after [3.0.0]. Use one of the [query] methods instead",
   )
@@ -585,23 +517,9 @@ class OnAudioQuery {
     return [];
   }
 
-  /// Used to return Songs path.
-  ///
-  /// Important:
-  ///
-  /// * Duplicate path will be ignored.
-  ///
-  /// Platforms:
-  ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `❌` | `❌` | <br>
-  ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
+  /// Deprecated after [3.0.0]
   @Deprecated("Deprecated after [3.0.0]")
-  Future<List<String>> queryAllPath() async {
-    return [];
-  }
+  Future<List<String>> queryAllPath() async => [];
 
   //Playlist methods
 
