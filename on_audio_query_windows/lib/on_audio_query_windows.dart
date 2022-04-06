@@ -101,7 +101,7 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
   }
 
   @override
-  Future<Uint8List?> queryArtwork(
+  Future<ArtworkModel> queryArtwork(
     int id,
     ArtworkType type, {
     ArtworkFormat? format,

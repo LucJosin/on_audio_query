@@ -488,7 +488,7 @@ class OnAudioQuery {
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
-  Future<Uint8List?> queryArtwork(
+  Future<ArtworkModel> queryArtwork(
     int id,
     ArtworkType type, {
     ArtworkFormat? format,

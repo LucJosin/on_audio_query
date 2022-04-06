@@ -33,6 +33,9 @@ class ArtworkQuery : ViewModel() {
     private var quality: Int = 50
     private var size: Int = 100
 
+    //
+    private lateinit var query: Uri
+
     // None of this methods can be null.
     private lateinit var uri: Uri
     private lateinit var resolver: ContentResolver
@@ -51,7 +54,7 @@ class ArtworkQuery : ViewModel() {
 
         // The [id] of the song/album.
         id = call.argument<Number>("id")!!
-        
+
         // If the [size] is null, will be [100].
         size = call.argument<Int>("size")!!
 
@@ -95,15 +98,21 @@ class ArtworkQuery : ViewModel() {
         // Query everything in background for a better performance.
         viewModelScope.launch {
             // Start 'querying'.
-            var resultArtList: ByteArray? = loadArt()
+            var resultArtwork: ByteArray? = loadArt()
 
             // Sometimes android will extract a 'wrong' or 'empty' artwork. Just set as null.
-            if (resultArtList != null && resultArtList.isEmpty()) {
-                resultArtList = null
+            if (resultArtwork != null && resultArtwork.isEmpty()) {
+                resultArtwork = null
             }
 
             // After loading the information, send the 'result'.
-            result.success(resultArtList)
+            result.success(
+                hashMapOf<String, Any?>(
+                    "artwork" to resultArtwork,
+                    "path" to query.path,
+                    "ext" to query.lastPathSegment
+                )
+            )
         }
     }
 
@@ -132,7 +141,7 @@ class ArtworkQuery : ViewModel() {
                 //
                 // Due old problems with [MethodChannel] the [id] is defined as [Number].
                 // Here we convert to [Long]
-                val query = if (type == 2 || type == 3 || type == 4) {
+                query = if (type == 2 || type == 3 || type == 4) {
                     val item = helper.loadFirstItem(type, id, resolver) ?: return@withContext null
                     ContentUris.withAppendedId(uri, item.toLong())
                 } else {

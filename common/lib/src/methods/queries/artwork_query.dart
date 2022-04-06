@@ -14,7 +14,7 @@ class ArtworkQuery {
   // final QueryHelper _helper = QueryHelper();
 
   ///
-  Future<Uint8List?> queryArtwork(
+  Future<ArtworkModel> queryArtwork(
     int id,
     AudiosQuery audios,
     ArtworkType type, [
@@ -25,7 +25,7 @@ class ArtworkQuery {
     // TODO: Add queryArtwork to 'common'.
     // For know we will return null, using this 'old' method with a long list of
     // songs will cause a lot of problems.
-    return null;
+    return ArtworkModel({});
 
     // //
     // try {

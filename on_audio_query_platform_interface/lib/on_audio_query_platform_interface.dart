@@ -354,7 +354,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Future<Uint8List?> queryArtwork(
+  Future<ArtworkModel> queryArtwork(
     int id,
     ArtworkType type, {
     ArtworkFormat? format,

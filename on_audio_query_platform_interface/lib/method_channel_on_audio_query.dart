@@ -447,14 +447,14 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   }
 
   @override
-  Future<Uint8List?> queryArtwork(
+  Future<ArtworkModel> queryArtwork(
     int id,
     ArtworkType type, {
     ArtworkFormat? format,
     int? size,
     int? quality,
   }) async {
-    return await _channel.invokeMethod(
+    final Map resultArtwork = await _channel.invokeMethod(
       "queryArtwork",
       {
         "type": type.index,
@@ -464,6 +464,8 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "quality": (quality != null && quality <= 100) ? size : 50,
       },
     );
+
+    return ArtworkModel(resultArtwork);
   }
 
   @override

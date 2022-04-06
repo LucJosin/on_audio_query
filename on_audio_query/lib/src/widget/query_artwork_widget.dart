@@ -292,7 +292,7 @@ class QueryArtworkWidget extends StatelessWidget {
         '[quality] value cannot be greater than [100]',
       );
     }
-    return FutureBuilder<Uint8List?>(
+    return FutureBuilder<ArtworkModel>(
       future: _audioQuery.queryArtwork(
         id,
         type,
@@ -326,7 +326,9 @@ class QueryArtworkWidget extends StatelessWidget {
         }
 
         // No artwork was found or the bytes are empty.
-        if (item.data == null || item.data!.isEmpty) {
+        if (item.data == null ||
+            item.data!.artwork == null ||
+            item.data!.artwork!.isEmpty) {
           return nullArtworkWidget ??
               const Icon(
                 Icons.image_not_supported,
@@ -339,7 +341,7 @@ class QueryArtworkWidget extends StatelessWidget {
           borderRadius: artworkBorder ?? BorderRadius.circular(50),
           clipBehavior: artworkClipBehavior ?? Clip.antiAlias,
           child: Image.memory(
-            item.data!,
+            item.data!.artwork!,
             gaplessPlayback: keepOldArtwork ?? false,
             repeat: artworkRepeat ?? ImageRepeat.noRepeat,
             scale: artworkScale ?? 1.0,
