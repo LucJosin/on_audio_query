@@ -102,6 +102,7 @@ class _QuerySongsState extends State<QuerySongs> {
                     id: item.data![index].id,
                     type: ArtworkType.AUDIO,
                   ),
+                  onTap: () => debugPrint('${item.data![index]}'),
                 );
               },
             );

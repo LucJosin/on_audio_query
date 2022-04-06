@@ -24,27 +24,31 @@ class GenresQuery {
   /// Method used to "query" all the genres and their informations.
   Future<List<GenreModel>> queryGenres({
     MediaFilter? filter,
+    bool? isAsset,
   }) async {
     // If the parameters filter is null, use the default filter.
     filter ??= _defaultFilter;
 
     // Retrive all (or limited) files path.
-    List<String> audiosPath = await _helper.getFilesPath(limit: filter.limit);
+    List<MP3Instance> instances = await _helper.getFiles(
+      isAsset ?? false,
+      limit: filter.limit,
+    );
 
     // Since all the 'query' is made 'manually'. If we have multiple (100+) audio
     // files, will take more than 10 seconds to load everything. So, we need to use
     // the flutter isolate (compute) to load this files on another 'thread'.
     List<Map<String, Object?>> listOfGenres = await compute(
       _fetchListOfGenres,
-      audiosPath,
+      instances,
     );
 
     // 'Build' the filter.
-    List<GenreModel> genres = _helper.mediaFilter(
+    List<GenreModel> genres = _helper.mediaFilter<GenreModel>(
       filter,
       listOfGenres,
       genreProjection,
-    ) as List<GenreModel>;
+    );
 
     // Now we sort the list based on [sortType].
     switch (filter.genreSortType) {
@@ -64,7 +68,7 @@ class GenresQuery {
 
   // This method will be used on another isolate.
   Future<List<Map<String, Object?>>> _fetchListOfGenres(
-    List<String> audiosPath,
+    List<MP3Instance> instances,
   ) async {
     // This "helper" list will avoid duplicate values inside the final list.
     List<String> hList = [];
@@ -76,10 +80,7 @@ class GenresQuery {
     List<Map<String, Object?>> listOfGenres = [];
 
     // For each [audio] inside the [audios], take one and try read the [bytes].
-    for (var audio in audiosPath) {
-      //
-      MP3Instance mp3instance = await _helper.loadMP3(audio, false);
-
+    for (var mp3instance in instances) {
       //
       if (mp3instance.parseTagsSync()) {
         //
@@ -89,11 +90,11 @@ class GenresQuery {
         if (data == null) continue;
 
         //
-        String genre = data["Genre"];
+        String? genre = data["Genre"];
 
         // If [data] is null, the file probably has some wrong [bytes].
         // To avoid duplicate items, check if [helperList] already has this name.
-        if (genre.isEmpty || hList.contains(genre)) continue;
+        if (genre == null || genre.isEmpty || hList.contains(genre)) continue;
 
         // Count and add the number of songs for every genre.
         mediaCount += 1;
@@ -102,7 +103,7 @@ class GenresQuery {
         // platforms so, if you change some key, will have to change the [Android] too.
         Map<String, Object?> formattedGenre = await _formatGenre(
           data,
-          audio,
+          'audio',
           mediaCount,
         );
 

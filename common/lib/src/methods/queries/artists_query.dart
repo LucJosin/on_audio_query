@@ -27,19 +27,23 @@ class ArtistsQuery {
   /// Method used to "query" all the artists and their informations.
   Future<List<ArtistModel>> queryArtists({
     MediaFilter? filter,
+    bool? isAsset,
   }) async {
     // If the parameters filter is null, use the default filter.
     filter ??= _defaultFilter;
 
     // Retrive all (or limited) files path.
-    List<String> audiosPath = await _helper.getFilesPath(limit: filter.limit);
+    List<MP3Instance> instances = await _helper.getFiles(
+      isAsset ?? false,
+      limit: filter.limit,
+    );
 
     // Since all the 'query' is made 'manually'. If we have multiple (100+) audio
     // files, will take more than 10 seconds to load everything. So, we need to use
     // the flutter isolate (compute) to load this files on another 'thread'.
     List<Map<String, Object?>> listOfAlbums = await compute(
       _fetchListOfArtists,
-      audiosPath,
+      instances,
     );
 
     // 'Build' the filter.
@@ -112,7 +116,7 @@ class ArtistsQuery {
 
   // This method will be used on another isolate.
   Future<List<Map<String, Object?>>> _fetchListOfArtists(
-    List<String> audiosPath,
+    List<MP3Instance> instances,
   ) async {
     // This "helper" list will avoid duplicate values inside the final list.
     List<String> hList = [];
@@ -121,10 +125,7 @@ class ArtistsQuery {
     List<Map<String, Object?>> listOfArtists = [];
 
     // For each [audio] inside the [audios], take one and try read the [bytes].
-    for (var path in audiosPath) {
-      //
-      MP3Instance mp3instance = await _helper.loadMP3(path, false);
-
+    for (var mp3instance in instances) {
       //
       if (mp3instance.parseTagsSync()) {
         //
@@ -142,7 +143,8 @@ class ArtistsQuery {
 
         // "format" into a [Map<String, dynamic>], all keys are based on [Android]
         // platforms so, if you change some key, will have to change the [Android] too.
-        Map<String, Object?> formattedArtist = await _formatArtist(data, path);
+        Map<String, Object?> formattedArtist =
+            await _formatArtist(data, 'path');
 
         // Temporary and the final list.
         listOfArtists.add(formattedArtist);
@@ -157,28 +159,29 @@ class ArtistsQuery {
   }
 
   Future<Map<String, Object?>> _formatArtist(Map artist, String data) async {
-    AudiosQuery query = AudiosQuery();
+    // TODO: 'number_of_albums' and 'number_of_tracks'
+    // AudiosQuery query = AudiosQuery();
 
     //
-    var audios = await query.queryAudios(
-      filter: MediaFilter.forAudios(toQuery: {
-        MediaColumns.Artist.ARTIST: [artist["Artist"]]
-      }),
-    );
+    // var audios = await query.queryAudios(
+    //   filter: MediaFilter.forAudios(toQuery: {
+    //     MediaColumns.Artist.ARTIST: [artist["Artist"]]
+    //   }),
+    // );
 
-    //
-    var albums = await query.queryAudios(
-      filter: MediaFilter.forAudios(toQuery: {
-        MediaColumns.Album.ARTIST: [artist["Artist"]]
-      }),
-    );
+    // //
+    // var albums = await query.queryAudios(
+    //   filter: MediaFilter.forAudios(toQuery: {
+    //     MediaColumns.Album.ARTIST: [artist["Artist"]]
+    //   }),
+    // );
 
     //
     return {
       "_id": "${artist["Artist"]}".generateId(),
       "artist": artist["Artist"],
-      "number_of_albums": albums.length,
-      "number_of_tracks": audios.length,
+      // "number_of_albums": albums.length,
+      // "number_of_tracks": audios.length,
     };
   }
 }

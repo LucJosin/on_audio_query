@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:id3/id3.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
-import 'audios_query.dart';
 import '../helpers/query_helper_stub.dart'
     if (dart.library.io) '../helpers/query_helper_io.dart'
     if (dart.library.html) '../helpers/query_helper_html.dart';
@@ -29,19 +28,25 @@ class AlbumsQuery {
   ];
 
   /// Method used to "query" all the albums and their informations.
-  Future<List<AlbumModel>> queryAlbums({MediaFilter? filter}) async {
+  Future<List<AlbumModel>> queryAlbums({
+    MediaFilter? filter,
+    bool? isAsset,
+  }) async {
     // If the parameters filter is null, use the default filter.
     filter ??= _defaultFilter;
 
     // Retrive all (or limited) files path.
-    List<String> audiosPath = await _helper.getFilesPath(limit: filter.limit);
+    List<MP3Instance> instances = await _helper.getFiles(
+      isAsset ?? false,
+      limit: filter.limit,
+    );
 
     // Since all the 'query' is made 'manually'. If we have multiple (100+) audio
     // files, will take more than 10 seconds to load everything. So, we need to use
     // the flutter isolate (compute) to load this files on another 'thread'.
     List<Map<String, Object?>> listOfAlbums = await compute(
       _fetchListOfAlbums,
-      audiosPath,
+      instances,
     );
 
     // 'Build' the filter.
@@ -91,7 +96,7 @@ class AlbumsQuery {
 
   // This method will be used on another isolate.
   Future<List<Map<String, Object?>>> _fetchListOfAlbums(
-    List<String> audiosPath,
+    List<MP3Instance> instances,
   ) async {
     // This "helper" list will avoid duplicate values inside the final list.
     List<String> hList = [];
@@ -100,10 +105,7 @@ class AlbumsQuery {
     List<Map<String, Object?>> listOfAlbums = [];
 
     // For each [audio] inside the [audios], take one and try read the [bytes].
-    for (var path in audiosPath) {
-      //
-      MP3Instance mp3instance = await _helper.loadMP3(path, false);
-
+    for (var mp3instance in instances) {
       //
       if (mp3instance.parseTagsSync()) {
         //
@@ -120,7 +122,7 @@ class AlbumsQuery {
 
         // "format" into a [Map<String, dynamic>], all keys are based on [Android]
         // platforms so, if you change some key, will have to change the [Android] too.
-        Map<String, Object?> formattedAudio = await _formatAlbum(data, path);
+        Map<String, Object?> formattedAudio = await _formatAlbum(data, 'path');
 
         // Temporary and the final list.
         listOfAlbums.add(formattedAudio);
@@ -137,11 +139,12 @@ class AlbumsQuery {
   //
   Future<Map<String, Object?>> _formatAlbum(Map album, String data) async {
     //
-    var audios = await AudiosQuery().queryAudios(
-      filter: MediaFilter.forAudios(toQuery: {
-        MediaColumns.Album.ALBUM: [album["Album"]]
-      }),
-    );
+    // TODO: 'numsongs'
+    // var audios = await AudiosQuery().queryAudios(
+    //   filter: MediaFilter.forAudios(toQuery: {
+    //     MediaColumns.Album.ALBUM: [album["Album"]]
+    //   }),
+    // );
 
     //
     return {
@@ -149,7 +152,7 @@ class AlbumsQuery {
       "album": album["Album"],
       "artist": "${album["Artist"]}",
       "artist_id": "${album["Artist"]}".generateId(),
-      "numsongs": audios.length,
+      // "numsongs": audios.length,
     };
   }
 }

@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 
 import 'package:id3/id3.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
@@ -51,19 +54,25 @@ class AudiosQuery {
   ];
 
   /// Method used to 'query' all the audios and their informations.
-  Future<List<AudioModel>> queryAudios({MediaFilter? filter}) async {
+  Future<List<AudioModel>> queryAudios({
+    MediaFilter? filter,
+    bool? isAsset,
+  }) async {
     // If the parameters filter is null, use the default filter.
     filter ??= _defaultFilter;
 
     // Retrive all (or limited) files path.
-    List<String> audiosPath = await _helper.getFilesPath(limit: filter.limit);
+    List<MP3Instance> instances = await _helper.getFiles(
+      isAsset ?? false,
+      limit: filter.limit,
+    );
 
     // Since all the 'query' is made 'manually'. If we have multiple (100+) audio
     // files, will take more than 10 seconds to load everything. So, we need to use
     // the flutter isolate (compute) to load this files on another 'thread'.
     List<Map<String, Object?>> computedAudios = await compute(
       _fetchListOfAudios,
-      audiosPath,
+      instances,
     );
 
     // 'Build' the filter.
@@ -159,7 +168,7 @@ class AudiosQuery {
 
   // This method will be used on another isolate.
   Future<List<Map<String, Object?>>> _fetchListOfAudios(
-    List<String> audiosPath,
+    List<MP3Instance> instances,
   ) async {
     // Define a empty list of audios.
     List<Map<String, Object?>> listOfAudios = [];
@@ -175,10 +184,7 @@ class AudiosQuery {
     //   * Year (ignored)
     //   * Settings (ignored)
     //   * APIC
-    for (var path in audiosPath) {
-      //
-      MP3Instance mp3instance = await _helper.loadMP3(path, false);
-
+    for (var mp3instance in instances) {
       //
       if (mp3instance.parseTagsSync()) {
         //
@@ -189,7 +195,8 @@ class AudiosQuery {
 
         listOfAudios.add(_formatAudio(
           data,
-          path,
+          // TODO: Fix path
+          'path',
           mp3instance.mp3Bytes.length,
         ));
       }
