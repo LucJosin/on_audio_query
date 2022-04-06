@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:id3/id3.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
@@ -10,25 +12,30 @@ class QueryHelper {
   static final String _userDir = '${Platform.environment["USERPROFILE"]}';
 
   ///
-  static Directory get _defaultDirectory =>
-      Directory('$_userDir\\Desktop\\Music');
+  static Directory get _defaultDirectory => Directory('$_userDir\\Music');
 
   ///
   final String defaultMusicPath = '$_userDir\\Music';
 
+  ///
+  List<String> get paths => _paths;
+
+  //
+  List<String> _paths = [];
+
   /// This method will load a unique audio using his path, and return a [MP3Instance]
   /// with all information about this file.
-  Future<MP3Instance> loadMP3(String audio, bool isAsset) async {
+  Future<MP3Instance> _loadMP3(String audio, bool isAsset) async {
     //
     Uint8List audioBytes;
 
     //
     if (isAsset) {
       //
-      String decodedPath = Uri.decodeFull('AssetManifest.json');
+      String decodedPath = Uri.decodeFull(audio);
 
       //
-      var loadedAudio = await rootBundle.load(decodedPath);
+      ByteData loadedAudio = await rootBundle.load(decodedPath);
 
       //
       audioBytes = loadedAudio.buffer.asUint8List();
@@ -41,16 +48,50 @@ class QueryHelper {
   }
 
   ///
-  Future<List<String>> getFilesPath({bool lookSubs = true, int? limit}) async {
-    var files = _defaultDirectory
-        .listSync(recursive: lookSubs)
-        .whereType<File>()
-        .where((file) => file.path.endsWith('.mp3'))
-        .toList();
+  Future<List<MP3Instance>> getFiles(
+    bool isAsset, {
+    bool lookSubs = true,
+    int? limit,
+  }) async {
+    List<MP3Instance> instances = [];
 
-    if (limit != null) files = files.take(limit).toList();
+    //
+    if (isAsset) {
+      //
+      String assets = await rootBundle.loadString('AssetManifest.json');
 
-    return files.map((e) => e.path).toList();
+      //
+      Map pFiles = json.decode(assets);
+
+      //
+      var mp3Files = pFiles.keys.where((file) => file.endsWith(".mp3"));
+
+      //
+      _paths = mp3Files.toList().cast<String>();
+    } else {
+      //
+      List directoryEntities = _defaultDirectory.listSync(recursive: lookSubs);
+
+      //
+      var onlyFilesList = directoryEntities.whereType<File>();
+
+      //
+      var mp3Files = onlyFilesList.where((file) => file.path.endsWith('.mp3'));
+
+      //
+      _paths = mp3Files.map((e) => e.path).toList();
+    }
+
+    //
+    if (limit != null) _paths = _paths.take(limit).toList();
+
+    //
+    for (var file in _paths) {
+      instances.add(await _loadMP3(file, isAsset));
+    }
+
+    //
+    return instances;
   }
 
   ///
@@ -80,9 +121,16 @@ class QueryHelper {
 
       //
       for (var value in values) {
+        //
         listOfSongs.removeWhere((song) {
-          return song.containsKey(projection[id]) &&
-              !(song[projection[id]] as String).contains(value);
+          //
+          bool isProjectionValid = song.containsKey(projection[id]);
+
+          //
+          bool containsValue = (song[projection[id]] as String).contains(value);
+
+          //
+          return isProjectionValid && !containsValue;
         });
       }
     }
@@ -100,9 +148,16 @@ class QueryHelper {
 
       //
       for (var value in values) {
+        //
         listOfSongs.removeWhere((song) {
-          return song.containsKey(projection[id]) &&
-              (song[projection[id]] as String).contains(value);
+          //
+          bool isProjectionValid = song.containsKey(projection[id]);
+
+          //
+          bool containsValue = (song[projection[id]] as String).contains(value);
+
+          //
+          return isProjectionValid && containsValue;
         });
       }
     }

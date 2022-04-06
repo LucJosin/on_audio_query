@@ -22,8 +22,12 @@ class QueryHelper {
     return MP3Instance(loadedAudio.buffer.asUint8List());
   }
 
-  ///
-  Future<List<String>> getFilesPath({bool lookSubs = true, int? limit}) async {
+  /// TODO
+  Future<List<String>> getFiles(
+    bool isAsset, {
+    bool lookSubs = true,
+    int? limit,
+  }) async {
     //
     String assets = await rootBundle.loadString(_defaultDirectory);
 
@@ -31,14 +35,17 @@ class QueryHelper {
     Map decoded = json.decode(assets);
 
     //
-    List audioFiles = decoded.keys.where((e) => e.endsWith(".mp3")).toList();
+    List files = decoded.keys.where((e) => e.endsWith(".mp3")).toList();
 
     //
-    return audioFiles as List<String>;
+    if (limit != null) files = files.take(limit).toList();
+
+    //
+    return files as List<String>;
   }
 
   ///
-  List<AudioModel> mediaFilter(
+  List<T> mediaFilter<T>(
     MediaFilter filter,
     List<Map<String, Object?>> listOfSongs,
     List<String?> projection,
@@ -56,9 +63,16 @@ class QueryHelper {
 
       //
       for (var value in values) {
+        //
         listOfSongs.removeWhere((song) {
-          return song.containsKey(projection[id]) &&
-              !(song[projection[id]] as String).contains(value);
+          //
+          bool isProjectionValid = song.containsKey(projection[id]);
+
+          //
+          bool containsValue = (song[projection[id]] as String).contains(value);
+
+          //
+          return isProjectionValid && !containsValue;
         });
       }
     }
@@ -76,14 +90,32 @@ class QueryHelper {
 
       //
       for (var value in values) {
+        //
         listOfSongs.removeWhere((song) {
-          return song.containsKey(projection[id]) &&
-              (song[projection[id]] as String).contains(value);
+          //
+          bool isProjectionValid = song.containsKey(projection[id]);
+
+          //
+          bool containsValue = (song[projection[id]] as String).contains(value);
+
+          //
+          return isProjectionValid && containsValue;
         });
       }
     }
 
     //
-    return listOfSongs.map((e) => AudioModel(e)).toList();
+    switch (T) {
+      case AudioModel:
+        return listOfSongs.map((e) => AudioModel(e)).toList() as List<T>;
+      case AlbumModel:
+        return listOfSongs.map((e) => AlbumModel(e)).toList() as List<T>;
+      case ArtistModel:
+        return listOfSongs.map((e) => ArtistModel(e)).toList() as List<T>;
+      case GenreModel:
+        return listOfSongs.map((e) => GenreModel(e)).toList() as List<T>;
+      default:
+        return [];
+    }
   }
 }
