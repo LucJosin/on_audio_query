@@ -110,7 +110,7 @@ class ArtworkQuery : ViewModel() {
                 hashMapOf<String, Any?>(
                     "artwork" to resultArtwork,
                     "path" to query.path,
-                    "ext" to query.lastPathSegment
+                    "type" to format.name
                 )
             )
         }

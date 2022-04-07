@@ -14,7 +14,7 @@ class ArtworkModel {
   String? get path => _info["path"];
 
   /// Return artwork [extension]
-  Stream? get extension => _info["ext"];
+  Stream? get type => _info["type"];
 
   /// Return a map with all [keys] and [values] from specific artwork.
   Map get getMap => _info;
@@ -23,12 +23,12 @@ class ArtworkModel {
   ArtworkModel copyWith({
     Uint8List? artwork,
     String? path,
-    String? extension,
+    String? type,
   }) {
     return ArtworkModel({
       "artwork": artwork ?? this.artwork,
       "path": path ?? this.path,
-      "ext": extension ?? this.extension,
+      "ext": type ?? this.type,
     });
   }
 
