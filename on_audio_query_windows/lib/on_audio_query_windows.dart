@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 

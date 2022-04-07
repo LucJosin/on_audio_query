@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:id3/id3.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
-import 'audios_query.dart';
 import '../helpers/extensions/format_extension.dart';
 import '../helpers/query_helper_stub.dart'
     if (dart.library.io) '../helpers/query_helper_io.dart'

@@ -14,7 +14,6 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 */
 
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 

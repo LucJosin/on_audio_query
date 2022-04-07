@@ -1,7 +1,5 @@
 // ignore_for_file: dead_code
 
-import 'dart:typed_data';
-
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
 import 'audios_query.dart';

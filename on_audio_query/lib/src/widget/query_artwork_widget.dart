@@ -12,8 +12,6 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 =============
 */
 
-import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
