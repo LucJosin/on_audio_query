@@ -106,37 +106,43 @@ class ArtworkQuery {
     
     private func loadArtwork(cursor: MPMediaQuery!, size: Int, format: Int, uri: Int, quality: Int) {
         DispatchQueue.global(qos: .userInitiated).async {
-            var tempArtwork: Data?
-            var tempItem: MPMediaItem?
+            var artwork: Data?
+            var item: MPMediaItem?
             let fixedQuality = CGFloat(Double(quality) / 100.0)
             
             // If [uri] is 0: artwork is from [Song]
             // If [uri] is 1, 2 or 3: artwork is from [Album], [Playlist] or [Artist]
             if uri == 0 {
                 // Since all id are unique, we can safely call the first item.
-                tempItem = cursor!.items?.first
+                item = cursor!.items?.first
             } else {
                 // Since all id are unique, we can safely call the first item.
-                tempItem = cursor!.collections?.first?.items[0]
+                item = cursor!.collections?.first?.items.first
             }
             
             // If [format] is 0: will be [JPEG]
             // If [format] is 1: will be [PNG]
             if format == 0 {
-                tempArtwork = tempItem?.artwork?.image(at: CGSize(width: size, height: size))?.jpegData(compressionQuality: fixedQuality)
+                artwork = item?.artwork?.image(at: CGSize(width: size, height: size))?.jpegData(compressionQuality: fixedQuality)
             } else {
                 // [PNG] format will return a high image quality.
-                tempArtwork = tempItem?.artwork?.image(at: CGSize(width: size, height: size))?.pngData()
+                artwork = item?.artwork?.image(at: CGSize(width: size, height: size))?.pngData()
             }
             
             // After finish the "query", go back to the "main" thread(You can only call flutter
             // inside the main thread).
             DispatchQueue.main.async {
                 // We don't need a "empty" image so, return null to avoid problems.
-                if tempArtwork != nil && tempArtwork!.isEmpty {
-                    tempArtwork = nil
+                if artwork != nil && artwork!.isEmpty {
+                    artwork = nil
                 }
-                self.result(tempArtwork)
+                self.result(
+                    [
+                        "artwork": artwork,
+                        "path": nil,
+                        "type": format == 0 ? "JPEG" : "PNG",
+                    ]
+                )
             }
         }
     }
