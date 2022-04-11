@@ -14,12 +14,24 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 
 import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
+import 'package:on_audio_query/src/queries/albums_query.dart';
+import 'package:on_audio_query/src/queries/artists_query.dart';
+import 'package:on_audio_query/src/queries/genres_query.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
+
+import 'queries/audios_query.dart';
 
 ///Interface and Main method for use on_audio_query
 class OnAudioQuery {
   /// The platform interface that drives this plugin
   static OnAudioQueryPlatform get platform => OnAudioQueryPlatform.instance;
+
+  //
+  static final AudiosQuery _audiosQuery = AudiosQuery();
+  static final AlbumsQuery _albumsQuery = AlbumsQuery();
+  static final ArtistsQuery _artistsQuery = ArtistsQuery();
+  static final GenresQuery _genresQuery = GenresQuery();
 
   /// Used to return Songs Info based in [AudioModel].
   ///
@@ -48,7 +60,7 @@ class OnAudioQuery {
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<AudioModel>> querySongs({
     MediaFilter? filter,
-    bool? isAsset = false,
+    bool isAsset = false,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         SongSortType? sortType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -59,7 +71,7 @@ class OnAudioQuery {
         bool? ignoreCase,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead") String? path,
   }) async {
-    return platform.querySongs(filter: filter, isAsset: isAsset);
+    return platform.queryAudios(filter: filter, isAsset: isAsset);
   }
 
   /// Used to return Songs Info based in [AudioModel].
@@ -82,16 +94,22 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `✔️` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<AudioModel>> queryAudios({
     MediaFilter? filter,
-    bool? isAsset = false,
+    bool isAsset = false,
   }) async {
-    return platform.queryAudios(filter: filter, isAsset: isAsset);
+    //
+    if (isAsset || kIsWeb) {
+      return _audiosQuery.queryAudios(filter: filter, isAsset: isAsset);
+    }
+
+    //
+    return platform.queryAudios(filter: filter);
   }
 
   /// Used to observer(listen) the songs.
@@ -160,7 +178,7 @@ class OnAudioQuery {
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<AlbumModel>> queryAlbums({
     MediaFilter? filter,
-    bool? isAsset = false,
+    bool isAsset = false,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         AlbumSortType? sortType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -170,6 +188,12 @@ class OnAudioQuery {
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         bool? ignoreCase,
   }) async {
+    //
+    if (isAsset || kIsWeb) {
+      return _albumsQuery.queryAlbums(filter: filter, isAsset: isAsset);
+    }
+
+    //
     return platform.queryAlbums(filter: filter, isAsset: isAsset);
   }
 
@@ -235,7 +259,7 @@ class OnAudioQuery {
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<ArtistModel>> queryArtists({
     MediaFilter? filter,
-    bool? isAsset = false,
+    bool isAsset = false,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         ArtistSortType? sortType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -245,6 +269,12 @@ class OnAudioQuery {
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         bool? ignoreCase,
   }) async {
+    //
+    if (isAsset || kIsWeb) {
+      return _artistsQuery.queryArtists(filter: filter, isAsset: isAsset);
+    }
+
+    //
     return platform.queryArtists(filter: filter, isAsset: isAsset);
   }
 
@@ -384,7 +414,7 @@ class OnAudioQuery {
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<GenreModel>> queryGenres({
     MediaFilter? filter,
-    bool? isAsset = false,
+    bool isAsset = false,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         GenreSortType? sortType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -394,6 +424,12 @@ class OnAudioQuery {
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         bool? ignoreCase,
   }) async {
+    //
+    if (isAsset || kIsWeb) {
+      return _genresQuery.queryGenres(filter: filter, isAsset: isAsset);
+    }
+
+    //
     return platform.queryGenres(filter: filter, isAsset: isAsset);
   }
 
