@@ -1,13 +1,12 @@
 import 'package:flutter/foundation.dart';
 
-import 'package:id3/id3.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 import 'package:path/path.dart' as path_controller;
 
 import '../helpers/extensions/format_extension.dart';
 import '../helpers/query_helper_stub.dart'
-    if (dart.library.io) '../helpers/query_helper_io.dart'
-    if (dart.library.html) '../helpers/query_helper_html.dart';
+    if (dart.library.io) '../helpers/io.dart'
+    if (dart.library.html) '../helpers/html.dart';
 
 class AudiosQuery {
   ///
@@ -53,14 +52,14 @@ class AudiosQuery {
   /// Method used to 'query' all the audios and their informations.
   Future<List<AudioModel>> queryAudios({
     MediaFilter? filter,
-    bool? isAsset,
+    bool isAsset = false,
   }) async {
     // If the parameters filter is null, use the default filter.
     filter ??= _defaultFilter;
 
     // Retrive all (or limited) files path.
     List<MP3Instance> instances = await _helper.getFiles(
-      isAsset ?? false,
+      isAsset,
       limit: filter.limit,
     );
 
