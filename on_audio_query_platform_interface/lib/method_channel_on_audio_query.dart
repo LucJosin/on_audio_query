@@ -53,22 +53,10 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   Stream<List<PlaylistModel>>? _onPlaylistsObserverChanged;
   Stream<List<GenreModel>>? _onGenresObserverChanged;
 
-  @override
-  Future<List<T>> queryBuilder<T>({String? builder}) async {
-    return [] as List<T>;
-  }
-
-  @override
-  Future<List<AudioModel>> querySongs({
-    MediaFilter? filter,
-    bool? isAsset,
-  }) async {
-    // If the filter is null, use the 'default'.
-    filter ??= MediaFilter.forSongs();
-
-    // Both queries will used the same method.
-    return queryAudios(filter: filter, isAsset: isAsset);
-  }
+  // @override
+  // Future<List<T>> queryBuilder<T>({String? builder}) async {
+  //   return [] as List<T>;
+  // }
 
   @override
   Future<List<AudioModel>> queryAudios({
@@ -106,8 +94,6 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "toRemove": filter.toRemove,
         "type": fixedMap,
         "limit": filter.limit,
-        // Desktop and Web
-        "isAsset": isAsset,
         // Desktop
         // "saveArtwork": _saveArtwork,
         // "saveArtworkTmp": _saveArtworkTmp,
@@ -155,8 +141,6 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "toRemove": filter.toRemove,
         "type": fixedMap,
         "limit": filter.limit,
-        // Deskotop and Web
-        "isAsset": isAsset,
       },
     ).asyncMap<List<AudioModel>>(
       (event) => Future.wait(
@@ -191,8 +175,6 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "toQuery": filter.toQuery,
         "toRemove": filter.toRemove,
         "limit": filter.limit,
-        // Desktop and Web
-        "isAsset": isAsset,
       },
     );
 
@@ -255,8 +237,6 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "toQuery": filter.toQuery,
         "toRemove": filter.toRemove,
         "limit": filter.limit,
-        // Desktop and Web
-        "isAsset": isAsset,
       },
     );
 
@@ -384,8 +364,6 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "toQuery": filter.toQuery,
         "toRemove": filter.toRemove,
         "limit": filter.limit,
-        // Desktop and Web
-        "isAsset": isAsset,
       },
     );
 
@@ -426,26 +404,6 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   }
 
   @override
-  Future<List<AudioModel>> queryAudiosFrom(
-    AudiosFromType type,
-    Object where, {
-    SongSortType? sortType,
-    OrderType? orderType,
-    bool? ignoreCase,
-  }) async {
-    return [];
-  }
-
-  @override
-  Future<List<dynamic>> queryWithFilters(
-    String argsVal,
-    WithFiltersType withType,
-    dynamic args,
-  ) async {
-    return [];
-  }
-
-  @override
   Future<ArtworkModel> queryArtwork(
     int id,
     ArtworkType type, {
@@ -453,7 +411,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
     int? size,
     int? quality,
   }) async {
-    final Map resultArtwork = await _channel.invokeMethod(
+    return _channel.invokeMethod(
       "queryArtwork",
       {
         "type": type.index,
@@ -462,23 +420,10 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "size": size ?? 100,
         "quality": (quality != null && quality <= 100) ? size : 50,
       },
+    ).then(
+      (resultArtwork) => ArtworkModel(resultArtwork),
     );
-
-    return ArtworkModel(resultArtwork);
   }
-
-  @override
-  Future<List<SongModel>> queryFromFolder(
-    String path, {
-    SongSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-  }) async {
-    return [];
-  }
-
-  @override
-  Future<List<String>> queryAllPath() async => [];
 
   @override
   Future<int?> createPlaylist(
@@ -563,8 +508,9 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
 
   @override
   Future<DeviceModel> queryDeviceInfo() async {
-    final Map deviceResult = await _channel.invokeMethod("queryDeviceInfo");
-    return DeviceModel(deviceResult);
+    return _channel
+        .invokeMethod("queryDeviceInfo")
+        .then((deviceResult) => DeviceModel(deviceResult));
   }
 
   @override
@@ -574,7 +520,8 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
 
   @override
   Future<ObserversModel> observersStatus() async {
-    final Map observersResult = await _channel.invokeMethod('observersStatus');
-    return ObserversModel(observersResult);
+    return _channel
+        .invokeMethod('observersStatus')
+        .then((observersResult) => ObserversModel(observersResult));
   }
 }

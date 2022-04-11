@@ -30,6 +30,9 @@ export './src/controllers/models_controller.dart';
 export './src/controllers/sorts_controller.dart';
 export './src/controllers/types_controller.dart';
 
+//
+export 'package:id3/id3.dart';
+
 /// The interface that implementations of on_audio_query must implement.
 ///
 /// Platform implementations should extend this class rather than implement it as `on_audio_query`
@@ -58,22 +61,9 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   }
 
   // TODO: Add [queryBuilder]
-  Future<List<T>> queryBuilder<T>({String? builder}) {
-    throw UnimplementedError('queryBuilder() has not been implemented.');
-  }
-
-  /// Used to return Songs Info based in [AudioModel].
-  ///
-  /// Platforms:
-  ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `✔️` | <br>
-  ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Future<List<AudioModel>> querySongs({MediaFilter? filter, bool? isAsset}) {
-    throw UnimplementedError('querySongs() has not been implemented.');
-  }
+  // Future<List<T>> queryBuilder<T>({String? builder}) {
+  //   throw UnimplementedError('queryBuilder() has not been implemented.');
+  // }
 
   /// Used to return Audios Info based in [AudioModel].
   ///

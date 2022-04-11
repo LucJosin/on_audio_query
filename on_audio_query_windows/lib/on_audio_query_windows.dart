@@ -39,7 +39,7 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
   }) async {
     return await _audiosQuery.queryAudios(
       filter: filter,
-      isAsset: isAsset,
+      isAsset: isAsset ?? false,
     );
   }
 

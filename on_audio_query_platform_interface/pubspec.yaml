@@ -19,6 +19,9 @@ dependencies:
   # on_audio_query
   plugin_platform_interface: ^2.1.2
 
+  # ID3 Reader
+  id3: ^1.0.2
+
   # Flutter
   flutter:
     sdk: flutter

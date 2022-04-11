@@ -12,9 +12,6 @@ dependencies:
   on_audio_query_platform_interface:
     path: ../on_audio_query_platform_interface
 
-  # Others
-  id3: ^1.0.2
-
   # Flutter
   flutter:
     sdk: flutter

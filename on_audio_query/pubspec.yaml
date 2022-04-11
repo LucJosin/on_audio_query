@@ -9,7 +9,7 @@ homepage: https://github.com/LucJosin/on_audio_query/tree/main/on_audio_query
 # website: https://www.lucasjosino.com/
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: ">=2.12.0 <3.0.0"
   flutter: ">=1.20.0"
 
 dependencies:
@@ -18,11 +18,11 @@ dependencies:
     path: ../on_audio_query_platform_interface
   on_audio_query_windows:
     path: ../on_audio_query_windows
-  on_audio_query_web:
-    path: ../on_audio_query_web
 
   # Flutter
   flutter:
+    sdk: flutter
+  flutter_web_plugins:
     sdk: flutter
 
 dev_dependencies:
@@ -45,4 +45,5 @@ flutter:
       windows:
         default_package: on_audio_query_windows
       web:
-        default_package: on_audio_query_web
+        pluginClass: OnAudioQueryPlugin
+        fileName: src/on_audio_query_web.dart
