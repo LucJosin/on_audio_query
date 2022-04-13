@@ -32,12 +32,12 @@ class AudiosObserver implements ObserverInterface {
   Stream<List<AudioModel>> get stream => _controller.stream;
 
   @override
-  Future<void> startObserver(Map<String, dynamic> args) async {
+  Future<void> startObserver([Map<String, dynamic>? args]) async {
     //
-    bool followDir = args["followDir"] ?? true;
+    bool followDir = args?["followDir"] ?? true;
 
     //
-    String? path = args["path"];
+    String? path = args?["path"];
 
     //
     if (!_isRunning) {

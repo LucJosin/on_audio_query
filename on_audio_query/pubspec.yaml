@@ -46,4 +46,4 @@ flutter:
         default_package: on_audio_query_windows
       web:
         pluginClass: OnAudioQueryPlugin
-        fileName: src/on_audio_query_web.dart
+        fileName: on_audio_query_web.dart

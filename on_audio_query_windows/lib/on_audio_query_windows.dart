@@ -48,7 +48,7 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     MediaFilter? filter,
   }) async* {
     // Setup the observer.
-    await _audiosObserver.startObserver({});
+    await _audiosObserver.startObserver();
 
     // Return the 'stream'.
     yield* _audiosObserver.stream;

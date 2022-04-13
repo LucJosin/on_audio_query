@@ -25,7 +25,6 @@ extension OnIdGenerator on String {
   ///
   /// int finalId = int.parse(idAsString); //839711074105000
   /// ```
-  // TODO: Fix wrong audio id. Remove artist
   int generateAudioId() {
     if (isEmpty) return 0;
     List<String> splitted = split(" : ");
