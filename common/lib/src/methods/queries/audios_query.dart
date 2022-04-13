@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
-import 'package:path/path.dart';
+import 'package:path/path.dart' as p;
 
 import '../helpers/extensions/format_extension.dart';
 import '../helpers/query_helper_stub.dart'
@@ -204,12 +204,12 @@ class AudiosQuery {
 
   // Method to convert/join all media information.
   Map<String, Object?> _formatAudio(Map audio, String data, int size) {
-    String? fExtension = extension(data);
+    String? fExtension = p.extension(data);
     return {
       "_id": "${audio["Title"]} : ${audio["Artist"]}".generateAudioId(),
       "_data": data,
       "_uri": null,
-      "_display_name": "${audio["Artist"]} - ${audio["Title"]}$extension",
+      "_display_name": "${audio["Artist"]} - ${audio["Title"]}$fExtension",
       "_display_name_wo_ext": "${audio["Artist"]} - ${audio["Title"]}",
       "_size": size,
       "album": audio["Album"],
