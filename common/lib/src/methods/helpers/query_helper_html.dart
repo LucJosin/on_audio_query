@@ -9,7 +9,7 @@ class QueryHelper {
 
   /// This method will load a unique audio using his path, and return a [MP3Instance]
   /// with all information about this file.
-  Future<MP3Instance> loadMP3(String audio, bool isAsset) async {
+  Future<MP3Instance> _loadMP3(String audio, bool isAsset) async {
     // Before decode: assets/Jungle%20-%20Heavy,%20California.mp3
     // After decode: assets/Jungle - Heavy, California.mp3
     String decodedPath = Uri.decodeFull(audio);
@@ -21,12 +21,14 @@ class QueryHelper {
     return MP3Instance(loadedAudio.buffer.asUint8List());
   }
 
-  /// TODO
-  Future<List<String>> getFiles(
+  Future<List<MP3Instance>> getFiles(
     bool isAsset, {
     bool lookSubs = true,
     int? limit,
   }) async {
+    //
+    List<MP3Instance> instances = [];
+
     //
     String assets = await rootBundle.loadString(_defaultDirectory);
 
@@ -34,13 +36,20 @@ class QueryHelper {
     Map decoded = json.decode(assets);
 
     //
-    List files = decoded.keys.where((e) => e.endsWith(".mp3")).toList();
+    List paths = decoded.keys.where((e) => e.endsWith(".mp3")).toList();
 
     //
-    if (limit != null) files = files.take(limit).toList();
+    if (limit != null) paths = paths.take(limit).toList();
 
     //
-    return files as List<String>;
+    for (var file in paths) {
+      instances.add(
+        await _loadMP3(file, isAsset),
+      );
+    }
+
+    //
+    return instances;
   }
 
   ///

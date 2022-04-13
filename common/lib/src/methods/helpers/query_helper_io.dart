@@ -85,19 +85,13 @@ class QueryHelper {
 
     //
     for (var file in _paths) {
-      instances.add(await _loadMP3(file, isAsset));
+      instances.add(
+        await _loadMP3(file, isAsset),
+      );
     }
 
     //
     return instances;
-  }
-
-  ///
-  List<File> geFilesAsFile([bool lookSubs = true]) {
-    return _defaultDirectory
-        .listSync(recursive: lookSubs)
-        .whereType<File>()
-        .toList();
   }
 
   ///
