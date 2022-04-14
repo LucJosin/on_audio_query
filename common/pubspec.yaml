@@ -11,10 +11,6 @@ dependencies:
   on_audio_query_platform_interface:
     path: ../on_audio_query_platform_interface
 
-  # Path controllers
-  path: ^1.8.1
-  path_provider: ^2.0.9
-
 dev_dependencies:
   lints: ^1.0.0
   test: ^1.16.0
