@@ -32,6 +32,8 @@ export './src/controllers/types_controller.dart';
 
 //
 export 'package:id3/id3.dart';
+export 'package:path/path.dart';
+export 'package:path_provider/path_provider.dart';
 
 /// The interface that implementations of on_audio_query must implement.
 ///
@@ -60,7 +62,6 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  // TODO: Add [queryBuilder]
   // Future<List<T>> queryBuilder<T>({String? builder}) {
   //   throw UnimplementedError('queryBuilder() has not been implemented.');
   // }
