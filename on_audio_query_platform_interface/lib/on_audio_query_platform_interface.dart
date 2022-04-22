@@ -17,20 +17,20 @@ import 'dart:async';
 
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
-import './method_channel_on_audio_query.dart';
-import './src/controllers/models_controller.dart';
-import './src/controllers/sorts_controller.dart';
-import './src/controllers/types_controller.dart';
-import './src/filter/media_filter.dart';
+import 'method_channel_on_audio_query.dart';
+import 'src/controllers/models_controller.dart';
+import 'src/controllers/sorts_controller.dart';
+import 'src/controllers/types_controller.dart';
+import 'src/filter/media_filter.dart';
 
-//
-export './src/filter/media_filter.dart';
-export './src/filter/columns/media_columns.dart';
-export './src/controllers/models_controller.dart';
-export './src/controllers/sorts_controller.dart';
-export './src/controllers/types_controller.dart';
+// Internal methods/classes
+export 'src/filter/media_filter.dart';
+export 'src/filter/columns/media_columns.dart';
+export 'src/controllers/models_controller.dart';
+export 'src/controllers/sorts_controller.dart';
+export 'src/controllers/types_controller.dart';
 
-//
+// External packages
 export 'package:id3/id3.dart';
 export 'package:path/path.dart';
 export 'package:path_provider/path_provider.dart';
@@ -77,16 +77,6 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<List<AudioModel>> queryAudios({
     MediaFilter? filter,
-    bool? isAsset,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        SongSortType? sortType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        OrderType? orderType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        UriType? uriType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        bool? ignoreCase,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead") String? path,
   }) {
     throw UnimplementedError('queryAudios() has not been implemented.');
   }
@@ -117,15 +107,6 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<List<AlbumModel>> queryAlbums({
     MediaFilter? filter,
-    bool? isAsset,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        AlbumSortType? sortType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        OrderType? orderType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        UriType? uriType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        bool? ignoreCase,
   }) {
     throw UnimplementedError('queryAlbums() has not been implemented.');
   }
@@ -141,14 +122,6 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Stream<List<AlbumModel>> observeAlbums({
     MediaFilter? filter,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        AlbumSortType? sortType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        OrderType? orderType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        UriType? uriType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        bool? ignoreCase,
   }) {
     throw UnimplementedError('observeAlbums() has not been implemented.');
   }
@@ -164,15 +137,6 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<List<ArtistModel>> queryArtists({
     MediaFilter? filter,
-    bool? isAsset,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        ArtistSortType? sortType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        OrderType? orderType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        UriType? uriType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        bool? ignoreCase,
   }) {
     throw UnimplementedError('queryArtists() has not been implemented.');
   }
@@ -188,14 +152,6 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Stream<List<ArtistModel>> observeArtists({
     MediaFilter? filter,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        ArtistSortType? sortType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        OrderType? orderType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        UriType? uriType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        bool? ignoreCase,
   }) {
     throw UnimplementedError('observeArtists() has not been implemented.');
   }
@@ -211,14 +167,6 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<List<PlaylistModel>> queryPlaylists({
     MediaFilter? filter,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        PlaylistSortType? sortType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        OrderType? orderType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        UriType? uriType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        bool? ignoreCase,
   }) {
     throw UnimplementedError('queryPlaylists() has not been implemented.');
   }
@@ -234,14 +182,6 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Stream<List<PlaylistModel>> observePlaylists({
     MediaFilter? filter,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        PlaylistSortType? sortType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        OrderType? orderType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        UriType? uriType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        bool? ignoreCase,
   }) {
     throw UnimplementedError('observePlaylists() has not been implemented.');
   }
@@ -257,15 +197,6 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<List<GenreModel>> queryGenres({
     MediaFilter? filter,
-    bool? isAsset,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        GenreSortType? sortType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        OrderType? orderType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        UriType? uriType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        bool? ignoreCase,
   }) {
     throw UnimplementedError('queryGenres() has not been implemented.');
   }
@@ -281,58 +212,8 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Stream<List<GenreModel>> observeGenres({
     MediaFilter? filter,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        GenreSortType? sortType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        OrderType? orderType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        UriType? uriType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        bool? ignoreCase,
   }) {
     throw UnimplementedError('observeGenres() has not been implemented.');
-  }
-
-  /// Used to return Songs/Audios Info from a specific queryType based in [SongModel].
-  ///
-  /// Platforms:
-  ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `✔️` | <br>
-  ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  @Deprecated(
-    "Deprecated after [3.0.0]. Use one of the [query] methods instead",
-  )
-  Future<List<AudioModel>> queryAudiosFrom(
-    AudiosFromType type,
-    Object where, {
-    SongSortType? sortType,
-    OrderType? orderType,
-    bool? ignoreCase,
-  }) {
-    throw UnimplementedError('queryAudiosFrom() has not been implemented.');
-  }
-
-  /// Used to return Songs Info based in Something. Works like a "Search".
-  ///
-  /// Platforms:
-  ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `✔️` | <br>
-  ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  @Deprecated(
-    "Deprecated after [3.0.0]. Use one of the [query] methods instead",
-  )
-  Future<List<dynamic>> queryWithFilters(
-    String argsVal,
-    WithFiltersType withType,
-    dynamic args,
-  ) {
-    throw UnimplementedError('queryWithFilters() has not been implemented.');
   }
 
   /// Used to return Songs Artwork.
@@ -352,41 +233,6 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
     int? quality,
   }) {
     throw UnimplementedError('queryArtwork() has not been implemented.');
-  }
-
-  /// Used to return Songs Info from a specific [Folder] based in [SongModel].
-  ///
-  /// Platforms:
-  ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `❌` | `❌` | <br>
-  ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  @Deprecated(
-    "Deprecated after [3.0.0]. Use one of the [query] methods instead",
-  )
-  Future<List<SongModel>> queryFromFolder(
-    String path, {
-    SongSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-  }) {
-    throw UnimplementedError('queryFromFolder() has not been implemented.');
-  }
-
-  /// Used to return Songs path.
-  ///
-  /// Platforms:
-  ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `❌` | `❌` | <br>
-  ///
-  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  @Deprecated("Deprecated after [3.0.0]")
-  Future<List<String>> queryAllPath() {
-    throw UnimplementedError('queryAllPath() has not been implemented.');
   }
 
   //Playlist methods
@@ -542,5 +388,52 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<ObserversModel> observersStatus() {
     throw UnimplementedError('observersStatus() has not been implemented.');
+  }
+
+  // Deprecated methods
+
+  /// Deprecated after [3.0.0]. Use one of the [query] methods instead
+  @Deprecated(
+    "Deprecated after [3.0.0]. Use one of the [query] methods instead",
+  )
+  Future<List<AudioModel>> queryAudiosFrom(
+    AudiosFromType type,
+    Object where, {
+    SongSortType? sortType,
+    OrderType? orderType,
+    bool? ignoreCase,
+  }) {
+    throw UnimplementedError('queryAudiosFrom() has not been implemented.');
+  }
+
+  /// Deprecated after [3.0.0]. Use one of the [query] methods instead
+  @Deprecated(
+    "Deprecated after [3.0.0]. Use one of the [query] methods instead",
+  )
+  Future<List<dynamic>> queryWithFilters(
+    String argsVal,
+    WithFiltersType withType,
+    dynamic args,
+  ) {
+    throw UnimplementedError('queryWithFilters() has not been implemented.');
+  }
+
+  /// Deprecated after [3.0.0]. Use one of the [query] methods instead
+  @Deprecated(
+    "Deprecated after [3.0.0]. Use one of the [query] methods instead",
+  )
+  Future<List<SongModel>> queryFromFolder(
+    String path, {
+    SongSortType? sortType,
+    OrderType? orderType,
+    UriType? uriType,
+  }) {
+    throw UnimplementedError('queryFromFolder() has not been implemented.');
+  }
+
+  /// Deprecated after [3.0.0]
+  @Deprecated("Deprecated after [3.0.0]")
+  Future<List<String>> queryAllPath() {
+    throw UnimplementedError('queryAllPath() has not been implemented.');
   }
 }
