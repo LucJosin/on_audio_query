@@ -69,15 +69,29 @@ class MediaFilter {
         playlistSortType = null,
         genreSortType = null;
 
+  // TODO: Add more specific 'query'.
+  // E.g: ComparisonType.LIKE, ComparisonType.NOT_LIKE, ComparisonType.EQUAL_OR_SMALLER
+  /// Parameters:
   ///
+  /// * [orderType] is used to define if order will be Ascending or Descending.
+  /// * [sortType] is used to define list sort.
+  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
+  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
+  /// * [path] is used to define where the songs will be 'queried'.
+  ///
+  /// Important:
+  ///
+  /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
+  /// * If [sortType] is null, will be set to [DEFAULT].
+  /// * If [uriType] is null, will be set to [EXTERNAL].
+  /// * If [ignoreCase] is null, will be set to [true].
+  /// * If [path] is null, will be set to the default platform [path].
   MediaFilter.forSongs({
     this.songSortType,
     this.limit,
     this.orderType = OrderType.ASC_OR_SMALLER,
     this.uriType = UriType.EXTERNAL,
     this.ignoreCase = true,
-    // TODO: Add more specific 'query'.
-    // E.g: ComparisonType.LIKE, ComparisonType.NOT_LIKE, ComparisonType.EQUAL_OR_SMALLER
     this.toQuery = const {},
     this.toRemove = const {},
     this.type = const {
