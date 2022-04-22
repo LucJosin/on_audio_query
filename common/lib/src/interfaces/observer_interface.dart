@@ -1,3 +1,4 @@
+///
 abstract class ObserverInterface {
   /// [Get] variable to detect when the observer is running or not.
   bool get isRunning;
