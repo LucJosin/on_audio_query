@@ -15,47 +15,47 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart';
-import 'package:on_audio_query/src/queries/albums_query.dart';
-import 'package:on_audio_query/src/queries/artists_query.dart';
-import 'package:on_audio_query/src/queries/genres_query.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
+import 'queries/albums_query.dart';
+import 'queries/artists_query.dart';
 import 'queries/audios_query.dart';
+import 'queries/genres_query.dart';
 
-///Interface and Main method for use on_audio_query
+/// Main method to use the [on_audio_query] plugin.
+///
+/// Helpful Links:
+///   * [Homepage](https://github.com/LucJosin/on_audio_query)
+///     * [Examples](https://github.com/LucJosin/on_audio_query#examples)
+///   * [Pub](https://pub.dev/packages/on_audio_query)
+///     * [Documentation](https://pub.dev/documentation/on_audio_query/latest/)
+///
+/// Any problem? [Issues](https://github.com/LucJosin/on_audio_query/issues) <br>
+///
+/// Any suggestion? [Pull request](https://github.com/LucJosin/on_audio_query/pulls)
+///
+/// Copyright: © 2021, [Lucas Josino](https://www.lucasjosino.com/). All rights reserved.
 class OnAudioQuery {
   /// The platform interface that drives this plugin
   static OnAudioQueryPlatform get platform => OnAudioQueryPlatform.instance;
 
-  //
+  // Methods used when [isAsset] is true.
   static final AudiosQuery _audiosQuery = AudiosQuery();
   static final AlbumsQuery _albumsQuery = AlbumsQuery();
   static final ArtistsQuery _artistsQuery = ArtistsQuery();
   static final GenresQuery _genresQuery = GenresQuery();
 
-  /// Used to return Songs Info based in [AudioModel].
-  ///
-  /// Parameters:
-  ///
-  /// * [orderType] is used to define if order will be Ascending or Descending.
-  /// * [sortType] is used to define list sort.
-  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
-  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
-  /// * [path] is used to define where the songs will be 'queried'.
+  /// Used to return songs info.
   ///
   /// Important:
-  ///
-  /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
-  /// * If [sortType] is null, will be set to [DEFAULT].
-  /// * If [uriType] is null, will be set to [EXTERNAL].
-  /// * If [ignoreCase] is null, will be set to [true].
-  /// * If [path] is null, will be set to the default platform [path].
+  ///   * If [filter] is null, will be used the [MediaFilter.forSongs].
+  ///   * If [isAsset] is null, will be set to false.
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `✔️` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<AudioModel>> querySongs({
@@ -71,26 +71,14 @@ class OnAudioQuery {
         bool? ignoreCase,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead") String? path,
   }) async {
-    return platform.queryAudios(filter: filter, isAsset: isAsset);
+    return queryAudios(filter: filter, isAsset: isAsset);
   }
 
-  /// Used to return Songs Info based in [AudioModel].
-  ///
-  /// Parameters:
-  ///
-  /// * [orderType] is used to define if order will be Ascending or Descending.
-  /// * [sortType] is used to define list sort.
-  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
-  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
-  /// * [path] is used to define where the songs will be 'queried'.
+  /// Used to return audios info based in [AudioModel].
   ///
   /// Important:
-  ///
-  /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
-  /// * If [sortType] is null, will be set to [DEFAULT].
-  /// * If [uriType] is null, will be set to [EXTERNAL].
-  /// * If [ignoreCase] is null, will be set to [true].
-  /// * If [path] is null, will be set to the default platform [path].
+  ///   * If [filter] is null, will be used the [MediaFilter.forAudios].
+  ///   * If [isAsset] is null, will be set to false.
   ///
   /// Platforms:
   ///
@@ -105,75 +93,43 @@ class OnAudioQuery {
   }) async {
     //
     if (isAsset || kIsWeb) {
-      return _audiosQuery.queryAudios(filter: filter, isAsset: isAsset);
+      return _audiosQuery.queryAudios(
+        filter: filter,
+        isAsset: isAsset,
+      );
     }
 
     //
     return platform.queryAudios(filter: filter);
   }
 
-  /// Used to observer(listen) the songs.
-  ///
-  /// Parameters:
-  ///
-  /// * [orderType] is used to define if order will be Ascending or Descending.
-  /// * [sortType] is used to define list sort.
-  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
-  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
-  /// * [path] is used to define where the songs will be 'queried'.
-  ///
+  /// Used to observe(listen) the audios changes.
   ///
   /// Important:
-  ///
-  /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
-  /// * If [sortType] is null, will be set to [title].
-  /// * If [uriType] is null, will be set to [EXTERNAL].
-  /// * If [ignoreCase] is null, will be set to [true].
-  /// * If [path] is null, will be set to the default platform [path].
+  ///   * If [filter] is null, will be used the [MediaFilter.forAudios].
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `❌` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `❌` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Stream<List<AudioModel>> observeSongs({
-    MediaFilter? filter,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        SongSortType? sortType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        OrderType? orderType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        UriType? uriType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        bool? ignoreCase,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead") String? path,
-  }) {
+  Stream<List<AudioModel>> observeSongs({MediaFilter? filter}) {
     return platform.observeSongs(filter: filter);
   }
 
-  /// Used to return Albums Info based in [AlbumModel].
-  ///
-  /// Parameters:
-  ///
-  /// * [orderType] is used to define if order will be Ascending or Descending.
-  /// * [sortType] is used to define list sort.
-  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
-  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
+  /// Used to return albums info.
   ///
   /// Important:
-  ///
-  /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
-  /// * If [sortType] is null, will be set to [AlbumName].
-  /// * If [uriType] is null, will be set to [EXTERNAL].
-  /// * If [ignoreCase] is null, will be set to [true].
+  ///   * If [filter] is null, will be used the [MediaFilter.forAlbums].
+  ///   * If [isAsset] is null, will be set to false.
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `✔️` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<AlbumModel>> queryAlbums({
@@ -190,71 +146,43 @@ class OnAudioQuery {
   }) async {
     //
     if (isAsset || kIsWeb) {
-      return _albumsQuery.queryAlbums(filter: filter, isAsset: isAsset);
+      return _albumsQuery.queryAlbums(
+        filter: filter,
+        isAsset: isAsset,
+      );
     }
 
     //
-    return platform.queryAlbums(filter: filter, isAsset: isAsset);
+    return platform.queryAlbums(filter: filter);
   }
 
-  /// Used to observer(listen) the albums.
-  ///
-  /// Parameters:
-  ///
-  /// * [orderType] is used to define if order will be Ascending or Descending.
-  /// * [sortType] is used to define list sort.
-  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
-  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
+  /// Used to observe(listen) the albums changes.
   ///
   /// Important:
-  ///
-  /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
-  /// * If [sortType] is null, will be set to [AlbumName].
-  /// * If [uriType] is null, will be set to [EXTERNAL].
-  /// * If [ignoreCase] is null, will be set to [true].
+  ///   * If [filter] is null, will be used the [MediaFilter.forAlbums].
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `❌` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `❌` | `✔️` | <br>
   ///
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Stream<List<AlbumModel>> observeAlbums({
-    MediaFilter? filter,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        AlbumSortType? sortType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        OrderType? orderType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        UriType? uriType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        bool? ignoreCase,
-  }) {
+  Stream<List<AlbumModel>> observeAlbums({MediaFilter? filter}) {
     return platform.observeAlbums(filter: filter);
   }
 
-  /// Used to return Artists Info based in [ArtistModel].
-  ///
-  /// Parameters:
-  ///
-  /// * [orderType] is used to define if order will be Ascending or Descending.
-  /// * [sortType] is used to define list sort.
-  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
-  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
+  /// Used to return artists info.
   ///
   /// Important:
-  ///
-  /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
-  /// * If [sortType] is null, will be set to [ArtistName].
-  /// * If [uriType] is null, will be set to [EXTERNAL].
-  /// * If [ignoreCase] is null, will be set to [true].
+  ///   * If [filter] is null, will be used the [MediaFilter.forArtists].
+  ///   * If [isAsset] is null, will be set to false.
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `✔️` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<ArtistModel>> queryArtists({
@@ -271,71 +199,42 @@ class OnAudioQuery {
   }) async {
     //
     if (isAsset || kIsWeb) {
-      return _artistsQuery.queryArtists(filter: filter, isAsset: isAsset);
+      return _artistsQuery.queryArtists(
+        filter: filter,
+        isAsset: isAsset,
+      );
     }
 
     //
-    return platform.queryArtists(filter: filter, isAsset: isAsset);
+    return platform.queryArtists(filter: filter);
   }
 
-  /// Used to observer(listen) the artists.
-  ///
-  /// Parameters:
-  ///
-  /// * [orderType] is used to define if order will be Ascending or Descending.
-  /// * [sortType] is used to define list sort.
-  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
-  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
+  /// Used to observe(listen) the artists changes.
   ///
   /// Important:
-  ///
-  /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
-  /// * If [sortType] is null, will be set to [ArtistName].
-  /// * If [uriType] is null, will be set to [EXTERNAL].
-  /// * If [ignoreCase] is null, will be set to [true].
+  ///   * If [filter] is null, will be used the [MediaFilter.forArtists].
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `❌` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `❌` | `✔️` | <br>
   ///
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Stream<List<ArtistModel>> observeArtists({
-    MediaFilter? filter,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        ArtistSortType? sortType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        OrderType? orderType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        UriType? uriType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        bool? ignoreCase,
-  }) {
+  Stream<List<ArtistModel>> observeArtists({MediaFilter? filter}) {
     return platform.observeArtists(filter: filter);
   }
 
-  /// Used to return Playlists Info based in [PlaylistModel].
-  ///
-  /// Parameters:
-  ///
-  /// * [orderType] is used to define if order will be Ascending or Descending.
-  /// * [sortType] is used to define list sort.
-  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
-  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
+  /// Used to return playlists info.
   ///
   /// Important:
-  ///
-  /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
-  /// * If [sortType] is null, will be set to [PlaylistName].
-  /// * If [uriType] is null, will be set to [EXTERNAL].
-  /// * If [ignoreCase] is null, will be set to [true].
+  ///   * If [filter] is null, will be used the [MediaFilter.forPlaylists].
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `❌` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<PlaylistModel>> queryPlaylists({
@@ -352,64 +251,33 @@ class OnAudioQuery {
     return platform.queryPlaylists(filter: filter);
   }
 
-  /// Used to observer(listen) the playlists.
-  ///
-  /// Parameters:
-  ///
-  /// * [orderType] is used to define if order will be Ascending or Descending.
-  /// * [sortType] is used to define list sort.
-  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
-  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
+  /// Used to observe(listen) the playlists changes.
   ///
   /// Important:
-  ///
-  /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
-  /// * If [sortType] is null, will be set to [PlaylistName].
-  /// * If [uriType] is null, will be set to [EXTERNAL].
-  /// * If [ignoreCase] is null, will be set to [true].
+  ///   * If [filter] is null, will be used the [MediaFilter.forAlbums].
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `❌` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Stream<List<PlaylistModel>> observePlaylists({
-    MediaFilter? filter,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        PlaylistSortType? sortType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        OrderType? orderType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        UriType? uriType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        bool? ignoreCase,
-  }) {
+  Stream<List<PlaylistModel>> observePlaylists({MediaFilter? filter}) {
     return platform.observePlaylists(filter: filter);
   }
 
-  /// Used to return Genres Info based in [GenreModel].
-  ///
-  /// Parameters:
-  ///
-  /// * [orderType] is used to define if order will be Ascending or Descending.
-  /// * [sortType] is used to define list sort.
-  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
-  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
+  /// Used to return genres info.
   ///
   /// Important:
-  ///
-  /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
-  /// * If [sortType] is null, will be set to [GenreName].
-  /// * If [uriType] is null, will be set to [EXTERNAL].
-  /// * If [ignoreCase] is null, will be set to [true].
+  ///   * If [filter] is null, will be used the [MediaFilter.forGenres].
+  ///   * If [isAsset] is null, will be set to false.
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `✔️` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<GenreModel>> queryGenres({
@@ -426,73 +294,30 @@ class OnAudioQuery {
   }) async {
     //
     if (isAsset || kIsWeb) {
-      return _genresQuery.queryGenres(filter: filter, isAsset: isAsset);
+      return _genresQuery.queryGenres(
+        filter: filter,
+        isAsset: isAsset,
+      );
     }
 
     //
-    return platform.queryGenres(filter: filter, isAsset: isAsset);
+    return platform.queryGenres(filter: filter);
   }
 
-  /// Used to observer(listen) the genres.
-  ///
-  /// Parameters:
-  ///
-  /// * [orderType] is used to define if order will be Ascending or Descending.
-  /// * [sortType] is used to define list sort.
-  /// * [uriType] is used to define if songs will be catch in [EXTERNAL] or [INTERNAL] storage.
-  /// * [ignoreCase] is used to define if sort will ignore the lowercase or not.
+  /// Used to observe(listen) the genres changes.
   ///
   /// Important:
-  ///
-  /// * If [orderType] is null, will be set to [ASC_OR_SMALLER].
-  /// * If [sortType] is null, will be set to [GenreName].
-  /// * If [uriType] is null, will be set to [EXTERNAL].
+  ///   * If [filter] is null, will be used the [MediaFilter.forGenres].
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `❌` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `❌` | `✔️` | <br>
   ///
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Stream<List<GenreModel>> observeGenres({
-    MediaFilter? filter,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        GenreSortType? sortType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        OrderType? orderType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        UriType? uriType,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
-        bool? ignoreCase,
-  }) {
+  Stream<List<GenreModel>> observeGenres({MediaFilter? filter}) {
     return platform.observeGenres(filter: filter);
-  }
-
-  /// Deprecated after [3.0.0]. Use one of the [query] methods instead
-  @Deprecated(
-    "Deprecated after [3.0.0]. Use one of the [query] methods instead",
-  )
-  Future<List<SongModel>> queryAudiosFrom(
-    AudiosFromType type,
-    Object where, {
-    SongSortType? sortType,
-    OrderType? orderType,
-    bool? ignoreCase,
-  }) async {
-    return [];
-  }
-
-  /// Deprecated after [3.0.0]. Use one of the [query] methods instead
-  @Deprecated(
-    "Deprecated after [3.0.0]. Use one of the [query] methods instead",
-  )
-  Future<List<dynamic>> queryWithFilters(
-    String argsVal,
-    WithFiltersType withType, {
-    dynamic args,
-  }) async {
-    return [];
   }
 
   /// Used to return Songs Artwork.
@@ -519,9 +344,9 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `✔️` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<ArtworkModel> queryArtwork(
@@ -540,23 +365,6 @@ class OnAudioQuery {
     );
   }
 
-  /// Deprecated after [3.0.0]. Use one of the [query] methods instead
-  @Deprecated(
-    "Deprecated after [3.0.0]. Use one of the [query] methods instead",
-  )
-  Future<List<SongModel>> queryFromFolder(
-    String path, {
-    SongSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-  }) async {
-    return [];
-  }
-
-  /// Deprecated after [3.0.0]
-  @Deprecated("Deprecated after [3.0.0]")
-  Future<List<String>> queryAllPath() async => [];
-
   //Playlist methods
 
   /// Used to create a Playlist
@@ -573,9 +381,9 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `❌` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<int?> createPlaylist(
@@ -598,9 +406,9 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `❌` | `❌` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> removePlaylist(int playlistId) async {
@@ -616,9 +424,9 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `❌` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> addToPlaylist(int playlistId, int audioId) async {
@@ -634,9 +442,9 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `❌` | `❌` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> removeFromPlaylist(int playlistId, int audioId) async {
@@ -653,9 +461,9 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `❌` | `❌` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> moveItemTo(int playlistId, int from, int to) async {
@@ -671,9 +479,9 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `❌` | `❌` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> renamePlaylist(int playlistId, String newName) async {
@@ -691,9 +499,9 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `❌` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> permissionsStatus() async {
@@ -709,9 +517,9 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `❌` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<bool> permissionsRequest() async {
@@ -731,9 +539,9 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `✔️` | `✔️` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<DeviceModel> queryDeviceInfo() async {
@@ -772,9 +580,9 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `❌` | `❌` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `❌` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<bool> scanMedia(String path) async {
@@ -795,12 +603,57 @@ class OnAudioQuery {
   ///
   /// Platforms:
   ///
-  /// |   Android   |   IOS   |   Web   |
-  /// |--------------|-----------------|-----------------|
-  /// | `✔️` | `❌` | `❌` | <br>
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `✔️` | `✔️` | `❌` | `✔️` | <br>
   ///
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<ObserversModel> observersStatus() async {
     return await platform.observersStatus();
   }
+
+  // Deprecated methods
+
+  /// Deprecated after [3.0.0]. Use one of the [query] methods instead
+  @Deprecated(
+    "Deprecated after [3.0.0]. Use one of the [query] methods instead",
+  )
+  Future<List<SongModel>> queryAudiosFrom(
+    AudiosFromType type,
+    Object where, {
+    SongSortType? sortType,
+    OrderType? orderType,
+    bool? ignoreCase,
+  }) async {
+    return [];
+  }
+
+  /// Deprecated after [3.0.0]. Use one of the [query] methods instead
+  @Deprecated(
+    "Deprecated after [3.0.0]. Use one of the [query] methods instead",
+  )
+  Future<List<dynamic>> queryWithFilters(
+    String argsVal,
+    WithFiltersType withType, {
+    dynamic args,
+  }) async {
+    return [];
+  }
+
+  /// Deprecated after [3.0.0]. Use one of the [query] methods instead
+  @Deprecated(
+    "Deprecated after [3.0.0]. Use one of the [query] methods instead",
+  )
+  Future<List<SongModel>> queryFromFolder(
+    String path, {
+    SongSortType? sortType,
+    OrderType? orderType,
+    UriType? uriType,
+  }) async {
+    return [];
+  }
+
+  /// Deprecated after [3.0.0]
+  @Deprecated("Deprecated after [3.0.0]")
+  Future<List<String>> queryAllPath() async => [];
 }

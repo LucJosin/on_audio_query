@@ -61,13 +61,6 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   @override
   Future<List<AudioModel>> queryAudios({
     MediaFilter? filter,
-    bool? isAsset,
-    // Deprecated
-    SongSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
-    String? path,
   }) async {
     // If the filter is null, use the 'default'.
     filter ??= _defaultFilter;
@@ -110,12 +103,6 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   Stream<List<AudioModel>> observeSongs({
     MediaFilter? filter,
     bool? isAsset,
-    // Deprecated
-    SongSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
-    String? path,
   }) {
     // If the filter is null, use the 'default'.
     filter ??= _defaultFilter;
@@ -155,11 +142,6 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   @override
   Future<List<AlbumModel>> queryAlbums({
     MediaFilter? filter,
-    bool? isAsset,
-    AlbumSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
   }) async {
     // If the filter is null, use the 'default'.
     filter ??= _defaultFilter;
@@ -185,10 +167,6 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   @override
   Stream<List<AlbumModel>> observeAlbums({
     MediaFilter? filter,
-    AlbumSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
   }) {
     // If the filter is null, use the 'default'.
     filter ??= _defaultFilter;
@@ -217,11 +195,6 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   @override
   Future<List<ArtistModel>> queryArtists({
     MediaFilter? filter,
-    bool? isAsset,
-    ArtistSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
   }) async {
     // If the filter is null, use the 'default'.
     filter ??= _defaultFilter;
@@ -247,10 +220,6 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   @override
   Stream<List<ArtistModel>> observeArtists({
     MediaFilter? filter,
-    ArtistSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
   }) {
     // If the filter is null, use the 'default'.
     filter ??= _defaultFilter;
@@ -280,10 +249,6 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   @override
   Future<List<PlaylistModel>> queryPlaylists({
     MediaFilter? filter,
-    PlaylistSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
   }) async {
     // If the filter is null, use the 'default'.
     filter ??= _defaultFilter;
@@ -311,10 +276,6 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   @override
   Stream<List<PlaylistModel>> observePlaylists({
     MediaFilter? filter,
-    PlaylistSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
   }) {
     // If the filter is null, use the 'default'.
     filter ??= _defaultFilter;
@@ -344,11 +305,6 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   @override
   Future<List<GenreModel>> queryGenres({
     MediaFilter? filter,
-    bool? isAsset,
-    GenreSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
   }) async {
     // If the filter is null, use the 'default'.
     filter ??= _defaultFilter;
@@ -374,10 +330,6 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   @override
   Stream<List<GenreModel>> observeGenres({
     MediaFilter? filter,
-    GenreSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
   }) {
     // If the filter is null, use the 'default'.
     filter ??= _defaultFilter;
