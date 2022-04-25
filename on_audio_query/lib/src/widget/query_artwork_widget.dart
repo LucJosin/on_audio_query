@@ -12,6 +12,8 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 =============
 */
 
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
@@ -290,13 +292,15 @@ class QueryArtworkWidget extends StatelessWidget {
         '[quality] value cannot be greater than [100]',
       );
     }
-    return FutureBuilder<ArtworkModel>(
+    return FutureBuilder<ArtworkModel?>(
       future: _audioQuery.queryArtwork(
         id,
         type,
-        format: format ?? ArtworkFormat.JPEG,
-        size: size ?? 100,
-        quality: quality ?? 50,
+        filter: MediaFilter.forArtwork(
+          artworkFormat: format ?? ArtworkFormat.JPEG,
+          artworkSize: size ?? 100,
+          artworkQuality: quality ?? 50,
+        ),
       ),
       builder: (context, item) {
         // When you try 'query' without asking for [READ] permission the plugin
@@ -324,9 +328,8 @@ class QueryArtworkWidget extends StatelessWidget {
         }
 
         // No artwork was found or the bytes are empty.
-        if (item.data == null ||
-            item.data!.artwork == null ||
-            item.data!.artwork!.isEmpty) {
+        Uint8List? artwork = item.data?.artwork;
+        if (item.data == null || artwork == null || artwork.isEmpty) {
           return nullArtworkWidget ??
               const Icon(
                 Icons.image_not_supported,

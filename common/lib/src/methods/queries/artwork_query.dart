@@ -1,55 +1,98 @@
 // ignore_for_file: dead_code
+import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
-import 'audios_query.dart';
-// import '../helpers/query_helper_stub.dart'
-//     if (dart.library.io) '../helpers/query_helper_io.dart'
-//     if (dart.library.html) '../helpers/query_helper_html.dart';
+import '../helpers/query_helper_stub.dart'
+    if (dart.library.io) '../helpers/query_helper_io.dart'
+    if (dart.library.html) '../helpers/query_helper_html.dart';
 
 class ArtworkQuery {
   ///
-  // final QueryHelper _helper = QueryHelper();
+  final QueryHelper _helper = QueryHelper();
+
+  //
+  static final MediaFilter _defaultFilter = MediaFilter.forArtwork();
 
   ///
-  Future<ArtworkModel> queryArtwork(
+  Future<ArtworkModel?> queryArtwork(
     int id,
-    AudiosQuery audios,
+    List<AudioModel> audios,
     ArtworkType type, [
-    ArtworkFormat? format,
-    int? size,
-    int? quality,
+    MediaFilter? filter,
   ]) async {
-    // TODO: Add queryArtwork to 'common'.
-    // For know we will return null, using this 'old' method with a long list of
-    // songs will cause a lot of problems.
-    return ArtworkModel({});
+    //
+    filter ??= _defaultFilter;
 
-    // //
-    // try {
-    //   //
-    //   AudioModel audio = audios.listOfAudios.singleWhere(
-    //     (audio) =>
-    //         id == audio.id ||
-    //         id == audio.albumId ||
-    //         id == audio.artistId ||
-    //         id == audio.genreId,
-    //   );
+    //
+    ArtworkModel? cache = await _helper.getCachedArtwork(
+      id: id,
+      temporary: filter.onlyTemporarily ?? true,
+    );
 
-    //   //
-    //   MP3Instance? mp3instance = await _helper.loadMP3(audio.data, false);
+    //
+    if (cache != null) return cache;
 
-    //   if (mp3instance == null) return null;
+    //
+    try {
+      //
+      AudioModel audio = audios.singleWhere(
+        (audio) =>
+            id == audio.id ||
+            id == audio.albumId ||
+            id == audio.artistId ||
+            id == audio.genreId,
+      );
 
-    //   //
-    //   if (mp3instance.parseTagsSync()) {
-    //     Map<String, dynamic>? data = mp3instance.getMetaTags();
-    //     return data != null ? base64Decode(data["APIC"]["base64"]) : null;
-    //   }
-    // } catch (e) {
-    //   return null;
-    // }
+      //
+      MP3Instance mp3instance = await _helper.loadMP3(audio.data, false);
 
-    // return null;
+      //
+      if (mp3instance.parseTagsSync()) {
+        //
+        String? artwork = mp3instance.getMetaTags()?["APIC"]["base64"];
+
+        if (artwork == null) return null;
+
+        //
+        String? fileType;
+
+        //
+        if (artwork.startsWith('iVBORw0KGgo')) {
+          fileType = '.png';
+        } else if (artwork.startsWith('/9j')) {
+          fileType = '.jpeg';
+        }
+
+        //
+        if (fileType == null) return null;
+
+        //
+        Uint8List artAsByte = base64Decode(artwork);
+
+        //
+        String? path;
+        if (filter.saveArtwork ?? true) {
+          path = await _helper.saveArtworks(
+            id: id,
+            artwork: artAsByte,
+            fileType: fileType,
+            temporary: filter.onlyTemporarily ?? true,
+          );
+        }
+
+        //
+        return ArtworkModel({
+          'artwork': artAsByte,
+          'path': path,
+          'type': fileType,
+        });
+      }
+    } catch (e) {
+      //
+    }
+
+    return null;
   }
 }

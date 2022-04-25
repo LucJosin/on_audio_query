@@ -39,6 +39,21 @@ class MediaFilter {
   Map<int, List<String>> toRemove;
 
   ///
+  ArtworkFormat? artworkFormat;
+
+  ///
+  int? artworkSize;
+
+  ///
+  int? artworkQuality;
+
+  ///
+  bool? saveArtwork;
+
+  ///
+  bool? onlyTemporarily;
+
+  ///
   MediaFilter.init({
     this.songSortType,
     this.albumSortType,
@@ -52,6 +67,11 @@ class MediaFilter {
     this.toQuery = const {},
     this.toRemove = const {},
     this.type = const {},
+    this.artworkFormat,
+    this.artworkSize,
+    this.artworkQuality,
+    this.saveArtwork,
+    this.onlyTemporarily,
   });
 
   ///
@@ -64,10 +84,7 @@ class MediaFilter {
     this.toQuery = const {},
     this.toRemove = const {},
     this.type = const {},
-  })  : albumSortType = null,
-        artistSortType = null,
-        playlistSortType = null,
-        genreSortType = null;
+  });
 
   // TODO: Add more specific 'query'.
   // E.g: ComparisonType.LIKE, ComparisonType.NOT_LIKE, ComparisonType.EQUAL_OR_SMALLER
@@ -97,10 +114,7 @@ class MediaFilter {
     this.type = const {
       AudioType.IS_MUSIC: true,
     },
-  })  : albumSortType = null,
-        artistSortType = null,
-        playlistSortType = null,
-        genreSortType = null;
+  });
 
   ///
   MediaFilter.forAlbums({
@@ -111,11 +125,7 @@ class MediaFilter {
     this.ignoreCase = true,
     this.toQuery = const {},
     this.toRemove = const {},
-  })  : songSortType = null,
-        artistSortType = null,
-        playlistSortType = null,
-        genreSortType = null,
-        type = const {};
+  }) : type = const {};
 
   ///
   MediaFilter.forArtists({
@@ -126,11 +136,7 @@ class MediaFilter {
     this.ignoreCase = true,
     this.toQuery = const {},
     this.toRemove = const {},
-  })  : songSortType = null,
-        albumSortType = null,
-        playlistSortType = null,
-        genreSortType = null,
-        type = const {};
+  }) : type = const {};
 
   ///
   MediaFilter.forPlaylists({
@@ -141,11 +147,7 @@ class MediaFilter {
     this.ignoreCase = true,
     this.toQuery = const {},
     this.toRemove = const {},
-  })  : songSortType = null,
-        albumSortType = null,
-        artistSortType = null,
-        genreSortType = null,
-        type = const {};
+  }) : type = const {};
 
   ///
   MediaFilter.forGenres({
@@ -156,9 +158,19 @@ class MediaFilter {
     this.ignoreCase = true,
     this.toQuery = const {},
     this.toRemove = const {},
-  })  : songSortType = null,
-        albumSortType = null,
-        artistSortType = null,
-        playlistSortType = null,
+  }) : type = const {};
+
+  ///
+  MediaFilter.forArtwork({
+    this.artworkFormat = ArtworkFormat.JPEG,
+    this.artworkSize = 100,
+    this.artworkQuality = 50,
+    this.saveArtwork = true,
+    this.onlyTemporarily = true,
+  })  : orderType = OrderType.ASC_OR_SMALLER,
+        uriType = UriType.EXTERNAL,
+        ignoreCase = true,
+        toQuery = const {},
+        toRemove = const {},
         type = const {};
 }

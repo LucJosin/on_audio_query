@@ -12,17 +12,23 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 =============
 */
 
-import 'dart:typed_data';
-
 import 'package:flutter/foundation.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
-import 'queries/albums_query.dart';
-import 'queries/artists_query.dart';
-import 'queries/audios_query.dart';
-import 'queries/genres_query.dart';
+import 'methods/queries/albums_query.dart';
+import 'methods/queries/artists_query.dart';
+import 'methods/queries/audios_query.dart';
+import 'methods/queries/genres_query.dart';
 
 /// Main method to use the [on_audio_query] plugin.
+///
+/// Example:
+///
+/// Init the plugin using:
+///
+/// ```dart
+/// final OnAudioQuery _audioQuery = OnAudioQuery();
+/// ```
 ///
 /// Helpful Links:
 ///   * [Homepage](https://github.com/LucJosin/on_audio_query)
@@ -39,17 +45,59 @@ class OnAudioQuery {
   /// The platform interface that drives this plugin
   static OnAudioQueryPlatform get platform => OnAudioQueryPlatform.instance;
 
-  // Methods used when [isAsset] is true.
+  // Methods used when [fromAsset] is true.
   static final AudiosQuery _audiosQuery = AudiosQuery();
   static final AlbumsQuery _albumsQuery = AlbumsQuery();
   static final ArtistsQuery _artistsQuery = ArtistsQuery();
   static final GenresQuery _genresQuery = GenresQuery();
 
+  /// The default path used to store or cache the 'queried' images/artworks.
+  ///
+  /// **Note: All images are stored inside the app directory or device temporariy
+  /// directory, you can use the `path_provider` to get this path.**
+  ///
+  /// Example:
+  ///
+  /// ```dart
+  /// // Using the app directory.
+  /// var appDir = await getApplicationSupportDirectory();
+  ///
+  /// // Using the temporariy directory.
+  /// var appDir = await getTemporaryDirectory();
+  ///
+  /// // The directory with all images.
+  /// var artworksDir = appDir + artworksPath;
+  /// ```
+  static const String artworksPath = defaultArtworksPath;
+
   /// Used to return songs info.
   ///
   /// Important:
   ///   * If [filter] is null, will be used the [MediaFilter.forSongs].
-  ///   * If [isAsset] is null, will be set to false.
+  ///   * If [fromAsset] is null, will be set to false.
+  ///
+  /// Example:
+  ///
+  /// * Using await/async:
+  ///
+  /// ```dart
+  /// Future<List<AudioModel>> getAllSongs() async {
+  ///  // Default filter.
+  ///  MediaFilter _filter = MediaFilter.forSongs(
+  ///    songSortType: SongSortType.TITLE,
+  ///    limit: 30,
+  ///    orderType: OrderType.ASC_OR_SMALLER,
+  ///    uriType: UriType.EXTERNAL,
+  ///    ignoreCase: true,
+  ///    toQuery: const {},
+  ///    toRemove: const {},
+  ///    type: const {AudioType.IS_MUSIC: true},
+  ///  );
+  ///  return await _audioQuery.querySongs(filter: _filter);
+  /// }
+  /// ```
+  ///
+  /// * Using [FutureBuilder]: [Plugin example][1]
   ///
   /// Platforms:
   ///
@@ -57,10 +105,13 @@ class OnAudioQuery {
   /// |:----------:|:----------:|:----------:|:----------:|
   /// | `✔️` | `✔️` | `❌` | `❌` | <br>
   ///
-  /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
+  /// See more about [platforms support][2]
+  ///
+  /// [1]: https://github.com/LucJosin/on_audio_query/tree/development/on_audio_query/example
+  /// [2]: https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md
   Future<List<AudioModel>> querySongs({
     MediaFilter? filter,
-    bool isAsset = false,
+    bool fromAsset = false,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         SongSortType? sortType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -71,14 +122,37 @@ class OnAudioQuery {
         bool? ignoreCase,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead") String? path,
   }) async {
-    return queryAudios(filter: filter, isAsset: isAsset);
+    return queryAudios(filter: filter, fromAsset: fromAsset);
   }
 
   /// Used to return audios info based in [AudioModel].
   ///
   /// Important:
   ///   * If [filter] is null, will be used the [MediaFilter.forAudios].
-  ///   * If [isAsset] is null, will be set to false.
+  ///   * If [fromAsset] is null, will be set to false.
+  ///
+  /// Example:
+  ///
+  /// * Using await/async:
+  ///
+  /// ```dart
+  /// Future<List<AudioModel>> getAllAudios() async {
+  ///  // Default filter.
+  ///  MediaFilter _filter = MediaFilter.forAudios(
+  ///    songSortType: SongSortType.TITLE,
+  ///    limit: 30,
+  ///    orderType: OrderType.ASC_OR_SMALLER,
+  ///    uriType: UriType.EXTERNAL,
+  ///    ignoreCase: true,
+  ///    toQuery: const {},
+  ///    toRemove: const {},
+  ///    type: const {},
+  ///  );
+  ///  return await _audioQuery.queryAudios(filter: _filter);
+  /// }
+  /// ```
+  ///
+  /// * Using [FutureBuilder]: [Plugin example][1]
   ///
   /// Platforms:
   ///
@@ -89,13 +163,15 @@ class OnAudioQuery {
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<AudioModel>> queryAudios({
     MediaFilter? filter,
-    bool isAsset = false,
+    bool fromAsset = false,
+    bool fromAppDir = false,
   }) async {
     //
-    if (isAsset || kIsWeb) {
+    if (fromAsset || fromAppDir || kIsWeb) {
       return _audiosQuery.queryAudios(
         filter: filter,
-        isAsset: isAsset,
+        fromAsset: fromAsset,
+        fromAppDir: fromAppDir,
       );
     }
 
@@ -123,7 +199,7 @@ class OnAudioQuery {
   ///
   /// Important:
   ///   * If [filter] is null, will be used the [MediaFilter.forAlbums].
-  ///   * If [isAsset] is null, will be set to false.
+  ///   * If [fromAsset] is null, will be set to false.
   ///
   /// Platforms:
   ///
@@ -134,7 +210,8 @@ class OnAudioQuery {
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<AlbumModel>> queryAlbums({
     MediaFilter? filter,
-    bool isAsset = false,
+    bool fromAsset = false,
+    bool fromAppDir = false,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         AlbumSortType? sortType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -145,10 +222,11 @@ class OnAudioQuery {
         bool? ignoreCase,
   }) async {
     //
-    if (isAsset || kIsWeb) {
+    if (fromAsset || fromAppDir || kIsWeb) {
       return _albumsQuery.queryAlbums(
         filter: filter,
-        isAsset: isAsset,
+        fromAsset: fromAsset,
+        fromAppDir: fromAppDir,
       );
     }
 
@@ -176,7 +254,7 @@ class OnAudioQuery {
   ///
   /// Important:
   ///   * If [filter] is null, will be used the [MediaFilter.forArtists].
-  ///   * If [isAsset] is null, will be set to false.
+  ///   * If [fromAsset] is null, will be set to false.
   ///
   /// Platforms:
   ///
@@ -187,7 +265,8 @@ class OnAudioQuery {
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<ArtistModel>> queryArtists({
     MediaFilter? filter,
-    bool isAsset = false,
+    bool fromAsset = false,
+    bool fromAppDir = false,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         ArtistSortType? sortType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -198,10 +277,11 @@ class OnAudioQuery {
         bool? ignoreCase,
   }) async {
     //
-    if (isAsset || kIsWeb) {
+    if (fromAsset || fromAppDir || kIsWeb) {
       return _artistsQuery.queryArtists(
         filter: filter,
-        isAsset: isAsset,
+        fromAsset: fromAsset,
+        fromAppDir: fromAppDir,
       );
     }
 
@@ -271,7 +351,7 @@ class OnAudioQuery {
   ///
   /// Important:
   ///   * If [filter] is null, will be used the [MediaFilter.forGenres].
-  ///   * If [isAsset] is null, will be set to false.
+  ///   * If [fromAsset] is null, will be set to false.
   ///
   /// Platforms:
   ///
@@ -282,7 +362,8 @@ class OnAudioQuery {
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
   Future<List<GenreModel>> queryGenres({
     MediaFilter? filter,
-    bool isAsset = false,
+    bool fromAsset = false,
+    bool fromAppDir = false,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         GenreSortType? sortType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
@@ -293,10 +374,11 @@ class OnAudioQuery {
         bool? ignoreCase,
   }) async {
     //
-    if (isAsset || kIsWeb) {
+    if (fromAsset || fromAppDir || kIsWeb) {
       return _genresQuery.queryGenres(
         filter: filter,
-        isAsset: isAsset,
+        fromAsset: fromAsset,
+        fromAppDir: fromAsset,
       );
     }
 
@@ -339,8 +421,6 @@ class OnAudioQuery {
   /// * If [queryArtwork] is called in Android below Q/10, will return null.
   /// * If [format] is null, will be set to [JPEG] for better performance.
   /// * If [size] is null, will be set to [200] for better performance
-  /// * We need this method separated from [querySongs/queryAudios] because
-  /// return [Uint8List] and using inside query causes a slow performance.
   ///
   /// Platforms:
   ///
@@ -349,19 +429,19 @@ class OnAudioQuery {
   /// | `✔️` | `✔️` | `❌` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
-  Future<ArtworkModel> queryArtwork(
+  Future<ArtworkModel?> queryArtwork(
     int id,
     ArtworkType type, {
-    ArtworkFormat? format,
-    int? size,
-    int? quality,
+    MediaFilter? filter,
+    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
+        ArtworkFormat? format,
+    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead") int? size,
+    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead") int? quality,
   }) async {
     return platform.queryArtwork(
       id,
       type,
-      format: format,
-      size: size,
-      quality: quality,
+      filter: filter,
     );
   }
 

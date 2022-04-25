@@ -356,21 +356,26 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   }
 
   @override
-  Future<ArtworkModel> queryArtwork(
+  Future<ArtworkModel?> queryArtwork(
     int id,
     ArtworkType type, {
-    ArtworkFormat? format,
-    int? size,
-    int? quality,
+    MediaFilter? filter,
   }) async {
+    // If the filter is null, use the 'default'.
+    filter ??= _defaultFilter;
+
+    //
     return _channel.invokeMethod(
       "queryArtwork",
       {
         "type": type.index,
         "id": id,
-        "format": format?.index ?? ArtworkFormat.JPEG.index,
-        "size": size ?? 100,
-        "quality": (quality != null && quality <= 100) ? size : 50,
+        "format": filter.artworkFormat?.index ?? ArtworkFormat.JPEG.index,
+        "size": filter.artworkSize ?? 100,
+        "quality":
+            (filter.artworkQuality != null && filter.artworkQuality! <= 100)
+                ? filter.artworkQuality
+                : 50,
       },
     ).then(
       (resultArtwork) => ArtworkModel(resultArtwork),
