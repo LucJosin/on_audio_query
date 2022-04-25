@@ -59,7 +59,7 @@ class _QuerySongsState extends State<QuerySongs> {
           // type: const {AudioType.IS_MUSIC : true},
           future: _audioQuery.queryAudios(
             filter: MediaFilter.forAudios(
-              limit: 50, // Debug
+              limit: 5, // Debug
             ),
           ),
           builder: (context, item) {

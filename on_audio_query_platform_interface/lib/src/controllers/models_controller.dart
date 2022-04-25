@@ -6,14 +6,15 @@ import 'dart:typed_data';
 part '../models/song_model.dart';
 
 // Media Models
-part '../models/audio_model.dart';
-part '../models/album_model.dart';
-part '../models/artist_model.dart';
-part '../models/playlist_model.dart';
-part '../models/genre_model.dart';
+part '../models/medias/media_model.dart';
+part '../models/medias/audio_model.dart';
+part '../models/medias/album_model.dart';
+part '../models/medias/artist_model.dart';
+part '../models/medias/playlist_model.dart';
+part '../models/medias/genre_model.dart';
 
 // Artwork Model
-part '../models/artwork_model.dart';
+part '../models/medias/artwork_model.dart';
 
 // Device Model
 part '../models/device/device_model.dart';

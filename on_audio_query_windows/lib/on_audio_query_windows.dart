@@ -30,16 +30,13 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
   @override
   Future<List<AudioModel>> queryAudios({
     MediaFilter? filter,
-    bool? isAsset,
-    SongSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
-    String? path,
+    bool? fromAsset,
+    bool? fromAppDir,
   }) async {
     return await _audiosQuery.queryAudios(
       filter: filter,
-      isAsset: isAsset ?? false,
+      fromAsset: fromAsset,
+      fromAppDir: fromAppDir,
     );
   }
 
@@ -57,63 +54,53 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
   @override
   Future<List<AlbumModel>> queryAlbums({
     MediaFilter? filter,
-    bool? isAsset,
-    AlbumSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
+    bool? fromAsset,
+    bool? fromAppDir,
   }) async {
     return await _albumsQuery.queryAlbums(
       filter: filter,
-      isAsset: isAsset,
+      fromAsset: fromAsset,
+      fromAppDir: fromAppDir,
     );
   }
 
   @override
   Future<List<ArtistModel>> queryArtists({
     MediaFilter? filter,
-    bool? isAsset,
-    ArtistSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
+    bool? fromAsset,
+    bool? fromAppDir,
   }) async {
     return await _artistsQuery.queryArtists(
       filter: filter,
-      isAsset: isAsset,
+      fromAsset: fromAsset,
+      fromAppDir: fromAppDir,
     );
   }
 
   @override
   Future<List<GenreModel>> queryGenres({
     MediaFilter? filter,
-    bool? isAsset,
-    GenreSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
+    bool? fromAsset,
+    bool? fromAppDir,
   }) async {
     return await _genresQuery.queryGenres(
       filter: filter,
-      isAsset: isAsset,
+      fromAsset: fromAsset,
+      fromAppDir: fromAppDir,
     );
   }
 
   @override
-  Future<ArtworkModel> queryArtwork(
+  Future<ArtworkModel?> queryArtwork(
     int id,
     ArtworkType type, {
-    ArtworkFormat? format,
-    int? size,
-    int? quality,
+    MediaFilter? filter,
   }) async {
     return await _artworkQuery.queryArtwork(
       id,
-      _audiosQuery,
+      _audiosQuery.listOfAudios,
       type,
-      format,
-      size,
-      quality,
+      filter,
     );
   }
 

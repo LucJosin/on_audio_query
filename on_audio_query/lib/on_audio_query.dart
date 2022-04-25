@@ -13,7 +13,7 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 */
 
 export 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart'
-    hide OnAudioQueryPlatform;
+    hide OnAudioQueryPlatform, defaultArtworksPath;
 
-export './src/on_audio_query_controller.dart';
-export './src/widget/query_artwork_widget.dart';
+export 'src/on_audio_query_controller.dart';
+export 'src/widget/query_artwork_widget.dart';

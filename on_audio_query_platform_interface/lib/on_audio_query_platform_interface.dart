@@ -23,6 +23,13 @@ import 'src/controllers/sorts_controller.dart';
 import 'src/controllers/types_controller.dart';
 import 'src/filter/media_filter.dart';
 
+// Constants
+export 'src/constants.dart';
+
+// Interfaces
+export 'src/interfaces/observer_interface.dart';
+export 'src/interfaces/query_helper_interface.dart';
+
 // Internal methods/classes
 export 'src/filter/media_filter.dart';
 export 'src/filter/columns/media_columns.dart';
@@ -225,12 +232,10 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// | `✔️` | `✔️` | `✔️` | <br>
   ///
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Future<ArtworkModel> queryArtwork(
+  Future<ArtworkModel?> queryArtwork(
     int id,
     ArtworkType type, {
-    ArtworkFormat? format,
-    int? size,
-    int? quality,
+    MediaFilter? filter,
   }) {
     throw UnimplementedError('queryArtwork() has not been implemented.');
   }

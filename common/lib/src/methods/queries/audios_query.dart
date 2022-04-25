@@ -52,14 +52,19 @@ class AudiosQuery {
   /// Method used to 'query' all the audios and their informations.
   Future<List<AudioModel>> queryAudios({
     MediaFilter? filter,
-    bool isAsset = false,
+    bool? fromAsset,
+    bool? fromAppDir,
   }) async {
     // If the parameters filter is null, use the default filter.
     filter ??= _defaultFilter;
 
+    //
+    fromAsset ??= false;
+    fromAppDir ??= false;
+
     // Retrive all (or limited) files path.
-    List<MP3Instance> instances = await _helper.getFiles(
-      isAsset,
+    List<Map<String, Object>> instances = await _helper.getFiles(
+      fromAsset,
       limit: filter.limit,
     );
 
@@ -78,7 +83,6 @@ class AudiosQuery {
       audioProjection,
     );
 
-    // TODO: Add a media sort. Join all sort in one.
     // Now we sort the list based on [sortType].
     //
     // Some variables has a [Null] value, so we need use the [orEmpty] extension,
@@ -164,7 +168,7 @@ class AudiosQuery {
 
   // This method will be used on another isolate.
   Future<List<Map<String, Object?>>> _fetchListOfAudios(
-    List<MP3Instance> instances,
+    List<Map<String, Object>> instances,
   ) async {
     // Define a empty list of audios.
     List<Map<String, Object?>> listOfAudios = [];
@@ -182,20 +186,28 @@ class AudiosQuery {
     //   * APIC
     for (var mp3instance in instances) {
       //
-      if (mp3instance.parseTagsSync()) {
+      String? currentPath;
+
+      //
+      mp3instance.forEach((key, value) {
         //
-        Map<String, dynamic>? data = mp3instance.getMetaTags();
+        if (key == 'path') currentPath = '$value';
 
-        // If [data] is null, the file probably has some wrong [bytes].
-        if (data == null) continue;
+        //
+        if (key == 'mp3' && (value as MP3Instance).parseTagsSync()) {
+          //
+          Map<String, dynamic>? data = value.getMetaTags();
 
-        listOfAudios.add(_formatAudio(
-          data,
-          // TODO: Fix path
-          'path',
-          mp3instance.mp3Bytes.length,
-        ));
-      }
+          // If [data] is null, the file probably has some wrong [bytes].
+          if (data != null && currentPath != null) {
+            listOfAudios.add(_formatAudio(
+              data,
+              currentPath!,
+              value.mp3Bytes.length,
+            ));
+          }
+        }
+      });
     }
 
     // Back to the 'main' isolate.

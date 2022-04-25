@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
 import '../helpers/query_helper_io.dart';
-import '/src/interfaces/observer_interface.dart';
 import '/src/methods/queries/audios_query.dart';
 
 class AudiosObserver implements ObserverInterface {

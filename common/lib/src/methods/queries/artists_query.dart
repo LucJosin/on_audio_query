@@ -25,14 +25,15 @@ class ArtistsQuery {
   /// Method used to "query" all the artists and their informations.
   Future<List<ArtistModel>> queryArtists({
     MediaFilter? filter,
-    bool? isAsset,
+    bool? fromAsset,
+    bool? fromAppDir,
   }) async {
     // If the parameters filter is null, use the default filter.
     filter ??= _defaultFilter;
 
     // Retrive all (or limited) files path.
-    List<MP3Instance> instances = await _helper.getFiles(
-      isAsset ?? false,
+    List<Map<String, Object>> instances = await _helper.getFiles(
+      fromAsset ?? false,
       limit: filter.limit,
     );
 
@@ -114,7 +115,7 @@ class ArtistsQuery {
 
   // This method will be used on another isolate.
   Future<List<Map<String, Object?>>> _fetchListOfArtists(
-    List<MP3Instance> instances,
+    List<Map<String, Object>> instances,
   ) async {
     // This "helper" list will avoid duplicate values inside the final list.
     List<String> hList = [];
@@ -124,32 +125,34 @@ class ArtistsQuery {
 
     // For each [audio] inside the [audios], take one and try read the [bytes].
     for (var mp3instance in instances) {
-      //
-      if (mp3instance.parseTagsSync()) {
+      mp3instance.forEach((key, value) async {
         //
-        Map<String, dynamic>? data = mp3instance.getMetaTags();
+        if (key == 'mp3' && (value as MP3Instance).parseTagsSync()) {
+          //
+          Map<String, dynamic>? data = value.getMetaTags();
 
-        //
-        if (data == null) continue;
+          //
+          if (data == null) return;
 
-        //
-        String artist = data["Artist"];
+          //
+          String artist = data["Artist"];
 
-        // If [data] is null, the file probably has some wrong [bytes].
-        // To avoid duplicate items, check if [helperList] already has this name.
-        if (artist.isEmpty || hList.contains(artist)) continue;
+          // If [data] is null, the file probably has some wrong [bytes].
+          // To avoid duplicate items, check if [helperList] already has this name.
+          if (artist.isEmpty || hList.contains(artist)) return;
 
-        // "format" into a [Map<String, dynamic>], all keys are based on [Android]
-        // platforms so, if you change some key, will have to change the [Android] too.
-        Map<String, Object?> formattedArtist =
-            await _formatArtist(data, 'path');
+          // "format" into a [Map<String, dynamic>], all keys are based on [Android]
+          // platforms so, if you change some key, will have to change the [Android] too.
+          Map<String, Object?> formattedArtist =
+              await _formatArtist(data, 'path');
 
-        // Temporary and the final list.
-        listOfArtists.add(formattedArtist);
+          // Temporary and the final list.
+          listOfArtists.add(formattedArtist);
 
-        //
-        hList.add(artist);
-      }
+          //
+          hList.add(artist);
+        }
+      });
     }
 
     // Back to the 'main' isolate.
