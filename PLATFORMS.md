@@ -5,6 +5,10 @@ Here you'll see a extra information about every method/type etc..
 ## Topics:
 
 - [Methods](#methods)
+  - [Query Methods](#query-methods)
+  - [Observer Methods](#observer-methods)
+  - [Playlist Methods](#playlist-methods)
+  - [Others Methods](#others-methods)
 - [Sort Types](#sorttypes)
   - [SongSortType](#songsorttype)
   - [AlbumSortType](#albumsorttype)
@@ -21,184 +25,212 @@ Here you'll see a extra information about every method/type etc..
   - [PlaylistModel](#playlistmodel)
   - [ArtistModel](#artistmodel)
   - [GenreModel](#genremodel)
-- [DeviceModel](#devicemodel)
+  - [DeviceModel](#devicemodel)
 
 ✔️ -> Supported <br>
 ❌ -> Not Supported <br>
 
 ## Methods
 
-| Methods              | Android | IOS  | Web  |
-| -------------------- | ------- | ---- | ---- |
-| `querySongs`         | `✔️`    | `✔️` | `✔️` |
-| `queryAlbums`        | `✔️`    | `✔️` | `✔️` |
-| `queryArtists`       | `✔️`    | `✔️` | `✔️` |
-| `queryPlaylists`     | `✔️`    | `✔️` | `❌` |
-| `queryGenres`        | `✔️`    | `✔️` | `✔️` |
-| `queryArtwork`       | `✔️`    | `✔️` | `✔️` |
-| `createPlaylist`     | `✔️`    | `✔️` | `❌` |
-| `removePlaylist`     | `✔️`    | `❌` | `❌` |
-| `addToPlaylist`      | `✔️`    | `✔️` | `❌` |
-| `removeFromPlaylist` | `✔️`    | `❌` | `❌` |
-| `renamePlaylist`     | `✔️`    | `❌` | `❌` |
-| `moveItemTo`         | `✔️`    | `❌` | `❌` |
-| `permissionsRequest` | `✔️`    | `✔️` | `❌` |
-| `permissionsStatus`  | `✔️`    | `✔️` | `❌` |
-| `queryDeviceInfo`    | `✔️`    | `✔️` | `✔️` |
-| `scanMedia`          | `✔️`    | `❌` | `❌` |
+### Query methods
+
+|      Methods      | Android | IOS  | Web  | Windows |
+| :---------------: | :-----: | :--: | :--: | :-----: |
+|   `queryAudios`   |  `✔️`   | `✔️` | `✔️` |  `✔️`   |
+|   `queryAlbums`   |  `✔️`   | `✔️` | `✔️` |  `✔️`   |
+|  `queryArtists`   |  `✔️`   | `✔️` | `✔️` |  `✔️`   |
+| `queryPlaylists`  |  `✔️`   | `✔️` | `❌` |  `❌`   |
+|   `queryGenres`   |  `✔️`   | `✔️` | `✔️` |  `✔️`   |
+|  `queryArtwork`   |  `✔️`   | `✔️` | `❌` |  `❌`   |
+| `queryDeviceInfo` |  `✔️`   | `✔️` | `❌` |  `❌`   |
+
+### Observer methods
+
+|      Methods       | Android | IOS  | Web  | Windows |
+| :----------------: | :-----: | :--: | :--: | :-----: |
+|  `observeAudios`   |  `✔️`   | `✔️` | `❌` |  `✔️`   |
+|  `observeAlbums`   |  `✔️`   | `✔️` | `❌` |  `✔️`   |
+|  `observeArtists`  |  `✔️`   | `✔️` | `❌` |  `✔️`   |
+| `observePlaylists` |  `✔️`   | `✔️` | `❌` |  `❌`   |
+|  `observeGenres`   |  `✔️`   | `✔️` | `❌` |  `✔️`   |
+
+### Playlist methods
+
+|       Methods        | Android | IOS  | Web  | Windows |
+| :------------------: | :-----: | :--: | :--: | :-----: |
+|   `createPlaylist`   |  `✔️`   | `✔️` | `❌` |  `❌`   |
+|   `removePlaylist`   |  `✔️`   | `❌` | `❌` |  `❌`   |
+|   `addToPlaylist`    |  `✔️`   | `✔️` | `❌` |  `❌`   |
+| `removeFromPlaylist` |  `✔️`   | `❌` | `❌` |  `❌`   |
+|   `renamePlaylist`   |  `✔️`   | `❌` | `❌` |  `❌`   |
+|     `moveItemTo`     |  `✔️`   | `❌` | `❌` |  `❌`   |
+
+### Permission methods
+
+|       Methods        | Android | IOS  | Web  | Windows |
+| :------------------: | :-----: | :--: | :--: | :-----: |
+| `permissionsRequest` |  `✔️`   | `✔️` | `❌` |  `❌`   |
+| `permissionsStatus`  |  `✔️`   | `✔️` | `❌` |  `❌`   |
+
+### Others methods
+
+|      Methods      | Android | IOS  | Web  | Windows |
+| :---------------: | :-----: | :--: | :--: | :-----: |
+|    `scanMedia`    |  `✔️`   | `✔️` | `❌` |  `✔️`   |
+| `observersStatus` |  `✔️`   | `✔️` | `❌` |  `✔️`   |
 
 ## SortTypes
 
 ### SongSortType
 
-| Methods        | Android | IOS  | Web  |
-| -------------- | ------- | ---- | ---- |
-| `DEFAULT`      | `✔️`    | `✔️` | `✔️` |
-| `ARTIST`       | `✔️`    | `✔️` | `✔️` |
-| `ALBUM`        | `✔️`    | `✔️` | `✔️` |
-| `DURATION`     | `✔️`    | `✔️` | `✔️` |
-| `DATA_ADDED`   | `✔️`    | `✔️` | `❌` |
-| `SIZE`         | `✔️`    | `✔️` | `✔️` |
-| `DISPLAY_NAME` | `✔️`    | `✔️` | `✔️` |
+|    Methods     | Android | IOS  | Web  |
+| :------------: | :-----: | :--: | :--: |
+|   `DEFAULT`    |  `✔️`   | `✔️` | `✔️` |
+|    `ARTIST`    |  `✔️`   | `✔️` | `✔️` |
+|    `ALBUM`     |  `✔️`   | `✔️` | `✔️` |
+|   `DURATION`   |  `✔️`   | `✔️` | `✔️` |
+|  `DATA_ADDED`  |  `✔️`   | `✔️` | `❌` |
+|     `SIZE`     |  `✔️`   | `✔️` | `✔️` |
+| `DISPLAY_NAME` |  `✔️`   | `✔️` | `✔️` |
 
 ### AlbumSortType
 
-| Methods        | Android | IOS  | Web  |
-| -------------- | ------- | ---- | ---- |
-| `DEFAULT`      | `✔️`    | `✔️` | `✔️` |
-| `ARTIST`       | `✔️`    | `✔️` | `✔️` |
-| `ALBUM`        | `✔️`    | `✔️` | `✔️` |
-| `NUM_OF_SONGS` | `✔️`    | `✔️` | `✔️` |
+|    Methods     | Android | IOS  | Web  |
+| :------------: | :-----: | :--: | :--: |
+|   `DEFAULT`    |  `✔️`   | `✔️` | `✔️` |
+|    `ARTIST`    |  `✔️`   | `✔️` | `✔️` |
+|    `ALBUM`     |  `✔️`   | `✔️` | `✔️` |
+| `NUM_OF_SONGS` |  `✔️`   | `✔️` | `✔️` |
 
 ### ArtistSortType
 
-| Methods         | Android | IOS  | Web  |
-| --------------- | ------- | ---- | ---- |
-| `DEFAULT`       | `✔️`    | `❌` | `✔️` |
-| `ARTIST_NAME`   | `✔️`    | `✔️` | `✔️` |
-| `ARTIST_KEY`    | `✔️`    | `❌` | `❌` |
-| `NUM_OF_TRACKS` | `✔️`    | `✔️` | `✔️` |
-| `NUM_OF_ALBUMS` | `✔️`    | `✔️` | `✔️` |
+|     Methods     | Android | IOS  | Web  |
+| :-------------: | :-----: | :--: | :--: |
+|    `DEFAULT`    |  `✔️`   | `❌` | `✔️` |
+|  `ARTIST_NAME`  |  `✔️`   | `✔️` | `✔️` |
+|  `ARTIST_KEY`   |  `✔️`   | `❌` | `❌` |
+| `NUM_OF_TRACKS` |  `✔️`   | `✔️` | `✔️` |
+| `NUM_OF_ALBUMS` |  `✔️`   | `✔️` | `✔️` |
 
 ### PlaylistSortType
 
-| Methods         | Android | IOS  | Web  |
-| --------------- | ------- | ---- | ---- |
-| `DEFAULT`       | `✔️`    | `❌` | `❌` |
-| `DATA_ADDED`    | `✔️`    | `❌` | `❌` |
-| `PLAYLIST_NAME` | `✔️`    | `❌` | `❌` |
+|     Methods     | Android | IOS  | Web  |
+| :-------------: | :-----: | :--: | :--: |
+|    `DEFAULT`    |  `✔️`   | `❌` | `❌` |
+|  `DATA_ADDED`   |  `✔️`   | `❌` | `❌` |
+| `PLAYLIST_NAME` |  `✔️`   | `❌` | `❌` |
 
 ### GenreSortType
 
-| Methods   | Android | IOS  | Web  |
-| --------- | ------- | ---- | ---- |
-| `DEFAULT` | `✔️`    | `✔️` | `✔️` |
+|  Methods  | Android | IOS  | Web  |
+| :-------: | :-----: | :--: | :--: |
+| `DEFAULT` |  `✔️`   | `✔️` | `✔️` |
 
 ## OrderTypes
 
 | Methods | Android | IOS  | Web  |
-| ------- | ------- | ---- | ---- |
-| `ASC`   | `✔️`    | `✔️` | `✔️` |
-| `DESC`  | `✔️`    | `✔️` | `✔️` |
+| :-----: | :-----: | :--: | :--: |
+|  `ASC`  |  `✔️`   | `✔️` | `✔️` |
+| `DESC`  |  `✔️`   | `✔️` | `✔️` |
 
 ## UriTypes
 
-| Methods    | Android | IOS  | Web  |
-| ---------- | ------- | ---- | ---- |
-| `EXTERNAL` | `✔️`    | `❌` | `❌` |
-| `INTERNAL` | `✔️`    | `✔️` | `✔️` |
+|  Methods   | Android | IOS  | Web  |
+| :--------: | :-----: | :--: | :--: |
+| `EXTERNAL` |  `✔️`   | `❌` | `❌` |
+| `INTERNAL` |  `✔️`   | `✔️` | `✔️` |
 
 ## ArtworkTypes
 
 | Methods | Android | IOS  | Web  |
-| ------- | ------- | ---- | ---- |
-| `AUDIO` | `✔️`    | `✔️` | `✔️` |
-| `ALBUM` | `✔️`    | `✔️` | `✔️` |
+| ------: | :-----: | :--: | :--: |
+| `AUDIO` |  `✔️`   | `✔️` | `✔️` |
+| `ALBUM` |  `✔️`   | `✔️` | `✔️` |
 
 ## ArtworkFormat
 
 | Methods | Android | IOS  | Web  |
-| ------- | ------- | ---- | ---- |
-| `JPEG`  | `✔️`    | `✔️` | `❌` |
-| `PNG`   | `✔️`    | `✔️` | `❌` |
+| :-----: | :-----: | :--: | :--: |
+| `JPEG`  |  `✔️`   | `✔️` | `❌` |
+|  `PNG`  |  `✔️`   | `✔️` | `❌` |
 
 ## Models
 
 ### SongModel
 
-| Methods            | Android | IOS  | Web  |
-| ------------------ | ------- | ---- | ---- |
-| `id`               | `✔️`    | `✔️` | `✔️` |
-| `data`             | `✔️`    | `✔️` | `✔️` |
-| `uri`              | `✔️`    | `❌` | `❌` |
-| `displayName`      | `✔️`    | `✔️` | `✔️` |
-| `displayNameWOExt` | `✔️`    | `✔️` | `✔️` |
-| `size`             | `✔️`    | `✔️` | `✔️` |
-| `album`            | `✔️`    | `✔️` | `✔️` |
-| `albumId`          | `✔️`    | `✔️` | `✔️` |
-| `artist`           | `✔️`    | `✔️` | `✔️` |
-| `artistId`         | `✔️`    | `✔️` | `✔️` |
-| `genre`            | `✔️`    | `✔️` | `✔️` |
-| `genreId`          | `✔️`    | `✔️` | `✔️` |
-| `bookmark`         | `✔️`    | `✔️` | `❌` |
-| `composer`         | `✔️`    | `✔️` | `❌` |
-| `dateAdded`        | `✔️`    | `✔️` | `❌` |
-| `dateModified`     | `✔️`    | `❌` | `✔️` |
-| `duration`         | `✔️`    | `✔️` | `❌` |
-| `title`            | `✔️`    | `✔️` | `✔️` |
-| `track`            | `✔️`    | `✔️` | `✔️` |
-| `fileExtension`    | `✔️`    | `✔️` | `✔️` |
-| `is_alarm`         | `✔️`    | `❌` | `❌` |
-| `is_audiobook`     | `✔️`    | `❌` | `❌` |
-| `is_music`         | `✔️`    | `❌` | `❌` |
-| `is_notification`  | `✔️`    | `❌` | `❌` |
-| `is_podcast`       | `✔️`    | `❌` | `❌` |
-| `is_ringtone`      | `✔️`    | `❌` | `❌` |
+|      Methods       | Android | IOS  | Web  |
+| :----------------: | :-----: | :--: | :--: |
+|        `id`        |  `✔️`   | `✔️` | `✔️` |
+|       `data`       |  `✔️`   | `✔️` | `✔️` |
+|       `uri`        |  `✔️`   | `❌` | `❌` |
+|   `displayName`    |  `✔️`   | `✔️` | `✔️` |
+| `displayNameWOExt` |  `✔️`   | `✔️` | `✔️` |
+|       `size`       |  `✔️`   | `✔️` | `✔️` |
+|      `album`       |  `✔️`   | `✔️` | `✔️` |
+|     `albumId`      |  `✔️`   | `✔️` | `✔️` |
+|      `artist`      |  `✔️`   | `✔️` | `✔️` |
+|     `artistId`     |  `✔️`   | `✔️` | `✔️` |
+|      `genre`       |  `✔️`   | `✔️` | `✔️` |
+|     `genreId`      |  `✔️`   | `✔️` | `✔️` |
+|     `bookmark`     |  `✔️`   | `✔️` | `❌` |
+|     `composer`     |  `✔️`   | `✔️` | `❌` |
+|    `dateAdded`     |  `✔️`   | `✔️` | `❌` |
+|   `dateModified`   |  `✔️`   | `❌` | `✔️` |
+|     `duration`     |  `✔️`   | `✔️` | `❌` |
+|      `title`       |  `✔️`   | `✔️` | `✔️` |
+|      `track`       |  `✔️`   | `✔️` | `✔️` |
+|  `fileExtension`   |  `✔️`   | `✔️` | `✔️` |
+|     `is_alarm`     |  `✔️`   | `❌` | `❌` |
+|   `is_audiobook`   |  `✔️`   | `❌` | `❌` |
+|     `is_music`     |  `✔️`   | `❌` | `❌` |
+| `is_notification`  |  `✔️`   | `❌` | `❌` |
+|    `is_podcast`    |  `✔️`   | `❌` | `❌` |
+|   `is_ringtone`    |  `✔️`   | `❌` | `❌` |
 
 ### AlbumModel
 
-| Methods      | Android | IOS  | Web  |
-| ------------ | ------- | ---- | ---- |
-| `id`         | `✔️`    | `✔️` | `✔️` |
-| `album`      | `✔️`    | `✔️` | `✔️` |
-| `albumId`    | `✔️`    | `✔️` | `✔️` |
-| `artist`     | `✔️`    | `✔️` | `✔️` |
-| `artistId`   | `✔️`    | `✔️` | `✔️` |
-| `numOfSongs` | `✔️`    | `✔️` | `✔️` |
+|   Methods    | Android | IOS  | Web  |
+| :----------: | :-----: | :--: | :--: |
+|     `id`     |  `✔️`   | `✔️` | `✔️` |
+|   `album`    |  `✔️`   | `✔️` | `✔️` |
+|  `albumId`   |  `✔️`   | `✔️` | `✔️` |
+|   `artist`   |  `✔️`   | `✔️` | `✔️` |
+|  `artistId`  |  `✔️`   | `✔️` | `✔️` |
+| `numOfSongs` |  `✔️`   | `✔️` | `✔️` |
 
 ### PlaylistModel
 
-| Methods        | Android | IOS  | Web  |
-| -------------- | ------- | ---- | ---- |
-| `id`           | `✔️`    | `✔️` | `❌` |
-| `playlist`     | `✔️`    | `✔️` | `❌` |
-| `data`         | `✔️`    | `❌` | `❌` |
-| `dateAdded`    | `✔️`    | `✔️` | `❌` |
-| `dateModified` | `✔️`    | `✔️` | `❌` |
-| `numOfSongs`   | `✔️`    | `✔️` | `❌` |
-| `artwork`      | `❌`    | `✔️` | `❌` |
+|    Methods     | Android | IOS  | Web  |
+| :------------: | :-----: | :--: | :--: |
+|      `id`      |  `✔️`   | `✔️` | `❌` |
+|   `playlist`   |  `✔️`   | `✔️` | `❌` |
+|     `data`     |  `✔️`   | `❌` | `❌` |
+|  `dateAdded`   |  `✔️`   | `✔️` | `❌` |
+| `dateModified` |  `✔️`   | `✔️` | `❌` |
+|  `numOfSongs`  |  `✔️`   | `✔️` | `❌` |
+|   `artwork`    |  `❌`   | `✔️` | `❌` |
 
 ### ArtistModel
 
-| Methods          | Android | IOS  | Web  |
-| ---------------- | ------- | ---- | ---- |
-| `id`             | `✔️`    | `✔️` | `✔️` |
-| `artist`         | `✔️`    | `✔️` | `✔️` |
-| `numberOfAlbums` | `✔️`    | `✔️` | `✔️` |
-| `numberOfTracks` | `✔️`    | `✔️` | `✔️` |
+|     Methods      | Android | IOS  | Web  |
+| :--------------: | :-----: | :--: | :--: |
+|       `id`       |  `✔️`   | `✔️` | `✔️` |
+|     `artist`     |  `✔️`   | `✔️` | `✔️` |
+| `numberOfAlbums` |  `✔️`   | `✔️` | `✔️` |
+| `numberOfTracks` |  `✔️`   | `✔️` | `✔️` |
 
 ### GenreModel
 
-| Methods      | Android | IOS  | Web  |
-| ------------ | ------- | ---- | ---- |
-| `id`         | `✔️`    | `✔️` | `✔️` |
-| `genre`      | `✔️`    | `✔️` | `✔️` |
-| `numOfSongs` | `✔️`    | `✔️` | `✔️` |
+|   Methods    | Android | IOS  | Web  |
+| :----------: | :-----: | :--: | :--: |
+|     `id`     |  `✔️`   | `✔️` | `✔️` |
+|   `genre`    |  `✔️`   | `✔️` | `✔️` |
+| `numOfSongs` |  `✔️`   | `✔️` | `✔️` |
 
 ### DeviceModel
 
-| Methods   | Android | IOS  | Web  |
-| --------- | ------- | ---- | ---- |
-| `version` | `✔️`    | `✔️` | `✔️` |
-| `type`    | `✔️`    | `✔️` | `✔️` |
-| `model`   | `✔️`    | `✔️` | `❌` |
+|  Methods  | Android | IOS  | Web  |
+| :-------: | :-----: | :--: | :--: |
+| `version` |  `✔️`   | `✔️` | `✔️` |
+|  `type`   |  `✔️`   | `✔️` | `✔️` |
+|  `model`  |  `✔️`   | `✔️` | `❌` |

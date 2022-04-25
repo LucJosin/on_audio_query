@@ -8,8 +8,9 @@
 
 ## Help:
 
-**Any problem? [Issues](https://github.com/LucJosin/on_audio_query/issues)** <br>
-**Any suggestion? [Pull request](https://github.com/LucJosin/on_audio_query/pulls)**
+- **Docs([Pub.dev](https://pub.dev/documentation/on_audio_query/latest/on_audio_query/OnAudioQuery-class.html))**
+- **Any problem? [Issues](https://github.com/LucJosin/on_audio_query/issues)**
+- **Any suggestion? [Pull request](https://github.com/LucJosin/on_audio_query/pulls)**
 
 ### Topics:
 
