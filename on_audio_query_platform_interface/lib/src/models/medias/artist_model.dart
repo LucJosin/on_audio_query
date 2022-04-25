@@ -1,14 +1,11 @@
 part of models_controller;
 
 /// [ArtistModel] that contains all [Artist] Information.
-class ArtistModel {
-  ArtistModel(this._info);
+class ArtistModel extends MediaModel {
+  ArtistModel(this._info) : super(_info['_id']);
 
   //The type dynamic is used for both but, the map is always based in [String, dynamic]
   final Map<dynamic, dynamic> _info;
-
-  /// Return artist [id]
-  int get id => _info["_id"];
 
   /// Return artist [artist]
   String get artist => _info["artist"];

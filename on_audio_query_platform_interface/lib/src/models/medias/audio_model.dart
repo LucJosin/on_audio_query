@@ -1,14 +1,11 @@
 part of models_controller;
 
 /// [AudioModel] that contains all [Song] Information.
-class AudioModel {
-  AudioModel(this._info);
+class AudioModel extends MediaModel {
+  AudioModel(this._info) : super(_info['_id']);
 
   //The type dynamic is used for both but, the map is always based in [String, dynamic]
   final Map<dynamic, dynamic> _info;
-
-  /// Return song [id]
-  int get id => _info["_id"];
 
   /// Return song [id] from a playlist.
   ///

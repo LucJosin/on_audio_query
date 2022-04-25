@@ -1,8 +1,8 @@
 part of models_controller;
 
 /// [ArtworkModel] that contains all [Image] information.
-class ArtworkModel {
-  ArtworkModel(this._info);
+class ArtworkModel extends MediaModel {
+  ArtworkModel(this._info) : super(_info['_id']);
 
   //The type dynamic is used for both but, the map is always based in [String, dynamic]
   final Map<dynamic, dynamic> _info;
@@ -21,11 +21,13 @@ class ArtworkModel {
 
   ///
   ArtworkModel copyWith({
+    int? id,
     Uint8List? artwork,
     String? path,
     String? type,
   }) {
     return ArtworkModel({
+      "_id": id ?? this.id,
       "artwork": artwork ?? this.artwork,
       "path": path ?? this.path,
       "ext": type ?? this.type,

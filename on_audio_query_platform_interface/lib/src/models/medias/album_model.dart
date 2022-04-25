@@ -1,14 +1,11 @@
 part of models_controller;
 
 /// [AlbumModel] that contains all [Album] Information.
-class AlbumModel {
-  AlbumModel(this._info);
+class AlbumModel extends MediaModel {
+  AlbumModel(this._info) : super(_info['_id']);
 
   //The type dynamic is used for both but, the map is always based in [String, dynamic]
   final Map<dynamic, dynamic> _info;
-
-  /// Return album [id]
-  int get id => _info["_id"];
 
   /// Return album [album]
   String get album => _info["album"];
