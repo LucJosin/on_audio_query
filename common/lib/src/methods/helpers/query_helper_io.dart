@@ -5,7 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/services.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
-class QueryHelper {
+class QueryHelper extends QueryHelperInterface {
   ///
   static final String _userDir = '${Platform.environment["USERPROFILE"]}';
 
@@ -23,7 +23,8 @@ class QueryHelper {
 
   /// This method will load a unique audio using his path, and return a [MP3Instance]
   /// with all information about this file.
-  Future<MP3Instance> _loadMP3(String audio, bool isAsset) async {
+  @override
+  Future<MP3Instance> loadMP3(String audio, bool isAsset) async {
     //
     Uint8List audioBytes;
 
@@ -46,12 +47,13 @@ class QueryHelper {
   }
 
   ///
-  Future<List<MP3Instance>> getFiles(
+  @override
+  Future<List<Map<String, Object>>> getFiles(
     bool isAsset, {
     bool lookSubs = true,
     int? limit,
   }) async {
-    List<MP3Instance> instances = [];
+    List<Map<String, Object>> instances = [];
 
     //
     if (isAsset) {
@@ -84,10 +86,11 @@ class QueryHelper {
     if (limit != null) _paths = _paths.take(limit).toList();
 
     //
-    for (var file in _paths) {
-      instances.add(
-        await _loadMP3(file, isAsset),
-      );
+    for (var path in _paths) {
+      instances.add({
+        "path": path,
+        "mp3": await loadMP3(path, isAsset),
+      });
     }
 
     //
@@ -95,6 +98,7 @@ class QueryHelper {
   }
 
   ///
+  @override
   List<T> mediaFilter<T>(
     MediaFilter filter,
     List<Map<String, Object?>> listOfSongs,
@@ -167,5 +171,64 @@ class QueryHelper {
       default:
         return [];
     }
+  }
+
+  @override
+  Future<String?> saveArtworks({
+    required int id,
+    required Uint8List? artwork,
+    required String fileType,
+    bool temporary = true,
+  }) async {
+    //
+    Directory dirPath = temporary
+        ? await getTemporaryDirectory()
+        : await getApplicationSupportDirectory();
+
+    //
+    //
+    if (artwork == null) return null;
+
+    //
+    File artFile = File(
+      dirPath.path + defaultArtworksPath + '\\$id$fileType',
+    );
+
+    if (!await artFile.exists()) await artFile.create(recursive: true);
+
+    //
+    await artFile.writeAsBytes(artwork);
+
+    return artFile.path;
+  }
+
+  @override
+  Future<ArtworkModel?> getCachedArtwork({
+    required int id,
+    bool temporary = true,
+  }) async {
+    //
+    Directory dirPath = temporary
+        ? await getTemporaryDirectory()
+        : await getApplicationSupportDirectory();
+
+    //
+    File file = Directory(dirPath.path + defaultArtworksPath)
+        .listSync()
+        .whereType<File>()
+        .firstWhere(
+          (file) => file.path.contains('$id'),
+          orElse: () => File(''),
+        );
+
+    //
+    if (!await file.exists()) return null;
+
+    //
+    return ArtworkModel({
+      'artwork': await file.readAsBytes(),
+      'path': file.path,
+      'type': file.uri.pathSegments.last
+    });
   }
 }

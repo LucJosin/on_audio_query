@@ -1,15 +1,17 @@
 import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
-class QueryHelper {
+class QueryHelper extends QueryHelperInterface {
   ///
   static String get _defaultDirectory => 'AssetManifest.json';
 
   /// This method will load a unique audio using his path, and return a [MP3Instance]
   /// with all information about this file.
-  Future<MP3Instance> _loadMP3(String audio, bool isAsset) async {
+  @override
+  Future<MP3Instance> loadMP3(String audio, bool isAsset) async {
     // Before decode: assets/Jungle%20-%20Heavy,%20California.mp3
     // After decode: assets/Jungle - Heavy, California.mp3
     String decodedPath = Uri.decodeFull(audio);
@@ -21,13 +23,14 @@ class QueryHelper {
     return MP3Instance(loadedAudio.buffer.asUint8List());
   }
 
-  Future<List<MP3Instance>> getFiles(
+  @override
+  Future<List<Map<String, Object>>> getFiles(
     bool isAsset, {
     bool lookSubs = true,
     int? limit,
   }) async {
     //
-    List<MP3Instance> instances = [];
+    List<Map<String, Object>> instances = [];
 
     //
     String assets = await rootBundle.loadString(_defaultDirectory);
@@ -42,10 +45,11 @@ class QueryHelper {
     if (limit != null) paths = paths.take(limit).toList();
 
     //
-    for (var file in paths) {
-      instances.add(
-        await _loadMP3(file, isAsset),
-      );
+    for (var path in paths) {
+      instances.add({
+        "path": path,
+        "mp3": await loadMP3(path, isAsset),
+      });
     }
 
     //
@@ -53,6 +57,7 @@ class QueryHelper {
   }
 
   ///
+  @override
   List<T> mediaFilter<T>(
     MediaFilter filter,
     List<Map<String, Object?>> listOfSongs,
@@ -125,5 +130,23 @@ class QueryHelper {
       default:
         return [];
     }
+  }
+
+  @override
+  Future<String?> saveArtworks({
+    required int id,
+    required Uint8List? artwork,
+    required String fileType,
+    bool temporary = true,
+  }) {
+    throw UnsupportedError('Unsupported method when using [Web]');
+  }
+
+  @override
+  Future<ArtworkModel?> getCachedArtwork({
+    required int id,
+    bool temporary = true,
+  }) {
+    throw UnimplementedError('Unsupported method when using [Web]');
   }
 }
