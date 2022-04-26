@@ -26,13 +26,16 @@ class ArtworkQuery {
     filter ??= _defaultFilter;
 
     //
-    ArtworkModel? cache = await _helper.getCachedArtwork(
-      id: id,
-      temporary: filter.onlyTemporarily ?? true,
-    );
+    if (!(filter.ignoreCached ?? false)) {
+      //
+      ArtworkModel? cache = await _helper.getCachedArtwork(
+        id: id,
+        temporary: filter.cacheTemporarily ?? true,
+      );
 
-    //
-    if (cache != null) return cache;
+      //
+      if (cache != null) return cache;
+    }
 
     //
     try {
@@ -73,17 +76,18 @@ class ArtworkQuery {
 
         //
         String? path;
-        if (filter.saveArtwork ?? true) {
+        if (filter.cacheArtwork ?? true) {
           path = await _helper.saveArtworks(
             id: id,
             artwork: artAsByte,
             fileType: fileType,
-            temporary: filter.onlyTemporarily ?? true,
+            temporary: filter.cacheTemporarily ?? true,
           );
         }
 
         //
         return ArtworkModel({
+          '_id': id,
           'artwork': artAsByte,
           'path': path,
           'type': fileType,

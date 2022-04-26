@@ -208,13 +208,21 @@ class QueryHelper extends QueryHelperInterface {
     bool temporary = true,
   }) async {
     //
-    Directory dirPath = temporary
+    Directory dir = temporary
         ? await getTemporaryDirectory()
         : await getApplicationSupportDirectory();
 
     //
-    File file = Directory(dirPath.path + defaultArtworksPath)
-        .listSync()
+    Directory artworksDir = Directory(dir.path + defaultArtworksPath);
+
+    //
+    if (!artworksDir.existsSync()) return null;
+
+    //
+    File art = artworksDir
+        .listSync(
+          recursive: true,
+        )
         .whereType<File>()
         .firstWhere(
           (file) => file.path.contains('$id'),
@@ -222,13 +230,15 @@ class QueryHelper extends QueryHelperInterface {
         );
 
     //
-    if (!await file.exists()) return null;
+    if (art.existsSync()) {
+      return ArtworkModel({
+        '_id': id,
+        'artwork': await art.readAsBytes(),
+        'path': art.path,
+        'type': art.uri.pathSegments.last
+      });
+    }
 
-    //
-    return ArtworkModel({
-      'artwork': await file.readAsBytes(),
-      'path': file.path,
-      'type': file.uri.pathSegments.last
-    });
+    return null;
   }
 }

@@ -108,6 +108,7 @@ class ArtworkQuery : ViewModel() {
             // After loading the information, send the 'result'.
             result.success(
                 hashMapOf<String, Any?>(
+                    "_id" to id.toInt(),
                     "artwork" to resultArtwork,
                     "path" to query.path,
                     "type" to format.name
