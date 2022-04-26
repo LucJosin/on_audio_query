@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
@@ -26,6 +27,24 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
 
   //
   static final AudiosObserver _audiosObserver = AudiosObserver();
+
+  @override
+  Future<bool> clearCachedArtworks() async {
+    Directory appDir = await getApplicationSupportDirectory();
+    Directory artworksDir = Directory(appDir.path + defaultArtworksPath);
+
+    //
+    try {
+      //
+      return await artworksDir
+          .delete(recursive: true)
+          .then((dir) => !dir.existsSync());
+    } catch (e) {
+      //
+    }
+
+    return false;
+  }
 
   @override
   Future<List<AudioModel>> queryAudios({

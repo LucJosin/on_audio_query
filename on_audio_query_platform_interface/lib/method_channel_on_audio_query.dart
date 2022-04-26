@@ -59,6 +59,11 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   // }
 
   @override
+  Future<bool> clearCachedArtworks() async {
+    return await _channel.invokeMethod('clearCachedArtworks');
+  }
+
+  @override
   Future<List<AudioModel>> queryAudios({
     MediaFilter? filter,
   }) async {
@@ -376,6 +381,9 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
             (filter.artworkQuality != null && filter.artworkQuality! <= 100)
                 ? filter.artworkQuality
                 : 50,
+        "save": filter.cacheArtwork ?? true,
+        "onlyTemporarily": filter.cacheTemporarily ?? true,
+        "ignoreCached": filter.ignoreCached ?? false,
       },
     ).then(
       (resultArtwork) => ArtworkModel(resultArtwork),

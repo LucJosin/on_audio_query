@@ -48,10 +48,13 @@ class MediaFilter {
   int? artworkQuality;
 
   ///
-  bool? saveArtwork;
+  bool? cacheArtwork;
 
   ///
-  bool? onlyTemporarily;
+  bool? cacheTemporarily;
+
+  ///
+  bool? ignoreCached;
 
   ///
   MediaFilter.init({
@@ -70,8 +73,9 @@ class MediaFilter {
     this.artworkFormat,
     this.artworkSize,
     this.artworkQuality,
-    this.saveArtwork,
-    this.onlyTemporarily,
+    this.cacheArtwork,
+    this.cacheTemporarily,
+    this.ignoreCached,
   });
 
   ///
@@ -165,8 +169,9 @@ class MediaFilter {
     this.artworkFormat = ArtworkFormat.JPEG,
     this.artworkSize = 100,
     this.artworkQuality = 50,
-    this.saveArtwork = true,
-    this.onlyTemporarily = true,
+    this.cacheArtwork = true,
+    this.cacheTemporarily = true,
+    this.ignoreCached = false,
   })  : orderType = OrderType.ASC_OR_SMALLER,
         uriType = UriType.EXTERNAL,
         ignoreCase = true,

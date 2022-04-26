@@ -70,6 +70,23 @@ class OnAudioQuery {
   /// ```
   static const String artworksPath = defaultArtworksPath;
 
+  /// Used to delete all artworks cached after using [queryArtwork].
+  ///
+  /// Note: This method will delete **ONLY** files inside the app directory, all
+  /// artworks cached inside the temp folder will be delete automatically after
+  /// some time.
+  ///
+  /// Platforms:
+  ///
+  /// |`   Android   `|`   IOS   `|`   Web   `|`   Windows   `|
+  /// |:----------:|:----------:|:----------:|:----------:|
+  /// | `❌` | `✔️` | `❌` | `✔️` | <br>
+  ///
+  /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
+  static Future<bool> clearCachedArtworks() async {
+    return platform.clearCachedArtworks();
+  }
+
   /// Used to return songs info.
   ///
   /// Important:
@@ -666,7 +683,7 @@ class OnAudioQuery {
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<bool> scanMedia(String path) async {
-    return await platform.scanMedia(path);
+    return platform.scanMedia(path);
   }
 
   /// Used to check the observers(listeners) status of:
@@ -689,7 +706,7 @@ class OnAudioQuery {
   ///
   /// See more about [platform support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
   Future<ObserversModel> observersStatus() async {
-    return await platform.observersStatus();
+    return platform.observersStatus();
   }
 
   // Deprecated methods
@@ -705,7 +722,7 @@ class OnAudioQuery {
     OrderType? orderType,
     bool? ignoreCase,
   }) async {
-    return [];
+    throw const Deprecated('Deprecated after [3.0.0]');
   }
 
   /// Deprecated after [3.0.0]. Use one of the [query] methods instead
@@ -716,8 +733,8 @@ class OnAudioQuery {
     String argsVal,
     WithFiltersType withType, {
     dynamic args,
-  }) async {
-    return [];
+  }) {
+    throw const Deprecated('Deprecated after [3.0.0]');
   }
 
   /// Deprecated after [3.0.0]. Use one of the [query] methods instead
@@ -729,11 +746,13 @@ class OnAudioQuery {
     SongSortType? sortType,
     OrderType? orderType,
     UriType? uriType,
-  }) async {
-    return [];
+  }) {
+    throw const Deprecated('Deprecated after [3.0.0]');
   }
 
   /// Deprecated after [3.0.0]
   @Deprecated("Deprecated after [3.0.0]")
-  Future<List<String>> queryAllPath() async => [];
+  Future<List<String>> queryAllPath() {
+    throw const Deprecated('Deprecated after [3.0.0]');
+  }
 }

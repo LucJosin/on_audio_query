@@ -158,6 +158,15 @@ class QueryArtworkWidget extends StatelessWidget {
   /// * If [keepOldArtwork] is null, will be set to [false].
   final bool? keepOldArtwork;
 
+  /// TODO: Add Docs
+  final bool? cacheArtwork;
+
+  /// TODO: Add Docs
+  final bool? cacheTemporarily;
+
+  /// TODO: Add Docs
+  final bool? ignoreCache;
+
   /// Used to define a Widget when audio/song don't return any artwork.
   ///
   /// Important:
@@ -271,6 +280,9 @@ class QueryArtworkWidget extends StatelessWidget {
     this.artworkColor,
     this.artworkBlendMode,
     this.keepOldArtwork,
+    this.cacheArtwork,
+    this.cacheTemporarily,
+    this.ignoreCache,
     this.nullArtworkWidget,
     this.errorBuilder,
     this.frameBuilder,
@@ -300,6 +312,9 @@ class QueryArtworkWidget extends StatelessWidget {
           artworkFormat: format ?? ArtworkFormat.JPEG,
           artworkSize: size ?? 100,
           artworkQuality: quality ?? 50,
+          cacheArtwork: cacheArtwork ?? true,
+          cacheTemporarily: cacheTemporarily ?? true,
+          ignoreCached: ignoreCache ?? false,
         ),
       ),
       builder: (context, item) {
@@ -309,10 +324,6 @@ class QueryArtworkWidget extends StatelessWidget {
         // This 'no permission' code exception is: 403.
         if (item.hasError) {
           if (item.error is PlatformException) {
-            // Define error as PlatformException.
-            var error = item.error as PlatformException;
-            debugPrint(error.message);
-
             // Return a 'different' image.
             return const Icon(
               Icons.no_encryption_gmailerrorred,

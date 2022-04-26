@@ -16,7 +16,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart';
 import 'package:on_audio_query_example/src/observer/observe_songs.dart';
 import 'package:on_audio_query_example/src/query/query_songs.dart';
 
@@ -66,6 +66,13 @@ class _MainState extends State<Main> {
         centerTitle: true,
         title: const Text("OnAudioQueryExample"),
         elevation: 0,
+        actions: [
+          IconButton(
+            tooltip: 'Delete all cached artworks',
+            onPressed: () => OnAudioQuery.clearCachedArtworks(),
+            icon: const Icon(Icons.delete),
+          )
+        ],
       ),
       body: Center(
         child: Column(
