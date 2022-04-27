@@ -3,7 +3,7 @@ import 'package:on_audio_query_platform_interface/on_audio_query_platform_interf
 ///
 class MediaFilter {
   ///
-  SongSortType? songSortType;
+  AudioSortType? audioSortType;
 
   ///
   AlbumSortType? albumSortType;
@@ -54,11 +54,11 @@ class MediaFilter {
   bool? cacheTemporarily;
 
   ///
-  bool? ignoreCached;
+  bool? overrideCache;
 
   ///
   MediaFilter.init({
-    this.songSortType,
+    this.audioSortType,
     this.albumSortType,
     this.artistSortType,
     this.playlistSortType,
@@ -75,12 +75,12 @@ class MediaFilter {
     this.artworkQuality,
     this.cacheArtwork,
     this.cacheTemporarily,
-    this.ignoreCached,
+    this.overrideCache,
   });
 
   ///
   MediaFilter.forAudios({
-    this.songSortType,
+    this.audioSortType,
     this.limit,
     this.orderType = OrderType.ASC_OR_SMALLER,
     this.uriType = UriType.EXTERNAL,
@@ -108,7 +108,7 @@ class MediaFilter {
   /// * If [ignoreCase] is null, will be set to [true].
   /// * If [path] is null, will be set to the default platform [path].
   MediaFilter.forSongs({
-    this.songSortType,
+    this.audioSortType,
     this.limit,
     this.orderType = OrderType.ASC_OR_SMALLER,
     this.uriType = UriType.EXTERNAL,
@@ -171,7 +171,7 @@ class MediaFilter {
     this.artworkQuality = 50,
     this.cacheArtwork = true,
     this.cacheTemporarily = true,
-    this.ignoreCached = false,
+    this.overrideCache = false,
   })  : orderType = OrderType.ASC_OR_SMALLER,
         uriType = UriType.EXTERNAL,
         ignoreCase = true,

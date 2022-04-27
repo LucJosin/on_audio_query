@@ -8,7 +8,7 @@ public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
     static let channelName: String = "com.lucasjosino.on_audio_query"
     
     // Observers
-    private var songsObserver: SongsObserver? = nil
+    private var audiosObserver: AudiosObserver? = nil
     private var albumsObserver: AlbumsObserver? = nil
     private var artistsObserver: ArtistsObserver? = nil
     private var playlistsObserver: PlaylistsObserver? = nil
@@ -64,13 +64,16 @@ public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
         case "observersStatus":
             result(
                 [
-                    "songs_observer": songsObserver?.isRunning ?? false,
+                    "audios_observer": audiosObserver?.isRunning ?? false,
                     "albums_observer": albumsObserver?.isRunning ?? false,
                     "artists_observer": artistsObserver?.isRunning ?? false,
                     "playlists_observer": playlistsObserver?.isRunning ?? false,
                     "genres_observer": genresObserver?.isRunning ?? false,
                 ]
             )
+        //
+        case "clearCachedArtworks":
+            result(clearCachedArtworks())
         default:
             // All others methods
             QueryController(call: call, result: result).chooseMethod()
@@ -86,16 +89,56 @@ public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
         }
     }
     
+    private func clearCachedArtworks() -> Bool {
+        // The default plugin artwork directory.
+        //
+        // Note: This is PART of the path.
+        let pluginDir = "/on_audio_query/mediastore/artworks/"
+        
+        // Get and check if the app directory exists.
+        if let dir: String = NSSearchPathForDirectoriesInDomains(
+            .documentDirectory,
+            .userDomainMask,
+            true
+        ).first {
+            // Define a file manager.
+            let fileManager = FileManager.default
+            
+            // Join the app directory with the plugin directory.
+            var artsDir = URL(string: dir)
+            
+            // Join the app directory with the plugin artworks directory.
+            artsDir?.appendPathComponent(pluginDir)
+            
+            // Check if the artworks directory exists.
+            if artsDir != nil && fileManager.fileExists(atPath: artsDir!.path) {
+                // The remove method can throw a error.
+                do {
+                    // Delete the folder with all items(artworks) inside.
+                    try fileManager.removeItem(atPath: artsDir!.path)
+                    
+                    // Return
+                    return true
+                } catch {
+                    print("SwiftOnAudioQueryPlugin::clearCachedArtworks -> \(error)")
+                }
+            }
+        }
+        
+        //
+        return false
+    }
+    
     private func setUpEventChannel(binary: FlutterBinaryMessenger) {
         let cName = SwiftOnAudioQueryPlugin.channelName
         
-        // Songs channel.
-        let songsChannel = FlutterEventChannel(
-            name: "\(cName)/songs_observer",
+        // Audios channel.
+        let audiosChannel = FlutterEventChannel(
+            name: "\(cName)/audios_observer",
             binaryMessenger: binary
         )
-        songsObserver = SongsObserver()
-        songsChannel.setStreamHandler(songsObserver)
+        audiosObserver = AudiosObserver()
+        audiosChannel.setStreamHandler(audiosObserver)
         
         // Albums channel.
         let albumsChannel = FlutterEventChannel(
