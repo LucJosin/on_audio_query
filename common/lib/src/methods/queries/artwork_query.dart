@@ -26,7 +26,7 @@ class ArtworkQuery {
     filter ??= _defaultFilter;
 
     //
-    if (!(filter.ignoreCached ?? false)) {
+    if (!(filter.overrideCache ?? false)) {
       //
       ArtworkModel? cache = await _helper.getCachedArtwork(
         id: id,

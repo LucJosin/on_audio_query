@@ -11,26 +11,26 @@ import java.io.File
 
 class QueryHelper {
     //This method will load some extra information about audio/song
-    fun loadSongExtraInfo(
+    fun loadAudioExtraInfo(
         uri: Uri,
-        songData: MutableMap<String, Any?>
+        audioData: MutableMap<String, Any?>
     ): MutableMap<String, Any?> {
-        val file = File(songData["_data"].toString())
+        val file = File(audioData["_data"].toString())
 
         //Getting displayName without [Extension].
-        songData["_display_name_wo_ext"] = file.nameWithoutExtension
+        audioData["_display_name_wo_ext"] = file.nameWithoutExtension
         //Adding only the extension
-        songData["file_extension"] = file.extension
+        audioData["file_extension"] = file.extension
 
         //A different type of "data"
-        val tempUri = ContentUris.withAppendedId(uri, songData["_id"].toString().toLong())
-        songData["_uri"] = tempUri.toString()
+        val tempUri = ContentUris.withAppendedId(uri, audioData["_id"].toString().toLong())
+        audioData["_uri"] = tempUri.toString()
 
-        return songData
+        return audioData
     }
 
     //This method will separate [String] from [Int]
-    fun loadSongItem(itemProperty: String, cursor: Cursor): Any? {
+    fun loadAudioItem(itemProperty: String, cursor: Cursor): Any? {
         return when (itemProperty) {
             // Int
             "_id",
@@ -141,7 +141,7 @@ class QueryHelper {
     @Suppress("DEPRECATION")
     fun loadFirstItem(type: Int, id: Number, resolver: ContentResolver): String? {
 
-        // We use almost the same method to 'query' the first item from Song/Album/Artist and we
+        // We use almost the same method to 'query' the first item from Audio/Album/Artist and we
         // need to use a different uri when 'querying' from playlist.
         // If [type] is something different, return null.
         val selection: String? = when (type) {
@@ -204,7 +204,7 @@ class QueryHelper {
         //
         if (cursor != null) {
             cursor.moveToFirst()
-            // Try / Catch to avoid problems. Everytime someone request the first song from a playlist and
+            // Try / Catch to avoid problems. Everytime someone request the first audio from a playlist and
             // this playlist is empty will crash the app, so we just 'print' the error.
             try {
                 dataOrId =
@@ -220,19 +220,5 @@ class QueryHelper {
         cursor?.close()
 
         return dataOrId
-    }
-
-    fun chooseWithFilterType(uri: Uri, itemProperty: String, cursor: Cursor): Any? {
-        return when (uri) {
-            MediaStore.Audio.Media.EXTERNAL_CONTENT_URI -> loadSongItem(itemProperty, cursor)
-            MediaStore.Audio.Albums.EXTERNAL_CONTENT_URI -> loadAlbumItem(itemProperty, cursor)
-            MediaStore.Audio.Playlists.EXTERNAL_CONTENT_URI -> loadPlaylistItem(
-                itemProperty,
-                cursor
-            )
-            MediaStore.Audio.Artists.EXTERNAL_CONTENT_URI -> loadArtistItem(itemProperty, cursor)
-            MediaStore.Audio.Genres.EXTERNAL_CONTENT_URI -> loadGenreItem(itemProperty, cursor)
-            else -> null
-        }
     }
 }

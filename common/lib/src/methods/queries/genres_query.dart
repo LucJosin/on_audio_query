@@ -14,7 +14,7 @@ class GenresQuery {
   // Default filter.
   final MediaFilter _defaultFilter = MediaFilter.forGenres();
 
-  // Song projection (to filter).
+  // Genre projection (to filter).
   List<String?> genreProjection = [
     "_id",
     "name",
@@ -97,7 +97,7 @@ class GenresQuery {
           // To avoid duplicate items, check if [helperList] already has this name.
           if (genre == null || genre.isEmpty || hList.contains(genre)) return;
 
-          // Count and add the number of songs for every genre.
+          // Count and add the number of genres for every genre.
           mediaCount += 1;
 
           // "format" into a [Map<String, dynamic>], all keys are based on [Android]

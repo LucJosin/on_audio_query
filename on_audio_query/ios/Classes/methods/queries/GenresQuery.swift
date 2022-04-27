@@ -7,7 +7,7 @@ class GenresQuery {
     private var result: FlutterResult?
     private var sink: FlutterEventSink?
     
-    // Song projection (to filter).
+    // Genre projection (to filter).
     private let genreProjection: [String?] = [
         "_id",
         "name"

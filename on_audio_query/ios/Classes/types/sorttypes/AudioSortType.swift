@@ -1,6 +1,6 @@
 import MediaPlayer
 
-public func checkSongSortType(sortType: Int) -> MPMediaGrouping {
+public func checkAudioSortType(sortType: Int) -> MPMediaGrouping {
     switch sortType {
     case 0:
         return MPMediaGrouping.title

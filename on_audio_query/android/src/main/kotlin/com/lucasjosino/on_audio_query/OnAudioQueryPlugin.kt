@@ -43,7 +43,7 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         private const val CHANNEL_NAME = "com.lucasjosino.on_audio_query"
 
         // Event channels name.
-        private const val SONGS_OBS_CHANNEL_NAME = "$CHANNEL_NAME/songs_observer"
+        private const val AUDIOS_OBS_CHANNEL_NAME = "$CHANNEL_NAME/audios_observer"
         private const val ALBUMS_OBS_CHANNEL_NAME = "$CHANNEL_NAME/albums_observer"
         private const val PLAYLISTS_OBS_CHANNEL_NAME = "$CHANNEL_NAME/playlists_observer"
         private const val ARTISTS_OBS_CHANNEL_NAME = "$CHANNEL_NAME/artists_observer"
@@ -63,7 +63,7 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private var binding: ActivityPluginBinding? = null
 
     // Observers
-    private var songsObserver: SongsObserver? = null
+    private var audiosObserver: AudiosObserver? = null
     private var albumsObserver: AlbumsObserver? = null
     private var playlistsObserver: PlaylistsObserver? = null
     private var artistsObserver: ArtistsObserver? = null
@@ -150,7 +150,7 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             "observersStatus" -> {
                 result.success(
                     hashMapOf(
-                        "songs_observer" to (songsObserver?.isRunning ?: false),
+                        "audios_observer" to (audiosObserver?.isRunning ?: false),
                         "albums_observer" to (albumsObserver?.isRunning ?: false),
                         "artists_observer" to (artistsObserver?.isRunning ?: false),
                         "playlists_observer" to (playlistsObserver?.isRunning ?: false),
@@ -193,8 +193,8 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         this.binding = null
 
         // Remove all event channel.
-        songsObserver?.onCancel(null)
-        songsObserver = null
+        audiosObserver?.onCancel(null)
+        audiosObserver = null
 
         albumsObserver?.onCancel(null)
         albumsObserver = null
@@ -216,10 +216,10 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     // TODO: Check if this setup consumes much memory.
     private fun setUpEventChannel(binaryMessenger: BinaryMessenger) {
-        // Songs channel.
-        val songsChannel = EventChannel(binaryMessenger, SONGS_OBS_CHANNEL_NAME)
-        songsObserver = SongsObserver(context)
-        songsChannel.setStreamHandler(songsObserver)
+        // Audios channel.
+        val audiosChannel = EventChannel(binaryMessenger, AUDIOS_OBS_CHANNEL_NAME)
+        audiosObserver = AudiosObserver(context)
+        audiosChannel.setStreamHandler(audiosObserver)
 
         // Albums channel.
         val albumsChannel = EventChannel(binaryMessenger, ALBUMS_OBS_CHANNEL_NAME)

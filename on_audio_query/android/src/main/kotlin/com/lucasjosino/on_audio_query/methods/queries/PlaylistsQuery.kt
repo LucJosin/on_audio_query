@@ -149,7 +149,7 @@ class PlaylistsQuery : ViewModel() {
                     playlistData[playlistMedia] = helper.loadPlaylistItem(playlistMedia, cursor)
                 }
 
-                // Count and add the number of songs for every playlist.
+                // Count and add the number of audios for every playlist.
                 val mediaCount = helper.getMediaCount(1, playlistData["_id"].toString(), resolver)
                 playlistData["num_of_songs"] = mediaCount
 

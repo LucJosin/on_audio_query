@@ -6,10 +6,10 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.provider.MediaStore
-import com.lucasjosino.on_audio_query.methods.queries.SongsQuery
+import com.lucasjosino.on_audio_query.methods.queries.AudiosQuery
 import io.flutter.plugin.common.EventChannel
 
-class SongsObserver(
+class AudiosObserver(
     private val context: Context,
 ) : ContentObserver(Handler(Looper.getMainLooper())), EventChannel.StreamHandler {
 
@@ -23,7 +23,7 @@ class SongsObserver(
     val isRunning: Boolean get() = pIsRunning
 
     // Main parameters
-    private val query: SongsQuery get() = SongsQuery()
+    private val query: AudiosQuery get() = AudiosQuery()
 
     private var sink: EventChannel.EventSink? = null
     private var args: Map<*, *>? = null
@@ -33,12 +33,12 @@ class SongsObserver(
 
     // This function will be 'called' everytime the MediaStore -> Audios change.
     override fun onChange(selfChange: Boolean) {
-        // We reuse the [querySongs] from [SongsQuery] and 'query' everytime some change is detected.
+        // We reuse the [queryAudios] from [AudiosQuery] and 'query' everytime some change is detected.
         query.init(context, sink = sink, args = args)
     }
 
     // This function will be 'called' everytime the Flutter [EventChannel] is called.
-    // [SongsObserver] event channel name: 'com.lucasjosino.on_audio_query/songs_observer'.
+    // [AudiosObserver] event channel name: 'com.lucasjosino.on_audio_query/audios_observer'.
     override fun onListen(arguments: Any?, events: EventChannel.EventSink?) {
         // Define the [sink] and [args]
         // The sink is used to define/send a event(change) or error.
@@ -48,7 +48,7 @@ class SongsObserver(
         // Register this class to observe the [MediaStore].
         context.contentResolver.registerContentObserver(URI, true, this)
 
-        // Define the [SongsObserver] as running.
+        // Define the [AudiosObserver] as running.
         pIsRunning = true
 
         // Send the initial data.

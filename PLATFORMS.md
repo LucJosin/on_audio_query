@@ -10,7 +10,7 @@ Here you'll see a extra information about every method/type etc..
   - [Playlist Methods](#playlist-methods)
   - [Others Methods](#others-methods)
 - [Sort Types](#sorttypes)
-  - [SongSortType](#songsorttype)
+  - [AudioSortType](#audiosorttype)
   - [AlbumSortType](#albumsorttype)
   - [ArtistSortType](#artistsorttype)
   - [PlaylistSortType](#playlistsorttype)
@@ -20,7 +20,7 @@ Here you'll see a extra information about every method/type etc..
 - [Artwork Types](#artworktype)
 - [Artwork Format Types](#artworkformat)
 - [Models](#models)
-  - [SongModel](#songmodel)
+  - [AudioModel](#audiomodel)
   - [AlbumModel](#albummodel)
   - [PlaylistModel](#playlistmodel)
   - [ArtistModel](#artistmodel)
@@ -81,7 +81,7 @@ Here you'll see a extra information about every method/type etc..
 
 ## SortTypes
 
-### SongSortType
+### AudioSortType
 
 |    Methods     | Android | IOS  | Web  |
 | :------------: | :-----: | :--: | :--: |

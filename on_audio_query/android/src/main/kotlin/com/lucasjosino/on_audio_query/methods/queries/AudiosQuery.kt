@@ -12,7 +12,7 @@ import com.lucasjosino.on_audio_query.controllers.PermissionController
 import com.lucasjosino.on_audio_query.methods.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkAudioType
 import com.lucasjosino.on_audio_query.types.checkAudiosUriType
-import com.lucasjosino.on_audio_query.types.sorttypes.checkSongSortType
+import com.lucasjosino.on_audio_query.types.sorttypes.checkAudioSortType
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -20,8 +20,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/** SongsQuery */
-class SongsQuery : ViewModel() {
+/** AudiosQuery */
+class AudiosQuery : ViewModel() {
 
     // Main parameters
     private val helper = QueryHelper()
@@ -32,10 +32,10 @@ class SongsQuery : ViewModel() {
     private lateinit var resolver: ContentResolver
     private lateinit var sortType: String
 
-    // Songs projection
+    // Audios projection
     // Ignore the [Data] deprecation because this plugin support older versions.
     @Suppress("DEPRECATION")
-    val songProjection: Array<String>
+    val audioProjection: Array<String>
         @SuppressLint("InlinedApi")
         get() : Array<String> {
             val tmpProjection = arrayListOf(
@@ -107,7 +107,7 @@ class SongsQuery : ViewModel() {
         val type: Map<Int, Int> = pArgs["type"] as Map<Int, Int>
 
         // Sort: Type and Order.
-        sortType = checkSongSortType(pSortType, pOrderType, pIgnoreCase)
+        sortType = checkAudioSortType(pSortType, pOrderType, pIgnoreCase)
 
         // Add a 'query' limit(if not null).
         if (pLimit != null) sortType += " LIMIT $pLimit"
@@ -122,7 +122,7 @@ class SongsQuery : ViewModel() {
         for ((id: Int, values: ArrayList<String>) in toQuery) {
             for (value in values) {
                 // The comparison type: contains
-                selection += songProjection[id] + " LIKE '%" + value + "%' " + "AND "
+                selection += audioProjection[id] + " LIKE '%" + value + "%' " + "AND "
             }
         }
 
@@ -130,7 +130,7 @@ class SongsQuery : ViewModel() {
         for ((id: Int, values: ArrayList<String>) in toRemove) {
             for (value in values) {
                 // The comparison type: contains
-                selection += songProjection[id] + " NOT LIKE '%" + value + "%' " + "AND "
+                selection += audioProjection[id] + " NOT LIKE '%" + value + "%' " + "AND "
             }
         }
 
@@ -168,36 +168,36 @@ class SongsQuery : ViewModel() {
         // Query everything in background for a better performance.
         viewModelScope.launch {
             // Start 'querying'.
-            val resultSongList: ArrayList<MutableMap<String, Any?>> = loadSongs()
+            val resultAudioList: ArrayList<MutableMap<String, Any?>> = loadAudios()
 
             // After loading the information, send the 'result'.
-            sink?.success(resultSongList)
-            result?.success(resultSongList)
+            sink?.success(resultAudioList)
+            result?.success(resultAudioList)
         }
     }
 
     //Loading in Background
-    private suspend fun loadSongs(): ArrayList<MutableMap<String, Any?>> =
+    private suspend fun loadAudios(): ArrayList<MutableMap<String, Any?>> =
         withContext(Dispatchers.IO) {
             // Setup the cursor with [uri], [projection] and [sortType].
-            val cursor = resolver.query(uri, songProjection, selection, null, sortType)
+            val cursor = resolver.query(uri, audioProjection, selection, null, sortType)
 
             // Empty list.
-            val songList: ArrayList<MutableMap<String, Any?>> = ArrayList()
+            val audioList: ArrayList<MutableMap<String, Any?>> = ArrayList()
 
-            // For each item(song) inside this "cursor", take one and "format"
+            // For each item(audio) inside this "cursor", take one and "format"
             // into a [Map<String, dynamic>].
             while (cursor != null && cursor.moveToNext()) {
                 val tempData: MutableMap<String, Any?> = HashMap()
                 for (audioMedia in cursor.columnNames) {
-                    tempData[audioMedia] = helper.loadSongItem(audioMedia, cursor)
+                    tempData[audioMedia] = helper.loadAudioItem(audioMedia, cursor)
                 }
 
                 //Get a extra information from audio, e.g: extension, uri, etc..
-                val tempExtraData = helper.loadSongExtraInfo(uri, tempData)
+                val tempExtraData = helper.loadAudioExtraInfo(uri, tempData)
                 tempData.putAll(tempExtraData)
 
-                songList.add(tempData)
+                audioList.add(tempData)
             }
 
             // Close cursor to avoid memory leaks.
@@ -205,7 +205,7 @@ class SongsQuery : ViewModel() {
 
             // After finish the "query", go back to the "main" thread(You can only call flutter
             // inside the main thread).
-            return@withContext songList
+            return@withContext audioList
         }
 }
 
@@ -214,7 +214,7 @@ class SongsQuery : ViewModel() {
 // * Query only audio > 60000 ms [1 minute]
 // Obs: I don't think is a good idea, some audio "Non music" have more than 1 minute
 //query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, MediaStore.Audio.Media.DURATION +
-// ">= 60000", null, checkSongSortType(sortType!!))
+// ">= 60000", null, checkAudioSortType(sortType!!))
 
 // * Query audio with limit, used for better performance in tests
 //MediaStore.Audio.Media.TITLE + " LIMIT 4"

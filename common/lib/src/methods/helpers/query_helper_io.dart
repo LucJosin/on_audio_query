@@ -101,7 +101,7 @@ class QueryHelper extends QueryHelperInterface {
   @override
   List<T> mediaFilter<T>(
     MediaFilter filter,
-    List<Map<String, Object?>> listOfSongs,
+    List<Map<String, Object?>> listOfAudios,
     List<String?> projection,
   ) {
     //
@@ -118,12 +118,13 @@ class QueryHelper extends QueryHelperInterface {
       //
       for (var value in values) {
         //
-        listOfSongs.removeWhere((song) {
+        listOfAudios.removeWhere((audio) {
           //
-          bool isProjectionValid = song.containsKey(projection[id]);
+          bool isProjectionValid = audio.containsKey(projection[id]);
 
           //
-          bool containsValue = (song[projection[id]] as String).contains(value);
+          bool containsValue =
+              (audio[projection[id]] as String).contains(value);
 
           //
           return isProjectionValid && !containsValue;
@@ -145,12 +146,13 @@ class QueryHelper extends QueryHelperInterface {
       //
       for (var value in values) {
         //
-        listOfSongs.removeWhere((song) {
+        listOfAudios.removeWhere((audio) {
           //
-          bool isProjectionValid = song.containsKey(projection[id]);
+          bool isProjectionValid = audio.containsKey(projection[id]);
 
           //
-          bool containsValue = (song[projection[id]] as String).contains(value);
+          bool containsValue =
+              (audio[projection[id]] as String).contains(value);
 
           //
           return isProjectionValid && containsValue;
@@ -161,13 +163,13 @@ class QueryHelper extends QueryHelperInterface {
     //
     switch (T) {
       case AudioModel:
-        return listOfSongs.map((e) => AudioModel(e)).toList() as List<T>;
+        return listOfAudios.map((e) => AudioModel(e)).toList() as List<T>;
       case AlbumModel:
-        return listOfSongs.map((e) => AlbumModel(e)).toList() as List<T>;
+        return listOfAudios.map((e) => AlbumModel(e)).toList() as List<T>;
       case ArtistModel:
-        return listOfSongs.map((e) => ArtistModel(e)).toList() as List<T>;
+        return listOfAudios.map((e) => ArtistModel(e)).toList() as List<T>;
       case GenreModel:
-        return listOfSongs.map((e) => GenreModel(e)).toList() as List<T>;
+        return listOfAudios.map((e) => GenreModel(e)).toList() as List<T>;
       default:
         return [];
     }

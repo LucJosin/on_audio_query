@@ -18,7 +18,7 @@ class QueryHelper extends QueryHelperInterface {
   @override
   List<T> mediaFilter<T>(
     MediaFilter filter,
-    List<Map<String, Object?>> listOfSongs,
+    List<Map<String, Object?>> listOfAudios,
     List<String?> projection,
   ) =>
       throw UnsupportedError('Stub Class');

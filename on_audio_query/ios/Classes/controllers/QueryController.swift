@@ -14,8 +14,8 @@ public class QueryController {
         // All necessary method to this plugin support both platforms, only playlists
         // are limited when using [IOS].
         switch call.method {
-        case "querySongs":
-            SongsQuery(call: call, result: result).querySongs()
+        case "queryAudios":
+            AudiosQuery(call: call, result: result).queryAudios()
         case "queryAlbums":
             AlbumsQuery(call: call, result: result).queryAlbums()
         case "queryArtists":

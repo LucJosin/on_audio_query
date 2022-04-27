@@ -22,8 +22,8 @@ import 'on_audio_query_platform_interface.dart';
 const String _channelName = 'com.lucasjosino.on_audio_query';
 const MethodChannel _channel = MethodChannel(_channelName);
 
-const EventChannel _songsObserverChannel = EventChannel(
-  '$_channelName/songs_observer',
+const EventChannel _audiosObserverChannel = EventChannel(
+  '$_channelName/audios_observer',
 );
 const EventChannel _albumsObserverChannel = EventChannel(
   '$_channelName/albums_observer',
@@ -47,7 +47,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   static final MediaFilter _defaultFilter = MediaFilter.init();
 
   /// Observers
-  Stream<List<AudioModel>>? _onSongsObserverChanged;
+  Stream<List<AudioModel>>? _onAudiosObserverChanged;
   Stream<List<AlbumModel>>? _onAlbumsObserverChanged;
   Stream<List<ArtistModel>>? _onArtistsObserverChanged;
   Stream<List<PlaylistModel>>? _onPlaylistsObserverChanged;
@@ -84,7 +84,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
     final List<dynamic> resultSongs = await _channel.invokeMethod(
       "querySongs",
       {
-        "sortType": filter.songSortType?.index,
+        "sortType": filter.audioSortType?.index,
         "orderType": filter.orderType.index,
         "uri": filter.uriType.index,
         "ignoreCase": filter.ignoreCase,
@@ -122,10 +122,10 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
       fixedMap[key.index] = value == true ? 1 : 0;
     });
 
-    // Invoke the observer and convert the result into a list of [SongModel].
-    _onSongsObserverChanged ??= _songsObserverChannel.receiveBroadcastStream(
+    // Invoke the observer and convert the result into a list of [AudioModel].
+    _onAudiosObserverChanged ??= _audiosObserverChannel.receiveBroadcastStream(
       {
-        "sortType": filter.songSortType?.index,
+        "sortType": filter.audioSortType?.index,
         "orderType": filter.orderType.index,
         "uri": filter.uriType.index,
         "ignoreCase": filter.ignoreCase,
@@ -141,7 +141,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
     );
 
     // Return the list.
-    return _onSongsObserverChanged!;
+    return _onAudiosObserverChanged!;
   }
 
   @override
@@ -381,9 +381,9 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
             (filter.artworkQuality != null && filter.artworkQuality! <= 100)
                 ? filter.artworkQuality
                 : 50,
-        "save": filter.cacheArtwork ?? true,
-        "onlyTemporarily": filter.cacheTemporarily ?? true,
-        "ignoreCached": filter.ignoreCached ?? false,
+        "cacheArtwork": filter.cacheArtwork ?? true,
+        "cacheTemporarily": filter.cacheTemporarily ?? true,
+        "overrideCache": filter.overrideCache ?? false,
       },
     ).then(
       (resultArtwork) => ArtworkModel(resultArtwork),

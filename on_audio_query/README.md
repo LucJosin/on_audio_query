@@ -157,7 +157,7 @@ All types of methods on this plugin:
 
 | Methods                | Parameters      | Return                |
 | ---------------------- | --------------- | --------------------- |
-| [`observeSongs`]()     | `(MediaFilter)` | `List<AudioModel>`    |
+| [`observeAudios`]()    | `(MediaFilter)` | `List<AudioModel>`    |
 | [`observeAlbums`]()    | `(MediaFilter)` | `List<AlbumModel>`    |
 | [`observeArtists`]()   | `(MediaFilter)` | `List<ArtistModel>`   |
 | [`observePlaylists`]() | `(MediaFilter)` | `List<PlaylistModel>` |
@@ -194,7 +194,7 @@ All types of methods on this plugin:
 ```dart
   Widget someOtherName() async {
     return QueryArtworkWidget(
-      id: <songId>,
+      id: <audioId>,
       type: ArtworkType.AUDIO,
     );
   }
@@ -254,7 +254,7 @@ Android `MediaStore` will be able to know this 'state'.
   someName() async {
     // DEFAULT: ArtworkFormat.JPEG, 200 and false
     Uint8List something = await _audioQuery.queryArtwork(
-        <songId>,
+        <audioId>,
         ArtworkType.AUDIO,
         ...,
       );

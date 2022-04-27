@@ -3,8 +3,7 @@
 part of sorts_controller;
 
 /// Defines the sort type used for [querySongs] and [queryAudios].
-@Deprecated('Deprecated after [3.0.0]. Use [AudioSortType] instead')
-enum SongSortType {
+enum AudioSortType {
   ///[TITLE] will return song list using [title] as sort param.
   TITLE,
 

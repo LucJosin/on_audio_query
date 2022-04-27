@@ -7,7 +7,7 @@ class ArtistsQuery {
     private var result: FlutterResult?
     private var sink: FlutterEventSink?
     
-    // Song projection (to filter).
+    // Artist projection (to filter).
     private let artistProjection: [String?] = [
         "_id",
         "artists",
@@ -42,7 +42,7 @@ class ArtistsQuery {
         
         // We don't need to define a sortType here. [IOS] only support
         // the [Artist]. The others will be sorted "manually" using
-        // [formatSongList] before sending to Dart.
+        // [formatAudioList] before sending to Dart.
         
         // Request permission status from the 'main' method.
         let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
@@ -148,10 +148,10 @@ class ArtistsQuery {
         //
         let albums = albumsCursor.collections
 
-        // Normally when the song doesn't have a [album], will be defined as 'nil' or 'unknown',
+        // Normally when the audio doesn't have a [album], will be defined as 'nil' or 'unknown',
         // So, we'll 'filter' the [albums], removing this 'non-albums'.
         //
-        // If multiple songs does have the same [album], will be count only as 1.
+        // If multiple audios does have the same [album], will be count only as 1.
         for album in albums! {
             // Use the [Title] as parameter.
             let itemAlbum = album.items[0].albumTitle

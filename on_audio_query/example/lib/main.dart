@@ -102,7 +102,7 @@ class _MainState extends State<Main> {
             ),
             // This option will open a 'dynamic' page.
             //
-            // Everytime something change, e.g: add or remove songs, will 'trigger'
+            // Everytime something change, e.g: add or remove audios, will 'trigger'
             // a listener and update the UI
             //
             // - Uses the 'StreamBuilder' widget.

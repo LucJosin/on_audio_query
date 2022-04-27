@@ -1,14 +1,14 @@
 import Flutter
 import MediaPlayer
 
-class SongsQuery {
+class AudiosQuery {
     // Main parameters
     private var args: [String: Any]
     private var result: FlutterResult?
     private var sink: FlutterEventSink?
     
-    // Song projection (to filter).
-    private let songProjection: [String?] = [
+    // Audio projection (to filter).
+    private let audioProjection: [String?] = [
         "_id",
         "_data",
         "_display_name",
@@ -47,7 +47,7 @@ class SongsQuery {
         self.result = result
     }
     
-    func querySongs() {
+    func queryAudios() {
         // The sortType. If 'nil', will be set as [Title].
         let sortType = args["sortType"] as? Int ?? 0
         
@@ -64,9 +64,9 @@ class SongsQuery {
         ))
         
         // Using native sort from [IOS] you can only use the [Title], [Album] and
-        // [Artist]. The others will be sorted 'manually' using [formatSongList] before
+        // [Artist]. The others will be sorted 'manually' using [formatAudioList] before
         // sending to Dart.
-        cursor.groupingType = checkSongSortType(sortType: sortType)
+        cursor.groupingType = checkAudioSortType(sortType: sortType)
         
         // Request permission status from the 'main' method.
         let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
@@ -130,26 +130,26 @@ class SongsQuery {
         
         // Query everything in background for a better performance.
         DispatchQueue.global(qos: .userInitiated).async {
-            var listOfSongs: [[String: Any?]] = Array()
+            var listOfAudios: [[String: Any?]] = Array()
             
             // Define the 'query' limit.
             let limit: Int? = self.args["limit"] as? Int
             
-            // For each item(song) inside this "cursor", take one and "format"
+            // For each item(audio) inside this "cursor", take one and "format"
             // into a [Map<String, dynamic>], all keys are based on [Android]
             // platforms so, if you change some key, will have to change the [Android] too.
-            for song in cursorItems {
+            for audio in cursorItems {
                 // When list count reach the [limit]. Break the loop.
                 //
                 // If [limit] value is 'nil', continue.
-                if listOfSongs.count == limit {
+                if listOfAudios.count == limit {
                     break
                 }
                 
-                // If the song file don't has a assetURL, is a Cloud item.
-                if !song.isCloudItem && song.assetURL != nil {
-                    let songData = self.loadSongItem(song: song)
-                    listOfSongs.append(songData)
+                // If the audio file don't has a assetURL, is a Cloud item.
+                if !audio.isCloudItem && audio.assetURL != nil {
+                    let audioData = self.loadAudioItem(audio: audio)
+                    listOfAudios.append(audioData)
                 }
             }
             
@@ -158,8 +158,8 @@ class SongsQuery {
             let toRemove = self.args["toRemove"] as! [Int: [String]]
             
             // 'Build' the filter.
-            listOfSongs = listOfSongs.mediaFilter(
-                mediaProjection: self.songProjection,
+            listOfAudios = listOfAudios.mediaFilter(
+                mediaProjection: self.audioProjection,
                 toQuery: toQuery,
                 toRemove: toRemove
             )
@@ -168,7 +168,7 @@ class SongsQuery {
             // inside the main thread).
             DispatchQueue.main.async {
                 // Here we'll check the "custom" sort and define a order to the list.
-                let finalList = self.formatSongList(allSongs: listOfSongs)
+                let finalList = self.formatAudioList(allAudios: listOfAudios)
                 
                 // After loading the information, send the 'result'.
                 self.sink?(finalList)
@@ -177,37 +177,37 @@ class SongsQuery {
         }
     }
     
-    private func loadSongItem(song: MPMediaItem) -> [String: Any?] {
-        let fileExt = song.assetURL?.pathExtension ?? ""
-        let sizeInBytes = song.value(forProperty: "fileSize") as? Int
+    private func loadAudioItem(audio: MPMediaItem) -> [String: Any?] {
+        let fileExt = audio.assetURL?.pathExtension ?? ""
+        let sizeInBytes = audio.value(forProperty: "fileSize") as? Int
         return [
-            "_id": song.persistentID,
-            "_data": song.assetURL?.absoluteString,
-            "_uri": song.assetURL?.absoluteString,
-            "_display_name": "\(song.artist ?? "") - \(song.title ?? "").\(fileExt)",
-            "_display_name_wo_ext": "\(song.artist ?? "") - \(song.title ?? "")",
+            "_id": audio.persistentID,
+            "_data": audio.assetURL?.absoluteString,
+            "_uri": audio.assetURL?.absoluteString,
+            "_display_name": "\(audio.artist ?? "") - \(audio.title ?? "").\(fileExt)",
+            "_display_name_wo_ext": "\(audio.artist ?? "") - \(audio.title ?? "")",
             "_size": sizeInBytes,
             "audio_id": nil,
-            "album": song.albumTitle,
-            "album_id": song.albumPersistentID,
-            "artist": song.artist,
-            "artist_id": song.artistPersistentID,
-            "genre": song.genre,
-            "genre_id": song.genrePersistentID,
-            "bookmark": Int(song.bookmarkTime),
-            "composer": song.composer,
-            "date_added": Int(song.dateAdded.timeIntervalSince1970),
+            "album": audio.albumTitle,
+            "album_id": audio.albumPersistentID,
+            "artist": audio.artist,
+            "artist_id": audio.artistPersistentID,
+            "genre": audio.genre,
+            "genre_id": audio.genrePersistentID,
+            "bookmark": Int(audio.bookmarkTime),
+            "composer": audio.composer,
+            "date_added": Int(audio.dateAdded.timeIntervalSince1970),
             "date_modified": 0,
-            "duration": Int(song.playbackDuration * 1000),
-            "title": song.title,
-            "track": song.albumTrackNumber,
+            "duration": Int(audio.playbackDuration * 1000),
+            "title": audio.title,
+            "track": audio.albumTrackNumber,
             "file_extension": fileExt,
         ]
     }
     
-    private func formatSongList(allSongs: [[String: Any?]]) -> [[String: Any?]] {
-        // Define a copy of all songs.
-        var allSongsCopy = allSongs
+    private func formatAudioList(allAudios: [[String: Any?]]) -> [[String: Any?]] {
+        // Define a copy of all audios.
+        var allAudiosCopy = allAudios
         
         // Define all 'basic' filters.
         let order = args["orderType"] as? Int
@@ -217,23 +217,23 @@ class SongsQuery {
         // Sort the list 'manually'.
         switch sortType {
         case 3:
-            allSongsCopy.sort { (val1, val2) in
+            allAudiosCopy.sort { (val1, val2) in
                 (val1["duration"] as! Double) > (val2["duration"] as! Double)
             }
         case 4:
-            allSongsCopy.sort { (val1, val2) in
+            allAudiosCopy.sort { (val1, val2) in
                 (val1["date_added"] as! Int) > (val2["date_added"] as! Int)
             }
         case 5:
-            allSongsCopy.sort { (val1, val2) in
+            allAudiosCopy.sort { (val1, val2) in
                 (val1["_size"] as! Int) > (val2["_size"] as! Int)
             }
         case 6:
-            allSongsCopy.sort { (val1, val2) in
+            allAudiosCopy.sort { (val1, val2) in
                 ((val1["_display_name"] as! String).isCase(ignoreCase: ignoreCase)) > ((val2["_display_name"] as! String).isCase(ignoreCase: ignoreCase))
             }
         case 7:
-            allSongsCopy.sort { (val1, val2) in
+            allAudiosCopy.sort { (val1, val2) in
                 (val1["track"] as! Int) > (val2["track"] as! Int)
             }
         default:
@@ -241,6 +241,6 @@ class SongsQuery {
         }
         
         // The order value is [1], reverse the list.
-        return order == 1 ? allSongsCopy.reversed() : allSongsCopy
+        return order == 1 ? allAudiosCopy.reversed() : allAudiosCopy
     }
 }

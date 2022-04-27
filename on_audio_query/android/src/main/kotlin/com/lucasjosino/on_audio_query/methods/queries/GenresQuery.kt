@@ -144,7 +144,7 @@ class GenresQuery : ViewModel() {
                     genreData[genreMedia] = helper.loadGenreItem(genreMedia, cursor)
                 }
 
-                // Count and add the number of songs for every genre.
+                // Count and add the number of audios for every genre.
                 val mediaCount = helper.getMediaCount(0, genreData["_id"].toString(), resolver)
                 genreData["num_of_songs"] = mediaCount
 

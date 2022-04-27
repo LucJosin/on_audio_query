@@ -58,9 +58,9 @@ extension Array where Element == [String: Any?] {
             // remove all that doesn't match.
             for value in values {
                 // Remove all items.
-                copyOfMediaList.removeAll(where: { songs in
+                copyOfMediaList.removeAll(where: { audios in
                     // Check if contains.
-                    return songs.contains(where: { key, val in
+                    return audios.contains(where: { key, val in
                         // If the [key] and [projection] match, check if the value *contains*.
                         // If so, keep the 'media'. If not, remove it.
                         return key == mediaProjection[id] && !String(describing: val).contains(value)
@@ -81,9 +81,9 @@ extension Array where Element == [String: Any?] {
             // remove all that does match.
             for value in values {
                 // Remove all items.
-                copyOfMediaList.removeAll(where: { songs in
+                copyOfMediaList.removeAll(where: { audios in
                     // Check if contains.
-                    return songs.contains(where: { key, val in
+                    return audios.contains(where: { key, val in
                         // If the [key] and [projection] match, check if the value *contains*.
                         // If so, remove the 'media'. If not, keep it.
                         return key == mediaProjection[id] && String(describing: val).contains(value)

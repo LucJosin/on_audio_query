@@ -1,9 +1,9 @@
 import MediaPlayer
 
-class SongsObserver : NSObject, FlutterStreamHandler {
+class AudiosObserver : NSObject, FlutterStreamHandler {
     
     // Main parameters
-    private var query: SongsQuery?
+    private var query: AudiosQuery?
     private var sink: FlutterEventSink?
     private let library = MPMediaLibrary.default()
     private let notification = NotificationCenter.default
@@ -21,7 +21,7 @@ class SongsObserver : NSObject, FlutterStreamHandler {
         sink = events
         
         // Setup the 'query' class.
-        query = SongsQuery(
+        query = AudiosQuery(
             sink: self.sink,
             args: arguments as? [String: Any]
         )
@@ -35,15 +35,15 @@ class SongsObserver : NSObject, FlutterStreamHandler {
             // Will be 'called' everytime the MPMediaLibrary change.
             // TODO: Currently will 'fire' any change. We need detect only 'audios' change.
             notification.addObserver(forName: .MPMediaLibraryDidChange, object: nil, queue: nil, using: { _ in
-                self.query?.querySongs()
+                self.query?.queryAudios()
             })
         }
         
-        // Define the [SongsObserver] as running.
+        // Define the [AudiosObserver] as running.
         pIsRunning = true
         
         // Send the initial data.
-        query?.querySongs()
+        query?.queryAudios()
         
         // No errors.
         return nil

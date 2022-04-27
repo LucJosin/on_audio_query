@@ -52,7 +52,7 @@ class ArtworkQuery : ViewModel() {
     fun queryArtwork(context: Context, result: MethodChannel.Result, call: MethodCall) {
         resolver = context.contentResolver
 
-        // The [id] of the song/album.
+        // The [id] of the audio/album.
         id = call.argument<Number>("id")!!
 
         // If the [size] is null, will be [100].
@@ -69,7 +69,7 @@ class ArtworkQuery : ViewModel() {
         format = checkArtworkFormat(call.argument<Int>("format")!!)
 
         // Check uri:
-        //   * [0]: Song.
+        //   * [0]: Audio.
         //   * [1]: Album.
         //   * [2]: Playlist.
         //   * [3]: Artist.
@@ -133,7 +133,7 @@ class ArtworkQuery : ViewModel() {
             // Try / Catch to avoid problems.
             try {
                 // If [type] is 2, 3 or 4, we need to 'get' the first item from playlist or artist.
-                // We'll use the first artist song to 'simulate' the artwork.
+                // We'll use the first artist audio to 'simulate' the artwork.
                 //
                 // Type:
                 //   * [2]: Playlist.
@@ -161,7 +161,7 @@ class ArtworkQuery : ViewModel() {
             // else:
             //   * Load the first [item] from [album] using the [id] as filter.
             //
-            // If [item] return null, no song/album has found, just return null.
+            // If [item] return null, no audio/album has found, just return null.
             val item = helper.loadFirstItem(type, id, resolver) ?: return@withContext null
             try {
                 // I tried both [_data] and [_uri], none of them work.

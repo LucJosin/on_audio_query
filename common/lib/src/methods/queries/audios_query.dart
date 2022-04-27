@@ -103,12 +103,12 @@ class AudiosQuery {
     //    return v1!.compareTo(v2!);
     //  });
     // ```
-    switch (filter.songSortType) {
-      case SongSortType.TITLE:
+    switch (filter.audioSortType) {
+      case AudioSortType.TITLE:
         _audios.sort((v1, v2) => v1.title.compareTo(v2.title));
         break;
 
-      case SongSortType.ARTIST:
+      case AudioSortType.ARTIST:
         _audios.sort(
           (v1, v2) => v1.artist.orEmpty
               .isCase(
@@ -121,7 +121,7 @@ class AudiosQuery {
         _audios.sort((v1, v2) => v1.artist == null ? 1 : 0);
         break;
 
-      case SongSortType.ALBUM:
+      case AudioSortType.ALBUM:
         _audios.sort(
           (v1, v2) => v1.album.orEmpty
               .isCase(
@@ -133,7 +133,7 @@ class AudiosQuery {
         );
         break;
 
-      // case SongSortType.DURATION:
+      // case AudioSortType.DURATION:
       //   audios.sort((v1, v2) {
       //     if (v1.duration == null && v2.duration == null) return -1;
       //     if (v1.duration == null && v2.duration != null) return 1;
@@ -142,11 +142,11 @@ class AudiosQuery {
       //   });
       //   break;
 
-      case SongSortType.SIZE:
+      case AudioSortType.SIZE:
         _audios.sort((v1, v2) => v1.size.compareTo(v2.size));
         break;
 
-      case SongSortType.DISPLAY_NAME:
+      case AudioSortType.DISPLAY_NAME:
         _audios.sort(
           (v1, v2) => v1.displayName
               .isCase(
