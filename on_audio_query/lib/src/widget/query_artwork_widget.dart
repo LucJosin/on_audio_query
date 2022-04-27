@@ -158,14 +158,38 @@ class QueryArtworkWidget extends StatelessWidget {
   /// * If [keepOldArtwork] is null, will be set to [false].
   final bool? keepOldArtwork;
 
-  /// TODO: Add Docs
+  /// Used to define if artwork should be cached inside the app support directory.
+  ///
+  /// Note: This parameter will **ONLY** be valid on `Windows` or `IOS` platforms.
+  ///
+  /// Important:
+  ///
+  /// * [cacheArtwork] default value is [true].
   final bool? cacheArtwork;
 
-  /// TODO: Add Docs
+  /// Used to define if artwork should be cached **temporarily** inside the
+  /// app temp directory.
+  ///
+  /// Note: This parameter will **ONLY** be valid on `Windows` or `IOS` platforms.
+  ///
+  /// Note²: This parameter will **ONLY** be used when [cacheArtwork] is true.
+  ///
+  /// Important:
+  ///
+  /// * [cacheTemporarily] default value is [true].
   final bool? cacheTemporarily;
 
-  /// TODO: Add Docs
-  final bool? ignoreCache;
+  /// Used to define if artwork should be overridden if already exists. This will
+  /// replace the current artwork with a new one.
+  ///
+  /// Note: This parameter will **ONLY** be valid on `Windows` or `IOS` platforms.
+  ///
+  /// Note²: This parameter will **ONLY** be used when [cacheArtwork] is true.
+  ///
+  /// Important:
+  ///
+  /// * [overrideCache] default value is [false].
+  final bool? overrideCache;
 
   /// Used to define a Widget when audio/song don't return any artwork.
   ///
@@ -282,7 +306,7 @@ class QueryArtworkWidget extends StatelessWidget {
     this.keepOldArtwork,
     this.cacheArtwork,
     this.cacheTemporarily,
-    this.ignoreCache,
+    this.overrideCache,
     this.nullArtworkWidget,
     this.errorBuilder,
     this.frameBuilder,
@@ -314,7 +338,7 @@ class QueryArtworkWidget extends StatelessWidget {
           artworkQuality: quality ?? 50,
           cacheArtwork: cacheArtwork ?? true,
           cacheTemporarily: cacheTemporarily ?? true,
-          ignoreCached: ignoreCache ?? false,
+          overrideCache: overrideCache ?? false,
         ),
       ),
       builder: (context, item) {
