@@ -17,11 +17,11 @@ class ArtworkQuery {
 
   ///
   Future<ArtworkModel?> queryArtwork(
-    int id,
     List<AudioModel> audios,
-    ArtworkType type, [
+    int id,
+    ArtworkType type, {
     MediaFilter? filter,
-  ]) async {
+  }) async {
     //
     filter ??= _defaultFilter;
 

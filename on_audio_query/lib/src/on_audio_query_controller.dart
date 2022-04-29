@@ -12,7 +12,6 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 =============
 */
 
-import 'package:flutter/foundation.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
 import 'methods/queries/albums_query.dart';
@@ -129,7 +128,9 @@ class OnAudioQuery {
   Future<List<AudioModel>> querySongs({
     MediaFilter? filter,
     bool fromAsset = false,
+    bool fromAppDir = false,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
+        // ignore: deprecated_member_use
         SongSortType? sortType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         OrderType? orderType,
@@ -137,9 +138,14 @@ class OnAudioQuery {
         UriType? uriType,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
         bool? ignoreCase,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead") String? path,
+    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
+        String? path,
   }) async {
-    return queryAudios(filter: filter, fromAsset: fromAsset);
+    return queryAudios(
+      filter: filter,
+      fromAsset: fromAsset,
+      fromAppDir: fromAppDir,
+    );
   }
 
   /// Used to return audios info based in [AudioModel].
@@ -184,7 +190,7 @@ class OnAudioQuery {
     bool fromAppDir = false,
   }) async {
     //
-    if (fromAsset || fromAppDir || kIsWeb) {
+    if (fromAsset || fromAppDir) {
       return _audiosQuery.queryAudios(
         filter: filter,
         fromAsset: fromAsset,
@@ -239,8 +245,9 @@ class OnAudioQuery {
         bool? ignoreCase,
   }) async {
     //
-    if (fromAsset || fromAppDir || kIsWeb) {
+    if (fromAsset || fromAppDir) {
       return _albumsQuery.queryAlbums(
+        await _audiosQuery.queryAudios(),
         filter: filter,
         fromAsset: fromAsset,
         fromAppDir: fromAppDir,
@@ -294,8 +301,9 @@ class OnAudioQuery {
         bool? ignoreCase,
   }) async {
     //
-    if (fromAsset || fromAppDir || kIsWeb) {
+    if (fromAsset || fromAppDir) {
       return _artistsQuery.queryArtists(
+        await _audiosQuery.queryAudios(),
         filter: filter,
         fromAsset: fromAsset,
         fromAppDir: fromAppDir,
@@ -391,7 +399,7 @@ class OnAudioQuery {
         bool? ignoreCase,
   }) async {
     //
-    if (fromAsset || fromAppDir || kIsWeb) {
+    if (fromAsset || fromAppDir) {
       return _genresQuery.queryGenres(
         filter: filter,
         fromAsset: fromAsset,

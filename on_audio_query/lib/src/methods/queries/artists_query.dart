@@ -14,6 +14,9 @@ class ArtistsQuery {
   // Default filter.
   final MediaFilter _defaultFilter = MediaFilter.forArtists();
 
+  //
+  List<AudioModel> _audios = [];
+
   // Artist projection.
   List<String?> artistProjection = [
     "_id",
@@ -23,13 +26,17 @@ class ArtistsQuery {
   ];
 
   /// Method used to "query" all the artists and their informations.
-  Future<List<ArtistModel>> queryArtists({
+  Future<List<ArtistModel>> queryArtists(
+    List<AudioModel> audios, {
     MediaFilter? filter,
     bool? fromAsset,
     bool? fromAppDir,
   }) async {
     // If the parameters filter is null, use the default filter.
     filter ??= _defaultFilter;
+
+    //
+    _audios = audios;
 
     // Retrive all (or limited) files path.
     List<Map<String, Object>> instances = await _helper.getFiles(
@@ -160,29 +167,23 @@ class ArtistsQuery {
   }
 
   Future<Map<String, Object?>> _formatArtist(Map artist, String data) async {
-    // TODO: 'number_of_albums' and 'number_of_tracks'
-    // AudiosQuery query = AudiosQuery();
+    // Get the number of audios from a artist.
+    int numOfAudios = _audios.where((audio) {
+      //
+      if (audio.artist != null && audio.artist!.isNotEmpty) {
+        return audio.artist! == artist["Artist"];
+      }
 
-    //
-    // var audios = await query.queryAudios(
-    //   filter: MediaFilter.forAudios(toQuery: {
-    //     MediaColumns.Artist.ARTIST: [artist["Artist"]]
-    //   }),
-    // );
-
-    // //
-    // var albums = await query.queryAudios(
-    //   filter: MediaFilter.forAudios(toQuery: {
-    //     MediaColumns.Album.ARTIST: [artist["Artist"]]
-    //   }),
-    // );
+      //
+      return false;
+    }).length;
 
     //
     return {
       "_id": "${artist["Artist"]}".generateId(),
       "artist": artist["Artist"],
       // "number_of_albums": albums.length,
-      // "number_of_tracks": audios.length,
+      "number_of_tracks": numOfAudios,
     };
   }
 }

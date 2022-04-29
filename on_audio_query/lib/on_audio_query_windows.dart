@@ -77,6 +77,7 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     bool? fromAppDir,
   }) async {
     return await _albumsQuery.queryAlbums(
+      _audiosQuery.listOfAudios,
       filter: filter,
       fromAsset: fromAsset,
       fromAppDir: fromAppDir,
@@ -90,6 +91,7 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     bool? fromAppDir,
   }) async {
     return await _artistsQuery.queryArtists(
+      _audiosQuery.listOfAudios,
       filter: filter,
       fromAsset: fromAsset,
       fromAppDir: fromAppDir,
@@ -116,10 +118,10 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     MediaFilter? filter,
   }) async {
     return await _artworkQuery.queryArtwork(
-      id,
       _audiosQuery.listOfAudios,
+      id,
       type,
-      filter,
+      filter: filter,
     );
   }
 

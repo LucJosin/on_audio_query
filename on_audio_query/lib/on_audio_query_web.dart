@@ -42,17 +42,25 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
 
   @override
   Future<List<AlbumModel>> queryAlbums({MediaFilter? filter}) async {
-    return _albumsQuery.queryAlbums(filter: filter);
+    return _albumsQuery.queryAlbums(
+      _audiosQuery.listOfAudios,
+      filter: filter,
+    );
   }
 
   @override
   Future<List<ArtistModel>> queryArtists({MediaFilter? filter}) async {
-    return _artistsQuery.queryArtists(filter: filter);
+    return _artistsQuery.queryArtists(
+      _audiosQuery.listOfAudios,
+      filter: filter,
+    );
   }
 
   @override
   Future<List<GenreModel>> queryGenres({MediaFilter? filter}) async {
-    return _genresQuery.queryGenres(filter: filter);
+    return _genresQuery.queryGenres(
+      filter: filter,
+    );
   }
 
   // @override
