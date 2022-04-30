@@ -64,7 +64,9 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     MediaFilter? filter,
   }) async* {
     // Setup the observer.
-    await _audiosObserver.startObserver();
+    await _audiosObserver.startObserver({
+      'query': _audiosQuery,
+    });
 
     // Return the 'stream'.
     yield* _audiosObserver.stream;
@@ -135,5 +137,10 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
         'genres_observer': false,
       }),
     );
+  }
+
+  bool cancelObservers() {
+    _audiosObserver.stopObserver();
+    return true;
   }
 }

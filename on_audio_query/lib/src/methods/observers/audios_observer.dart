@@ -11,10 +11,10 @@ class AudiosObserver implements ObserverInterface {
   final QueryHelper _helper = QueryHelper();
 
   // Query
-  final AudiosQuery _query = AudiosQuery();
+  late AudiosQuery _query;
 
   //
-  final StreamController<List<AudioModel>> _controller = StreamController();
+  StreamController<List<AudioModel>>? _controller;
 
   //
   StreamSubscription<FileSystemEvent>? _toWatchStream;
@@ -22,16 +22,28 @@ class AudiosObserver implements ObserverInterface {
   // [Internal] variable to detect when the observer is running or not.
   bool _isRunning = false;
 
-  //
+  @override
+  Stream<List<AudioModel>> get stream {
+    //
+    if (_controller == null) throw NullThrownError();
+
+    //
+    return _controller!.stream;
+  }
+
   @override
   bool get isRunning => _isRunning;
 
-  //
   @override
-  Stream<List<AudioModel>> get stream => _controller.stream;
+  Future<Stream<List<AudioModel>>> startObserver([
+    Map<String, dynamic>? args,
+  ]) async {
+    //
+    _controller ??= StreamController<List<AudioModel>>.broadcast(
+      onListen: onChange,
+      onCancel: stopObserver,
+    );
 
-  @override
-  Future<void> startObserver([Map<String, dynamic>? args]) async {
     //
     bool followDir = args?["followDir"] ?? true;
 
@@ -41,6 +53,9 @@ class AudiosObserver implements ObserverInterface {
     //
     if (!_isRunning) {
       //
+      _query = args?['query'] ?? AudiosQuery();
+
+      //
       Directory dirToWatch;
 
       //
@@ -48,9 +63,11 @@ class AudiosObserver implements ObserverInterface {
 
       //
       if (!await dirToWatch.exists()) {
-        _controller.addError(NullThrownError());
+        //
+        _controller?.addError(NullThrownError());
+
+        //
         stopObserver();
-        return;
       }
 
       //
@@ -59,8 +76,8 @@ class AudiosObserver implements ObserverInterface {
       //
       _toWatchStream = toWatch.listen(
         (_) => onChange(),
-        onError: (error) => onError(error),
-        cancelOnError: true,
+        onError: (error) => _controller!.addError(error),
+        cancelOnError: false,
       );
 
       //
@@ -68,36 +85,43 @@ class AudiosObserver implements ObserverInterface {
     }
 
     //
-    _controller.add(await _query.queryAudios());
+    _controller?.add(await _query.queryAudios());
+
+    return _controller!.stream;
   }
 
   @override
   void onChange() async {
     //
-    if (_controller.isClosed) {
+    if (_controller == null) {
       stopObserver();
       return;
     }
 
     //
-    if (_controller.isPaused) return;
+    if (_controller!.isClosed) {
+      stopObserver();
+      return;
+    }
 
     //
-    _controller.add(await _query.queryAudios());
+    if (_controller!.isPaused) return;
+
+    //
+    _controller!.add(await _query.queryAudios());
   }
 
   @override
-  void onError(dynamic error) async {
-    _controller.addError(error);
-    stopObserver();
-  }
-
-  @override
-  void stopObserver() {
+  void stopObserver() async {
     //
     _isRunning = false;
-    _controller.close();
-    _toWatchStream?.cancel();
+
+    //
+    await _controller?.close();
+    await _toWatchStream?.cancel();
+
+    //
+    _controller = null;
     _toWatchStream = null;
   }
 }

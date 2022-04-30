@@ -10,10 +10,11 @@ class QueryHelper extends QueryHelperInterface {
   static final String _userDir = '${Platform.environment["USERPROFILE"]}';
 
   ///
-  static Directory get _defaultDirectory => Directory('$_userDir\\Music');
+  static Directory get _defaultDirectory =>
+      Directory('$_userDir\\Desktop\\Music');
 
   ///
-  final String defaultMusicPath = '$_userDir\\Music';
+  final String defaultMusicPath = '$_userDir\\Desktop\\Music';
 
   ///
   List<String> get paths => _paths;

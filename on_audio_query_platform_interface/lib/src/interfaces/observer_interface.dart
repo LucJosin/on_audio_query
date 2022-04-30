@@ -7,14 +7,11 @@ abstract class ObserverInterface {
   Stream<dynamic> get stream;
 
   ///
-  void startObserver(Map<String, dynamic> args) {}
+  void startObserver(Map<String, dynamic> args);
 
   ///
-  void onChange() {}
+  void onChange();
 
   ///
-  void onError(dynamic error) {}
-
-  ///
-  void stopObserver() {}
+  void stopObserver();
 }
