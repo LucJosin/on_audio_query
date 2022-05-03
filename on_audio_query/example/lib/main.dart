@@ -17,7 +17,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:flutter/foundation.dart';
-import 'package:on_audio_query_example/src/observer/observe_songs.dart';
+import 'package:on_audio_query_example/src/observer/observe_audios.dart';
 import 'package:on_audio_query_example/src/query/query_songs.dart';
 
 void main() {
@@ -110,7 +110,7 @@ class _MainState extends State<Main> {
             GestureDetector(
               onTap: () => Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (_) => const ObserveSongs(),
+                  builder: (_) => const ObserveAudios(),
                 ),
               ),
               child: Container(

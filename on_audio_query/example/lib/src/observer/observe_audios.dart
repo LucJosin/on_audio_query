@@ -18,14 +18,14 @@ import 'package:on_audio_query/on_audio_query.dart';
 
 import '../widgets/dialog_widget.dart';
 
-class ObserveSongs extends StatefulWidget {
-  const ObserveSongs({Key? key}) : super(key: key);
+class ObserveAudios extends StatefulWidget {
+  const ObserveAudios({Key? key}) : super(key: key);
 
   @override
-  ObserveSongsState createState() => ObserveSongsState();
+  ObserveAudiosState createState() => ObserveAudiosState();
 }
 
-class ObserveSongsState extends State<ObserveSongs> {
+class ObserveAudiosState extends State<ObserveAudios> {
   final OnAudioQuery _audioQuery = OnAudioQuery();
 
   @override
@@ -72,8 +72,8 @@ class ObserveSongsState extends State<ObserveSongs> {
           // toQuery: const {},
           // toRemove: const {},
           // type: const {AudioType.IS_MUSIC : true},
-          stream: _audioQuery.observeSongs(
-            filter: MediaFilter.forSongs(
+          stream: _audioQuery.observeAudios(
+            filter: MediaFilter.forAudios(
               limit: 50, // Debug
             ),
           ),
