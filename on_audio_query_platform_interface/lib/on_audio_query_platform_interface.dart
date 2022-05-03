@@ -86,7 +86,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   }
 
   /// Used to observer(listen) the songs.
-  Stream<List<AudioModel>> observeSongs({
+  Stream<List<AudioModel>> observeAudios({
     MediaFilter? filter,
   }) {
     throw UnimplementedError('observeSongs() has not been implemented.');

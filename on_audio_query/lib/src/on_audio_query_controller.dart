@@ -214,8 +214,8 @@ class OnAudioQuery {
   /// | `✔️` | `✔️` | `❌` | `✔️` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Stream<List<AudioModel>> observeSongs({MediaFilter? filter}) {
-    return platform.observeSongs(filter: filter);
+  Stream<List<AudioModel>> observeAudios({MediaFilter? filter}) {
+    return platform.observeAudios(filter: filter);
   }
 
   /// Used to return albums info.
