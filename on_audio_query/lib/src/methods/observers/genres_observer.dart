@@ -4,21 +4,21 @@ import 'dart:io';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
 import '/src/methods/helpers/query_helper_io.dart';
-import '/src/methods/queries/audios_query.dart';
+import '/src/methods/queries/genres_query.dart';
 
 ///
-class AudiosObserver implements ObserverInterface {
+class GenresObserver implements ObserverInterface {
   // Helper
   final QueryHelper _helper = QueryHelper();
 
   // Filter
-  MediaFilter _filter = MediaFilter.forAudios();
+  MediaFilter _filter = MediaFilter.forGenres();
 
-  // Query
-  late AudiosQuery _query;
+  // Queries
+  final GenresQuery _genresQuery = GenresQuery();
 
   // Stream controller.
-  StreamController<List<AudioModel>>? _controller;
+  StreamController<List<GenreModel>>? _controller;
 
   // Directory watcher.
   StreamSubscription<FileSystemEvent>? _toWatchStream;
@@ -27,7 +27,7 @@ class AudiosObserver implements ObserverInterface {
   bool _isRunning = false;
 
   @override
-  Stream<List<AudioModel>> get stream {
+  Stream<List<GenreModel>> get stream {
     // If [isRunning] is false or the method [startObserver] was never called
     // throw a [NullThrownError].
     if (!_isRunning || _controller == null) {
@@ -44,7 +44,7 @@ class AudiosObserver implements ObserverInterface {
   @override
   Future<void> startObserver([Map<String, dynamic>? args]) async {
     // If null, Initialize the [_controller].
-    _controller ??= StreamController<List<AudioModel>>.broadcast(
+    _controller ??= StreamController<List<GenreModel>>.broadcast(
       onListen: onChange,
       onCancel: stopObserver,
     );
@@ -57,9 +57,6 @@ class AudiosObserver implements ObserverInterface {
 
     // If [isRunning] is false, setup the listener.
     if (!_isRunning) {
-      // The query will be used to get all medias.
-      _query = args?['query'] ?? AudiosQuery();
-
       // Define the directory to listen to. If [path] is null we'll use the
       // [defaultMusicPath] E.g: (C:\Users\user\Music)
       Directory dirToWatch = Directory(_helper.defaultMusicPath);
@@ -86,7 +83,9 @@ class AudiosObserver implements ObserverInterface {
 
     // Send the first(if isRunning is false) result or Send a result if it's
     // already running.
-    _controller?.add(await _query.queryAudios());
+    _controller!.add(
+      await _genresQuery.queryGenres(),
+    );
   }
 
   @override
@@ -101,7 +100,9 @@ class AudiosObserver implements ObserverInterface {
     if (_controller!.isPaused) return;
 
     // If the controller isn't null, closed or paused, send the new result.
-    _controller!.add(await _query.queryAudios());
+    _controller!.add(
+      await _genresQuery.queryGenres(),
+    );
   }
 
   @override
