@@ -695,7 +695,7 @@ class OnAudioQuery {
   }
 
   /// Used to check the observers(listeners) status of:
-  ///   * [observeSongs]
+  ///   * [observeAudios]
   ///   * [observeAlbums]
   ///   * [observePlaylists]
   ///   * [observeArtists]

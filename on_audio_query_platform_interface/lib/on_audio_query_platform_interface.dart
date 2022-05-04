@@ -75,7 +75,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
 
   /// Used to delete all artworks cached after using [queryArtwork].
   Future<bool> clearCachedArtworks() {
-    throw UnimplementedError('queryAudios() has not been implemented.');
+    throw UnimplementedError('clearCachedArtworks() has not been implemented.');
   }
 
   /// Used to return Audios Info based in [AudioModel].
@@ -89,7 +89,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   Stream<List<AudioModel>> observeAudios({
     MediaFilter? filter,
   }) {
-    throw UnimplementedError('observeSongs() has not been implemented.');
+    throw UnimplementedError('observeAudios() has not been implemented.');
   }
 
   /// Used to return Albums Info based in [AlbumModel].

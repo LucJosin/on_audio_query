@@ -105,7 +105,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   }
 
   @override
-  Stream<List<AudioModel>> observeSongs({
+  Stream<List<AudioModel>> observeAudios({
     MediaFilter? filter,
     bool? isAsset,
   }) {
