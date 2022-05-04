@@ -13,7 +13,7 @@ class AudiosQuery {
   List<AudioModel> get listOfAudios => _audios;
 
   //
-  late List<AudioModel> _audios;
+  List<AudioModel> _audios = [];
 
   // Helper.
   final QueryHelper _helper = QueryHelper();

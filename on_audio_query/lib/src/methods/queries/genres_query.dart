@@ -73,40 +73,58 @@ class GenresQuery {
     // This "helper" list will avoid duplicate values inside the final list.
     List<String> hList = [];
 
-    //
-    int mediaCount = 0;
-
     // Define a empty list of audios.
     List<Map<String, Object?>> listOfGenres = [];
 
+    // All genres media count.
+    Map<String, int> mediaCount = {};
+
     // For each [audio] inside the [audios], take one and try read the [bytes].
     for (var mp3instance in instances) {
+      //
       mp3instance.forEach((key, value) async {
         //
         if (key == 'mp3' && (value as MP3Instance).parseTagsSync()) {
           //
           Map<String, dynamic>? data = value.getMetaTags();
 
-          //
+          // If [data] is null, the file probably has some wrong [bytes].
           if (data == null) return;
 
-          //
-          String? genre = data["Genre"];
+          // Get the genre name and remove all (possible) whitespace.
+          String? genre = (data["Genre"] as String?)?.trim();
 
-          // If [data] is null, the file probably has some wrong [bytes].
-          // To avoid duplicate items, check if [helperList] already has this name.
-          if (genre == null || genre.isEmpty || hList.contains(genre)) return;
+          // If null or empty, return.
+          if (genre == null || genre.isEmpty) return;
 
-          // Count and add the number of genres for every genre.
-          mediaCount += 1;
+          // Get the current count of audios for this genre, if null, create the
+          // item and add the value of 0.
+          int count = mediaCount.putIfAbsent(genre, () {
+            return mediaCount[genre] = 0;
+          });
+
+          // Add or updated the number of audios for this genre.
+          mediaCount[genre] = count + 1;
 
           // "format" into a [Map<String, dynamic>], all keys are based on [Android]
           // platforms so, if you change some key, will have to change the [Android] too.
           Map<String, Object?> formattedGenre = await _formatGenre(
-            data,
-            'audio',
-            mediaCount,
+            genre,
+            count,
           );
+
+          // Check if the genre already exists.
+          //
+          // If true, update the [numOfSongs] and return.
+          if (hList.contains(genre)) {
+            //
+            int index = listOfGenres.indexWhere(
+              (tGenre) => tGenre['name'] == genre,
+            );
+
+            listOfGenres[index] = formattedGenre;
+            return;
+          }
 
           // Temporary and the final list.
           listOfGenres.add(formattedGenre);
@@ -121,14 +139,10 @@ class GenresQuery {
     return listOfGenres;
   }
 
-  Future<Map<String, Object?>> _formatGenre(
-    Map genre,
-    String data,
-    int count,
-  ) async {
+  Future<Map<String, Object?>> _formatGenre(String genreName, int count) async {
     return {
-      "_id": "${genre["Genre"]}".generateId(),
-      "name": genre["Genre"],
+      "_id": genreName.generateId(),
+      "name": genreName,
       "num_of_songs": count,
     };
   }

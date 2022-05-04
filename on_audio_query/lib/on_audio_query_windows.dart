@@ -37,6 +37,12 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
   static final ArtistsObserver _artistsObserver = ArtistsObserver();
   static final GenresObserver _genresObserver = GenresObserver();
 
+  // TODO: Add a better way to get all audios. E.g: M3U
+  Future<void> _initOrUpdateAudios() async {
+    await _audiosQuery.queryAudios();
+    return;
+  }
+
   @override
   Future<bool> clearCachedArtworks() async {
     // All artworks are saved inside the app directory.
@@ -90,6 +96,10 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     bool? fromAsset,
     bool? fromAppDir,
   }) async {
+    // We'll use the [listOfAudios] to some informations.
+    _initOrUpdateAudios();
+
+    //
     return await _albumsQuery.queryAlbums(
       _audiosQuery.listOfAudios,
       filter: filter,
@@ -102,6 +112,9 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
   Stream<List<AlbumModel>> observeAlbums({
     MediaFilter? filter,
   }) async* {
+    // We'll use the [listOfAudios] to some informations.
+    _initOrUpdateAudios();
+
     // Setup the observer.
     await _albumsObserver.startObserver({
       'query': _audiosQuery,
@@ -118,6 +131,10 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     bool? fromAsset,
     bool? fromAppDir,
   }) async {
+    // We'll use the [listOfAudios] to some informations.
+    _initOrUpdateAudios();
+
+    //
     return await _artistsQuery.queryArtists(
       _audiosQuery.listOfAudios,
       filter: filter,
@@ -130,6 +147,9 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
   Stream<List<ArtistModel>> observeArtists({
     MediaFilter? filter,
   }) async* {
+    // We'll use the [listOfAudios] to some informations.
+    _initOrUpdateAudios();
+
     // Setup the observer.
     await _artistsObserver.startObserver({
       'query': _audiosQuery,
@@ -146,6 +166,10 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     bool? fromAsset,
     bool? fromAppDir,
   }) async {
+    // We'll use the [listOfAudios] to some informations.
+    _initOrUpdateAudios();
+
+    //
     return await _genresQuery.queryGenres(
       filter: filter,
       fromAsset: fromAsset,
@@ -157,6 +181,9 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
   Stream<List<GenreModel>> observeGenres({
     MediaFilter? filter,
   }) async* {
+    // We'll use the [listOfAudios] to some informations.
+    _initOrUpdateAudios();
+
     // Setup the observer.
     await _genresObserver.startObserver({
       'filter': filter,
@@ -172,6 +199,10 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     ArtworkType type, {
     MediaFilter? filter,
   }) async {
+    // We'll use the [listOfAudios] to some informations.
+    _initOrUpdateAudios();
+
+    //
     return await _artworkQuery.queryArtwork(
       _audiosQuery.listOfAudios,
       id,
