@@ -86,7 +86,9 @@ class AudiosObserver implements ObserverInterface {
 
     // Send the first(if isRunning is false) result or Send a result if it's
     // already running.
-    _controller?.add(await _query.queryAudios());
+    _controller?.add(
+      await _query.queryAudios(filter: _filter),
+    );
   }
 
   @override
@@ -97,11 +99,13 @@ class AudiosObserver implements ObserverInterface {
     // Check if the controller is closed.
     if (_controller!.isClosed) return stopObserver();
 
-    // Check if the controller is paused. If true, just ignore(or await).
+    // Check if the controller is paused. If true, just ignore(or wait).
     if (_controller!.isPaused) return;
 
     // If the controller isn't null, closed or paused, send the new result.
-    _controller!.add(await _query.queryAudios());
+    _controller!.add(
+      await _query.queryAudios(filter: _filter),
+    );
   }
 
   @override
