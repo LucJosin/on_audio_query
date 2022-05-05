@@ -4,6 +4,7 @@ import 'package:on_audio_query_platform_interface/on_audio_query_platform_interf
 import 'package:path/path.dart' as p;
 
 import '../helpers/extensions/format_extension.dart';
+import '../helpers/extensions/filter_extension.dart';
 import '../helpers/query_helper_stub.dart'
     if (dart.library.io) '../helpers/query_helper_io.dart'
     if (dart.library.html) '../helpers/query_helper_html.dart';
@@ -64,7 +65,8 @@ class AudiosQuery {
 
     // Retrive all (or limited) files path.
     List<Map<String, Object>> instances = await _helper.getFiles(
-      fromAsset,
+      fromAsset: fromAsset,
+      fromAppDir: fromAppDir,
       limit: filter.limit,
     );
 
@@ -76,12 +78,8 @@ class AudiosQuery {
       instances,
     );
 
-    // 'Build' the filter.
-    _audios = _helper.mediaFilter<AudioModel>(
-      filter,
-      computedAudios,
-      audioProjection,
-    );
+    // 'Run' the filter.
+    _audios = computedAudios.mediaFilter<AudioModel>(filter, audioProjection);
 
     // Now we sort the list based on [sortType].
     //

@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
 import '../helpers/extensions/format_extension.dart';
+import '../helpers/extensions/filter_extension.dart';
 import '../helpers/query_helper_stub.dart'
     if (dart.library.io) '../helpers/query_helper_io.dart'
     if (dart.library.html) '../helpers/query_helper_html.dart';
@@ -15,7 +16,7 @@ class GenresQuery {
   final MediaFilter _defaultFilter = MediaFilter.forGenres();
 
   // Genre projection (to filter).
-  List<String?> genreProjection = [
+  List<String?> projection = [
     "_id",
     "name",
   ];
@@ -31,23 +32,23 @@ class GenresQuery {
 
     // Retrive all (or limited) files path.
     List<Map<String, Object>> instances = await _helper.getFiles(
-      fromAsset ?? false,
+      fromAsset: fromAsset,
+      fromAppDir: fromAppDir,
       limit: filter.limit,
     );
 
     // Since all the 'query' is made 'manually'. If we have multiple (100+) audio
     // files, will take more than 10 seconds to load everything. So, we need to use
     // the flutter isolate (compute) to load this files on another 'thread'.
-    List<Map<String, Object?>> listOfGenres = await compute(
+    List<Map<String, Object?>> computedGenres = await compute(
       _fetchListOfGenres,
       instances,
     );
 
-    // 'Build' the filter.
-    List<GenreModel> genres = _helper.mediaFilter<GenreModel>(
+    // 'Run' the filter.
+    List<GenreModel> genres = computedGenres.mediaFilter<GenreModel>(
       filter,
-      listOfGenres,
-      genreProjection,
+      projection,
     );
 
     // Now we sort the list based on [sortType].

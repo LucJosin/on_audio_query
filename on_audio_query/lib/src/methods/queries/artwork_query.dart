@@ -20,6 +20,8 @@ class ArtworkQuery {
     List<AudioModel> audios,
     int id,
     ArtworkType type, {
+    bool? fromAsset,
+    bool? fromAppDir,
     MediaFilter? filter,
   }) async {
     //
@@ -49,7 +51,11 @@ class ArtworkQuery {
       );
 
       //
-      MP3Instance mp3instance = await _helper.loadMP3(audio.data, false);
+      MP3Instance mp3instance = await _helper.loadMP3(
+        audio.data,
+        fromAsset: fromAsset,
+        fromAppDir: fromAppDir,
+      );
 
       //
       if (mp3instance.parseTagsSync()) {

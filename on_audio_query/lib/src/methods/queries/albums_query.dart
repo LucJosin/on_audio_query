@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
 import '../helpers/extensions/format_extension.dart';
+import '../helpers/extensions/filter_extension.dart';
 import '../helpers/query_helper_stub.dart'
     if (dart.library.io) '../helpers/query_helper_io.dart'
     if (dart.library.html) '../helpers/query_helper_html.dart';
@@ -18,7 +19,7 @@ class AlbumsQuery {
   List<AudioModel> _audios = [];
 
   // Album projection.
-  List<String?> albumProjection = [
+  List<String?> projection = [
     "_id",
     "album",
     "artist",
@@ -44,23 +45,23 @@ class AlbumsQuery {
 
     // Retrive all (or limited) files path.
     List<Map<String, Object>> instances = await _helper.getFiles(
-      fromAsset ?? false,
+      fromAsset: fromAsset,
+      fromAppDir: fromAppDir,
       limit: filter.limit,
     );
 
     // Since all the 'query' is made 'manually'. If we have multiple (100+) audio
     // files, will take more than 10 seconds to load everything. So, we need to use
     // the flutter isolate (compute) to load this files on another 'thread'.
-    List<Map<String, Object?>> listOfAlbums = await compute(
+    List<Map<String, Object?>> computedAlbums = await compute(
       _fetchListOfAlbums,
       instances,
     );
 
-    // 'Build' the filter.
-    List<AlbumModel> albums = _helper.mediaFilter<AlbumModel>(
+    // 'Run' the filter.
+    List<AlbumModel> albums = computedAlbums.mediaFilter<AlbumModel>(
       filter,
-      listOfAlbums,
-      albumProjection,
+      projection,
     );
 
     // Now we sort the list based on [sortType].
