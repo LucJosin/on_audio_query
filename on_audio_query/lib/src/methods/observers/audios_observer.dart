@@ -8,9 +8,6 @@ import '/src/methods/queries/audios_query.dart';
 
 ///
 class AudiosObserver implements ObserverInterface {
-  // Helper
-  final QueryHelper _helper = QueryHelper();
-
   // Filter
   MediaFilter _filter = MediaFilter.forAudios();
 
@@ -62,7 +59,7 @@ class AudiosObserver implements ObserverInterface {
 
       // Define the directory to listen to. If [path] is null we'll use the
       // [defaultMusicPath] E.g: (C:\Users\user\Music)
-      Directory dirToWatch = Directory(_helper.defaultMusicPath);
+      Directory dirToWatch = Directory(QueryHelper.defaultMusicPath);
 
       // Check if this path exists.
       if (!await dirToWatch.exists()) {
