@@ -152,6 +152,8 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   Future<ArtworkModel?> queryArtwork(
     int id,
     ArtworkType type, {
+    bool? fromAsset,
+    bool? fromAppDir,
     MediaFilter? filter,
   }) {
     throw UnimplementedError('queryArtwork() has not been implemented.');

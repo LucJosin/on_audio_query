@@ -92,11 +92,6 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "toRemove": filter.toRemove,
         "type": fixedMap,
         "limit": filter.limit,
-        // Desktop
-        // "saveArtwork": _saveArtwork,
-        // "saveArtworkTmp": _saveArtworkTmp,
-        // "createM3U": _createM3U,
-        // "savePath": _savePath,
       },
     );
 
@@ -364,6 +359,8 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   Future<ArtworkModel?> queryArtwork(
     int id,
     ArtworkType type, {
+    bool? fromAsset,
+    bool? fromAppDir,
     MediaFilter? filter,
   }) async {
     // If the filter is null, use the 'default'.

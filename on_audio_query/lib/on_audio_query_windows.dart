@@ -197,6 +197,8 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
   Future<ArtworkModel?> queryArtwork(
     int id,
     ArtworkType type, {
+    bool? fromAsset,
+    bool? fromAppDir,
     MediaFilter? filter,
   }) async {
     // We'll use the [listOfAudios] to some informations.
@@ -208,6 +210,8 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
       id,
       type,
       filter: filter,
+      fromAsset: fromAsset,
+      fromAppDir: fromAppDir,
     );
   }
 
