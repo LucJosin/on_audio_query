@@ -7,24 +7,20 @@ import 'package:on_audio_query_platform_interface/on_audio_query_platform_interf
 class QueryHelper extends QueryHelperInterface {
   ///
   @override
-  Future<List<Map<String, Object>>> getFiles(
-    bool isAsset, {
+  Future<List<Map<String, Object>>> getFiles({
+    bool? fromAsset,
+    bool? fromAppDir,
     bool lookSubs = true,
     int? limit,
   }) async =>
       throw UnsupportedError('Stub Class');
 
-  ///
   @override
-  List<T> mediaFilter<T>(
-    MediaFilter filter,
-    List<Map<String, Object?>> listOfAudios,
-    List<String?> projection,
-  ) =>
-      throw UnsupportedError('Stub Class');
-
-  @override
-  Future<MP3Instance> loadMP3(String audio, bool isAsset) {
+  Future<MP3Instance> loadMP3(
+    String audio, {
+    bool? fromAsset,
+    bool? fromAppDir,
+  }) {
     throw UnsupportedError('Stub Class');
   }
 
@@ -43,6 +39,6 @@ class QueryHelper extends QueryHelperInterface {
     required int id,
     bool temporary = true,
   }) {
-    throw UnimplementedError();
+    throw UnsupportedError('Stub Class');
   }
 }

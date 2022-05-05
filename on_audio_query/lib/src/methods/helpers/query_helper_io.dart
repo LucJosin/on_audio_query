@@ -6,40 +6,37 @@ import 'package:flutter/services.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
 class QueryHelper extends QueryHelperInterface {
-  ///
+  /// User directory path.
   static final String _userDir = '${Platform.environment["USERPROFILE"]}';
 
-  ///
-  static Directory get _defaultDirectory =>
-      Directory('$_userDir\\Desktop\\Music');
+  /// System default music directory.
+  static final Directory _defaultDirectory = Directory('$_userDir\\Music');
 
-  ///
-  final String defaultMusicPath = '$_userDir\\Desktop\\Music';
+  /// System default music path.
+  static final String defaultMusicPath = '$_userDir\\Music';
 
-  ///
-  List<String> get paths => _paths;
-
-  //
-  List<String> _paths = [];
-
-  /// This method will load a unique audio using his path, and return a [MP3Instance]
-  /// with all information about this file.
   @override
-  Future<MP3Instance> loadMP3(String audio, bool isAsset) async {
-    //
+  Future<MP3Instance> loadMP3(
+    String audio, {
+    bool? fromAsset,
+    bool? fromAppDir,
+  }) async {
+    // File bytes.
     Uint8List audioBytes;
 
-    //
-    if (isAsset) {
-      //
+    // We need [rootBundle] to load/read the file bytes.
+    if (fromAsset ?? false) {
+      // Before decode: assets/Jungle%20-%20Heavy,%20California.mp3
+      // After decode: assets/Jungle - Heavy, California.mp3
       String decodedPath = Uri.decodeFull(audio);
 
-      //
+      // 'Load' the audio and get all bytes.
       ByteData loadedAudio = await rootBundle.load(decodedPath);
 
-      //
+      // Define the file bytes.
       audioBytes = loadedAudio.buffer.asUint8List();
     } else {
+      // Define the file bytes.
       audioBytes = File(audio).readAsBytesSync();
     }
 
@@ -49,48 +46,71 @@ class QueryHelper extends QueryHelperInterface {
 
   ///
   @override
-  Future<List<Map<String, Object>>> getFiles(
-    bool isAsset, {
+  Future<List<Map<String, Object>>> getFiles({
+    bool? fromAsset,
+    bool? fromAppDir,
     bool lookSubs = true,
     int? limit,
   }) async {
+    // List that will contain all informations.
     List<Map<String, Object>> instances = [];
 
     //
-    if (isAsset) {
-      //
+    List<String> paths = [];
+
+    // Check if the 'query' is from 'Assets', 'App Directory' or 'Default path' .
+    if (fromAsset ?? false) {
+      // All assets are saved inside the 'AssetManifest'.
       String assets = await rootBundle.loadString('AssetManifest.json');
 
-      //
+      // Decorde the String
       Map pFiles = json.decode(assets);
 
-      //
-      var mp3Files = pFiles.keys.where((file) => file.endsWith(".mp3"));
+      // Get only [mp3] files.
+      var mp3Files = pFiles.keys.where(
+        (file) => file.endsWith(".mp3"),
+      );
+
+      // Set all paths.
+      paths = mp3Files.toList().cast<String>();
 
       //
-      _paths = mp3Files.toList().cast<String>();
     } else {
-      //
-      List directoryEntities = _defaultDirectory.listSync(recursive: lookSubs);
+      // If [fromAppDir] is true. Get all files from the App directory.
+      List<File> directoryEntities = (fromAppDir != null && fromAppDir)
+          ? await getApplicationSupportDirectory().then((dir) {
+              return dir
+                  .listSync(followLinks: lookSubs)
+                  .whereType<File>()
+                  .toList();
+            })
+          // The defaultDirectory on windows: 'C:\Users\user\Music'.
+          : _defaultDirectory
+              .listSync(recursive: lookSubs)
+              .whereType<File>()
+              .toList();
 
-      //
-      var onlyFilesList = directoryEntities.whereType<File>();
+      // Get only [mp3] files.
+      var mp3Files = directoryEntities.where(
+        (file) => file.path.endsWith('.mp3'),
+      );
 
-      //
-      var mp3Files = onlyFilesList.where((file) => file.path.endsWith('.mp3'));
-
-      //
-      _paths = mp3Files.map((e) => e.path).toList();
+      // Set all paths.
+      paths = mp3Files.map((e) => e.path).toList();
     }
 
-    //
-    if (limit != null) _paths = _paths.take(limit).toList();
+    // 'Define' a limit to the files.
+    if (limit != null) paths = paths.take(limit).toList();
 
-    //
-    for (var path in _paths) {
+    // For every path, create a map with the path and file information.
+    for (var path in paths) {
       instances.add({
         "path": path,
-        "mp3": await loadMP3(path, isAsset),
+        "mp3": await loadMP3(
+          path,
+          fromAsset: fromAsset,
+          fromAppDir: fromAppDir,
+        ),
       });
     }
 
@@ -98,110 +118,33 @@ class QueryHelper extends QueryHelperInterface {
     return instances;
   }
 
-  ///
-  @override
-  List<T> mediaFilter<T>(
-    MediaFilter filter,
-    List<Map<String, Object?>> listOfAudios,
-    List<String?> projection,
-  ) {
-    //
-    for (int id in filter.toQuery.keys) {
-      // If the given [id] doesn't exist. Skip to next.
-      if (projection[id] == null) continue;
-
-      //
-      var values = filter.toQuery[id];
-
-      //
-      if (values == null) continue;
-
-      //
-      for (var value in values) {
-        //
-        listOfAudios.removeWhere((audio) {
-          //
-          bool isProjectionValid = audio.containsKey(projection[id]);
-
-          //
-          bool containsValue =
-              (audio[projection[id]] as String).contains(value);
-
-          //
-          return isProjectionValid && !containsValue;
-        });
-      }
-    }
-
-    //
-    for (int id in filter.toRemove.keys) {
-      // If the given [id] doesn't exist. Skip to next.
-      if (projection[id] == null) continue;
-
-      //
-      var values = filter.toRemove[id];
-
-      //
-      if (values == null) continue;
-
-      //
-      for (var value in values) {
-        //
-        listOfAudios.removeWhere((audio) {
-          //
-          bool isProjectionValid = audio.containsKey(projection[id]);
-
-          //
-          bool containsValue =
-              (audio[projection[id]] as String).contains(value);
-
-          //
-          return isProjectionValid && containsValue;
-        });
-      }
-    }
-
-    //
-    switch (T) {
-      case AudioModel:
-        return listOfAudios.map((e) => AudioModel(e)).toList() as List<T>;
-      case AlbumModel:
-        return listOfAudios.map((e) => AlbumModel(e)).toList() as List<T>;
-      case ArtistModel:
-        return listOfAudios.map((e) => ArtistModel(e)).toList() as List<T>;
-      case GenreModel:
-        return listOfAudios.map((e) => GenreModel(e)).toList() as List<T>;
-      default:
-        return [];
-    }
-  }
-
   @override
   Future<String?> saveArtworks({
     required int id,
-    required Uint8List? artwork,
+    required Uint8List artwork,
     required String fileType,
     bool temporary = true,
   }) async {
-    //
+    // Define if the artwork will be saved inside a tmp folder or the app
+    // directory.
     Directory dirPath = temporary
         ? await getTemporaryDirectory()
         : await getApplicationSupportDirectory();
 
+    // Create the file object.
     //
-    //
-    if (artwork == null) return null;
-
-    //
+    // * [dirPath] will be the tmp/app folder.
+    // * [defaultArtworksPath] is the plugin artwork folder path.
+    // * The [file] name will be created using the artwork/media [id] and file
+    // [type].
     File artFile = File(
       dirPath.path + defaultArtworksPath + '\\$id$fileType',
     );
 
-    if (!await artFile.exists()) await artFile.create(recursive: true);
-
-    //
+    // Write the bytes to the file. Will create a file if it's null.
     await artFile.writeAsBytes(artwork);
 
+    // Return the file path.
     return artFile.path;
   }
 
@@ -210,29 +153,31 @@ class QueryHelper extends QueryHelperInterface {
     required int id,
     bool temporary = true,
   }) async {
-    //
+    // Define if the artwork will be 'queried' inside a tmp folder or the app
+    // directory.
     Directory dir = temporary
         ? await getTemporaryDirectory()
         : await getApplicationSupportDirectory();
 
-    //
+    // 'Build' the artwork directory.
     Directory artworksDir = Directory(dir.path + defaultArtworksPath);
 
-    //
+    // Return if no folder was found.
     if (!artworksDir.existsSync()) return null;
 
-    //
-    File art = artworksDir
-        .listSync(
-          recursive: true,
-        )
-        .whereType<File>()
-        .firstWhere(
-          (file) => file.path.contains('$id'),
-          orElse: () => File(''),
-        );
+    // Get all files inside the folder and get only the first which contains the
+    // given [id].
+    File? art;
+    try {
+      art = artworksDir
+          .listSync(recursive: true)
+          .whereType<File>()
+          .firstWhere((f) => f.path.contains('$id'));
+    } catch (e) {
+      return null;
+    }
 
-    //
+    // Check if the file exists. If true, 'build' a ArtworkModel with all info.
     if (art.existsSync()) {
       return ArtworkModel({
         '_id': id,
@@ -242,6 +187,7 @@ class QueryHelper extends QueryHelperInterface {
       });
     }
 
+    //
     return null;
   }
 }
