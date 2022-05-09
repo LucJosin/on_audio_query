@@ -18,14 +18,14 @@ import 'package:on_audio_query/on_audio_query.dart';
 
 import '../widgets/dialog_widget.dart';
 
-class QuerySongs extends StatefulWidget {
-  const QuerySongs({Key? key}) : super(key: key);
+class QueryAudios extends StatefulWidget {
+  const QueryAudios({Key? key}) : super(key: key);
 
   @override
-  _QuerySongsState createState() => _QuerySongsState();
+  _QueryAudiosState createState() => _QueryAudiosState();
 }
 
-class _QuerySongsState extends State<QuerySongs> {
+class _QueryAudiosState extends State<QueryAudios> {
   final OnAudioQuery _audioQuery = OnAudioQuery();
 
   @override
@@ -58,9 +58,7 @@ class _QuerySongsState extends State<QuerySongs> {
           // toRemove: const {},
           // type: const {AudioType.IS_MUSIC : true},
           future: _audioQuery.queryAudios(
-            filter: MediaFilter.forAudios(
-              limit: 5, // Debug
-            ),
+            filter: MediaFilter.forAudios(),
           ),
           builder: (context, item) {
             // When you try 'query' without asking for [READ] permission the plugin

@@ -12,18 +12,20 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 =============
 */
 
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:on_audio_query/on_audio_query.dart';
-import 'package:flutter/foundation.dart';
-import 'package:on_audio_query_example/src/observer/observe_audios.dart';
-import 'package:on_audio_query_example/src/query/query_songs.dart';
+
+import 'main_controller.dart';
+import 'src/observer/observe_audios.dart';
+import 'src/query/query_songs.dart';
+import 'src/widgets/settings_dialog_widget.dart';
 
 void main() {
   runApp(
     MaterialApp(
-      theme: ThemeData.light(),
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData.light().copyWith(
+        primaryColor: Colors.grey[200],
+      ),
       darkTheme: ThemeData.dark(),
       home: const Main(),
     ),
@@ -38,93 +40,202 @@ class Main extends StatefulWidget {
 }
 
 class _MainState extends State<Main> {
-  final OnAudioQuery _audioQuery = OnAudioQuery();
+  // Default border to all app.
+  final BorderRadius borderRadius = BorderRadius.circular(10);
+
+  // Controller.
+  final MainController _controller = MainController();
+
+  // Links
+  Map<String, Uri> links = {
+    'github': Uri.parse('https://github.com/LucJosin/on_audio_query'),
+    'pub': Uri.parse('https://pub.dev/packages/on_audio_query'),
+    'docs': Uri.parse('https://pub.dev/documentation/on_audio_query/latest/'),
+    'issue': Uri.parse('https://github.com/LucJosin/on_audio_query/issues'),
+    'pr': Uri.parse('https://github.com/LucJosin/on_audio_query/pulls'),
+  };
 
   @override
   void initState() {
     super.initState();
-    // Request to the user, the permissoion to read MediaStore(Android) and
-    // MPMediaLibrary(IOS).
-    requestPermission();
-  }
-
-  requestPermission() async {
-    // Web platform don't support permissions methods.
-    if (!kIsWeb && !Platform.isWindows && !Platform.isLinux) {
-      bool permissionStatus = await _audioQuery.permissionsStatus();
-      if (!permissionStatus) {
-        bool r = await _audioQuery.permissionsRequest();
-        debugPrint("$r");
-      }
-    }
+    _controller.checkPermisison();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        // Basic configurations
+        elevation: 1.5,
+        shadowColor: Colors.black.withOpacity(0.5),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        // Title
+        title: Text(
+          "OnAudioQuery",
+          style: TextStyle(
+            fontSize: 20,
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.white
+                : Colors.black,
+          ),
+        ),
         centerTitle: true,
-        title: const Text("OnAudioQueryExample"),
-        elevation: 0,
+        // Buttons
         actions: [
           IconButton(
-            tooltip: 'Delete all cached artworks',
-            onPressed: () => OnAudioQuery.clearCachedArtworks(),
-            icon: const Icon(Icons.delete),
+            onPressed: () => showSettingsDialog(context),
+            icon: const Icon(Icons.more_vert),
           )
         ],
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            const Text("Select one option:"),
-            // This option will open a 'static' page.
-            //
-            // The only way to show new/deleted items is calling 'setState'.
-            //
-            // - Uses the 'FutureBuilder' widget.
-            // - Will never update the UI automatically.
-            GestureDetector(
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const QuerySongs(),
-                ),
-              ),
-              child: Container(
-                height: 200,
-                width: 200,
-                color: Theme.of(context).backgroundColor,
-                child: const Center(
-                  child: Text("Static"),
-                ),
-              ),
-            ),
-            // This option will open a 'dynamic' page.
-            //
-            // Everytime something change, e.g: add or remove audios, will 'trigger'
-            // a listener and update the UI
-            //
-            // - Uses the 'StreamBuilder' widget.
-            // - Update the UI automatically.
-            GestureDetector(
-              onTap: () => Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const ObserveAudios(),
-                ),
-              ),
-              child: Container(
-                height: 200,
-                width: 200,
-                color: Theme.of(context).backgroundColor,
-                child: const Center(
-                  child: Text("Dynamic"),
-                ),
-              ),
-            ),
-          ],
+      body: SizedBox(
+        width: MediaQuery.of(context).size.width,
+        child: SingleChildScrollView(
+          child: Wrap(
+            runSpacing: 15,
+            alignment: WrapAlignment.center,
+            children: [
+              messageWidget(context),
+              titleWidget(context, 'Queries'),
+              queriesWidget(context),
+              titleWidget(context, 'Help'),
+              linksWidget(context),
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget titleWidget(BuildContext context, String title) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Padding(
+        padding: EdgeInsets.only(
+          left: MediaQuery.of(context).size.width * 0.06,
+        ),
+        child: Text(title),
+      ),
+    );
+  }
+
+  Widget messageWidget(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(top: 15),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+      width: MediaQuery.of(context).size.width * 0.9,
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColor,
+        borderRadius: borderRadius,
+      ),
+      child: Column(
+        children: [
+          const Text(
+            'This plugin require: \nLibrary (IOS) and READ (Android) permissions.',
+            textAlign: TextAlign.center,
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          ElevatedButton(
+            onPressed: _controller.hasError
+                ? null
+                : _controller.requestPermission(context),
+            style: ElevatedButton.styleFrom(
+              elevation: 0,
+              primary: Theme.of(context).scaffoldBackgroundColor,
+            ),
+            child: const Text('Grant permission'),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget queriesWidget(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.9,
+      child: Wrap(
+        runSpacing: 5,
+        children: [
+          tileWidget(
+            context,
+            'Static Query',
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => const QueryAudios(),
+              ),
+            ),
+          ),
+          tileWidget(
+            context,
+            'Dynamic Query',
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (_) => const ObserveAudios(),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget linksWidget(BuildContext context) {
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.9,
+      child: Wrap(
+        runSpacing: 5,
+        children: [
+          tileWidget(
+            context,
+            'Github',
+            onTap: () => _controller.launchLink(links['github']!, context),
+            icon: Icons.open_in_new_outlined,
+          ),
+          tileWidget(
+            context,
+            'Pub.dev',
+            onTap: () => _controller.launchLink(links['pub']!, context),
+            icon: Icons.open_in_new_outlined,
+          ),
+          tileWidget(
+            context,
+            'Docs',
+            onTap: () => _controller.launchLink(links['docs']!, context),
+            icon: Icons.open_in_new_outlined,
+          ),
+          tileWidget(
+            context,
+            'Any problem?',
+            onTap: () => _controller.launchLink(links['issue']!, context),
+            icon: Icons.open_in_new_outlined,
+          ),
+          tileWidget(
+            context,
+            'Any suggestion?',
+            onTap: () => _controller.launchLink(links['pr']!, context),
+            icon: Icons.open_in_new_outlined,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget tileWidget(
+    BuildContext context,
+    String title, {
+    void Function()? onTap,
+    IconData icon = Icons.navigate_next_rounded,
+  }) {
+    return ListTile(
+      shape: RoundedRectangleBorder(
+        borderRadius: borderRadius,
+      ),
+      tileColor: Theme.of(context).primaryColor,
+      title: Text(title),
+      trailing: Icon(icon),
+      onTap: onTap,
     );
   }
 }
