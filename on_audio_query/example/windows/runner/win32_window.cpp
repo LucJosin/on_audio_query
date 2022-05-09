@@ -110,16 +110,21 @@ bool Win32Window::CreateAndShow(const std::wstring& title,
   const wchar_t* window_class =
       WindowClassRegistrar::GetInstance()->GetWindowClass();
 
-  const POINT target_point = {static_cast<LONG>(origin.x),
-                              static_cast<LONG>(origin.y)};
+  const int screen_pos_x = 550; // Screen position (X)
+  const int screen_pos_y = 100; // Screen position (Y)
+  const int screen_height = 700; // Screen default height
+  const int screen_width = screen_height / 2; // Screen default width
+
+  const POINT target_point = {static_cast<LONG>(screen_pos_x),
+                              static_cast<LONG>(screen_pos_y)};
   HMONITOR monitor = MonitorFromPoint(target_point, MONITOR_DEFAULTTONEAREST);
   UINT dpi = FlutterDesktopGetDpiForMonitor(monitor);
   double scale_factor = dpi / 96.0;
 
   HWND window = CreateWindow(
       window_class, title.c_str(), WS_OVERLAPPEDWINDOW | WS_VISIBLE,
-      Scale(origin.x, scale_factor), Scale(origin.y, scale_factor),
-      Scale(size.width, scale_factor), Scale(size.height, scale_factor),
+      Scale(screen_pos_x, scale_factor), Scale(screen_pos_y, scale_factor),
+      Scale(screen_width, scale_factor), Scale(screen_height, scale_factor),
       nullptr, nullptr, GetModuleHandle(nullptr), this);
 
   if (!window) {
