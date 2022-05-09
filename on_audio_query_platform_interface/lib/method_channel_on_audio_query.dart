@@ -82,7 +82,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
 
     // Invoke the channel.
     final List<dynamic> resultSongs = await _channel.invokeMethod(
-      "querySongs",
+      "queryAudios",
       {
         "sortType": filter.audioSortType?.index,
         "orderType": filter.orderType.index,
