@@ -1,3 +1,11 @@
+## [2.6.1] - [05.17.2022]
+
+### Fixes
+
+#### Android
+
+- **[Fixed]** incompatibility with `Flutter 3`. - [#78](https://github.com/LucJosin/on_audio_query/issues/78)
+
 ## [2.6.0] - [02.01.2022]
 
 ### Features
