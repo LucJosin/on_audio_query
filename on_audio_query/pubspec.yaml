@@ -40,9 +40,9 @@ flutter:
         pluginClass: OnAudioQueryPlugin
       ios:
         pluginClass: OnAudioQueryPlugin
-      web:
-        pluginClass: OnAudioQueryPlugin
-        fileName: on_audio_query_web.dart
-      windows:
-        dartPluginClass: OnAudioQueryPlugin
-        fileName: on_audio_query_windows.dart
+      # web:
+      #   pluginClass: OnAudioQueryPlugin
+      #   fileName: on_audio_query_web.dart
+      # windows:
+      #   dartPluginClass: OnAudioQueryPlugin
+      #   fileName: on_audio_query_windows.dart
