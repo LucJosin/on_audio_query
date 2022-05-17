@@ -147,8 +147,8 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
-        permissions: Array<out String>?,
-        grantResults: IntArray?
+        permissions: Array<out String>,
+        grantResults: IntArray
     ): Boolean {
         // When [pResult] is not initialized the permission request did not originate from the
         // [on_audio_query] plugin, so return [false] to indicate the [on_audio_query] plugin is not
@@ -161,8 +161,8 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
         if (requestCode != onRequestCode) return false
 
         // Check permission
-        val isPermissionGranted = if (grantResults != null) grantResults.isNotEmpty()
-                && grantResults[0] == PackageManager.PERMISSION_GRANTED else false
+        val isPermissionGranted = (grantResults.isNotEmpty()
+                && grantResults[0] == PackageManager.PERMISSION_GRANTED)
 
         // After all checks, we can handle the permission request.
         when {
