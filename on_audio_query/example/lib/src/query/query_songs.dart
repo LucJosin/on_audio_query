@@ -58,7 +58,9 @@ class _QueryAudiosState extends State<QueryAudios> {
           // toRemove: const {},
           // type: const {AudioType.IS_MUSIC : true},
           future: _audioQuery.queryAudios(
-            filter: MediaFilter.forAudios(),
+            filter: MediaFilter.forAudios(
+              limit: 50,
+            ),
           ),
           builder: (context, item) {
             // When you try 'query' without asking for [READ] permission the plugin

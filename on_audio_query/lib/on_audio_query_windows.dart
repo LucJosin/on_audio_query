@@ -202,7 +202,7 @@ class OnAudioQueryPlugin extends OnAudioQueryPlatform {
     MediaFilter? filter,
   }) async {
     // We'll use the [listOfAudios] to some informations.
-    _initOrUpdateAudios();
+    // _initOrUpdateAudios();
 
     //
     return await _artworkQuery.queryArtwork(
