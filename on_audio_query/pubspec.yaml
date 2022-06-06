@@ -16,6 +16,8 @@ dependencies:
   # on_audio_query
   on_audio_query_platform_interface:
     path: ../on_audio_query_platform_interface
+  on_audio_query_android:
+    path: ../on_audio_query_android
 
   # Flutter
   flutter:
@@ -36,8 +38,7 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.lucasjosino.on_audio_query
-        pluginClass: OnAudioQueryPlugin
+        default_package: image_picker_android
       ios:
         pluginClass: OnAudioQueryPlugin
       # web:
