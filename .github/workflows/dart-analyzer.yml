@@ -6,10 +6,20 @@ on:
   pull_request:
     branches:
       - main
+    types:
+      - opened
+      - reopened
+      - synchronize
+      - ready_for_review
 
 jobs:
-  package-analysis:
+  plugin-analysis:
     runs-on: ubuntu-latest
+    # https://gist.github.com/myobie/671d2f2a1e503efa0c05e7b865c26a9d
+    if: ${{ github.event.pull_request.draft }}
+    run: |
+      echo "This PR is currently a draft."
+      exit 1
     steps:
       - uses: actions/checkout@v2
       - uses: axel-op/dart-package-analyzer@v3
@@ -17,7 +27,7 @@ jobs:
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           relativePath: on_audio_query/
-      - name: Check Scores
+      - name: Check plugin scores
         env:
           TOTAL: ${{ steps.dart_analysis.outputs.total }}
           TOTAL_MAX: ${{ steps.dart_analysis.outputs.total_max }}
