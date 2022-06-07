@@ -14,10 +14,10 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
-import 'methods/queries/albums_query.dart';
-import 'methods/queries/artists_query.dart';
-import 'methods/queries/audios_query.dart';
-import 'methods/queries/genres_query.dart';
+// import 'methods/queries/albums_query.dart';
+// import 'methods/queries/artists_query.dart';
+// import 'methods/queries/audios_query.dart';
+// import 'methods/queries/genres_query.dart';
 
 /// Main method to use the [on_audio_query] plugin.
 ///
@@ -45,10 +45,10 @@ class OnAudioQuery {
   static OnAudioQueryPlatform get platform => OnAudioQueryPlatform.instance;
 
   // Methods used when [fromAsset] is true.
-  static final AudiosQuery _audiosQuery = AudiosQuery();
-  static final AlbumsQuery _albumsQuery = AlbumsQuery();
-  static final ArtistsQuery _artistsQuery = ArtistsQuery();
-  static final GenresQuery _genresQuery = GenresQuery();
+  // static final AudiosQuery _audiosQuery = AudiosQuery();
+  // static final AlbumsQuery _albumsQuery = AlbumsQuery();
+  // static final ArtistsQuery _artistsQuery = ArtistsQuery();
+  // static final GenresQuery _genresQuery = GenresQuery();
 
   /// The default path used to store or cache the 'queried' images/artworks.
   ///
@@ -190,13 +190,13 @@ class OnAudioQuery {
     bool fromAppDir = false,
   }) async {
     //
-    if (fromAsset || fromAppDir) {
-      return _audiosQuery.queryAudios(
-        filter: filter,
-        fromAsset: fromAsset,
-        fromAppDir: fromAppDir,
-      );
-    }
+    // if (fromAsset || fromAppDir) {
+    //   return _audiosQuery.queryAudios(
+    //     filter: filter,
+    //     fromAsset: fromAsset,
+    //     fromAppDir: fromAppDir,
+    //   );
+    // }
 
     //
     return platform.queryAudios(filter: filter);
@@ -245,14 +245,14 @@ class OnAudioQuery {
         bool? ignoreCase,
   }) async {
     //
-    if (fromAsset || fromAppDir) {
-      return _albumsQuery.queryAlbums(
-        await _audiosQuery.queryAudios(),
-        filter: filter,
-        fromAsset: fromAsset,
-        fromAppDir: fromAppDir,
-      );
-    }
+    // if (fromAsset || fromAppDir) {
+    //   return _albumsQuery.queryAlbums(
+    //     await _audiosQuery.queryAudios(),
+    //     filter: filter,
+    //     fromAsset: fromAsset,
+    //     fromAppDir: fromAppDir,
+    //   );
+    // }
 
     //
     return platform.queryAlbums(filter: filter);
@@ -301,14 +301,14 @@ class OnAudioQuery {
         bool? ignoreCase,
   }) async {
     //
-    if (fromAsset || fromAppDir) {
-      return _artistsQuery.queryArtists(
-        await _audiosQuery.queryAudios(),
-        filter: filter,
-        fromAsset: fromAsset,
-        fromAppDir: fromAppDir,
-      );
-    }
+    // if (fromAsset || fromAppDir) {
+    //   return _artistsQuery.queryArtists(
+    //     await _audiosQuery.queryAudios(),
+    //     filter: filter,
+    //     fromAsset: fromAsset,
+    //     fromAppDir: fromAppDir,
+    //   );
+    // }
 
     //
     return platform.queryArtists(filter: filter);
@@ -399,13 +399,13 @@ class OnAudioQuery {
         bool? ignoreCase,
   }) async {
     //
-    if (fromAsset || fromAppDir) {
-      return _genresQuery.queryGenres(
-        filter: filter,
-        fromAsset: fromAsset,
-        fromAppDir: fromAsset,
-      );
-    }
+    // if (fromAsset || fromAppDir) {
+    //   return _genresQuery.queryGenres(
+    //     filter: filter,
+    //     fromAsset: fromAsset,
+    //     fromAppDir: fromAsset,
+    //   );
+    // }
 
     //
     return platform.queryGenres(filter: filter);
