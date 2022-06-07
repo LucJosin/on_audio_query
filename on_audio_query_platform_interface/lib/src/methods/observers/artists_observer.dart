@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:on_audio_query/src/methods/queries/artists_query.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
+import '../queries/artists_query.dart';
 import '/src/methods/helpers/query_helper_io.dart';
 import '/src/methods/queries/audios_query.dart';
 

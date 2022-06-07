@@ -1,4 +1,5 @@
-import '../../../../on_audio_query.dart';
+import '../../../controllers/models_controller.dart';
+import '../../../filter/media_filter.dart';
 
 extension OnMediaFilter on List<Map> {
   List<T> mediaFilter<T>(
