@@ -79,72 +79,52 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   }
 
   /// Used to return Audios Info based in [AudioModel].
-  Future<List<AudioModel>> queryAudios({
-    MediaFilter? filter,
-  }) {
+  Future<List<AudioModel>> queryAudios({MediaFilter? filter}) {
     throw UnimplementedError('queryAudios() has not been implemented.');
   }
 
   /// Used to observer(listen) the songs.
-  Stream<List<AudioModel>> observeAudios({
-    MediaFilter? filter,
-  }) {
+  Stream<List<AudioModel>> observeAudios({MediaFilter? filter}) {
     throw UnimplementedError('observeAudios() has not been implemented.');
   }
 
   /// Used to return Albums Info based in [AlbumModel].
-  Future<List<AlbumModel>> queryAlbums({
-    MediaFilter? filter,
-  }) {
+  Future<List<AlbumModel>> queryAlbums({MediaFilter? filter}) {
     throw UnimplementedError('queryAlbums() has not been implemented.');
   }
 
   /// Used to observer(listen) the albums.
-  Stream<List<AlbumModel>> observeAlbums({
-    MediaFilter? filter,
-  }) {
+  Stream<List<AlbumModel>> observeAlbums({MediaFilter? filter}) {
     throw UnimplementedError('observeAlbums() has not been implemented.');
   }
 
   /// Used to return Artists Info based in [ArtistModel].
-  Future<List<ArtistModel>> queryArtists({
-    MediaFilter? filter,
-  }) {
+  Future<List<ArtistModel>> queryArtists({MediaFilter? filter}) {
     throw UnimplementedError('queryArtists() has not been implemented.');
   }
 
   /// Used to observer(listen) the artists.
-  Stream<List<ArtistModel>> observeArtists({
-    MediaFilter? filter,
-  }) {
+  Stream<List<ArtistModel>> observeArtists({MediaFilter? filter}) {
     throw UnimplementedError('observeArtists() has not been implemented.');
   }
 
   /// Used to return Playlists Info based in [PlaylistModel].
-  Future<List<PlaylistModel>> queryPlaylists({
-    MediaFilter? filter,
-  }) {
+  Future<List<PlaylistModel>> queryPlaylists({MediaFilter? filter}) {
     throw UnimplementedError('queryPlaylists() has not been implemented.');
   }
 
   /// Used to observer(listen) the playlists.
-  Stream<List<PlaylistModel>> observePlaylists({
-    MediaFilter? filter,
-  }) {
+  Stream<List<PlaylistModel>> observePlaylists({MediaFilter? filter}) {
     throw UnimplementedError('observePlaylists() has not been implemented.');
   }
 
   /// Used to return Genres Info based in [GenreModel].
-  Future<List<GenreModel>> queryGenres({
-    MediaFilter? filter,
-  }) {
+  Future<List<GenreModel>> queryGenres({MediaFilter? filter}) {
     throw UnimplementedError('queryGenres() has not been implemented.');
   }
 
   /// Used to observer(listen) the genres.
-  Stream<List<GenreModel>> observeGenres({
-    MediaFilter? filter,
-  }) {
+  Stream<List<GenreModel>> observeGenres({MediaFilter? filter}) {
     throw UnimplementedError('observeGenres() has not been implemented.');
   }
 

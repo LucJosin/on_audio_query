@@ -3,8 +3,6 @@
 part of types_controller;
 
 /// Defines if query method will be in [EXTERNAL] or [INTERNAL] storage.
-///
-/// Normally [INTERNAL] return null.
 enum UriType {
   /// EXTERNAL storage.
   EXTERNAL,

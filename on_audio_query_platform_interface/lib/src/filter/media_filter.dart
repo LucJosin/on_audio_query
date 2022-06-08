@@ -66,6 +66,9 @@ class MediaFilter {
   /// Note: By default, the type is [empty]\(Will 'query' all types of audios).
   Map<AudioType, bool> type;
 
+  /// TODO
+  MediaDirType? dirType;
+
   /// The 'objects'(titles, albums, artists, etc...) to be 'queried'.
   ///
   /// E.g:
@@ -184,6 +187,7 @@ class MediaFilter {
     this.toQuery = const {},
     this.toRemove = const {},
     this.type = const {},
+    this.dirType,
     this.artworkFormat,
     this.artworkSize,
     this.artworkQuality,
@@ -216,6 +220,7 @@ class MediaFilter {
     this.toQuery = const {},
     this.toRemove = const {},
     this.type = const {},
+    this.dirType,
   });
 
   /// A 'default' filter that can be used for audios(songs).
@@ -241,6 +246,7 @@ class MediaFilter {
     this.type = const {
       AudioType.IS_MUSIC: true,
     },
+    this.dirType,
   });
 
   /// A 'default' filter that can be used for albums.
@@ -262,6 +268,7 @@ class MediaFilter {
     this.ignoreCase = true,
     this.toQuery = const {},
     this.toRemove = const {},
+    this.dirType,
   }) : type = const {};
 
   /// A 'default' filter that can be used for artists.
@@ -283,6 +290,7 @@ class MediaFilter {
     this.ignoreCase = true,
     this.toQuery = const {},
     this.toRemove = const {},
+    this.dirType,
   }) : type = const {};
 
   /// A 'default' filter that can be used for playlists.
@@ -304,6 +312,7 @@ class MediaFilter {
     this.ignoreCase = true,
     this.toQuery = const {},
     this.toRemove = const {},
+    this.dirType,
   }) : type = const {};
 
   /// A 'default' filter that can be used for genres.
@@ -325,6 +334,7 @@ class MediaFilter {
     this.ignoreCase = true,
     this.toQuery = const {},
     this.toRemove = const {},
+    this.dirType,
   }) : type = const {};
 
   /// A 'default' filter that can be used for artwork.
