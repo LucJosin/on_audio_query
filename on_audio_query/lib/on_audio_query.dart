@@ -19,7 +19,5 @@ export 'package:on_audio_query_platform_interface/on_audio_query_platform_interf
         QueryHelperInterface,
         defaultArtworksPath;
 
-export './on_audio_query_windows.dart';
-
 export 'src/on_audio_query_controller.dart';
 export 'src/widget/query_artwork_widget.dart';
