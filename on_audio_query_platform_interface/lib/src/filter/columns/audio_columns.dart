@@ -3,6 +3,7 @@
 part of columns_controller;
 
 /// All audio columns used with [MediaFilter].
+// TODO: Change class to enum (Dart 1.17.*)
 class AudioColumns {
   /// The audio [ID].
   int get ID => 0;

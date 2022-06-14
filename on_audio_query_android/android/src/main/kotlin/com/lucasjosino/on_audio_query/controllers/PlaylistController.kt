@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.lucasjosino.on_audio_query.controllers
 
 import android.content.ContentResolver

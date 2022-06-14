@@ -53,6 +53,9 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   Stream<List<PlaylistModel>>? _onPlaylistsObserverChanged;
   Stream<List<GenreModel>>? _onGenresObserverChanged;
 
+  /// Native query
+  // AudiosQuery get _audiosQuery => AudiosQuery();
+
   // @override
   // Future<List<T>> queryBuilder<T>({String? builder}) async {
   //   return [] as List<T>;
@@ -69,6 +72,12 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   }) async {
     // If the filter is null, use the 'default'.
     filter ??= _defaultFilter;
+
+    // Check if the request is to [Assets] or [App Directory].
+    // if (filter.dirType == MediaDirType.ASSETS ||
+    //     filter.dirType == MediaDirType.APP_DIR) {
+    //   return _audiosQuery.queryAudios();
+    // }
 
     // Fix the 'type' filter.
     //
