@@ -2,7 +2,7 @@
 
 part of types_controller;
 
-/// Define where the plugin will query all medias:
+/// Define where the plugin will query the medias:
 ///   * [DEFAULT]
 ///     * Android: MediaStore
 ///     * iOS: MPMediaLibrary(MPMediaQuery)

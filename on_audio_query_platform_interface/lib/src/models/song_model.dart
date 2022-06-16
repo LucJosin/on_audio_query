@@ -12,8 +12,6 @@ class SongModel {
   int get id => _info["_id"];
 
   /// Return song [id] from a playlist.
-  ///
-  // TODO: Fix [audio_id] after [3.0.0]
   int? get audioId => _info["audio_id"];
 
   /// Return song [data]
