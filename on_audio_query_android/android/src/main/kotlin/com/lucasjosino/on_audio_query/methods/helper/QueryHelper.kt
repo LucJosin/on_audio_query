@@ -38,9 +38,9 @@ class QueryHelper {
             "artist_id" -> {
                 // The [id] from Android >= 30/R is a [Long] instead of [Int].
                 if (Build.VERSION.SDK_INT >= 30) {
-                    cursor.getLong(cursor.getColumnIndex(itemProperty))
+                    cursor.getLong(cursor.getColumnIndexOrThrow(itemProperty))
                 } else {
-                    cursor.getInt(cursor.getColumnIndex(itemProperty))
+                    cursor.getInt(cursor.getColumnIndexOrThrow(itemProperty))
                 }
             }
             "_size",
@@ -49,7 +49,7 @@ class QueryHelper {
             "date_added",
             "date_modified",
             "duration",
-            "track" -> cursor.getInt(cursor.getColumnIndex(itemProperty))
+            "track" -> cursor.getInt(cursor.getColumnIndexOrThrow(itemProperty))
             // Boolean
             "is_alarm",
             "is_audiobook",
@@ -57,12 +57,12 @@ class QueryHelper {
             "is_notification",
             "is_podcast",
             "is_ringtone" -> {
-                val value = cursor.getString(cursor.getColumnIndex(itemProperty))
+                val value = cursor.getString(cursor.getColumnIndexOrThrow(itemProperty))
                 if (value == "0") return false
                 return true
             }
             // String
-            else -> cursor.getString(cursor.getColumnIndex(itemProperty))
+            else -> cursor.getString(cursor.getColumnIndexOrThrow(itemProperty))
         }
     }
 
@@ -73,13 +73,13 @@ class QueryHelper {
             "artist_id" -> {
                 // The [album] id from Android >= 30/R is a [Long] instead of [Int].
                 if (Build.VERSION.SDK_INT >= 30) {
-                    cursor.getLong(cursor.getColumnIndex(itemProperty))
+                    cursor.getLong(cursor.getColumnIndexOrThrow(itemProperty))
                 } else {
-                    cursor.getInt(cursor.getColumnIndex(itemProperty))
+                    cursor.getInt(cursor.getColumnIndexOrThrow(itemProperty))
                 }
             }
-            "numsongs" -> cursor.getInt(cursor.getColumnIndex(itemProperty))
-            else -> cursor.getString(cursor.getColumnIndex(itemProperty))
+            "numsongs" -> cursor.getInt(cursor.getColumnIndexOrThrow(itemProperty))
+            else -> cursor.getString(cursor.getColumnIndexOrThrow(itemProperty))
         }
     }
 
@@ -88,8 +88,8 @@ class QueryHelper {
         return when (itemProperty) {
             "_id",
             "date_added",
-            "date_modified" -> cursor.getLong(cursor.getColumnIndex(itemProperty))
-            else -> cursor.getString(cursor.getColumnIndex(itemProperty))
+            "date_modified" -> cursor.getLong(cursor.getColumnIndexOrThrow(itemProperty))
+            else -> cursor.getString(cursor.getColumnIndexOrThrow(itemProperty))
         }
     }
 
@@ -99,14 +99,14 @@ class QueryHelper {
             "_id" -> {
                 // The [artist] id from Android >= 30/R is a [Long] instead of [Int].
                 if (Build.VERSION.SDK_INT >= 30) {
-                    cursor.getLong(cursor.getColumnIndex(itemProperty))
+                    cursor.getLong(cursor.getColumnIndexOrThrow(itemProperty))
                 } else {
-                    cursor.getInt(cursor.getColumnIndex(itemProperty))
+                    cursor.getInt(cursor.getColumnIndexOrThrow(itemProperty))
                 }
             }
             "number_of_albums",
-            "number_of_tracks" -> cursor.getInt(cursor.getColumnIndex(itemProperty))
-            else -> cursor.getString(cursor.getColumnIndex(itemProperty))
+            "number_of_tracks" -> cursor.getInt(cursor.getColumnIndexOrThrow(itemProperty))
+            else -> cursor.getString(cursor.getColumnIndexOrThrow(itemProperty))
         }
     }
 
@@ -116,15 +116,16 @@ class QueryHelper {
             "_id" -> {
                 // The [genre] id from Android >= 30/R is a [Long] instead of [Int].
                 if (Build.VERSION.SDK_INT >= 30) {
-                    cursor.getLong(cursor.getColumnIndex(itemProperty))
+                    cursor.getLong(cursor.getColumnIndexOrThrow(itemProperty))
                 } else {
-                    cursor.getInt(cursor.getColumnIndex(itemProperty))
+                    cursor.getInt(cursor.getColumnIndexOrThrow(itemProperty))
                 }
             }
-            else -> cursor.getString(cursor.getColumnIndex(itemProperty))
+            else -> cursor.getString(cursor.getColumnIndexOrThrow(itemProperty))
         }
     }
 
+    @Suppress("DEPRECATION")
     fun getMediaCount(type: Int, arg: String, resolver: ContentResolver): Int {
         val uri: Uri = if (type == 0) {
             MediaStore.Audio.Genres.Members.getContentUri("external", arg.toLong())
