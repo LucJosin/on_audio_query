@@ -8,7 +8,7 @@
 
 ## Help:
 
-- **Docs([Pub.dev](https://pub.dev/documentation/on_audio_query/latest/on_audio_query/OnAudioQuery-class.html))**
+- **Docs: [Pub.dev](https://pub.dev/documentation/on_audio_query/latest/on_audio_query/OnAudioQuery-class.html)**
 - **Any problem? [Issues](https://github.com/LucJosin/on_audio_query/issues)**
 - **Any suggestion? [Pull request](https://github.com/LucJosin/on_audio_query/pulls)**
 
@@ -26,6 +26,28 @@
 <!-- ✔️ | ❌ -->
 
 ### Query methods
+
+| Methods           | Android | IOS  |
+| ----------------- | :-----: | :--: |
+| `queryAudios`     |  `✔️`   | `✔️` |
+| `queryAlbums`     |  `✔️`   | `✔️` |
+| `queryArtists`    |  `✔️`   | `✔️` |
+| `queryPlaylists`  |  `✔️`   | `✔️` |
+| `queryGenres`     |  `✔️`   | `✔️` |
+| `queryArtwork`    |  `✔️`   | `✔️` |
+| `queryDeviceInfo` |  `✔️`   | `✔️` |
+
+### Observer methods
+
+| Methods            | Android | IOS  |
+| ------------------ | :-----: | :--: |
+| `observeAudios`    |  `✔️`   | `✔️` |
+| `observeAlbums`    |  `✔️`   | `✔️` |
+| `observeArtists`   |  `✔️`   | `✔️` |
+| `observePlaylists` |  `✔️`   | `✔️` |
+| `observeGenres`    |  `✔️`   | `✔️` |
+
+<!-- ### Query methods
 
 | Methods           | Android | IOS  | Web  | Windows |
 | ----------------- | :-----: | :--: | :--: | :-----: |
@@ -45,32 +67,7 @@
 | `observeAlbums`    |  `✔️`   | `✔️` | `❌` |  `✔️`   |
 | `observeArtists`   |  `✔️`   | `✔️` | `❌` |  `✔️`   |
 | `observePlaylists` |  `✔️`   | `✔️` | `❌` |  `❌`   |
-| `observeGenres`    |  `✔️`   | `✔️` | `❌` |  `✔️`   |
-
-### Playlist methods
-
-| Methods              | Android | IOS  | Web  | Windows |
-| -------------------- | :-----: | :--: | :--: | :-----: |
-| `createPlaylist`     |  `✔️`   | `✔️` | `❌` |  `❌`   |
-| `removePlaylist`     |  `✔️`   | `❌` | `❌` |  `❌`   |
-| `addToPlaylist`      |  `✔️`   | `✔️` | `❌` |  `❌`   |
-| `removeFromPlaylist` |  `✔️`   | `❌` | `❌` |  `❌`   |
-| `renamePlaylist`     |  `✔️`   | `❌` | `❌` |  `❌`   |
-| `moveItemTo`         |  `✔️`   | `❌` | `❌` |  `❌`   |
-
-### Permission methods
-
-| Methods              | Android | IOS  | Web  | Windows |
-| -------------------- | :-----: | :--: | :--: | :-----: |
-| `permissionsRequest` |  `✔️`   | `✔️` | `❌` |  `❌`   |
-| `permissionsStatus`  |  `✔️`   | `✔️` | `❌` |  `❌`   |
-
-### Others methods
-
-| Methods           | Android | IOS  | Web  | Windows |
-| ----------------- | :-----: | :--: | :--: | :-----: |
-| `scanMedia`       |  `✔️`   | `✔️` | `❌` |  `✔️`   |
-| `observersStatus` |  `✔️`   | `✔️` | `❌` |  `✔️`   |
+| `observeGenres`    |  `✔️`   | `✔️` | `❌` |  `✔️`   | -->
 
 ✔️ -> Supported <br>
 ❌ -> Not Supported <br>
