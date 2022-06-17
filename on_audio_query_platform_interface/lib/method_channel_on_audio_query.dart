@@ -46,7 +46,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   /// Default filter for all methods.
   static final MediaFilter _defaultFilter = MediaFilter.init();
 
-  /// Observers
+  // Observers
   Stream<List<AudioModel>>? _onAudiosObserverChanged;
   Stream<List<AlbumModel>>? _onAlbumsObserverChanged;
   Stream<List<ArtistModel>>? _onArtistsObserverChanged;

@@ -1,0 +1,3 @@
+class OnAudioQueryPlugin {
+  void getPlatformVersion() {}
+}
