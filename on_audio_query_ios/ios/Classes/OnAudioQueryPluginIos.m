@@ -1,6 +1,6 @@
-#import "OnAudioQueryPlugin.h"
-#if __has_include(<on_audio_query/on_audio_query_ios-Swift.h>)
-#import <on_audio_query/on_audio_query_ios-Swift.h>
+#import "OnAudioQueryPluginIos.h"
+#if __has_include(<on_audio_query_ios/on_audio_query_ios-Swift.h>)
+#import <on_audio_query_ios/on_audio_query_ios-Swift.h>
 #else
 // Support project import fallback if the generated compatibility header
 // is not copied when this plugin is created as a library.
