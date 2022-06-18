@@ -36,14 +36,17 @@ class QueryArtworkWidget extends StatelessWidget {
   /// Opts: [AUDIO] and [ALBUM].
   final ArtworkType type;
 
-  /// Used to define artwork [format].
+  @Deprecated('Deprecated after [3.0.0]. Use [formatType] instead')
+  final ArtworkFormat? format;
+
+  /// Used to define artwork [formatType].
   ///
   /// Opts: [JPEG] and [PNG].
   ///
   /// Important:
   ///
-  /// * If [format] is null, will be set to [JPEG].
-  final ArtworkFormat? format;
+  /// * If [formatType] is null, will be set to [JPEG].
+  final ArtworkFormatType? formatType;
 
   /// Used to define artwork [size].
   ///
@@ -290,7 +293,8 @@ class QueryArtworkWidget extends StatelessWidget {
     Key? key,
     required this.id,
     required this.type,
-    this.format,
+    this.format, // Deprecated
+    this.formatType,
     this.size,
     this.quality,
     this.artworkQuality,
@@ -333,7 +337,7 @@ class QueryArtworkWidget extends StatelessWidget {
         id,
         type,
         filter: MediaFilter.forArtwork(
-          artworkFormat: format ?? ArtworkFormat.JPEG,
+          artworkFormat: formatType ?? ArtworkFormatType.JPEG,
           artworkSize: size ?? 100,
           artworkQuality: quality ?? 50,
           cacheArtwork: cacheArtwork ?? true,

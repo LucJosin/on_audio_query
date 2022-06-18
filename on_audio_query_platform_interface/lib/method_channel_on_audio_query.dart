@@ -381,7 +381,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
       {
         "type": type.index,
         "id": id,
-        "format": filter.artworkFormat?.index ?? ArtworkFormat.JPEG.index,
+        "format": filter.artworkFormat?.index ?? ArtworkFormatType.JPEG.index,
         "size": filter.artworkSize ?? 100,
         "quality":
             (filter.artworkQuality != null && filter.artworkQuality! <= 100)

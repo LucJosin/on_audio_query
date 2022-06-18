@@ -459,9 +459,12 @@ class OnAudioQuery {
     ArtworkType type, {
     MediaFilter? filter,
     @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
+        // ignore: deprecated_member_use
         ArtworkFormat? format,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead") int? size,
-    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead") int? quality,
+    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
+        int? size,
+    @Deprecated("Deprecated after [3.0.0]. Use [filter] instead")
+        int? quality,
   }) async {
     return platform.queryArtwork(
       id,

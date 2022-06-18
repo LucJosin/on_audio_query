@@ -126,8 +126,8 @@ class MediaFilter {
   ///   * JPEG (JPG);
   ///   * PNG.
   ///
-  /// Note: If null, will be defined as [ArtworkFormat.JPEG].
-  ArtworkFormat? artworkFormat;
+  /// Note: If null, will be defined as [ArtworkFormatType.JPEG].
+  ArtworkFormatType? artworkFormat;
 
   /// The artwork [size].
   ///
@@ -348,14 +348,14 @@ class MediaFilter {
   ///
   /// Parameters:
   ///
-  /// * [artworkFormat] is used to define the [ArtworkFormat].
+  /// * [artworkFormat] is used to define the [ArtworkFormatType].
   /// * [artworkSize] is used to define the artwork size.
   /// * [artworkQuality] is used to define the artwork quality.
   /// * [cacheArtwork] is used to define if the artwork will be [cached].
   /// * [cacheTemporarily] is used to define if the artwork will be [cached]\(temporarily).
   /// * [overrideCache] is used to define if the artwork will be [overriden] if already exists.
   MediaFilter.forArtwork({
-    this.artworkFormat = ArtworkFormat.JPEG,
+    this.artworkFormat = ArtworkFormatType.JPEG,
     this.artworkSize = 100,
     this.artworkQuality = 50,
     this.cacheArtwork = true,
