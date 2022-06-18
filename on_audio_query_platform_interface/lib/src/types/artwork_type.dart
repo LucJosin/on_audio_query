@@ -32,15 +32,12 @@ enum ArtworkType {
   GENRE,
 }
 
-/// Defines the type of image.
-///
-/// Read [JPEG] and [PNG] for know the difference between performance.
+/// Deprecated after [3.0.0]. Use [ArtworkFormatType] methods instead
+@Deprecated('Deprecated after [3.0.0]. Use [ArtworkFormatType] methods instead')
 enum ArtworkFormat {
-  /// Note: [JPEG] images give a better performance when call the method and
-  /// give a "bad" image quality.
+  /// Deprecated after [3.0.0]. Use [ArtworkFormatType.JPEG] methods instead
   JPEG,
 
-  /// Note: [PNG] images give a slow performance when call the method and give a
-  /// "good" image quality.
+  /// Deprecated after [3.0.0]. Use [ArtworkFormatType.PNG] methods instead
   PNG,
 }
