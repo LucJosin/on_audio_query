@@ -80,7 +80,7 @@ Add the following code to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  on_audio_query: ^3.0.0
+  on_audio_query: 3.0.0-beta.0
 ```
 
 ### Request Permission:
@@ -107,7 +107,7 @@ To use this plugin add the following code to your `Info.plist`
 	<string>..Add a reason..</string>
 ```
 
-#### Web/Assets:
+<!-- #### Web/Assets:
 
 Since Web Browsers **don't** offer direct access to their user's `file system`, this plugin will use the `assets` folder to "query" the audios files. So, will totally depend of the `developer`.
 
@@ -120,7 +120,7 @@ assets:
   # - assets/audios/animals/
   # - assets/audios/animals/cat/
   # ...
-```
+``` -->
 
 ## Some Features:
 
