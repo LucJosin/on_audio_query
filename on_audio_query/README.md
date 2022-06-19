@@ -16,7 +16,7 @@
 
 - [How to Install](#how-to-install)
 - [Platforms](#platforms)
-- [How to use](#how-to-use)
+- [Overview](#overview)
 - [Examples](#examples)
 - [Gif Examples](#gif-examples)
 - [License](#license)
@@ -135,7 +135,7 @@ assets:
 - Add/Remove/Move specific audios to playlists.
 - Specific sort types for all query methods.
 
-## How to use:
+## Overview:
 
 All types of methods on this plugin:
 

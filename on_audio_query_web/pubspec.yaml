@@ -1,8 +1,9 @@
 name: on_audio_query_web
 description: Web implementation of [on_audio_query].
-version: 1.0.0-alpha.0
+version: 2.0.0-alpha.0
 homepage: https://github.com/LucJosin/on_audio_query/tree/main/on_audio_query_web
-# pub.dev: https://pub.dev/packages/on_audio_query_web
+# pub.dev: https://pub.dev/packages/on_audio_query
+# pub.dev (Web): https://pub.dev/packages/on_audio_query_web
 # ========
 # author: Lucas Josino
 # github: https://github.com/LucJosin
