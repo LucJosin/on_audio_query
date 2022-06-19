@@ -1,3 +1,93 @@
+## [3.0.0-beta.0] - [06.19.2022]
+
+### Features
+
+#### Dart
+
+- **[Updated]** `example`.
+- **[Added/Fixed]** documentation.
+
+#### Android / iOS
+
+- **[Added]** `clearCachedArtworks` method to clear all cached images/artworks.
+- **[Added]** a `filter` to every 'query' method.
+- **[Added]** option to sort songs using `track number`.
+- **[Added]** method to get `information` from specifics audios.
+- **[Added]** `ArtworkFormatType`.
+- **[Added]** `AudioType`.
+- **[Added]** `MediaDirType`.
+- **[Added]** `MediaFilter`.
+- **[Added]** `MediaColumns`.
+- **[Added]** `ArtworkModel`.
+- **[Added]** `ObserversModel`.
+- **[Added]** `observersStatus`.
+- **[Added]** `observers`:
+  - observeSongs.
+  - observeAlbums.
+  - observeArtists.
+  - observePlaylists.
+  - observeGenres.
+- **[Reduced]** the default `artwork` resolution.
+
+#### Android
+
+- **[Updated]** `gradle`.
+- **[Removed]** `Ringtones`, `Notification`, etc.. from default 'query'.
+- **[Added]** option to use multiple `path` when 'querying'.
+
+### Fixes
+
+#### Android
+
+- Fix app crash after `requestPermission`.
+
+<!-- #### iOS
+
+- Fix `iTunesStore not authorized`. -->
+
+### Documentation
+
+- Updated `README` documentation.
+- Updated `DEPRECATED` documentation.
+- Updated `PLATFORMS` documentation.
+
+### Important Changes ⚠
+
+- Now all methods will use the `filter` for more advanced filtering.
+- Now the `plugin` will return a `error`, instead of empty list, if app **doesn't have permission to read**.
+- Now `createPlaylist` will return the `playlistId` instead if `bool`.
+- Now `queryArtwork` will return a `ArtworkModel`.
+
+#### @**Deprecated**
+
+- `[queryAudiosFrom]`.
+- `[queryWithFilters]`.
+- `[queryFromFolder]`.
+- `[queryAllPath]`.
+- `[format]` from `[QueryArtworkWidget]`.
+- `[AudiosFromType]` and `[AudiosFromType]`
+- `[format]`, `[size]` and `[quality]` from `[queryArtwork]`.
+- `[SongModel]`
+  - Use `[AudioModel]` instead.
+- `[SongSortType]`
+  - Use `[MediaColumns.Audio]` instead.
+- `[AlbumSortType]`
+  - Use `[MediaColumns.Album]` instead.
+- `[ArtistSortType]`
+  - Use `[MediaColumns.Artist]` instead.
+- `[PlaylistSortType]`
+  - Use `[MediaColumns.Playlist]` instead.
+- `[GenreSortType]`
+  - Use `[MediaColumns.Genre]` instead.
+- `[ArtworkFormat]`
+  - Use `[ArtworkFormatType]` instead.
+- `[sortType]`, `[orderType]`, `[uriType]` and `[ignoreCase]` from:
+  - `[querySongs]`;
+  - `[queryAlbums]`;
+  - `[queryArtists]`;
+  - `[queryPlaylists]`;
+  - `[queryGenres]`.
+
 ## [2.6.1] - [05.17.2022]
 
 ### Fixes
@@ -80,7 +170,7 @@
 
 - Updated `README` documentation.
 
-### ⚠ Important Changes
+### Important Changes ⚠
 
 #### Dart
 
@@ -142,7 +232,7 @@ See all development [changes](https://github.com/LucJosin/on_audio_query/blob/ma
 
 - Downgraded `Kotlin` and `Gradle` version. - [#51](https://github.com/LucJosin/on_audio_query/issues/51)
 
-### ⚠ Important Changes
+### Important Changes ⚠
 
 #### @Deprecated
 
@@ -273,7 +363,7 @@ See all development [changes](https://github.com/LucJosin/on_audio_query/blob/ma
 
 - **[Changed]** wrong name `DATA_ADDED` to `DATE_ADDED` for both `[SongSortType]` and `[PlaylistSortType]`. - [#27](https://github.com/LucJosin/on_audio_query/issues/27)
 
-### ⚠ Important Changes
+### Important Changes ⚠
 
 #### Dart
 
@@ -455,7 +545,7 @@ See all development [changes](https://github.com/LucJosin/on_audio_query/blob/ma
 - Updated `DEPRECATED` documentation.
 - Added documentation to `IOS` platform.
 
-### ⚠ Important Changes
+### Important Changes ⚠
 
 #### @Deprecated
 
@@ -478,7 +568,7 @@ See all development [changes](https://github.com/LucJosin/on_audio_query/blob/ma
 - Updated `DEPRECATED` documentation.
 - Created [`PLATFORMS`](https://github.com/LucJosin/on_audio_query/blob/2.0.0-dev/PLATFORMS.md) file.
 
-### ⚠ Important Changes
+### Important Changes ⚠
 
 #### Dart
 
@@ -515,7 +605,7 @@ See all development [changes](https://github.com/LucJosin/on_audio_query/blob/ma
 - Added `[queryPlaylists]` method.
 - Added `[queryAudiosFrom]` method.
 
-### ⚠ Important Changes
+### Important Changes ⚠
 
 #### Dart
 
@@ -550,7 +640,7 @@ See all development [changes](https://github.com/LucJosin/on_audio_query/blob/ma
 
 - Added `[queryArtists]` and `[queryGenres]`.
 
-### ⚠ Important Changes
+### Important Changes ⚠
 
 #### @Deprecated
 
@@ -589,7 +679,7 @@ See all development [changes](https://github.com/LucJosin/on_audio_query/blob/ma
 - Now `[sdk]` are `[version]`.
 - Now `[deviceType]` are `[type]`.
 
-### ⚠ Important Changes
+### Important Changes ⚠
 
 #### Dart
 
@@ -714,7 +804,7 @@ See all development [changes](https://github.com/LucJosin/on_audio_query/blob/ma
 
 - Changed from `[deviceInfo]` to `[deviceSDK]` on `[QueryArtworkWidget]`.
 
-### ⚠ Important Changes
+### Important Changes ⚠
 
 #### Dart
 
@@ -752,7 +842,7 @@ See all development [changes](https://github.com/LucJosin/on_audio_query/blob/ma
 - Updated some `[Kotlin]` dependencies.
 - Changed some `[Kotlin]` methods.
 
-### ⚠ Important Changes
+### Important Changes ⚠
 
 #### Dart
 
@@ -779,7 +869,7 @@ See all development [changes](https://github.com/LucJosin/on_audio_query/blob/ma
 
 - Updated `README` documentation.
 
-### ⚠ Important Changes
+### Important Changes ⚠
 
 #### Dart
 
@@ -815,7 +905,7 @@ See all development [changes](https://github.com/LucJosin/on_audio_query/blob/ma
 - Now all `[Kotlin]` checks will throw a `[Exception]` if value don't exist.
 - Updated some `[Kotlin]` dependencies.
 
-### ⚠ Important Changes
+### Important Changes ⚠
 
 #### Dart/Android
 
@@ -868,7 +958,7 @@ See all development [changes](https://github.com/LucJosin/on_audio_query/blob/ma
 
 ## [1.0.3] - [03.28.2021]
 
-### ⚠ Important Changes
+### Important Changes ⚠
 
 #### Dart
 
@@ -897,7 +987,7 @@ See all development [changes](https://github.com/LucJosin/on_audio_query/blob/ma
 
 - Now `[Id]` in models return `[int]` instead `[String]`.
 
-### ⚠ Important Changes
+### Important Changes ⚠
 
 #### Dart/Android
 
@@ -1055,7 +1145,7 @@ See all development [changes](https://github.com/LucJosin/on_audio_query/blob/ma
 ### Changes
 - TODO
 
-### ⚠ Important Changes
+### Important Changes ⚠
 #### @**Deprecated**
 - TODO
  -->
