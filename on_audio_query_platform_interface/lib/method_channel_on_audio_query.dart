@@ -14,224 +14,395 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 */
 
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 
 import 'on_audio_query_platform_interface.dart';
 
-import 'package:on_audio_query_platform_interface/details/on_audio_query_helper.dart';
+const String _channelName = 'com.lucasjosino.on_audio_query';
+const MethodChannel _channel = MethodChannel(_channelName);
 
-const MethodChannel _channel = MethodChannel('com.lucasjosino.on_audio_query');
+const EventChannel _audiosObserverChannel = EventChannel(
+  '$_channelName/audios_observer',
+);
+const EventChannel _albumsObserverChannel = EventChannel(
+  '$_channelName/albums_observer',
+);
+const EventChannel _artistsObserverChannel = EventChannel(
+  '$_channelName/artists_observer',
+);
+const EventChannel _playlistsObserverChannel = EventChannel(
+  '$_channelName/playlists_observer',
+);
+const EventChannel _genresObserverChannel = EventChannel(
+  '$_channelName/genres_observer',
+);
 
 /// An implementation of [OnAudioQueryPlatform] that uses method channels.
 class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   /// The MethodChannel that is being used by this implementation of the plugin.
   MethodChannel get channel => _channel;
 
+  /// Default filter for all methods.
+  static final MediaFilter _defaultFilter = MediaFilter.init();
+
+  // Observers
+  Stream<List<AudioModel>>? _onAudiosObserverChanged;
+  Stream<List<AlbumModel>>? _onAlbumsObserverChanged;
+  Stream<List<ArtistModel>>? _onArtistsObserverChanged;
+  Stream<List<PlaylistModel>>? _onPlaylistsObserverChanged;
+  Stream<List<GenreModel>>? _onGenresObserverChanged;
+
+  /// Native query
+  // AudiosQuery get _audiosQuery => AudiosQuery();
+
+  // @override
+  // Future<List<T>> queryBuilder<T>({String? builder}) async {
+  //   return [] as List<T>;
+  // }
+
   @override
-  Future<List<SongModel>> querySongs({
-    SongSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
-    String? path,
+  Future<bool> clearCachedArtworks() async {
+    return await _channel.invokeMethod('clearCachedArtworks');
+  }
+
+  @override
+  Future<List<AudioModel>> queryAudios({
+    MediaFilter? filter,
   }) async {
+    // If the filter is null, use the 'default'.
+    filter ??= _defaultFilter;
+
+    // Check if the request is to [Assets] or [App Directory].
+    // if (filter.dirType == MediaDirType.ASSETS ||
+    //     filter.dirType == MediaDirType.APP_DIR) {
+    //   return _audiosQuery.queryAudios();
+    // }
+
+    // Fix the 'type' filter.
+    //
+    // Convert the 'AudioType' into 'int'.
+    // The 'true' and 'false' value into '1' or '2'.
+    Map<int, int> fixedMap = {};
+    filter.type.forEach((key, value) {
+      //
+      fixedMap[key.index] = value == true ? 1 : 0;
+    });
+
+    // Invoke the channel.
     final List<dynamic> resultSongs = await _channel.invokeMethod(
-      "querySongs",
+      "queryAudios",
       {
-        "sortType": sortType?.index,
-        "orderType": orderType != null
-            ? orderType.index
-            : OrderType.ASC_OR_SMALLER.index,
-        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
-        "ignoreCase": ignoreCase ?? true,
-        "path": path,
+        "sortType": filter.audioSortType?.index,
+        "orderType": filter.orderType.index,
+        "uri": filter.uriType.index,
+        "ignoreCase": filter.ignoreCase,
+        "toQuery": filter.toQuery,
+        "toRemove": filter.toRemove,
+        "type": fixedMap,
+        "limit": filter.limit,
       },
     );
-    return resultSongs.map((e) => SongModel(e)).toList();
+
+    // Convert the result into a list of [SongModel] and return.
+    return resultSongs.map((e) => AudioModel(e)).toList();
+  }
+
+  @override
+  Stream<List<AudioModel>> observeAudios({
+    MediaFilter? filter,
+    bool? isAsset,
+  }) {
+    // If the filter is null, use the 'default'.
+    filter ??= _defaultFilter;
+
+    // Fix the 'type' filter.
+    //
+    // Convert the 'AudioType' into 'int'.
+    // The 'true' and 'false' value into '1' or '2'.
+    Map<int, int> fixedMap = {};
+    filter.type.forEach((key, value) {
+      //
+      fixedMap[key.index] = value == true ? 1 : 0;
+    });
+
+    // Invoke the observer and convert the result into a list of [AudioModel].
+    _onAudiosObserverChanged ??= _audiosObserverChannel.receiveBroadcastStream(
+      {
+        "sortType": filter.audioSortType?.index,
+        "orderType": filter.orderType.index,
+        "uri": filter.uriType.index,
+        "ignoreCase": filter.ignoreCase,
+        "toQuery": filter.toQuery,
+        "toRemove": filter.toRemove,
+        "type": fixedMap,
+        "limit": filter.limit,
+      },
+    ).asyncMap<List<AudioModel>>(
+      (event) => Future.wait(
+        event.map<Future<AudioModel>>((m) async => AudioModel(m)),
+      ),
+    );
+
+    // Return the list.
+    return _onAudiosObserverChanged!;
   }
 
   @override
   Future<List<AlbumModel>> queryAlbums({
-    AlbumSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
+    MediaFilter? filter,
   }) async {
+    // If the filter is null, use the 'default'.
+    filter ??= _defaultFilter;
+
+    // Invoke the channel.
     final List<dynamic> resultAlbums = await _channel.invokeMethod(
       "queryAlbums",
       {
-        "sortType": sortType?.index,
-        "orderType": orderType != null
-            ? orderType.index
-            : OrderType.ASC_OR_SMALLER.index,
-        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
-        "ignoreCase": ignoreCase ?? true,
+        "sortType": filter.albumSortType?.index,
+        "orderType": filter.orderType.index,
+        "uri": filter.uriType.index,
+        "ignoreCase": filter.ignoreCase,
+        "toQuery": filter.toQuery,
+        "toRemove": filter.toRemove,
+        "limit": filter.limit,
       },
     );
+
+    // Convert the result into a list of [AlbumModel] and return.
     return resultAlbums.map((albumInfo) => AlbumModel(albumInfo)).toList();
   }
 
   @override
+  Stream<List<AlbumModel>> observeAlbums({
+    MediaFilter? filter,
+  }) {
+    // If the filter is null, use the 'default'.
+    filter ??= _defaultFilter;
+
+    // Invoke the observer and convert the result into a list of [AlbumModel].
+    _onAlbumsObserverChanged ??= _albumsObserverChannel.receiveBroadcastStream(
+      {
+        "sortType": filter.albumSortType?.index,
+        "orderType": filter.orderType.index,
+        "uri": filter.uriType.index,
+        "ignoreCase": filter.ignoreCase,
+        "toQuery": filter.toQuery,
+        "toRemove": filter.toRemove,
+        "limit": filter.limit,
+      },
+    ).asyncMap<List<AlbumModel>>(
+      (event) => Future.wait(
+        event.map<Future<AlbumModel>>((m) async => AlbumModel(m)),
+      ),
+    );
+
+    // Return the list.
+    return _onAlbumsObserverChanged!;
+  }
+
+  @override
   Future<List<ArtistModel>> queryArtists({
-    ArtistSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
+    MediaFilter? filter,
   }) async {
+    // If the filter is null, use the 'default'.
+    filter ??= _defaultFilter;
+
+    // Invoke the channel.
     final List<dynamic> resultArtists = await _channel.invokeMethod(
       "queryArtists",
       {
-        "sortType": sortType?.index,
-        "orderType": orderType != null
-            ? orderType.index
-            : OrderType.ASC_OR_SMALLER.index,
-        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
-        "ignoreCase": ignoreCase ?? true,
+        "sortType": filter.albumSortType?.index,
+        "orderType": filter.orderType.index,
+        "uri": filter.uriType.index,
+        "ignoreCase": filter.ignoreCase,
+        "toQuery": filter.toQuery,
+        "toRemove": filter.toRemove,
+        "limit": filter.limit,
       },
     );
+
+    // Convert the result into a list of [ArtistModel] and return.
     return resultArtists.map((artistInfo) => ArtistModel(artistInfo)).toList();
   }
 
   @override
+  Stream<List<ArtistModel>> observeArtists({
+    MediaFilter? filter,
+  }) {
+    // If the filter is null, use the 'default'.
+    filter ??= _defaultFilter;
+
+    // Invoke the observer and convert the result into a list of [ArtistModel].
+    _onArtistsObserverChanged ??=
+        _artistsObserverChannel.receiveBroadcastStream(
+      {
+        "sortType": filter.albumSortType?.index,
+        "orderType": filter.orderType.index,
+        "uri": filter.uriType.index,
+        "ignoreCase": filter.ignoreCase,
+        "toQuery": filter.toQuery,
+        "toRemove": filter.toRemove,
+        "limit": filter.limit,
+      },
+    ).asyncMap<List<ArtistModel>>(
+      (event) => Future.wait(
+        event.map<Future<ArtistModel>>((m) async => ArtistModel(m)),
+      ),
+    );
+
+    // Return the list.
+    return _onArtistsObserverChanged!;
+  }
+
+  @override
   Future<List<PlaylistModel>> queryPlaylists({
-    PlaylistSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
+    MediaFilter? filter,
   }) async {
+    // If the filter is null, use the 'default'.
+    filter ??= _defaultFilter;
+
+    // Invoke the channel.
     final List<dynamic> resultPlaylists = await _channel.invokeMethod(
       "queryPlaylists",
       {
-        "sortType": sortType?.index,
-        "orderType": orderType != null
-            ? orderType.index
-            : OrderType.ASC_OR_SMALLER.index,
-        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
-        "ignoreCase": ignoreCase ?? true,
+        "sortType": filter.albumSortType?.index,
+        "orderType": filter.orderType.index,
+        "uri": filter.uriType.index,
+        "ignoreCase": filter.ignoreCase,
+        "toQuery": filter.toQuery,
+        "toRemove": filter.toRemove,
+        "limit": filter.limit,
       },
     );
+
+    // Convert the result into a list of [PlaylistModel] and return.
     return resultPlaylists
         .map((playlistInfo) => PlaylistModel(playlistInfo))
         .toList();
   }
 
   @override
+  Stream<List<PlaylistModel>> observePlaylists({
+    MediaFilter? filter,
+  }) {
+    // If the filter is null, use the 'default'.
+    filter ??= _defaultFilter;
+
+    // Invoke the observer and convert the result into a list of [PlaylistModel].
+    _onPlaylistsObserverChanged ??=
+        _playlistsObserverChannel.receiveBroadcastStream(
+      {
+        "sortType": filter.albumSortType?.index,
+        "orderType": filter.orderType.index,
+        "uri": filter.uriType.index,
+        "ignoreCase": filter.ignoreCase,
+        "toQuery": filter.toQuery,
+        "toRemove": filter.toRemove,
+        "limit": filter.limit,
+      },
+    ).asyncMap<List<PlaylistModel>>(
+      (event) => Future.wait(
+        event.map<Future<PlaylistModel>>((m) async => PlaylistModel(m)),
+      ),
+    );
+
+    // Return the list.
+    return _onPlaylistsObserverChanged!;
+  }
+
+  @override
   Future<List<GenreModel>> queryGenres({
-    GenreSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-    bool? ignoreCase,
+    MediaFilter? filter,
   }) async {
+    // If the filter is null, use the 'default'.
+    filter ??= _defaultFilter;
+
+    // Invoke the channel.
     final List<dynamic> resultGenres = await _channel.invokeMethod(
       "queryGenres",
       {
-        "sortType": sortType?.index,
-        "orderType": orderType != null
-            ? orderType.index
-            : OrderType.ASC_OR_SMALLER.index,
-        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
-        "ignoreCase": ignoreCase ?? true,
+        "sortType": filter.albumSortType?.index,
+        "orderType": filter.orderType.index,
+        "uri": filter.uriType.index,
+        "ignoreCase": filter.ignoreCase,
+        "toQuery": filter.toQuery,
+        "toRemove": filter.toRemove,
+        "limit": filter.limit,
       },
     );
+
+    // Convert the result into a list of [GenreModel] and return.
     return resultGenres.map((genreInfo) => GenreModel(genreInfo)).toList();
   }
 
   @override
-  Future<List<SongModel>> queryAudiosFrom(
-    AudiosFromType type,
-    Object where, {
-    SongSortType? sortType,
-    OrderType? orderType,
-    bool? ignoreCase,
-  }) async {
-    final List<dynamic> resultSongsFrom = await _channel.invokeMethod(
-      "queryAudiosFrom",
+  Stream<List<GenreModel>> observeGenres({
+    MediaFilter? filter,
+  }) {
+    // If the filter is null, use the 'default'.
+    filter ??= _defaultFilter;
+
+    // Invoke the observer and convert the result into a list of [GenreModel].
+    _onGenresObserverChanged ??= _genresObserverChannel.receiveBroadcastStream(
       {
-        "type": type.index,
-        "where": where,
-        "sortType": sortType?.index,
-        "orderType": orderType != null
-            ? orderType.index
-            : OrderType.ASC_OR_SMALLER.index,
-        "ignoreCase": ignoreCase ?? true,
+        "sortType": filter.albumSortType?.index,
+        "orderType": filter.orderType.index,
+        "uri": filter.uriType.index,
+        "ignoreCase": filter.ignoreCase,
+        "toQuery": filter.toQuery,
+        "toRemove": filter.toRemove,
+        "limit": filter.limit,
       },
+    ).asyncMap<List<GenreModel>>(
+      (event) => Future.wait(
+        event.map<Future<GenreModel>>((m) async => GenreModel(m)),
+      ),
     );
-    return resultSongsFrom.map((songInfo) => SongModel(songInfo)).toList();
+
+    // Return the list.
+    return _onGenresObserverChanged!;
   }
 
   @override
-  Future<List<dynamic>> queryWithFilters(
-    String argsVal,
-    WithFiltersType withType,
-    dynamic args,
-  ) async {
-    final List<dynamic> resultFilters = await _channel.invokeMethod(
-      "queryWithFilters",
-      {"withType": withType.index, "args": args.index ?? 0, "argsVal": argsVal},
-    );
-    return resultFilters;
-  }
-
-  @override
-  Future<Uint8List?> queryArtwork(
+  Future<ArtworkModel?> queryArtwork(
     int id,
     ArtworkType type, {
-    ArtworkFormat? format,
-    int? size,
-    int? quality,
+    bool? fromAsset,
+    bool? fromAppDir,
+    MediaFilter? filter,
   }) async {
-    final Uint8List? finalArtworks = await _channel.invokeMethod(
+    // If the filter is null, use the 'default'.
+    filter ??= _defaultFilter;
+
+    //
+    return _channel.invokeMethod(
       "queryArtwork",
       {
         "type": type.index,
         "id": id,
-        "format": format != null ? format.index : ArtworkFormat.JPEG.index,
-        "size": size ?? 200,
-        "quality": (quality != null && quality <= 100) ? size : 100,
+        "format": filter.artworkFormat?.index ?? ArtworkFormatType.JPEG.index,
+        "size": filter.artworkSize ?? 100,
+        "quality":
+            (filter.artworkQuality != null && filter.artworkQuality! <= 100)
+                ? filter.artworkQuality
+                : 50,
+        "cacheArtwork": filter.cacheArtwork ?? true,
+        "cacheTemporarily": filter.cacheTemporarily ?? true,
+        "overrideCache": filter.overrideCache ?? false,
       },
+    ).then(
+      (resultArtwork) => ArtworkModel(resultArtwork),
     );
-    return finalArtworks;
   }
 
   @override
-  Future<List<SongModel>> queryFromFolder(
-    String path, {
-    SongSortType? sortType,
-    OrderType? orderType,
-    UriType? uriType,
-  }) async {
-    final List<dynamic> resultFromFolder = await _channel.invokeMethod(
-      "queryFromFolder",
-      {
-        "sortType":
-            sortType != null ? sortType.index : SongSortType.TITLE.index,
-        "orderType": orderType != null
-            ? orderType.index
-            : OrderType.ASC_OR_SMALLER.index,
-        "uri": uriType != null ? uriType.index : UriType.EXTERNAL.index,
-        "path": path
-      },
-    );
-    return resultFromFolder.map((songInfo) => SongModel(songInfo)).toList();
-  }
-
-  @override
-  Future<List<String>> queryAllPath() async {
-    final List<dynamic> resultAllPath = await _channel.invokeMethod(
-      "queryAllPath",
-    );
-    return resultAllPath.cast<String>();
-  }
-
-  @override
-  Future<bool> createPlaylist(
+  Future<int?> createPlaylist(
     String name, {
     String? author,
     String? desc,
   }) async {
-    final bool resultCreatePl = await _channel.invokeMethod(
+    return await _channel.invokeMethod(
       "createPlaylist",
       {
         "playlistName": name,
@@ -239,47 +410,43 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "playlistDesc": desc,
       },
     );
-    return resultCreatePl;
   }
 
   @override
   Future<bool> removePlaylist(int playlistId) async {
-    final bool resultRemovePl = await _channel.invokeMethod(
+    return await _channel.invokeMethod(
       "removePlaylist",
       {
         "playlistId": playlistId,
       },
     );
-    return resultRemovePl;
   }
 
   @override
   Future<bool> addToPlaylist(int playlistId, int audioId) async {
-    final bool resultAddToPl = await _channel.invokeMethod(
+    return await _channel.invokeMethod(
       "addToPlaylist",
       {
         "playlistId": playlistId,
         "audioId": audioId,
       },
     );
-    return resultAddToPl;
   }
 
   @override
   Future<bool> removeFromPlaylist(int playlistId, int audioId) async {
-    final bool resultRemoveFromPl = await _channel.invokeMethod(
+    return await _channel.invokeMethod(
       "removeFromPlaylist",
       {
         "playlistId": playlistId,
         "audioId": audioId,
       },
     );
-    return resultRemoveFromPl;
   }
 
   @override
   Future<bool> moveItemTo(int playlistId, int from, int to) async {
-    final bool resultMoveItem = await _channel.invokeMethod(
+    return await _channel.invokeMethod(
       "moveItemTo",
       {
         "playlistId": playlistId,
@@ -287,45 +454,45 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "to": to,
       },
     );
-    return resultMoveItem;
   }
 
   @override
   Future<bool> renamePlaylist(int playlistId, String newName) async {
-    final bool resultRenamePl = await _channel.invokeMethod(
+    return await _channel.invokeMethod(
       "renamePlaylist",
       {
         "playlistId": playlistId,
         "newPlName": newName,
       },
     );
-    return resultRenamePl;
   }
 
   @override
   Future<bool> permissionsStatus() async {
-    final bool resultStatus = await _channel.invokeMethod("permissionsStatus");
-    return resultStatus;
+    return await _channel.invokeMethod("permissionsStatus");
   }
 
   @override
   Future<bool> permissionsRequest() async {
-    final bool resultRequest = await _channel.invokeMethod(
-      "permissionsRequest",
-    );
-    return resultRequest;
+    return await _channel.invokeMethod("permissionsRequest");
   }
 
   @override
   Future<DeviceModel> queryDeviceInfo() async {
-    final Map deviceResult = await _channel.invokeMethod("queryDeviceInfo");
-    return DeviceModel(deviceResult);
+    return _channel
+        .invokeMethod("queryDeviceInfo")
+        .then((deviceResult) => DeviceModel(deviceResult));
   }
 
   @override
   Future<bool> scanMedia(String path) async {
-    return await _channel.invokeMethod('scan', {
-      "path": path,
-    });
+    return await _channel.invokeMethod('scan', {"path": path});
+  }
+
+  @override
+  Future<ObserversModel> observersStatus() async {
+    return _channel
+        .invokeMethod('observersStatus')
+        .then((observersResult) => ObserversModel(observersResult));
   }
 }

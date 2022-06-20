@@ -3,12 +3,9 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
 
 jobs:
-  package-analysis:
+  plugin-analysis:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -17,12 +14,12 @@ jobs:
         with:
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           relativePath: on_audio_query/
-      - name: Check Scores
+      - name: Check plugin scores
         env:
           TOTAL: ${{ steps.dart_analysis.outputs.total }}
           TOTAL_MAX: ${{ steps.dart_analysis.outputs.total_max }}
         run: |
-          SCORES=$(( $TOTAL + 10 / $TOTAL_MAX + 10 ))
+          SCORES=$(( $TOTAL / $TOTAL_MAX ))
           if (( $SCORES < 1 ))
           then
             echo Score too low!
