@@ -14,12 +14,9 @@ environment:
 
 dependencies:
   # on_audio_query
-  on_audio_query_platform_interface:
-    path: ../on_audio_query_platform_interface
-  on_audio_query_android:
-    path: ../on_audio_query_android
-  on_audio_query_ios:
-    path: ../on_audio_query_ios
+  on_audio_query_platform_interface: ^2.0.0-beta.0
+  on_audio_query_android: ^1.0.0-prerelease.0
+  on_audio_query_ios: ^1.0.0-prerelease.0
 
   # Flutter
   flutter:
