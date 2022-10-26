@@ -314,7 +314,8 @@ class QueryArtworkWidget extends StatelessWidget {
     this.nullArtworkWidget,
     this.errorBuilder,
     this.frameBuilder,
-  }) : super(key: key);
+  })  : assert(quality != null && quality > 100),
+        super(key: key);
 
   OnAudioQuery get _audioQuery => OnAudioQuery();
 
@@ -327,11 +328,6 @@ class QueryArtworkWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (quality != null && quality! > 100) {
-      throw Exception(
-        '[quality] value cannot be greater than [100]',
-      );
-    }
     return FutureBuilder<ArtworkModel?>(
       future: _audioQuery.queryArtwork(
         id,
