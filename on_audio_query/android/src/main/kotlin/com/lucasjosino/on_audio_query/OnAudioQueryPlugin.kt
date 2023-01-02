@@ -19,7 +19,9 @@ import android.app.Activity
 import android.content.Context
 import android.content.pm.PackageManager
 import android.media.MediaScannerConnection
+import android.os.Build
 import androidx.annotation.NonNull
+import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.lucasjosino.on_audio_query.controller.OnAudioController
@@ -52,7 +54,14 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     //
     private val onPermission = arrayOf(
         Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
+        Manifest.permission.WRITE_EXTERNAL_STORAGE,
+
+    )
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    private  val tiramisuPermission = arrayOf(
+        Manifest.permission.READ_MEDIA_AUDIO,
+        Manifest.permission.READ_MEDIA_IMAGES,
+        Manifest.permission.READ_MEDIA_VIDEO
     )
 
     // This is only important for initialization
@@ -122,29 +131,61 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     //
     private val onRequestCode: Int = 88560
 
-    override fun onPermissionStatus(context: Context?): Boolean = onPermission.all {
+    override fun onPermissionStatus(context: Context?): Boolean{
         // After "leaving" this class, context will be null so, we need this context argument to
         // call the [checkSelfPermission].
-        return ContextCompat.checkSelfPermission(
-            context ?: pContext,
-            it
-        ) == PackageManager.PERMISSION_GRANTED
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            return tiramisuPermission.all {
+                ContextCompat.checkSelfPermission(
+                    context ?: pContext,
+                    it
+                ) == PackageManager.PERMISSION_GRANTED
+            }
+        }
+        else{
+            return onPermission.all {
+                ContextCompat.checkSelfPermission(
+                    context ?: pContext,
+                    it
+                ) == PackageManager.PERMISSION_GRANTED
+            }
+        }
+
     }
 
     override fun onRequestPermission() {
-        ActivityCompat.requestPermissions(pActivity, onPermission, onRequestCode)
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            ActivityCompat.requestPermissions(pActivity, tiramisuPermission, onRequestCode)
+        }
+        else{
+            ActivityCompat.requestPermissions(pActivity, onPermission, onRequestCode)
+        }
+
     }
 
     // Second requestPermission, this one with the option "Never Ask Again".
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onRetryRequestPermission() {
-        if (ActivityCompat.shouldShowRequestPermissionRationale(pActivity, onPermission[0])
-            || ActivityCompat.shouldShowRequestPermissionRationale(pActivity, onPermission[1])
-        ) {
-            retryRequest = false
-            onRequestPermission()
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+            if (ActivityCompat.shouldShowRequestPermissionRationale(pActivity, onPermission[0])
+                || ActivityCompat.shouldShowRequestPermissionRationale(pActivity, onPermission[1])
+            ) {
+                retryRequest = false
+                onRequestPermission()
+            }
+        }
+        else{
+            if (ActivityCompat.shouldShowRequestPermissionRationale(pActivity, tiramisuPermission[0])
+                || ActivityCompat.shouldShowRequestPermissionRationale(pActivity, tiramisuPermission[1])
+                || ActivityCompat.shouldShowRequestPermissionRationale(pActivity,tiramisuPermission[2])
+            ) {
+                retryRequest = false
+                onRequestPermission()
+            }
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
