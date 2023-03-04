@@ -1,6 +1,6 @@
 name: on_audio_query
 description: Flutter Plugin used to query audios/songs infos [title, artist, album, etc..] from device storage.
-version: 2.6.1
+version: 2.6.2
 homepage: https://github.com/LucJosin/on_audio_query/tree/main/on_audio_query
 # pub.dev: https://pub.dev/packages/on_audio_query
 # ========

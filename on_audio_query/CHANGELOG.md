@@ -1,3 +1,11 @@
+## [2.6.2] - [03.03.2023]
+
+### Fixes
+
+#### Android
+
+- **[Fixed]** incompatibility with `Android 13`. - [#91](https://github.com/LucJosin/on_audio_query/issues/91) - Thanks [@ruchit-7span](https://github.com/ruchit-7span)
+
 ## [2.6.1] - [05.17.2022]
 
 ### Fixes
