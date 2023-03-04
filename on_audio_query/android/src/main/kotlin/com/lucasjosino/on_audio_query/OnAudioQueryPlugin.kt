@@ -55,10 +55,10 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     private val onPermission = arrayOf(
         Manifest.permission.READ_EXTERNAL_STORAGE,
         Manifest.permission.WRITE_EXTERNAL_STORAGE,
-
     )
+
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    private  val tiramisuPermission = arrayOf(
+    private val tiramisuPermission = arrayOf(
         Manifest.permission.READ_MEDIA_AUDIO,
         Manifest.permission.READ_MEDIA_IMAGES,
         Manifest.permission.READ_MEDIA_VIDEO
@@ -134,7 +134,7 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
     override fun onPermissionStatus(context: Context?): Boolean{
         // After "leaving" this class, context will be null so, we need this context argument to
         // call the [checkSelfPermission].
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
             return tiramisuPermission.all {
                 ContextCompat.checkSelfPermission(
                     context ?: pContext,
@@ -142,7 +142,7 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                 ) == PackageManager.PERMISSION_GRANTED
             }
         }
-        else{
+        else {
             return onPermission.all {
                 ContextCompat.checkSelfPermission(
                     context ?: pContext,
@@ -150,23 +150,21 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                 ) == PackageManager.PERMISSION_GRANTED
             }
         }
-
     }
 
     override fun onRequestPermission() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
             ActivityCompat.requestPermissions(pActivity, tiramisuPermission, onRequestCode)
         }
-        else{
+        else {
             ActivityCompat.requestPermissions(pActivity, onPermission, onRequestCode)
         }
-
     }
 
     // Second requestPermission, this one with the option "Never Ask Again".
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun onRetryRequestPermission() {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU){
             if (ActivityCompat.shouldShowRequestPermissionRationale(pActivity, onPermission[0])
                 || ActivityCompat.shouldShowRequestPermissionRationale(pActivity, onPermission[1])
             ) {
@@ -174,7 +172,7 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware,
                 onRequestPermission()
             }
         }
-        else{
+        else {
             if (ActivityCompat.shouldShowRequestPermissionRationale(pActivity, tiramisuPermission[0])
                 || ActivityCompat.shouldShowRequestPermissionRationale(pActivity, tiramisuPermission[1])
                 || ActivityCompat.shouldShowRequestPermissionRationale(pActivity,tiramisuPermission[2])
