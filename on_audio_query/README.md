@@ -10,18 +10,6 @@
 **Any problem? [Issues](https://github.com/LucJosin/on_audio_query/issues)** <br>
 **Any suggestion? [Pull request](https://github.com/LucJosin/on_audio_query/pulls)**
 
-### Extensions:
-
-* [on_audio_edit](https://github.com/LucJosin/on_audio_edit) - Used to edit audio metadata.
-* [on_audio_room](https://github.com/LucJosin/on_audio_room) - Used to store audio [Favorites, Most Played, etc..].
-
-### Translations:
-
-NOTE: Feel free to help with readme translations
-
-* [English](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/README.md)
-* [Portuguese](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/README.pt-BR.md)
-
 ### Topics:
 
 * [How to Install](#how-to-install)
@@ -64,17 +52,23 @@ NOTE: Feel free to help with readme translations
 Add the following code to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^2.6.0
+  on_audio_query: ^2.7.0
 ```
 
 ### Request Permission:
 #### Android:
 To use this plugin add the following code to your `AndroidManifest.xml`
 ```xml
-<manifest> ...
-
-  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+<manifest>
+  
+  <!-- Android 12 or below  -->
   <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+  <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+  <!-- Android 13 or greater  -->
+  <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+  <uses-permission android:name="android.permission.READ_MEDIA_VIDEO"/>
+  <uses-permission android:name="android.permission.READ_MEDIA_AUDIO"/>
 
 </manifest>
 ```
