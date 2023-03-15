@@ -4,7 +4,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
-import com.lucasjosino.on_audio_query.OnAudioQueryPlugin
+import com.lucasjosino.on_audio_query.controller.PermissionController
 import io.flutter.plugin.common.MethodChannel
 import java.io.File
 
@@ -25,16 +25,21 @@ class OnAllPathQuery {
     fun queryAllPath(context: Context, result: MethodChannel.Result) {
         this.resolver = context.contentResolver
 
-        // Request permission status from the main method.
-        val hasPermission = OnAudioQueryPlugin().onPermissionStatus(context)
-        // Empty list.
-        var resultAllPath = ArrayList<String>()
+        // Request permission status.
+        val hasPermission: Boolean = PermissionController().permissionStatus(context)
 
-        // We cannot "query" without permission so, just return a empty list.
-        if (hasPermission) {
-            // Start querying
-            resultAllPath = loadAllPath()
+        // We cannot 'query' without permission so, throw a PlatformException.
+        if (!hasPermission) {
+            result.error(
+                "403",
+                "The app doesn't have permission to read files.",
+                "Call the [permissionsRequest] method or install a external plugin to handle the app permission."
+            )
+            return
         }
+
+        // Start querying
+        val resultAllPath: ArrayList<String> = loadAllPath()
 
         // Send to Dart.
         result.success(resultAllPath)

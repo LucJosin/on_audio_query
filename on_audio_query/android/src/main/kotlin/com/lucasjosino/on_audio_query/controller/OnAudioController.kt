@@ -13,7 +13,7 @@ class OnAudioController(
 ) {
 
     //
-    fun onAudioController() {
+    fun call() {
         when (call.method) {
             //Query methods
             "querySongs" -> OnAudiosQuery().querySongs(context, result, call)

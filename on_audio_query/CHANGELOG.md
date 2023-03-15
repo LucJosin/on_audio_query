@@ -1,3 +1,21 @@
+## [2.7.0] - [14.03.2023]
+
+### Features
+
+#### Android
+
+- **[Added]** permission controller
+
+### Fixes
+
+#### Android
+
+- **[Fixed]** crash after request permission. - [#68](https://github.com/LucJosin/on_audio_query/issues/68)
+
+### Documentation
+
+- Updated `README` documentation. - [#96](https://github.com/LucJosin/on_audio_query/issues/96)
+
 ## [2.6.2] - [03.03.2023]
 
 ### Fixes

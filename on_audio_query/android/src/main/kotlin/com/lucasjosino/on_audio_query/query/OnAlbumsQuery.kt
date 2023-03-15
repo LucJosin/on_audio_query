@@ -5,7 +5,7 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lucasjosino.on_audio_query.OnAudioQueryPlugin
+import com.lucasjosino.on_audio_query.controller.PermissionController
 import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
 import com.lucasjosino.on_audio_query.types.checkAlbumsUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkAlbumSortType
@@ -52,21 +52,26 @@ class OnAlbumsQuery : ViewModel() {
         //   * [1]: Internal.
         uri = checkAlbumsUriType(call.argument<Int>("uri")!!)
 
+        // Request permission status;
+        val hasPermission: Boolean = PermissionController().permissionStatus(context)
+
+        // We cannot 'query' without permission so, throw a PlatformException.
+        if (!hasPermission) {
+            result.error(
+                "403",
+                "The app doesn't have permission to read files.",
+                "Call the [permissionsRequest] method or install a external plugin to handle the app permission."
+            )
+            return
+        }
+
         // Query everything in background for a better performance.
         viewModelScope.launch {
-            // Request permission status from the main method.
-            val hasPermission = OnAudioQueryPlugin().onPermissionStatus(context)
-            // Empty list.
-            var resultAlbumList = ArrayList<MutableMap<String, Any?>>()
+            // Start querying
+            val queryResult: ArrayList<MutableMap<String, Any?>> = loadAlbums()
 
-            // We cannot "query" without permission so, just return a empty list.
-            if (hasPermission) {
-                // Start querying
-                resultAlbumList = loadAlbums()
-            }
-
-            // Flutter UI will start, but, information still loading.
-            result.success(resultAlbumList)
+            // After loading the information, send the 'result'.
+            result.success(queryResult)
         }
     }
 
