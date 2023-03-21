@@ -11,6 +11,7 @@ import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
 import com.lucasjosino.on_audio_query.types.checkAudiosUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkSongSortType
 import com.lucasjosino.on_audio_query.utils.songProjection
+import io.flutter.Log
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,10 @@ import kotlinx.coroutines.withContext
 
 /** OnAudiosQuery */
 class OnAudiosQuery : ViewModel() {
+
+    companion object {
+        private const val TAG = "OnAudiosQuery"
+    }
 
     // Main parameters
     private val helper = OnAudioHelper()
@@ -65,6 +70,11 @@ class OnAudiosQuery : ViewModel() {
             selection = projection[0] + " like " + "'%" + call.argument<String>("path") + "/%'"
         }
 
+        Log.d(TAG, "Query config: ")
+        Log.d(TAG, "\tsortType: $sortType")
+        Log.d(TAG, "\tselection: $selection")
+        Log.d(TAG, "\turi: $uri")
+
         // Request permission status;
         val hasPermission: Boolean = PermissionController().permissionStatus(context)
 
@@ -91,11 +101,12 @@ class OnAudiosQuery : ViewModel() {
     //Loading in Background
     private suspend fun loadSongs(): ArrayList<MutableMap<String, Any?>> =
         withContext(Dispatchers.IO) {
-
             // Setup the cursor with [uri], [projection] and [sortType].
             val cursor = resolver.query(uri, songProjection(), selection, null, sortType)
             // Empty list.
             val songList: ArrayList<MutableMap<String, Any?>> = ArrayList()
+
+            Log.d(TAG, "Cursor count: ${cursor?.count}")
 
             // For each item(song) inside this "cursor", take one and "format"
             // into a [Map<String, dynamic>].

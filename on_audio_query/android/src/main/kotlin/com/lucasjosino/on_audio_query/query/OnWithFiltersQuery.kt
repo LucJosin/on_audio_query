@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.lucasjosino.on_audio_query.controller.PermissionController
 import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
 import com.lucasjosino.on_audio_query.types.*
+import io.flutter.Log
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +18,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class OnWithFiltersQuery : ViewModel() {
+
+    companion object {
+        private const val TAG = "OnWithFiltersQuery"
+    }
 
     //Main parameters
     private val helper = OnAudioHelper()
@@ -63,6 +68,11 @@ class OnWithFiltersQuery : ViewModel() {
             else -> throw Exception("[argsKey] returned null. Report this issue on [on_audio_query] GitHub.")
         }
 
+        Log.d(TAG, "Query config: ")
+        Log.d(TAG, "\twithType: $withType")
+        Log.d(TAG, "\targsVal: $argsVal")
+        Log.d(TAG, "\targsKey: $argsKey")
+
         // Request permission status;
         val hasPermission: Boolean = PermissionController().permissionStatus(context)
 
@@ -93,6 +103,8 @@ class OnWithFiltersQuery : ViewModel() {
             val cursor = resolver.query(withType, projection, argsKey, arrayOf(argsVal), null)
             // Empty list.
             val withFiltersList: ArrayList<MutableMap<String, Any?>> = ArrayList()
+
+            Log.d(TAG, "Cursor count: ${cursor?.count}")
 
             // For each item inside this "cursor", take one and "format"
             // into a [Map<String, dynamic>].

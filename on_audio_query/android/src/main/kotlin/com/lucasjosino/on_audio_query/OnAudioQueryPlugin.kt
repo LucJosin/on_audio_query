@@ -20,6 +20,7 @@ import android.media.MediaScannerConnection
 import android.os.Build
 import com.lucasjosino.on_audio_query.controller.OnAudioController
 import com.lucasjosino.on_audio_query.controller.PermissionController
+import io.flutter.Log
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -31,9 +32,14 @@ import io.flutter.plugin.common.MethodChannel.Result
 /** OnAudioQueryPlugin Central */
 class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
+    init {
+        // Set default logging level
+        Log.setLogLevel(Log.WARN)
+    }
+
     companion object {
         // Get the current class name.
-        private val TAG: String = this::class.java.name
+        private const val TAG: String = "OnAudioQueryPlugin"
 
         // Method channel name.
         private const val CHANNEL_NAME = "com.lucasjosino.on_audio_query"
@@ -50,7 +56,8 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     // Dart <-> Kotlin communication
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-        // Define the [context]
+        Log.i(TAG, "Attached to engine")
+
         context = flutterPluginBinding.applicationContext
 
         // Setup the method channel communication.
@@ -61,6 +68,8 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     // Methods will always follow the same route:
     // Receive method -> check permission -> controller -> do what's needed -> return to dart
     override fun onMethodCall(call: MethodCall, result: Result) {
+        Log.d(TAG, "Started method call (${call.method})")
+
         // Both [activity] and [binding] are from [onAttachedToActivity].
         if (activity == null || binding == null) {
             result.error(
@@ -79,6 +88,7 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         // Setup the [PermissionController]
         permissionController = PermissionController(retryRequest)
 
+        Log.i(TAG, "Method call: ${call.method}")
         when (call.method) {
             // Permissions
             "permissionsStatus" -> result.success(permissionController.permissionStatus(context))
@@ -107,38 +117,56 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
                 val sPath: String? = call.argument<String>("path")
 
                 // Check if the given file is null or empty.
-                if (sPath == null || sPath.isEmpty()) result.success(false)
+                if (sPath == null || sPath.isEmpty()) {
+                    Log.w(TAG, "Method 'scan' was called with null or empty 'path'")
+                    result.success(false)
+                }
 
                 // Scan and return
                 MediaScannerConnection.scanFile(context, arrayOf(sPath), null) { _, _ ->
+                    Log.d(TAG, "Scanned file: $sPath")
                     result.success(true)
                 }
+            }
+
+            // Logging
+            "setLogConfig" -> {
+                Log.setLogLevel(call.argument<Int>("level")!!)
+                result.success(true)
             }
 
             // All others methods
             else -> controller.call()
         }
+
+        Log.d(TAG, "Ended method call (${call.method})\n ")
     }
 
     override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        Log.i(TAG, "Detached from engine")
         channel.setMethodCallHandler(null)
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        Log.i(TAG, "Attached to activity")
         this.activity = binding.activity
         this.binding = binding
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
+        Log.i(TAG, "Detached from engine (config changes)")
         onDetachedFromActivity()
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        Log.i(TAG, "Reattached to activity (config changes)")
         onAttachedToActivity(binding)
     }
 
     // Detach all parameters.
     override fun onDetachedFromActivity() {
+        Log.i(TAG, "Detached from activity")
+
         // Remove the permission listener
         if (binding != null) {
             binding!!.removeRequestPermissionsResultListener(permissionController)
@@ -146,5 +174,6 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
         this.activity = null
         this.binding = null
+        Log.i(TAG, "Removed all declared methods")
     }
 }

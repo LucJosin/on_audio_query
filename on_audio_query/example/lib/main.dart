@@ -13,6 +13,7 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 */
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:on_audio_query/on_audio_query.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -32,22 +33,35 @@ class Songs extends StatefulWidget {
 }
 
 class _SongsState extends State<Songs> {
+  // Main method.
   final OnAudioQuery _audioQuery = OnAudioQuery();
+
+  // Define the plugin logging level. By default, is set to 'LogType.WARN'.
+  final LogConfig _audioQueryLog = LogConfig(logType: LogType.DEBUG);
+
+  // Indicates if application has permission to the library.
+  bool _hasPermission = false;
 
   @override
   void initState() {
     super.initState();
+    // Debug messages will appear on: VsCode 'Debug Console'
+    // or Android Studio 'Logcat'.
+    _audioQuery.setLogConfig(_audioQueryLog);
     requestPermission();
   }
 
   requestPermission() async {
-    // Web platform don't support permissions methods.
+    // Web platform doesn't support permissions methods.
     if (!kIsWeb) {
-      bool permissionStatus = await _audioQuery.permissionsStatus();
-      if (!permissionStatus) {
-        await _audioQuery.permissionsRequest();
+      _hasPermission = await _audioQuery.permissionsStatus();
+
+      if (!_hasPermission) {
+        _hasPermission = await _audioQuery.permissionsRequest();
       }
-      setState(() {});
+
+      // Only call update the UI if application has all required permissions.
+      _hasPermission ? setState(() {}) : null;
     }
   }
 
@@ -58,42 +72,43 @@ class _SongsState extends State<Songs> {
         title: const Text("OnAudioQueryExample"),
         elevation: 2,
       ),
-      body: FutureBuilder<List<SongModel>>(
-        // Default values:
-        future: _audioQuery.querySongs(
-          sortType: null,
-          orderType: OrderType.ASC_OR_SMALLER,
-          uriType: UriType.EXTERNAL,
-          ignoreCase: true,
-        ),
-        builder: (context, item) {
-          // Loading content
-          if (item.data == null) return const CircularProgressIndicator();
+      body: !_hasPermission
+          ? const Text("Application doesn't have access to the library")
+          : FutureBuilder<List<SongModel>>(
+              // Default values:
+              future: _audioQuery.querySongs(
+                sortType: null,
+                orderType: OrderType.ASC_OR_SMALLER,
+                uriType: UriType.EXTERNAL,
+                ignoreCase: true,
+              ),
+              builder: (context, item) {
+                // Waiting content.
+                if (item.data == null) return const CircularProgressIndicator();
 
-          // When you try "query" without asking for [READ] or [Library] permission
-          // the plugin will return a [Empty] list.
-          if (item.data!.isEmpty) return const Text("Nothing found!");
+                // 'Library' is empty.
+                if (item.data!.isEmpty) return const Text("Nothing found!");
 
-          // You can use [item.data!] direct or you can create a:
-          // List<SongModel> songs = item.data!;
-          return ListView.builder(
-            itemCount: item.data!.length,
-            itemBuilder: (context, index) {
-              return ListTile(
-                title: Text(item.data![index].title),
-                subtitle: Text(item.data![index].artist ?? "No Artist"),
-                trailing: const Icon(Icons.arrow_forward_rounded),
-                // This Widget will query/load image. Just add the id and type.
-                // You can use/create your own widget/method using [queryArtwork].
-                leading: QueryArtworkWidget(
-                  id: item.data![index].id,
-                  type: ArtworkType.AUDIO,
-                ),
-              );
-            },
-          );
-        },
-      ),
+                // You can use [item.data!] direct or you can create a:
+                // List<SongModel> songs = item.data!;
+                return ListView.builder(
+                  itemCount: item.data!.length,
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      title: Text(item.data![index].title),
+                      subtitle: Text(item.data![index].artist ?? "No Artist"),
+                      trailing: const Icon(Icons.arrow_forward_rounded),
+                      // This Widget will query/load image. Just add the id and type.
+                      // You can use/create your own widget/method using [queryArtwork].
+                      leading: QueryArtworkWidget(
+                        id: item.data![index].id,
+                        type: ArtworkType.AUDIO,
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
     );
   }
 }

@@ -8,6 +8,7 @@ import android.os.Build
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.lucasjosino.on_audio_query.interfaces.PermissionManagerInterface
+import io.flutter.Log
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.PluginRegistry
 
@@ -16,6 +17,7 @@ class PermissionController(
 ) : PermissionManagerInterface, PluginRegistry.RequestPermissionsResultListener {
 
     companion object {
+        private const val TAG: String = "PermissionController"
         private const val REQUEST_CODE: Int = 88560
     }
 
@@ -46,6 +48,8 @@ class PermissionController(
     }
 
     override fun requestPermission(activity: Activity, result: MethodChannel.Result) {
+        Log.d(TAG, "Requesting permissions.")
+        Log.d(TAG, "SDK: ${Build.VERSION.SDK_INT}, Should retry request: $retryRequest")
         this.activity = activity
         this.result = result
         ActivityCompat.requestPermissions(activity, permissions, REQUEST_CODE)
@@ -56,6 +60,7 @@ class PermissionController(
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, permissions[0])
             || ActivityCompat.shouldShowRequestPermissionRationale(activity, permissions[1])
         ) {
+            Log.d(TAG, "Retrying permission request")
             retryRequest = false
             if (this::activity.isInitialized && this::result.isInitialized) {
                 requestPermission(activity, result)
@@ -81,6 +86,8 @@ class PermissionController(
         // Check permission
         val isPermissionGranted = (grantResults.isNotEmpty()
                 && grantResults[0] == PackageManager.PERMISSION_GRANTED)
+
+        Log.d(TAG, "Permission accepted: $isPermissionGranted")
 
         // After all checks, we can handle the permission request.
         when {
