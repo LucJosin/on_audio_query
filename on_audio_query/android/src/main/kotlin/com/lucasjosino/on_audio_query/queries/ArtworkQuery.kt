@@ -1,4 +1,4 @@
-package com.lucasjosino.on_audio_query.query
+package com.lucasjosino.on_audio_query.queries
 
 import android.content.ContentResolver
 import android.content.ContentUris
@@ -12,7 +12,7 @@ import android.util.Size
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lucasjosino.on_audio_query.controller.PermissionController
-import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
+import com.lucasjosino.on_audio_query.queries.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkArtworkFormat
 import com.lucasjosino.on_audio_query.types.checkArtworkType
 import io.flutter.Log
@@ -25,14 +25,14 @@ import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
 
 /** OnArtworksQuery */
-class OnArtworksQuery : ViewModel() {
+class ArtworkQuery : ViewModel() {
 
     companion object {
         private const val TAG = "OnArtworksQuery"
     }
 
     //Main parameters
-    private val helper = OnAudioHelper()
+    private val helper = QueryHelper()
     private var type: Int = -1
     private var id: Number = 0
     private var quality: Int = 100

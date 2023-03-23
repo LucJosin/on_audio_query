@@ -1,4 +1,4 @@
-package com.lucasjosino.on_audio_query.query
+package com.lucasjosino.on_audio_query.queries
 
 import android.content.ContentResolver
 import android.content.Context
@@ -6,7 +6,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lucasjosino.on_audio_query.controller.PermissionController
-import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
+import com.lucasjosino.on_audio_query.queries.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkGenresUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkGenreSortType
 import com.lucasjosino.on_audio_query.utils.genreProjection
@@ -18,14 +18,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /** OnGenresQuery */
-class OnGenresQuery : ViewModel() {
+class GenreQuery : ViewModel() {
 
     companion object {
         private const val TAG = "OnGenresQuery"
     }
 
     // Main parameters.
-    private val helper = OnAudioHelper()
+    private val helper = QueryHelper()
 
     // None of this methods can be null.
     private lateinit var uri: Uri

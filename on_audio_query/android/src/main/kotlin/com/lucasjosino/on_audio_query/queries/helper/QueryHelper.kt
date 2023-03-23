@@ -1,4 +1,4 @@
-package com.lucasjosino.on_audio_query.query.helper
+package com.lucasjosino.on_audio_query.queries.helper
 
 import android.content.ContentResolver
 import android.content.ContentUris
@@ -9,7 +9,7 @@ import android.provider.MediaStore
 import android.util.Log
 import java.io.File
 
-class OnAudioHelper {
+class QueryHelper {
     //This method will load some extra information about audio/song
     fun loadSongExtraInfo(
         uri: Uri,

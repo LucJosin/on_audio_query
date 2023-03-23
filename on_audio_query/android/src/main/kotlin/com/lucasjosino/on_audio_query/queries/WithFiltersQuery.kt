@@ -1,4 +1,4 @@
-package com.lucasjosino.on_audio_query.query
+package com.lucasjosino.on_audio_query.queries
 
 import android.annotation.SuppressLint
 import android.content.ContentResolver
@@ -8,7 +8,7 @@ import android.provider.MediaStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lucasjosino.on_audio_query.controller.PermissionController
-import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
+import com.lucasjosino.on_audio_query.queries.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.*
 import io.flutter.Log
 import io.flutter.plugin.common.MethodCall
@@ -17,14 +17,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-class OnWithFiltersQuery : ViewModel() {
+class WithFiltersQuery : ViewModel() {
 
     companion object {
         private const val TAG = "OnWithFiltersQuery"
     }
 
     //Main parameters
-    private val helper = OnAudioHelper()
+    private val helper = QueryHelper()
     private val uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
     private var projection: Array<String>? = arrayOf()
 

@@ -1,4 +1,4 @@
-package com.lucasjosino.on_audio_query.query
+package com.lucasjosino.on_audio_query.queries
 
 import android.content.ContentResolver
 import android.content.Context
@@ -6,10 +6,10 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lucasjosino.on_audio_query.controller.PermissionController
-import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
-import com.lucasjosino.on_audio_query.types.checkPlaylistsUriType
-import com.lucasjosino.on_audio_query.types.sorttypes.checkGenreSortType
-import com.lucasjosino.on_audio_query.utils.playlistProjection
+import com.lucasjosino.on_audio_query.queries.helper.QueryHelper
+import com.lucasjosino.on_audio_query.types.checkArtistsUriType
+import com.lucasjosino.on_audio_query.types.sorttypes.checkArtistSortType
+import com.lucasjosino.on_audio_query.utils.artistProjection
 import io.flutter.Log
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -17,15 +17,15 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/** OnPlaylistQuery */
-class OnPlaylistQuery : ViewModel() {
+/** OnArtistsQuery */
+class ArtistQuery : ViewModel() {
 
     companion object {
-        private const val TAG = "OnPlaylistQuery"
+        private const val TAG = "OnArtistsQuery"
     }
 
     //Main parameters
-    private val helper = OnAudioHelper()
+    private val helper = QueryHelper()
 
     // None of this methods can be null.
     private lateinit var uri: Uri
@@ -33,18 +33,18 @@ class OnPlaylistQuery : ViewModel() {
     private lateinit var sortType: String
 
     /**
-     * Method to "query" all playlists.
+     * Method to "query" all artists.
      *
      * Parameters:
      *   * [context]
      *   * [result]
      *   * [call]
      */
-    fun queryPlaylists(context: Context, result: MethodChannel.Result, call: MethodCall) {
+    fun queryArtists(context: Context, result: MethodChannel.Result, call: MethodCall) {
         resolver = context.contentResolver
 
-        // Sort: Type and Order.
-        sortType = checkGenreSortType(
+        // Sort: Type and Order
+        sortType = checkArtistSortType(
             call.argument<Int>("sortType"),
             call.argument<Int>("orderType")!!,
             call.argument<Boolean>("ignoreCase")!!
@@ -52,7 +52,7 @@ class OnPlaylistQuery : ViewModel() {
         // Check uri:
         //   * [0]: External.
         //   * [1]: Internal.
-        uri = checkPlaylistsUriType(call.argument<Int>("uri")!!)
+        uri = checkArtistsUriType(call.argument<Int>("uri")!!)
 
         Log.d(TAG, "Query config: ")
         Log.d(TAG, "\tsortType: $sortType")
@@ -74,52 +74,48 @@ class OnPlaylistQuery : ViewModel() {
         // Query everything in background for a better performance.
         viewModelScope.launch {
             // Start querying
-            val queryResult: ArrayList<MutableMap<String, Any?>> = loadPlaylists()
+            val queryResult: ArrayList<MutableMap<String, Any?>> = loadArtists()
 
             // After loading the information, send the 'result'.
             result.success(queryResult)
         }
     }
 
-    //Loading in Background
-    private suspend fun loadPlaylists(): ArrayList<MutableMap<String, Any?>> =
+    // Loading in Background
+    private suspend fun loadArtists(): ArrayList<MutableMap<String, Any?>> =
         withContext(Dispatchers.IO) {
-            // Setup the cursor with [uri] and [projection].
-            val cursor = resolver.query(uri, playlistProjection, null, null, null)
+            // Setup the cursor with [uri], [projection] and [sortType].
+            val cursor = resolver.query(uri, artistProjection, null, null, sortType)
             // Empty list.
-            val playlistList: ArrayList<MutableMap<String, Any?>> = ArrayList()
+            val artistList: ArrayList<MutableMap<String, Any?>> = ArrayList()
 
             Log.d(TAG, "Cursor count: ${cursor?.count}")
 
-            // For each item(playlist) inside this "cursor", take one and "format"
+            // For each item(artist) inside this "cursor", take one and "format"
             // into a [Map<String, dynamic>].
             while (cursor != null && cursor.moveToNext()) {
-                val playlistData: MutableMap<String, Any?> = HashMap()
-                for (playlistMedia in cursor.columnNames) {
-                    playlistData[playlistMedia] = helper.loadPlaylistItem(playlistMedia, cursor)
+                val tempData: MutableMap<String, Any?> = HashMap()
+                for (artistMedia in cursor.columnNames) {
+                    tempData[artistMedia] = helper.loadArtistItem(artistMedia, cursor)
                 }
 
-                // Count and add the number of songs for every playlist.
-                val mediaCount = helper.getMediaCount(1, playlistData["_id"].toString(), resolver)
-                playlistData["num_of_songs"] = mediaCount
-
-                playlistList.add(playlistData)
+                artistList.add(tempData)
             }
 
             // Close cursor to avoid memory leaks.
             cursor?.close()
             // After finish the "query", go back to the "main" thread(You can only call flutter
             // inside the main thread).
-            return@withContext playlistList
+            return@withContext artistList
         }
 }
 
 //Extras:
 
-//I/OnPlaylistCursor[All/Audio]: [
-// _data
+//I/OnArtistCursor[All/Audio]: [
 // _id
-// date_added
-// date_modified
-// name
+// artist
+// artist_key
+// number_of_albums
+// number_of_tracks
 // ]

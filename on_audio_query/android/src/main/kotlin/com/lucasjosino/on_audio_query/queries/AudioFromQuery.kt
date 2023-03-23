@@ -1,4 +1,4 @@
-package com.lucasjosino.on_audio_query.query
+package com.lucasjosino.on_audio_query.queries
 
 import android.annotation.SuppressLint
 import android.content.ContentResolver
@@ -9,7 +9,7 @@ import android.provider.MediaStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lucasjosino.on_audio_query.controller.PermissionController
-import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
+import com.lucasjosino.on_audio_query.queries.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkAudiosFromType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkSongSortType
 import com.lucasjosino.on_audio_query.utils.songProjection
@@ -21,14 +21,14 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /** OnAudiosFromQuery */
-class OnAudiosFromQuery : ViewModel() {
+class AudioFromQuery : ViewModel() {
 
     companion object {
         private const val TAG = "OnAudiosFromQuery"
     }
 
     //Main parameters
-    private val helper = OnAudioHelper()
+    private val helper = QueryHelper()
     private val uri: Uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
     private var pId = 0
     private var pUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI

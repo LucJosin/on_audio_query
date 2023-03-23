@@ -1,4 +1,4 @@
-package com.lucasjosino.on_audio_query.query
+package com.lucasjosino.on_audio_query.queries
 
 import android.annotation.SuppressLint
 import android.content.ContentResolver
@@ -11,7 +11,7 @@ import io.flutter.plugin.common.MethodChannel
 import java.io.File
 
 /** OnAllPathQuery */
-class OnAllPathQuery {
+class AllPathQuery {
 
     companion object {
         private const val TAG = "OnAllPathQuery"
