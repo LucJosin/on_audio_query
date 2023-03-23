@@ -1,10 +1,11 @@
-## [2.7.0] - [14.03.2023]
+## [2.7.0] - [XX.XX.2023]
 
 ### Features
 
-#### Android
-
-- **[Added]** permission controller
+- **[Added]** `[setLogConfig]` method.
+- **[Added]** `[LogType]`.
+- **[Added]** `[LogConfig]`.
+- **[Added]** `[PermissionController]`
 
 ### Fixes
 
@@ -12,9 +13,9 @@
 
 - **[Fixed]** crash after request permission. - [#68](https://github.com/LucJosin/on_audio_query/issues/68)
 
-### Documentation
+### Changes
 
-- Updated `README` documentation. - [#96](https://github.com/LucJosin/on_audio_query/issues/96)
+- **[Updated]** example.
 
 ## [2.6.2] - [03.03.2023]
 

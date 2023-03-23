@@ -1,21 +1,21 @@
 import MediaPlayer
 
 func checkAudiosFrom(type: Int, where: Any) -> MPMediaQuery? {
-    var filter: MPMediaPropertyPredicate? = nil
+    var filter: MPMediaPropertyPredicate?
     let query = MPMediaQuery.songs()
     switch type {
     case 0:
-        filter = MPMediaPropertyPredicate.init(value: `where`, forProperty: MPMediaItemPropertyAlbumTitle)
+        filter = MPMediaPropertyPredicate(value: `where`, forProperty: MPMediaItemPropertyAlbumTitle)
     case 1:
-        filter = MPMediaPropertyPredicate.init(value: `where`, forProperty: MPMediaItemPropertyAlbumPersistentID)
+        filter = MPMediaPropertyPredicate(value: `where`, forProperty: MPMediaItemPropertyAlbumPersistentID)
     case 2:
-        filter = MPMediaPropertyPredicate.init(value: `where`, forProperty: MPMediaItemPropertyArtist)
+        filter = MPMediaPropertyPredicate(value: `where`, forProperty: MPMediaItemPropertyArtist)
     case 3:
-        filter = MPMediaPropertyPredicate.init(value: `where`, forProperty: MPMediaItemPropertyArtistPersistentID)
+        filter = MPMediaPropertyPredicate(value: `where`, forProperty: MPMediaItemPropertyArtistPersistentID)
     case 4:
-        filter = MPMediaPropertyPredicate.init(value: `where`, forProperty: MPMediaItemPropertyGenre)
+        filter = MPMediaPropertyPredicate(value: `where`, forProperty: MPMediaItemPropertyGenre)
     case 5:
-        filter = MPMediaPropertyPredicate.init(value: `where`, forProperty: MPMediaItemPropertyGenrePersistentID)
+        filter = MPMediaPropertyPredicate(value: `where`, forProperty: MPMediaItemPropertyGenrePersistentID)
     default:
         return nil
     }

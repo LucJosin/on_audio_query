@@ -15,6 +15,7 @@ import com.lucasjosino.on_audio_query.controller.PermissionController
 import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
 import com.lucasjosino.on_audio_query.types.checkArtworkFormat
 import com.lucasjosino.on_audio_query.types.checkArtworkType
+import io.flutter.Log
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
@@ -25,6 +26,10 @@ import java.io.FileInputStream
 
 /** OnArtworksQuery */
 class OnArtworksQuery : ViewModel() {
+
+    companion object {
+        private const val TAG = "OnArtworksQuery"
+    }
 
     //Main parameters
     private val helper = OnAudioHelper()
@@ -69,6 +74,13 @@ class OnArtworksQuery : ViewModel() {
         // Define the [type]:
         type = call.argument<Int>("type")!!
 
+        Log.d(TAG, "Query config: ")
+        Log.d(TAG, "\tid: $id")
+        Log.d(TAG, "\tquality: $quality")
+        Log.d(TAG, "\tformat: $format")
+        Log.d(TAG, "\turi: $uri")
+        Log.d(TAG, "\ttype: $type")
+
         // Request permission status;
         val hasPermission: Boolean = PermissionController().permissionStatus(context)
 
@@ -89,6 +101,7 @@ class OnArtworksQuery : ViewModel() {
 
             // Sometimes android will extract a 'wrong' or 'empty' artwork. Just set as null.
             if (resultArtList != null && resultArtList.isEmpty()) {
+                Log.i(TAG, "Artwork for '$id' is empty. Returning null")
                 resultArtList = null
             }
 
@@ -132,8 +145,7 @@ class OnArtworksQuery : ViewModel() {
                 val bitmap = resolver.loadThumbnail(query, Size(size, size), null)
                 artData = convertOrResize(bitmap = bitmap)!!
             } catch (e: Exception) {
-                // Some problem can occur, we hide to not "flood" the terminal.
-//                Log.i("on_audio_error: ", e.toString())
+                Log.w(TAG, "($id) Message: $e")
             }
         } else {
             // If [uri == Audio]:
@@ -160,8 +172,7 @@ class OnArtworksQuery : ViewModel() {
                 // [close] can only be called using [Android] >= 29/Q.
                 if (Build.VERSION.SDK_INT >= 29) metadata.close()
             } catch (e: Exception) {
-                // Some problem can occur, we hide to not "flood" the terminal.
-//                Log.i("on_audio_error: ", e.toString())
+                Log.w(TAG, "($id) Message: $e")
             }
         }
         // After finish the "query", go back to the "main" thread(You can only call flutter
@@ -185,8 +196,9 @@ class OnArtworksQuery : ViewModel() {
                 convertedBitmap.compress(format, quality, byteArrayBase)
             }
         } catch (e: Exception) {
-            //Log.i("Error", e.toString())
+            Log.w(TAG, "($id) Message: $e")
         }
+
         convertedBytes = byteArrayBase.toByteArray()
         byteArrayBase.close()
         return convertedBytes

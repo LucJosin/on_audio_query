@@ -10,6 +10,7 @@ import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
 import com.lucasjosino.on_audio_query.types.checkPlaylistsUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkGenreSortType
 import com.lucasjosino.on_audio_query.utils.playlistProjection
+import io.flutter.Log
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
@@ -18,6 +19,10 @@ import kotlinx.coroutines.withContext
 
 /** OnPlaylistQuery */
 class OnPlaylistQuery : ViewModel() {
+
+    companion object {
+        private const val TAG = "OnPlaylistQuery"
+    }
 
     //Main parameters
     private val helper = OnAudioHelper()
@@ -49,6 +54,10 @@ class OnPlaylistQuery : ViewModel() {
         //   * [1]: Internal.
         uri = checkPlaylistsUriType(call.argument<Int>("uri")!!)
 
+        Log.d(TAG, "Query config: ")
+        Log.d(TAG, "\tsortType: $sortType")
+        Log.d(TAG, "\turi: $uri")
+
         // Request permission status;
         val hasPermission: Boolean = PermissionController().permissionStatus(context)
 
@@ -79,6 +88,8 @@ class OnPlaylistQuery : ViewModel() {
             val cursor = resolver.query(uri, playlistProjection, null, null, null)
             // Empty list.
             val playlistList: ArrayList<MutableMap<String, Any?>> = ArrayList()
+
+            Log.d(TAG, "Cursor count: ${cursor?.count}")
 
             // For each item(playlist) inside this "cursor", take one and "format"
             // into a [Map<String, dynamic>].

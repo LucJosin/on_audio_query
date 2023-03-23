@@ -9,6 +9,7 @@ import com.lucasjosino.on_audio_query.controller.PermissionController
 import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
 import com.lucasjosino.on_audio_query.types.checkAlbumsUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkAlbumSortType
+import io.flutter.Log
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +18,10 @@ import kotlinx.coroutines.withContext
 
 /** OnAlbumsQuery */
 class OnAlbumsQuery : ViewModel() {
+
+    companion object {
+        private const val TAG = "OnAlbumsQuery"
+    }
 
     // Main parameters.
     private val helper = OnAudioHelper()
@@ -52,6 +57,10 @@ class OnAlbumsQuery : ViewModel() {
         //   * [1]: Internal.
         uri = checkAlbumsUriType(call.argument<Int>("uri")!!)
 
+        Log.d(TAG, "Query config: ")
+        Log.d(TAG, "\tsortType: $sortType")
+        Log.d(TAG, "\turi: $uri")
+
         // Request permission status;
         val hasPermission: Boolean = PermissionController().permissionStatus(context)
 
@@ -82,6 +91,8 @@ class OnAlbumsQuery : ViewModel() {
             val cursor = resolver.query(uri, null, null, null, sortType)
             // Empty list.
             val albumList: ArrayList<MutableMap<String, Any?>> = ArrayList()
+
+            Log.d(TAG, "Cursor count: ${cursor?.count}")
 
             // For each item(album) inside this "cursor", take one and "format"
             // into a [Map<String, dynamic>].

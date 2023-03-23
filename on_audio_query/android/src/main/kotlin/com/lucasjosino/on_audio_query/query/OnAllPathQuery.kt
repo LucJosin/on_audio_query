@@ -1,15 +1,21 @@
 package com.lucasjosino.on_audio_query.query
 
+import android.annotation.SuppressLint
 import android.content.ContentResolver
 import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
 import com.lucasjosino.on_audio_query.controller.PermissionController
+import io.flutter.Log
 import io.flutter.plugin.common.MethodChannel
 import java.io.File
 
 /** OnAllPathQuery */
 class OnAllPathQuery {
+
+    companion object {
+        private const val TAG = "OnAllPathQuery"
+    }
 
     // Main parameters, none of this methods can be null.
     private val uri: Uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
@@ -46,12 +52,15 @@ class OnAllPathQuery {
     }
 
     // Ignore the [Data] deprecation because this plugin support older versions.
+    @SuppressLint("Range")
     @Suppress("DEPRECATION")
     private fun loadAllPath(): ArrayList<String> {
         // Setup the cursor with [uri].
         val cursor = resolver.query(uri, null, null, null, null)
         // Empty list.
         val songPathList: ArrayList<String> = ArrayList()
+
+        Log.d(TAG, "Cursor count: ${cursor?.count}")
 
         // For each item(path) inside this "cursor", take one and add to the list.
         while (cursor != null && cursor.moveToNext()) {

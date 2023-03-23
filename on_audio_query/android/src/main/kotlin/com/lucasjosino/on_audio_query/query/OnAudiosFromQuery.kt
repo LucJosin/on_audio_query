@@ -13,6 +13,7 @@ import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
 import com.lucasjosino.on_audio_query.types.checkAudiosFromType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkSongSortType
 import com.lucasjosino.on_audio_query.utils.songProjection
+import io.flutter.Log
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +22,10 @@ import kotlinx.coroutines.withContext
 
 /** OnAudiosFromQuery */
 class OnAudiosFromQuery : ViewModel() {
+
+    companion object {
+        private const val TAG = "OnAudiosFromQuery"
+    }
 
     //Main parameters
     private val helper = OnAudioHelper()
@@ -63,6 +68,11 @@ class OnAudiosFromQuery : ViewModel() {
             call.argument<Int>("orderType")!!,
             call.argument<Boolean>("ignoreCase")!!
         )
+
+        Log.d(TAG, "Query config: ")
+        Log.d(TAG, "\tsortType: $sortType")
+        Log.d(TAG, "\ttype: $type")
+        Log.d(TAG, "\turi: $uri")
 
         // Request permission status.
         val hasPermission: Boolean = PermissionController().permissionStatus(context)
@@ -116,6 +126,8 @@ class OnAudiosFromQuery : ViewModel() {
             val cursor = resolver.query(uri, songProjection(), where, arrayOf(whereVal), sortType)
             // Empty list.
             val songsFromList: ArrayList<MutableMap<String, Any?>> = ArrayList()
+
+            Log.d(TAG, "Cursor count: ${cursor?.count}")
 
             // For each item(song) inside this "cursor", take one and "format"
             // into a [Map<String, dynamic>].
@@ -172,9 +184,11 @@ class OnAudiosFromQuery : ViewModel() {
 
     private suspend fun loadSongsFromPlaylistOrGenre(): ArrayList<MutableMap<String, Any?>> =
         withContext(Dispatchers.IO) {
-
             val songsFrom: ArrayList<MutableMap<String, Any?>> = ArrayList()
             val cursor = resolver.query(pUri, songProjection(), null, null, sortType)
+
+            Log.d(TAG, "Cursor count: ${cursor?.count}")
+
             while (cursor != null && cursor.moveToNext()) {
                 val tempData: MutableMap<String, Any?> = HashMap()
                 for (media in cursor.columnNames) {
