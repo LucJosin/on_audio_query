@@ -1,10 +1,11 @@
-## [2.7.0] - [14.03.2023]
+## [2.7.0] - [XX.XX.2023]
 
 ### Features
 
 - **[Added]** `[setLogConfig]` method.
 - **[Added]** `[LogType]`.
 - **[Added]** `[LogConfig]`.
+- **[Added]** `[PermissionController]`
 
 ### Fixes
 
@@ -14,7 +15,7 @@
 
 ### Changes
 
-- **[Added]** `[PermissionController]`
+- **[Updated]** example.
 
 ## [2.6.2] - [03.03.2023]
 
