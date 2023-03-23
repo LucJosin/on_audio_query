@@ -6,7 +6,7 @@ class OnAudiosFromQuery {
     var result: FlutterResult
     var type: Int = -1
     
-    init(call: FlutterMethodCall, result: @escaping FlutterResult) {
+    init(_ call: FlutterMethodCall, _ result: @escaping FlutterResult) {
         // To make life easy, add all arguments inside a map.
         self.args = call.arguments as! [String: Any]
         self.result = result
@@ -28,7 +28,7 @@ class OnAudiosFromQuery {
         cursor?.groupingType = checkSongSortType(sortType: sortType)
         
         // We cannot "query" without permission so, just return a empty list.
-        let hasPermission = SwiftOnAudioQueryPlugin().checkPermission()
+        let hasPermission = PermissionController.checkPermission()
         if hasPermission {
             // Here we'll check if the request is to [Playlist] or other.
             if self.type != 6 && cursor != nil {

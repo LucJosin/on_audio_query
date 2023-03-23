@@ -5,41 +5,42 @@ class OnPlaylistsController {
     var args: [String: Any]
     var result: FlutterResult
     
-    init(call: FlutterMethodCall, result: @escaping FlutterResult) {
+    init(_ call: FlutterMethodCall, _ result: @escaping FlutterResult) {
         self.args = call.arguments as! [String: Any]
         self.result = result
     }
     
-    // Due the [IOS] limitation, for now we can only create/add to playlists.
     func createPlaylist() {
-        // The name, author and description for playlist, playlistName cannot be null.
         let playlistName = args["playlistName"] as! String
         let playlistAuthor = args["playlistAuthor"] as? String
         let playlistDesc = args["playlistDesc"] as? String
         
-        //
-        let playlistMetadata = MPMediaPlaylistCreationMetadata.init(name: playlistName)
+        Log.type.debug("Playlist info: ")
+        Log.type.debug("\tname: \(playlistName)")
+        Log.type.debug("\tauthor: \(String(describing: playlistAuthor))")
+        Log.type.debug("\tdescription: \(String(describing: playlistDesc))")
+        
+        let playlistMetadata = MPMediaPlaylistCreationMetadata(name: playlistName)
         playlistMetadata.authorDisplayName = playlistAuthor
         playlistMetadata.descriptionText = playlistDesc ?? ""
         
-        //
-        MPMediaLibrary().getPlaylist(with: UUID.init(), creationMetadata: playlistMetadata, completionHandler: { playlist, error in
-            //A little second to create the playlist and Flutter UI update
+        MPMediaLibrary().getPlaylist(with: UUID(), creationMetadata: playlistMetadata, completionHandler: { playlist, _ in
             sleep(1)
-            if playlist != nil {
-                self.result(true)
-            } else {
-                print(error ?? "Something wrong happend")
-                self.result(false)
-            }
-        }
-        )
+            
+            let playlistHasBeenCreated = playlist != nil
+            Log.type.debug("Playlist has been created: \(playlistHasBeenCreated)")
+            
+            self.result(playlistHasBeenCreated)
+        })
     }
     
     func addToPlaylist() {
-        //
         let playlistId = args["playlistId"] as! Int
         let audioId = args["audioId"] as! Int
+        
+        Log.type.debug("Playlist info: ")
+        Log.type.debug("\tid: \(playlistId)")
+        Log.type.debug("\taudioId: \(audioId)")
         
         // TODO: Use another method to get UUID from playlist
         //
@@ -48,25 +49,25 @@ class OnPlaylistsController {
         
         // [addItem] won't work in the main thread.
         DispatchQueue.global(qos: .userInitiated).async {
-            var hasAdded: Bool = false
+            var hasBeenAdded = false
             
-            // If playlist is null, just return [false].
             if playlist != nil {
+                Log.type.debug("Found playlist! Name: \(playlist?.name ?? "Unknown")")
+                
                 playlist!.addItem(withProductID: String(audioId), completionHandler: { error in
-                    if error == nil {
-                        hasAdded = true
-                    } else {
-                        hasAdded = false
-                        // TODO: Fix "NSLocalizedDescription=The requested operation is not enabled for this device."
-                        print("on_audio_error: " + error.debugDescription)
+                    let hasError = error != nil
+                    
+                    if hasError {
+                        Log.type.error(error.debugDescription)
                     }
+        
+                    hasBeenAdded = !hasError
                 })
-            } else {
-                hasAdded = false
             }
             
             DispatchQueue.main.async {
-                self.result(hasAdded)
+                Log.type.debug("Item (\(audioId)) has been added: \(hasBeenAdded)")
+                self.result(hasBeenAdded)
             }
         }
     }
@@ -74,13 +75,15 @@ class OnPlaylistsController {
     private func loadPlaylist(id: Int) -> MPMediaPlaylist? {
         let cursor = MPMediaQuery.playlists()
         
-        //
-        let playlistFilter = MPMediaPropertyPredicate.init(value: id, forProperty: MPMediaPlaylistPropertyPersistentID)
-        let noCloudItemFilter = MPMediaPropertyPredicate.init(value: false, forProperty: MPMediaItemPropertyIsCloudItem)
+        // Create a filter using the playlist id.
+        let playlistFilter = MPMediaPropertyPredicate(value: id, forProperty: MPMediaPlaylistPropertyPersistentID)
+        
+        // Remove any cloud playlist.
+        let noCloudItemFilter = MPMediaPropertyPredicate(value: false, forProperty: MPMediaItemPropertyIsCloudItem)
+        
         cursor.addFilterPredicate(playlistFilter)
         cursor.addFilterPredicate(noCloudItemFilter)
-        
-        let firstPlaylist = cursor.collections?.first as? MPMediaPlaylist
-        return firstPlaylist
+
+        return cursor.collections?.first as? MPMediaPlaylist
     }
 }
