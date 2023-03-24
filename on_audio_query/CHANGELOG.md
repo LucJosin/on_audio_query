@@ -2,10 +2,12 @@
 
 ### Features
 
-- **[Added]** `[setLogConfig]` method.
 - **[Added]** `[LogType]`.
 - **[Added]** `[LogConfig]`.
 - **[Added]** `[PermissionController]`
+- **[Added]** `[setLogConfig]` method.
+- **[Added]** `[checkAndRequest]` method.
+- **[Added]** `[controller]` to `[QueryArtworkWidget]`.
 
 ### Fixes
 
@@ -18,6 +20,7 @@
 - **[Updated]** example.
 - **[Renamed]** natives files/folders.
 - **[Reduced]** the default `artwork` resolution.
+- **[Updated]** quality check on `[QueryArtworkWidget]`.
 
 ## [2.6.2] - [03.03.2023]
 
