@@ -51,21 +51,14 @@ class _SongsState extends State<Songs> {
     _audioQuery.setLogConfig(logConfig);
 
     // Check and request for permission.
-    requestPermission();
+    checkAndRequestPermissions();
   }
 
-  requestPermission() async {
-    // Web platform doesn't support permissions methods.
-    if (!kIsWeb) {
-      _hasPermission = await _audioQuery.permissionsStatus();
+  checkAndRequestPermissions() async {
+    _hasPermission = await _audioQuery.checkAndRequest();
 
-      if (!_hasPermission) {
-        _hasPermission = await _audioQuery.permissionsRequest();
-      }
-
-      // Only call update the UI if application has all required permissions.
-      _hasPermission ? setState(() {}) : null;
-    }
+    // Only call update the UI if application has all required permissions.
+    _hasPermission ? setState(() {}) : null;
   }
 
   @override

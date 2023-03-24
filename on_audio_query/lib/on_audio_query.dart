@@ -16,9 +16,9 @@ library on_audio_query;
 
 //
 import 'dart:async';
-import 'dart:typed_data';
 
 //Dart/Flutter
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 //Platform Interface
