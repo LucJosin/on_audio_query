@@ -18,7 +18,8 @@ import android.app.Activity
 import android.content.Context
 import android.media.MediaScannerConnection
 import android.os.Build
-import com.lucasjosino.on_audio_query.controller.OnAudioController
+import com.lucasjosino.on_audio_query.consts.Method
+import com.lucasjosino.on_audio_query.controller.MethodController
 import com.lucasjosino.on_audio_query.controller.PermissionController
 import io.flutter.Log
 import io.flutter.embedding.engine.plugins.FlutterPlugin
@@ -51,7 +52,7 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     private var binding: ActivityPluginBinding? = null
 
     private lateinit var context: Context
-    private lateinit var controller: OnAudioController
+    private lateinit var methodController: MethodController
     private lateinit var permissionController: PermissionController
 
     // Dart <-> Kotlin communication
@@ -79,7 +80,7 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             )
         }
 
-        controller = OnAudioController(context, call, result)
+        methodController = MethodController(context, call, result)
 
         // If user deny permission request a pop up will immediately show up
         // If [retryRequest] is null, the message will only show when call method again
@@ -91,8 +92,8 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         Log.i(TAG, "Method call: ${call.method}")
         when (call.method) {
             // Permissions
-            "permissionsStatus" -> result.success(permissionController.permissionStatus(context))
-            "permissionsRequest" -> {
+            Method.PERMISSION_STATUS -> result.success(permissionController.permissionStatus(context))
+            Method.PERMISSION_REQUEST -> {
                 // Add to controller the ability to listen the request result.
                 binding!!.addRequestPermissionsResultListener(permissionController)
 
@@ -101,7 +102,7 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             }
 
             // Device information
-            "queryDeviceInfo" -> {
+            Method.QUERY_DEVICE_INFO -> {
                 result.success(
                     hashMapOf<String, Any>(
                         "device_model" to Build.MODEL,
@@ -113,7 +114,7 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
             // This method will scan the given path to update the 'state'.
             // When deleting a file using 'dart:io', call this method to update the file 'state'.
-            "scan" -> {
+            Method.SCAN -> {
                 val sPath: String? = call.argument<String>("path")
 
                 // Check if the given file is null or empty.
@@ -130,13 +131,13 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             }
 
             // Logging
-            "setLogConfig" -> {
+            Method.SET_LOG_CONFIG -> {
                 Log.setLogLevel(call.argument<Int>("level")!!)
                 result.success(true)
             }
 
             // All others methods
-            else -> controller.call()
+            else -> methodController.find()
         }
 
         Log.d(TAG, "Ended method call (${call.method})\n ")

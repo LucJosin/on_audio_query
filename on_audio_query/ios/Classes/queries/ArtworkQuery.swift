@@ -1,7 +1,7 @@
 import Flutter
 import MediaPlayer
 
-class OnArtworkQuery {
+class ArtworkQuery {
     var args: [String: Any]
     var result: FlutterResult
     
@@ -18,31 +18,27 @@ class OnArtworkQuery {
     //
     // Not the best solution but, at least here we can select differents formats and size.
     func queryArtwork() {
-        // The id of the [Song] or [Album].
+        // The 'id' of the [Song] or [Album].
         let id = args["id"] as! Int
         
-        // The size of the image.
+        // The 'size' of the image.
         let size = args["size"] as! Int
         
-        // The size of the image.
+        // The 'size' of the image.
         var quality = args["quality"] as! Int
         if quality > 100 {
-            quality = 100
+            quality = 50
         }
         
-        // The format [JPEG] or [PNG].
+        // The format
+        //  * 0 -> JPEG
+        //  * 1 -> PNG
         let format = args["format"] as! Int
-        
-        // The uri [0]: Song and [1]: Album.
-        let uri = args["type"] as! Int
         
         var cursor: MPMediaQuery?
         var filter: MPMediaPropertyPredicate?
-        
-        // uri = 0 -> artwork from [Song]
-        // uri = 1 -> artwork from [Album]
-        // uri = 2 -> artwork from [Playlist]
-        // uri = 3 -> artwork from [Artist]
+            
+        let uri = args["type"] as! Int
         switch uri {
         case 0:
             filter = MPMediaPropertyPredicate(value: id, forProperty: MPMediaItemPropertyPersistentID)
@@ -65,7 +61,7 @@ class OnArtworkQuery {
         }
         
         if cursor == nil || filter == nil {
-            Log.type.warning("Cursor or filter has null values!")
+            Log.type.warning("Cursor or filter has null value!")
             result(nil)
         }
         

@@ -1,4 +1,4 @@
-package com.lucasjosino.on_audio_query.query
+package com.lucasjosino.on_audio_query.queries
 
 import android.content.ContentResolver
 import android.content.Context
@@ -6,7 +6,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lucasjosino.on_audio_query.controller.PermissionController
-import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
+import com.lucasjosino.on_audio_query.queries.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkGenresUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkGenreSortType
 import com.lucasjosino.on_audio_query.utils.genreProjection
@@ -18,16 +18,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /** OnGenresQuery */
-class OnGenresQuery : ViewModel() {
+class GenreQuery : ViewModel() {
 
     companion object {
         private const val TAG = "OnGenresQuery"
     }
 
     // Main parameters.
-    private val helper = OnAudioHelper()
+    private val helper = QueryHelper()
 
-    // None of this methods can be null.
     private lateinit var uri: Uri
     private lateinit var sortType: String
     private lateinit var resolver: ContentResolver
@@ -49,19 +48,18 @@ class OnGenresQuery : ViewModel() {
             call.argument<Int>("orderType")!!,
             call.argument<Boolean>("ignoreCase")!!
         )
+
         // Check uri:
-        //   * [0]: External.
-        //   * [1]: Internal.
+        //   * 0 -> External
+        //   * 1 -> Internal
         uri = checkGenresUriType(call.argument<Int>("uri")!!)
 
         Log.d(TAG, "Query config: ")
         Log.d(TAG, "\tsortType: $sortType")
         Log.d(TAG, "\turi: $uri")
 
-        // Request permission status;
+        // We cannot 'query' without permission.
         val hasPermission: Boolean = PermissionController().permissionStatus(context)
-
-        // We cannot 'query' without permission so, throw a PlatformException.
         if (!hasPermission) {
             result.error(
                 "403",
@@ -73,28 +71,26 @@ class OnGenresQuery : ViewModel() {
 
         // Query everything in background for a better performance.
         viewModelScope.launch {
-            // Start querying
             val queryResult: ArrayList<MutableMap<String, Any?>> = loadGenres()
-
-            // After loading the information, send the 'result'.
             result.success(queryResult)
         }
     }
 
-    //Loading in Background
+    // Loading in Background
     private suspend fun loadGenres(): ArrayList<MutableMap<String, Any?>> =
         withContext(Dispatchers.IO) {
-            // Setup the cursor with [uri], [projection] and [sortType].
+            // Setup the cursor with 'uri', 'projection' and 'sortType'.
             val cursor = resolver.query(uri, genreProjection, null, null, sortType)
-            // Empty list.
+
             val genreList: ArrayList<MutableMap<String, Any?>> = ArrayList()
 
             Log.d(TAG, "Cursor count: ${cursor?.count}")
 
             // For each item(genre) inside this "cursor", take one and "format"
-            // into a [Map<String, dynamic>].
+            // into a 'Map<String, dynamic>'.
             while (cursor != null && cursor.moveToNext()) {
                 val genreData: MutableMap<String, Any?> = HashMap()
+
                 for (genreMedia in cursor.columnNames) {
                     genreData[genreMedia] = helper.loadGenreItem(genreMedia, cursor)
                 }
@@ -110,15 +106,6 @@ class OnGenresQuery : ViewModel() {
 
             // Close cursor to avoid memory leaks.
             cursor?.close()
-            // After finish the "query", go back to the "main" thread(You can only call flutter
-            // inside the main thread).
             return@withContext genreList
         }
 }
-
-//Extras:
-
-//I/OnGenreCursor[All/Audio]: [
-// _id
-// name
-// ]

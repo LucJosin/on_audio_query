@@ -1,7 +1,7 @@
 import Flutter
 import MediaPlayer
 
-class OnArtistsQuery {
+class GenreQuery {
     var args: [String: Any]
     var result: FlutterResult
     
@@ -10,15 +10,15 @@ class OnArtistsQuery {
         self.result = result
     }
     
-    func queryArtists() {
-        let cursor = MPMediaQuery.artists()
+    func queryGenres() {
+        let cursor = MPMediaQuery.genres()
         
         // We don't need to define a sortType here. [IOS] only support
         // the [Artist]. The others will be sorted "manually" using
         // [formatSongList] before send to Dart.
         
         // Filter to avoid audios/songs from cloud library.
-        let cloudFilter = MPMediaPropertyPredicate.init(
+        let cloudFilter = MPMediaPropertyPredicate(
             value: false,
             forProperty: MPMediaItemPropertyIsCloudItem
         )
@@ -28,30 +28,35 @@ class OnArtistsQuery {
         let hasPermission = PermissionController.checkPermission()
         if hasPermission {
             // Query everything in background for a better performance.
-            loadArtists(cursor: cursor.collections)
+            loadGenres(cursor: cursor.collections)
         } else {
             // There's no permission so, return empty to avoid crashes.
             result([])
         }
     }
     
-    private func loadArtists(cursor: [MPMediaItemCollection]!) {
+    private func loadGenres(cursor: [MPMediaItemCollection]!) {
         DispatchQueue.global(qos: .userInitiated).async {
-            var listOfArtists: [[String: Any?]] = Array()
+            var listOfGenres: [[String: Any?]] = Array()
             
-            // For each item(artist) inside this "cursor", take one and "format"
+            // For each item(genre) inside this "cursor", take one and "format"
             // into a [Map<String, dynamic>], all keys are based on [Android]
             // platforms.
-            for artist in cursor {
-                if !artist.items[0].isCloudItem && artist.items[0].assetURL != nil {
-                    let artistData = loadArtistItem(artist: artist)
-                    listOfArtists.append(artistData)
+            for genre in cursor {
+                if !genre.items[0].isCloudItem, genre.items[0].assetURL != nil {
+                    var genreData = loadGenreItem(genre: genre)
+                    
+                    // Count and add the number of songs for every genre.
+                    let tmpMediaCount = getMediaCount(type: 0, id: genreData["_id"] as! UInt64)
+                    genreData["num_of_songs"] = tmpMediaCount
+                    
+                    listOfGenres.append(genreData)
                 }
             }
             
             DispatchQueue.main.async {
                 // Custom sort/order.
-                let finalList = formatArtistList(args: self.args, allArtists: listOfArtists)
+                let finalList = formatGenreList(args: self.args, allGenres: listOfGenres)
                 self.result(finalList)
             }
         }

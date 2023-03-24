@@ -1,7 +1,7 @@
 import Flutter
 import MediaPlayer
 
-class OnAudioQuery {
+class AudioQuery {
     var args: [String: Any]
     var result: FlutterResult
     

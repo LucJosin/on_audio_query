@@ -1,7 +1,7 @@
 import Flutter
 import MediaPlayer
 
-class OnPlaylistsQuery {
+class PlaylistQuery {
     var args: [String: Any]
     var result: FlutterResult
     

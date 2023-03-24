@@ -1,4 +1,4 @@
-package com.lucasjosino.on_audio_query.query
+package com.lucasjosino.on_audio_query.queries
 
 import android.content.ContentResolver
 import android.content.Context
@@ -6,7 +6,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lucasjosino.on_audio_query.controller.PermissionController
-import com.lucasjosino.on_audio_query.query.helper.OnAudioHelper
+import com.lucasjosino.on_audio_query.queries.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkAlbumsUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkAlbumSortType
 import io.flutter.Log
@@ -17,16 +17,15 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 /** OnAlbumsQuery */
-class OnAlbumsQuery : ViewModel() {
+class AlbumQuery : ViewModel() {
 
     companion object {
         private const val TAG = "OnAlbumsQuery"
     }
 
     // Main parameters.
-    private val helper = OnAudioHelper()
+    private val helper = QueryHelper()
 
-    // None of this methods can be null.
     private lateinit var uri: Uri
     private lateinit var sortType: String
     private lateinit var resolver: ContentResolver
@@ -52,19 +51,18 @@ class OnAlbumsQuery : ViewModel() {
             call.argument<Int>("orderType")!!,
             call.argument<Boolean>("ignoreCase")!!
         )
+
         // Check uri:
-        //   * [0]: External.
-        //   * [1]: Internal.
+        //   * 0 -> External
+        //   * 1 -> Internal
         uri = checkAlbumsUriType(call.argument<Int>("uri")!!)
 
         Log.d(TAG, "Query config: ")
         Log.d(TAG, "\tsortType: $sortType")
         Log.d(TAG, "\turi: $uri")
 
-        // Request permission status;
+        // We cannot 'query' without permission.
         val hasPermission: Boolean = PermissionController().permissionStatus(context)
-
-        // We cannot 'query' without permission so, throw a PlatformException.
         if (!hasPermission) {
             result.error(
                 "403",
@@ -76,10 +74,7 @@ class OnAlbumsQuery : ViewModel() {
 
         // Query everything in background for a better performance.
         viewModelScope.launch {
-            // Start querying
             val queryResult: ArrayList<MutableMap<String, Any?>> = loadAlbums()
-
-            // After loading the information, send the 'result'.
             result.success(queryResult)
         }
     }
@@ -87,45 +82,31 @@ class OnAlbumsQuery : ViewModel() {
     // Loading in Background
     private suspend fun loadAlbums(): ArrayList<MutableMap<String, Any?>> =
         withContext(Dispatchers.IO) {
-            // Setup the cursor with [uri], [projection](null == all items) and [sortType].
+            // Setup the cursor with 'uri', 'projection'(null == all items) and 'sortType'.
             val cursor = resolver.query(uri, null, null, null, sortType)
-            // Empty list.
+
             val albumList: ArrayList<MutableMap<String, Any?>> = ArrayList()
 
             Log.d(TAG, "Cursor count: ${cursor?.count}")
 
             // For each item(album) inside this "cursor", take one and "format"
-            // into a [Map<String, dynamic>].
+            // into a 'Map<String, dynamic>'.
             while (cursor != null && cursor.moveToNext()) {
                 val tempData: MutableMap<String, Any?> = HashMap()
+
                 for (albumMedia in cursor.columnNames) {
                     tempData[albumMedia] = helper.loadAlbumItem(albumMedia, cursor)
                 }
-                // In Android 10 and above [album_art] will return null, to avoid problem,
-                // we remove it. Use [queryArtwork] instead.
+
+                // Android 10 and above 'album_art' will return null. Use 'queryArtwork' instead.
                 val art = tempData["album_art"].toString()
                 if (art.isEmpty()) tempData.remove("album_art")
+
                 albumList.add(tempData)
             }
 
             // Close cursor to avoid memory leaks.
             cursor?.close()
-            // After finish the "query", go back to the "main" thread(You can only call flutter
-            // inside the main thread).
             return@withContext albumList
         }
 }
-
-//I/AlbumCursor: [
-// numsongs,
-// artist,
-// numsongs_by_artist,
-// _id,
-// album,
-// album_art,
-// album_key,
-// artist_id,
-// maxyear,
-// minyear,
-// album_id,
-// ]
