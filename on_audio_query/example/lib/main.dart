@@ -100,6 +100,7 @@ class _SongsState extends State<Songs> {
                         // This Widget will query/load image.
                         // You can use/create your own widget/method using [queryArtwork].
                         leading: QueryArtworkWidget(
+                          controller: _audioQuery,
                           id: item.data![index].id,
                           type: ArtworkType.AUDIO,
                         ),
