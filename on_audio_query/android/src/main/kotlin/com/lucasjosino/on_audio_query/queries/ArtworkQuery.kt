@@ -38,7 +38,6 @@ class ArtworkQuery : ViewModel() {
     private var quality: Int = 100
     private var size: Int = 200
 
-    // None of this methods can be null.
     private lateinit var uri: Uri
     private lateinit var resolver: ContentResolver
     private lateinit var format: Bitmap.CompressFormat
@@ -54,24 +53,28 @@ class ArtworkQuery : ViewModel() {
     fun queryArtwork(context: Context, result: MethodChannel.Result, call: MethodCall) {
         resolver = context.contentResolver
 
-        // The [id] of the song/album. If the [size] is null, will be [200].
-        id = call.argument<Number>("id")!!; size = call.argument<Int>("size")!!
-        // Define the quality of image.
-        // The [quality] value cannot be greater than 100 so, we check and if is, set to [100].
+        id = call.argument<Number>("id")!!
+
+        // If the 'size' is null, will be '200'.
+        size = call.argument<Int>("size")!!
+
+        // The 'quality' value cannot be greater than 100 so, we check and if is, set to '50'.
         quality = call.argument<Int>("quality")!!
-        if (quality > 100) quality = 100
+        if (quality > 100) quality = 50
+
         // Check format:
-        //   * [0]: JPEG
-        //   * [1]: PNG
+        //   * 0 -> JPEG
+        //   * 1 -> PNG
         format = checkArtworkFormat(call.argument<Int>("format")!!)
+
         // Check uri:
-        //   * [0]: Song.
-        //   * [1]: Album.
-        //   * [2]: Playlist.
-        //   * [3]: Artist.
-        //   * [4]: Genre.
+        //   * 0 -> Song.
+        //   * 1 -> Album.
+        //   * 2 -> Playlist.
+        //   * 3 -> Artist.
+        //   * 4 -> Genre.
         uri = checkArtworkType(call.argument<Int>("type")!!)
-        // Define the [type]:
+
         type = call.argument<Int>("type")!!
 
         Log.d(TAG, "Query config: ")
@@ -81,22 +84,19 @@ class ArtworkQuery : ViewModel() {
         Log.d(TAG, "\turi: $uri")
         Log.d(TAG, "\ttype: $type")
 
-        // Request permission status;
+        // We cannot 'query' without permission.
         val hasPermission: Boolean = PermissionController().permissionStatus(context)
-
-        // We cannot 'query' without permission so, throw a PlatformException.
         if (!hasPermission) {
             result.error(
                 "403",
                 "The app doesn't have permission to read files.",
-                "Call the [permissionsRequest] method or install a external plugin to handle the app permission."
+                "Call the [permissionsRequest' method or install a external plugin to handle the app permission."
             )
             return
         }
 
         // Query everything in background for a better performance.
         viewModelScope.launch {
-            // Start querying
             var resultArtList: ByteArray? = loadArt()
 
             // Sometimes android will extract a 'wrong' or 'empty' artwork. Just set as null.
@@ -105,7 +105,6 @@ class ArtworkQuery : ViewModel() {
                 resultArtList = null
             }
 
-            // After loading the information, send the 'result'.
             result.success(resultArtList)
         }
     }
@@ -113,28 +112,23 @@ class ArtworkQuery : ViewModel() {
     //Loading in Background
     @Suppress("BlockingMethodInNonBlockingContext")
     private suspend fun loadArt(): ByteArray? = withContext(Dispatchers.IO) {
-        // Empty array.
         var artData: ByteArray? = null
 
-        // In this case we need check the [Android] version and query [type].
-        //
-        // If [Android] >= 29/Q:
-        //   * We have a limited access to files/folders and we use [loadThumbnail].
-        // If [Android] < 29/Q:
-        //   * We use the [embeddedPicture] from [MediaMetadataRetriever] to get the image.
+        // If 'Android' >= 29/Q:
+        //   * Limited access to files/folders. Use 'loadThumbnail'.
+        // If 'Android' < 29/Q:
+        //   * Use the 'embeddedPicture' from 'MediaMetadataRetriever' to get the image.
         if (Build.VERSION.SDK_INT >= 29) {
-            // Try / Catch to avoid problems.
             try {
-                // If [type] is 2, 3 or 4, we need to 'get' the first item from playlist or artist.
-                // We'll use the first artist song to 'simulate' the artwork.
+                // If 'type' is 2, 3 or 4, Get the first item from playlist or artist.
+                // Use the first artist song to 'simulate' the artwork.
                 //
                 // Type:
-                //   * [2]: Playlist.
-                //   * [3]: Artist.
-                //   * [4]: Genre.
+                //   * 2 -> Playlist.
+                //   * 3 -> Artist.
+                //   * 4 -> Genre.
                 //
-                // Due old problems with [MethodChannel] the [id] is defined as [Number].
-                // Here we convert to [Long]
+                // OBS: The 'id' is defined as 'Number'. Convert to 'Long'
                 val query = if (type == 2 || type == 3 || type == 4) {
                     val item = helper.loadFirstItem(type, id, resolver) ?: return@withContext null
                     ContentUris.withAppendedId(uri, item.toLong())
@@ -148,35 +142,31 @@ class ArtworkQuery : ViewModel() {
                 Log.w(TAG, "($id) Message: $e")
             }
         } else {
-            // If [uri == Audio]:
-            //   * Load the first [item] from cursor using the [id] as filter.
+            // If 'uri == Audio':
+            //   * Load the first 'item' from cursor using the 'id' as filter.
             // else:
-            //   * Load the first [item] from [album] using the [id] as filter.
+            //   * Load the first 'item' from 'album' using the 'id' as filter.
             //
-            // If [item] return null, no song/album has found, just return null.
+            // If 'item' return null, no song/album has found, return null.
             val item = helper.loadFirstItem(type, id, resolver) ?: return@withContext null
+
             try {
-                // I tried both [_data] and [_uri], none of them work.
-                // So we use the [_data] inside the [FileInputStream] and take the
-                // [fd(FileDescriptor)].
                 val file = FileInputStream(item)
                 val metadata = MediaMetadataRetriever()
 
-                // Most of the cases the error occurred here.
                 metadata.setDataSource(file.fd)
                 val image = metadata.embeddedPicture
 
-                // Check if [image] null.
+                // Convert image. If null, return
                 artData = convertOrResize(byteArray = image) ?: return@withContext null
 
-                // [close] can only be called using [Android] >= 29/Q.
+                // 'close' can only be called using 'Android' >= 29/Q.
                 if (Build.VERSION.SDK_INT >= 29) metadata.close()
             } catch (e: Exception) {
                 Log.w(TAG, "($id) Message: $e")
             }
         }
-        // After finish the "query", go back to the "main" thread(You can only call flutter
-        // inside the main thread).
+
         return@withContext artData
     }
 
@@ -184,8 +174,9 @@ class ArtworkQuery : ViewModel() {
     private fun convertOrResize(bitmap: Bitmap? = null, byteArray: ByteArray? = null): ByteArray? {
         val convertedBytes: ByteArray?
         val byteArrayBase = ByteArrayOutputStream()
+
         try {
-            // If [bitmap] isn't null:
+            // If 'bitmap' isn't null:
             //   * The image(bitmap) is from first method. (Android >= 29/Q).
             // else:
             //   * The image(bytearray) is from second method. (Android < 29/Q).

@@ -27,7 +27,6 @@ class PlaylistQuery : ViewModel() {
     //Main parameters
     private val helper = QueryHelper()
 
-    // None of this methods can be null.
     private lateinit var uri: Uri
     private lateinit var resolver: ContentResolver
     private lateinit var sortType: String
@@ -50,18 +49,16 @@ class PlaylistQuery : ViewModel() {
             call.argument<Boolean>("ignoreCase")!!
         )
         // Check uri:
-        //   * [0]: External.
-        //   * [1]: Internal.
+        //   * 0 -> External.
+        //   * 1 -> Internal.
         uri = checkPlaylistsUriType(call.argument<Int>("uri")!!)
 
         Log.d(TAG, "Query config: ")
         Log.d(TAG, "\tsortType: $sortType")
         Log.d(TAG, "\turi: $uri")
 
-        // Request permission status;
+        // We cannot 'query' without permission.
         val hasPermission: Boolean = PermissionController().permissionStatus(context)
-
-        // We cannot 'query' without permission so, throw a PlatformException.
         if (!hasPermission) {
             result.error(
                 "403",
@@ -73,10 +70,7 @@ class PlaylistQuery : ViewModel() {
 
         // Query everything in background for a better performance.
         viewModelScope.launch {
-            // Start querying
             val queryResult: ArrayList<MutableMap<String, Any?>> = loadPlaylists()
-
-            // After loading the information, send the 'result'.
             result.success(queryResult)
         }
     }
@@ -84,17 +78,18 @@ class PlaylistQuery : ViewModel() {
     //Loading in Background
     private suspend fun loadPlaylists(): ArrayList<MutableMap<String, Any?>> =
         withContext(Dispatchers.IO) {
-            // Setup the cursor with [uri] and [projection].
+            // Setup the cursor with 'uri' and 'projection'.
             val cursor = resolver.query(uri, playlistProjection, null, null, null)
-            // Empty list.
+
             val playlistList: ArrayList<MutableMap<String, Any?>> = ArrayList()
 
             Log.d(TAG, "Cursor count: ${cursor?.count}")
 
             // For each item(playlist) inside this "cursor", take one and "format"
-            // into a [Map<String, dynamic>].
+            // into a 'Map<String, dynamic>'.
             while (cursor != null && cursor.moveToNext()) {
                 val playlistData: MutableMap<String, Any?> = HashMap()
+
                 for (playlistMedia in cursor.columnNames) {
                     playlistData[playlistMedia] = helper.loadPlaylistItem(playlistMedia, cursor)
                 }
@@ -108,18 +103,6 @@ class PlaylistQuery : ViewModel() {
 
             // Close cursor to avoid memory leaks.
             cursor?.close()
-            // After finish the "query", go back to the "main" thread(You can only call flutter
-            // inside the main thread).
             return@withContext playlistList
         }
 }
-
-//Extras:
-
-//I/OnPlaylistCursor[All/Audio]: [
-// _data
-// _id
-// date_added
-// date_modified
-// name
-// ]

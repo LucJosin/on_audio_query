@@ -15,10 +15,10 @@ class AllPathQuery {
 
     companion object {
         private const val TAG = "OnAllPathQuery"
+
+        private val URI: Uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
     }
 
-    // Main parameters, none of this methods can be null.
-    private val uri: Uri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
     private lateinit var resolver: ContentResolver
 
     /**
@@ -34,7 +34,7 @@ class AllPathQuery {
         // Request permission status.
         val hasPermission: Boolean = PermissionController().permissionStatus(context)
 
-        // We cannot 'query' without permission so, throw a PlatformException.
+        // We cannot 'query' without permission.
         if (!hasPermission) {
             result.error(
                 "403",
@@ -44,20 +44,16 @@ class AllPathQuery {
             return
         }
 
-        // Start querying
         val resultAllPath: ArrayList<String> = loadAllPath()
-
-        // Send to Dart.
         result.success(resultAllPath)
     }
 
-    // Ignore the [Data] deprecation because this plugin support older versions.
+    // Ignore the '_data' deprecation because this plugin support older versions.
     @SuppressLint("Range")
     @Suppress("DEPRECATION")
     private fun loadAllPath(): ArrayList<String> {
-        // Setup the cursor with [uri].
-        val cursor = resolver.query(uri, null, null, null, null)
-        // Empty list.
+        val cursor = resolver.query(URI, null, null, null, null)
+
         val songPathList: ArrayList<String> = ArrayList()
 
         Log.d(TAG, "Cursor count: ${cursor?.count}")
@@ -65,15 +61,17 @@ class AllPathQuery {
         // For each item(path) inside this "cursor", take one and add to the list.
         while (cursor != null && cursor.moveToNext()) {
             val content = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DATA))
+
             val path = File(content).parent
+
             // Check if path is null or if already exist inside list.
-            if (path != null && !songPathList.contains(path)) songPathList.add(path)
+            if (path != null && !songPathList.contains(path)) {
+                songPathList.add(path)
+            }
         }
 
         // Close cursor to avoid memory leaks.
         cursor?.close()
-        // After finish the "query", go back to the "main" thread(You can only call flutter
-        // inside the main thread).
         return songPathList
     }
 }

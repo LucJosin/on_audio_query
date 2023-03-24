@@ -45,7 +45,6 @@ class AudioQuery : ViewModel() {
      *   * [result]
      *   * [call]
      */
-    // Ignore the [Data] deprecation because this plugin support older versions.
     @Suppress("DEPRECATION")
     fun querySongs(
         context: Context,
@@ -60,10 +59,12 @@ class AudioQuery : ViewModel() {
             call.argument<Int>("orderType")!!,
             call.argument<Boolean>("ignoreCase")!!
         )
+
         // Check uri:
-        //   * [0]: External.
-        //   * [1]: Internal.
+        //   * 0 -> External.
+        //   * 1 -> Internal.
         uri = checkAudiosUriType(call.argument<Int>("uri")!!)
+
         // Here we provide a custom 'path'.
         if (call.argument<String>("path") != null) {
             val projection = songProjection()
@@ -75,10 +76,8 @@ class AudioQuery : ViewModel() {
         Log.d(TAG, "\tselection: $selection")
         Log.d(TAG, "\turi: $uri")
 
-        // Request permission status;
+        // We cannot 'query' without permission.
         val hasPermission: Boolean = PermissionController().permissionStatus(context)
-
-        // We cannot 'query' without permission so, throw a PlatformException.
         if (!hasPermission) {
             result.error(
                 "403",
@@ -90,10 +89,7 @@ class AudioQuery : ViewModel() {
 
         // Query everything in background for a better performance.
         viewModelScope.launch {
-            // Start querying
             val queryResult: ArrayList<MutableMap<String, Any?>> = loadSongs()
-
-            // After loading the information, send the 'result'.
             result.success(queryResult)
         }
     }
@@ -101,17 +97,18 @@ class AudioQuery : ViewModel() {
     //Loading in Background
     private suspend fun loadSongs(): ArrayList<MutableMap<String, Any?>> =
         withContext(Dispatchers.IO) {
-            // Setup the cursor with [uri], [projection] and [sortType].
+            // Setup the cursor with 'uri', 'projection' and 'sortType'.
             val cursor = resolver.query(uri, songProjection(), selection, null, sortType)
-            // Empty list.
+
             val songList: ArrayList<MutableMap<String, Any?>> = ArrayList()
 
             Log.d(TAG, "Cursor count: ${cursor?.count}")
 
             // For each item(song) inside this "cursor", take one and "format"
-            // into a [Map<String, dynamic>].
+            // into a 'Map<String, dynamic>'.
             while (cursor != null && cursor.moveToNext()) {
                 val tempData: MutableMap<String, Any?> = HashMap()
+
                 for (audioMedia in cursor.columnNames) {
                     tempData[audioMedia] = helper.loadSongItem(audioMedia, cursor)
                 }
@@ -125,70 +122,6 @@ class AudioQuery : ViewModel() {
 
             // Close cursor to avoid memory leaks.
             cursor?.close()
-            // After finish the "query", go back to the "main" thread(You can only call flutter
-            // inside the main thread).
             return@withContext songList
         }
 }
-
-//Extras:
-
-// * Query only audio > 60000 ms [1 minute]
-// Obs: I don't think is a good idea, some audio "Non music" have more than 1 minute
-//query(MediaStore.Audio.Media.EXTERNAL_CONTENT_URI, projection, MediaStore.Audio.Media.DURATION +
-// ">= 60000", null, checkSongSortType(sortType!!))
-
-// * Query audio with limit, used for better performance in tests
-//MediaStore.Audio.Media.TITLE + " LIMIT 4"
-
-// * All projection types in android [Audio]
-//I/AudioCursor[All]: [
-// title_key,
-// instance_id,
-// duration,
-// is_ringtone,
-// album_artist,
-// orientation,
-// artist,
-// height,
-// is_drm,
-// bucket_display_name,
-// is_audiobook,
-// owner_package_name,
-// volume_name,
-// title_resource_uri,
-// date_modified,
-// date_expires,
-// composer,
-// _display_name,
-// datetaken,
-// mime_type,
-// is_notification,
-// _id,
-// year,
-// _data,
-// _hash,
-// _size,
-// album,
-// is_alarm,
-// title,
-// track,
-// width,
-// is_music,
-// album_key,
-// is_trashed,
-// group_id,
-// document_id,
-// artist_id,
-// artist_key,
-// is_pending,
-// date_added,
-// is_podcast,
-// album_id,
-// primary_directory,
-// secondary_directory,
-// original_document_id,
-// bucket_id,
-// bookmark,
-// relative_path
-// ]
