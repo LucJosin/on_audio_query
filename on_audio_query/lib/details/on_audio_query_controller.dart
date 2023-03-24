@@ -36,6 +36,22 @@ class OnAudioQuery {
     }
   }
 
+  /// Simplified version of [permissionsStatus] and [permissionsRequest].
+  ///
+  /// Will check and request, if necessary, all required permissions.
+  ///
+  /// **OBS: Will always return true on web platform.**
+  Future<bool> checkAndRequest() async {
+    if (kIsWeb) return true;
+
+    bool hasPermission = await platform.permissionsStatus();
+    if (!hasPermission) {
+      hasPermission = await platform.permissionsRequest();
+    }
+
+    return hasPermission;
+  }
+
   /// Used to set the logging behavior.
   ///
   /// Parameters:

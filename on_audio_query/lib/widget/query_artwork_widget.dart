@@ -25,6 +25,14 @@ class QueryArtworkWidget extends StatelessWidget {
   /// All Audio/Song has a unique [id].
   final int id;
 
+  /// Used to call the platform specific method.
+  ///
+  /// Important:
+  ///
+  /// * If [controller] is null, will be create a new instance.
+  /// * Log set with [setLogConfig] will only work if [controller] is not null.
+  final OnAudioQuery? controller;
+
   /// Used to define artwork [type].
   ///
   /// Opts: [AUDIO] and [ALBUM].
@@ -251,6 +259,7 @@ class QueryArtworkWidget extends StatelessWidget {
     Key? key,
     required this.id,
     required this.type,
+    this.controller,
     this.format,
     this.size,
     this.quality,
@@ -268,17 +277,13 @@ class QueryArtworkWidget extends StatelessWidget {
     this.nullArtworkWidget,
     this.errorBuilder,
     this.frameBuilder,
-  }) : super(key: key);
+  })  : assert(quality != null && quality > 100),
+        super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (quality != null && quality! > 100) {
-      throw Exception(
-        '[quality] value cannot be greater than [100]',
-      );
-    }
     return FutureBuilder<Uint8List?>(
-      future: OnAudioQuery().queryArtwork(
+      future: (controller ?? OnAudioQuery()).queryArtwork(
         id,
         type,
         format: format ?? ArtworkFormat.JPEG,
