@@ -16,7 +16,7 @@
 ### Changes
 
 - **[Updated]** example.
-- **[Renamed]** natives files.
+- **[Renamed]** natives files/folders.
 - **[Reduced]** the default `artwork` resolution.
 
 ## [2.6.2] - [03.03.2023]
