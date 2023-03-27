@@ -1,19 +1,16 @@
 package com.lucasjosino.on_audio_query.queries
 
-import android.annotation.SuppressLint
 import android.content.ContentResolver
-import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lucasjosino.on_audio_query.controller.PermissionController
+import com.lucasjosino.on_audio_query.PluginProvider
+import com.lucasjosino.on_audio_query.controllers.PermissionController
 import com.lucasjosino.on_audio_query.queries.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkAudiosUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkSongSortType
 import com.lucasjosino.on_audio_query.utils.songProjection
 import io.flutter.Log
-import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -29,29 +26,19 @@ class AudioQuery : ViewModel() {
     private val helper = QueryHelper()
     private var selection: String? = null
 
-    // None of this methods can be null.
     private lateinit var uri: Uri
-    private lateinit var resolver: ContentResolver
     private lateinit var sortType: String
-
-    @SuppressLint("StaticFieldLeak")
-    private lateinit var context: Context
+    private lateinit var resolver: ContentResolver
 
     /**
      * Method to "query" all songs.
-     *
-     * Parameters:
-     *   * [context]
-     *   * [result]
-     *   * [call]
      */
     @Suppress("DEPRECATION")
-    fun querySongs(
-        context: Context,
-        result: MethodChannel.Result,
-        call: MethodCall
-    ) {
-        this.context = context; resolver = context.contentResolver
+    fun querySongs() {
+        val call = PluginProvider.call()
+        val result = PluginProvider.result()
+        val context = PluginProvider.context()
+        this.resolver = context.contentResolver
 
         // Sort: Type and Order.
         sortType = checkSongSortType(
@@ -77,7 +64,7 @@ class AudioQuery : ViewModel() {
         Log.d(TAG, "\turi: $uri")
 
         // We cannot 'query' without permission.
-        val hasPermission: Boolean = PermissionController().permissionStatus(context)
+        val hasPermission: Boolean = PermissionController().permissionStatus()
         if (!hasPermission) {
             result.error(
                 "403",
@@ -89,7 +76,7 @@ class AudioQuery : ViewModel() {
 
         // Query everything in background for a better performance.
         viewModelScope.launch {
-            val queryResult: ArrayList<MutableMap<String, Any?>> = loadSongs()
+            val queryResult = loadSongs()
             result.success(queryResult)
         }
     }

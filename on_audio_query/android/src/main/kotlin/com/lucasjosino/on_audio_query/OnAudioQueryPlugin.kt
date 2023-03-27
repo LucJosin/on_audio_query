@@ -14,13 +14,11 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 
 package com.lucasjosino.on_audio_query
 
-import android.app.Activity
-import android.content.Context
 import android.media.MediaScannerConnection
 import android.os.Build
 import com.lucasjosino.on_audio_query.consts.Method
-import com.lucasjosino.on_audio_query.controller.MethodController
-import com.lucasjosino.on_audio_query.controller.PermissionController
+import com.lucasjosino.on_audio_query.controllers.MethodController
+import com.lucasjosino.on_audio_query.controllers.PermissionController
 import io.flutter.Log
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
@@ -30,7 +28,6 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
-/** OnAudioQueryPlugin Central */
 class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     init {
@@ -46,20 +43,16 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         private const val CHANNEL_NAME = "com.lucasjosino.on_audio_query"
     }
 
-    private lateinit var channel: MethodChannel
+    private var permissionController = PermissionController()
+    private var methodController = MethodController()
 
-    private var activity: Activity? = null
     private var binding: ActivityPluginBinding? = null
 
-    private lateinit var context: Context
-    private lateinit var methodController: MethodController
-    private lateinit var permissionController: PermissionController
+    private lateinit var channel: MethodChannel
 
     // Dart <-> Kotlin communication
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         Log.i(TAG, "Attached to engine")
-
-        context = flutterPluginBinding.applicationContext
 
         // Setup the method channel communication.
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, CHANNEL_NAME)
@@ -71,34 +64,23 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     override fun onMethodCall(call: MethodCall, result: Result) {
         Log.d(TAG, "Started method call (${call.method})")
 
-        // Both [activity] and [binding] are from [onAttachedToActivity].
-        if (activity == null || binding == null) {
-            result.error(
-                "$TAG::onMethodCall",
-                "Methods [activity] or [binding] are null!",
-                null
-            )
-        }
-
-        methodController = MethodController(context, call, result)
+        // Init the plugin provider with current 'call' and 'result'.
+        PluginProvider.initCurrentMethod(call, result)
 
         // If user deny permission request a pop up will immediately show up
         // If [retryRequest] is null, the message will only show when call method again
         val retryRequest = call.argument<Boolean>("retryRequest") ?: false
-
-        // Setup the [PermissionController]
-        permissionController = PermissionController(retryRequest)
+        permissionController.retryRequest = retryRequest
 
         Log.i(TAG, "Method call: ${call.method}")
         when (call.method) {
             // Permissions
-            Method.PERMISSION_STATUS -> result.success(permissionController.permissionStatus(context))
+            Method.PERMISSION_STATUS -> {
+                val hasPermission = permissionController.permissionStatus()
+                result.success(hasPermission)
+            }
             Method.PERMISSION_REQUEST -> {
-                // Add to controller the ability to listen the request result.
-                binding!!.addRequestPermissionsResultListener(permissionController)
-
-                // Request the permission.
-                permissionController.requestPermission(activity!!, result)
+                permissionController.requestPermission()
             }
 
             // Device information
@@ -116,6 +98,7 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             // When deleting a file using 'dart:io', call this method to update the file 'state'.
             Method.SCAN -> {
                 val sPath: String? = call.argument<String>("path")
+                val context = PluginProvider.context()
 
                 // Check if the given file is null or empty.
                 if (sPath == null || sPath.isEmpty()) {
@@ -150,8 +133,13 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         Log.i(TAG, "Attached to activity")
-        this.activity = binding.activity
+
+        // Init plugin provider with 'activity' and 'context'.
+        PluginProvider.init(binding.activity)
+
+        // Add to controller the permission to listen to the request result.
         this.binding = binding
+        binding.addRequestPermissionsResultListener(permissionController)
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
@@ -173,7 +161,6 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             binding!!.removeRequestPermissionsResultListener(permissionController)
         }
 
-        this.activity = null
         this.binding = null
         Log.i(TAG, "Removed all declared methods")
     }

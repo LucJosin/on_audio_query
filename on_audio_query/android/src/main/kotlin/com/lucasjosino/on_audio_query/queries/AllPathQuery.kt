@@ -2,12 +2,11 @@ package com.lucasjosino.on_audio_query.queries
 
 import android.annotation.SuppressLint
 import android.content.ContentResolver
-import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
-import com.lucasjosino.on_audio_query.controller.PermissionController
+import com.lucasjosino.on_audio_query.PluginProvider
+import com.lucasjosino.on_audio_query.controllers.PermissionController
 import io.flutter.Log
-import io.flutter.plugin.common.MethodChannel
 import java.io.File
 
 /** OnAllPathQuery */
@@ -23,16 +22,14 @@ class AllPathQuery {
 
     /**
      * Method to "query" all paths.
-     *
-     * Parameters:
-     *   * [context]
-     *   * [result]
      */
-    fun queryAllPath(context: Context, result: MethodChannel.Result) {
+    fun queryAllPath() {
+        val result = PluginProvider.result()
+        val context = PluginProvider.context()
         this.resolver = context.contentResolver
 
         // Request permission status.
-        val hasPermission: Boolean = PermissionController().permissionStatus(context)
+        val hasPermission: Boolean = PermissionController().permissionStatus()
 
         // We cannot 'query' without permission.
         if (!hasPermission) {
@@ -44,7 +41,7 @@ class AllPathQuery {
             return
         }
 
-        val resultAllPath: ArrayList<String> = loadAllPath()
+        val resultAllPath = loadAllPath()
         result.success(resultAllPath)
     }
 

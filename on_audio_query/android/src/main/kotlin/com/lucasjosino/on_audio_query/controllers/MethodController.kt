@@ -1,42 +1,32 @@
-package com.lucasjosino.on_audio_query.controller
+package com.lucasjosino.on_audio_query.controllers
 
-import android.content.Context
+import com.lucasjosino.on_audio_query.PluginProvider
 import com.lucasjosino.on_audio_query.consts.Method
 import com.lucasjosino.on_audio_query.queries.*
-import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
 
-class MethodController(
-    private val context: Context,
-    private val call: MethodCall,
-    private val result: MethodChannel.Result
-) {
+class MethodController() {
 
     //
     fun find() {
-        when (call.method) {
+        when (PluginProvider.call().method) {
             //Query methods
-            Method.QUERY_AUDIOS -> AudioQuery().querySongs(context, result, call)
-            Method.QUERY_ALBUMS -> AlbumQuery().queryAlbums(context, result, call)
-            Method.QUERY_ARTISTS -> ArtistQuery().queryArtists(context, result, call)
-            Method.QUERY_PLAYLISTS -> PlaylistQuery().queryPlaylists(context, result, call)
-            Method.QUERY_GENRES -> GenreQuery().queryGenres(context, result, call)
-            Method.QUERY_ARTWORK -> ArtworkQuery().queryArtwork(context, result, call)
-            Method.QUERY_AUDIOS_FROM -> AudioFromQuery().querySongsFrom(context, result, call)
-            Method.QUERY_WITH_FILTERS -> WithFiltersQuery().queryWithFilters(context, result, call)
-            Method.QUERY_ALL_PATHS -> AllPathQuery().queryAllPath(context, result)
+            Method.QUERY_AUDIOS -> AudioQuery().querySongs()
+            Method.QUERY_ALBUMS -> AlbumQuery().queryAlbums()
+            Method.QUERY_ARTISTS -> ArtistQuery().queryArtists()
+            Method.QUERY_PLAYLISTS -> PlaylistQuery().queryPlaylists()
+            Method.QUERY_GENRES -> GenreQuery().queryGenres()
+            Method.QUERY_ARTWORK -> ArtworkQuery().queryArtwork()
+            Method.QUERY_AUDIOS_FROM -> AudioFromQuery().querySongsFrom()
+            Method.QUERY_WITH_FILTERS -> WithFiltersQuery().queryWithFilters()
+            Method.QUERY_ALL_PATHS -> AllPathQuery().queryAllPath()
             //Playlists methods
-            Method.CREATE_PLAYLIST -> PlaylistController().createPlaylist(context, result, call)
-            Method.REMOVE_PLAYLIST -> PlaylistController().removePlaylist(context, result, call)
-            Method.ADD_TO_PLAYLIST -> PlaylistController().addToPlaylist(context, result, call)
-            Method.REMOVE_FROM_PLAYLIST -> PlaylistController().removeFromPlaylist(
-                context,
-                result,
-                call
-            )
-            Method.RENAME_PLAYLIST -> PlaylistController().renamePlaylist(context, result, call)
-            Method.MOVE_ITEM_TO -> PlaylistController().moveItemTo(context, result, call)
-            else -> result.notImplemented()
+            Method.CREATE_PLAYLIST -> PlaylistController().createPlaylist()
+            Method.REMOVE_PLAYLIST -> PlaylistController().removePlaylist()
+            Method.ADD_TO_PLAYLIST -> PlaylistController().addToPlaylist()
+            Method.REMOVE_FROM_PLAYLIST -> PlaylistController().removeFromPlaylist()
+            Method.RENAME_PLAYLIST -> PlaylistController().renamePlaylist()
+            Method.MOVE_ITEM_TO -> PlaylistController().moveItemTo()
+            else -> PluginProvider.result().notImplemented()
         }
     }
 }

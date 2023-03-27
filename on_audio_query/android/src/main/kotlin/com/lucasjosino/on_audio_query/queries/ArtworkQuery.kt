@@ -2,7 +2,6 @@ package com.lucasjosino.on_audio_query.queries
 
 import android.content.ContentResolver
 import android.content.ContentUris
-import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.media.MediaMetadataRetriever
@@ -11,13 +10,12 @@ import android.os.Build
 import android.util.Size
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lucasjosino.on_audio_query.controller.PermissionController
+import com.lucasjosino.on_audio_query.PluginProvider
+import com.lucasjosino.on_audio_query.controllers.PermissionController
 import com.lucasjosino.on_audio_query.queries.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkArtworkFormat
 import com.lucasjosino.on_audio_query.types.checkArtworkType
 import io.flutter.Log
-import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -44,14 +42,12 @@ class ArtworkQuery : ViewModel() {
 
     /**
      * Method to "query" all albums.
-     *
-     * Parameters:
-     *   * [context]
-     *   * [result]
-     *   * [call]
      */
-    fun queryArtwork(context: Context, result: MethodChannel.Result, call: MethodCall) {
-        resolver = context.contentResolver
+    fun queryArtwork() {
+        val call = PluginProvider.call()
+        val result = PluginProvider.result()
+        val context = PluginProvider.context()
+        this.resolver = context.contentResolver
 
         id = call.argument<Number>("id")!!
 
@@ -85,7 +81,7 @@ class ArtworkQuery : ViewModel() {
         Log.d(TAG, "\ttype: $type")
 
         // We cannot 'query' without permission.
-        val hasPermission: Boolean = PermissionController().permissionStatus(context)
+        val hasPermission: Boolean = PermissionController().permissionStatus()
         if (!hasPermission) {
             result.error(
                 "403",
@@ -97,7 +93,7 @@ class ArtworkQuery : ViewModel() {
 
         // Query everything in background for a better performance.
         viewModelScope.launch {
-            var resultArtList: ByteArray? = loadArt()
+            var resultArtList = loadArt()
 
             // Sometimes android will extract a 'wrong' or 'empty' artwork. Just set as null.
             if (resultArtList != null && resultArtList.isEmpty()) {
