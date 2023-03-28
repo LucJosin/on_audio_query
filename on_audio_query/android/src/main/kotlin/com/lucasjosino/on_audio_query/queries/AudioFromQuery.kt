@@ -1,14 +1,13 @@
 package com.lucasjosino.on_audio_query.queries
 
-import android.annotation.SuppressLint
 import android.content.ContentResolver
-import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lucasjosino.on_audio_query.controller.PermissionController
+import com.lucasjosino.on_audio_query.PluginProvider
+import com.lucasjosino.on_audio_query.controllers.PermissionController
 import com.lucasjosino.on_audio_query.queries.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkAudiosFromType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkSongSortType
@@ -35,8 +34,6 @@ class AudioFromQuery : ViewModel() {
     private var pUri = MediaStore.Audio.Media.EXTERNAL_CONTENT_URI
 
     // None of this methods can be null.
-    @SuppressLint("StaticFieldLeak")
-    private lateinit var context: Context
     private lateinit var where: String
     private lateinit var whereVal: String
     private lateinit var sortType: String
@@ -44,14 +41,12 @@ class AudioFromQuery : ViewModel() {
 
     /**
      * Method to "query" all songs from a specific item.
-     *
-     * Parameters:
-     *   * [context]
-     *   * [result]
-     *   * [call]
      */
-    fun querySongsFrom(context: Context, result: MethodChannel.Result, call: MethodCall) {
-        this.context = context; resolver = context.contentResolver
+    fun querySongsFrom() {
+        val call = PluginProvider.call()
+        val result = PluginProvider.result()
+        val context = PluginProvider.context()
+        this.resolver = context.contentResolver
 
         // The type of 'item':
         //   * 0 -> Album
@@ -76,7 +71,7 @@ class AudioFromQuery : ViewModel() {
         Log.d(TAG, "\turi: $URI")
 
         // We cannot 'query' without permission.
-        val hasPermission: Boolean = PermissionController().permissionStatus(context)
+        val hasPermission: Boolean = PermissionController().permissionStatus()
         if (!hasPermission) {
             result.error(
                 "403",
@@ -109,7 +104,7 @@ class AudioFromQuery : ViewModel() {
 
             // Query everything in background for a better performance.
             viewModelScope.launch {
-                val resultSongList: ArrayList<MutableMap<String, Any?>> = loadSongsFrom()
+                val resultSongList = loadSongsFrom()
                 result.success(resultSongList)
             }
         }
@@ -170,7 +165,7 @@ class AudioFromQuery : ViewModel() {
 
         // Query everything in background for a better performance.
         viewModelScope.launch {
-            val resultSongsFrom: ArrayList<MutableMap<String, Any?>> = loadSongsFromPlaylistOrGenre()
+            val resultSongsFrom = loadSongsFromPlaylistOrGenre()
             result.success(resultSongsFrom)
         }
     }

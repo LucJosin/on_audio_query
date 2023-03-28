@@ -5,9 +5,9 @@ class ArtworkQuery {
     var args: [String: Any]
     var result: FlutterResult
     
-    init(_ call: FlutterMethodCall, _ result: @escaping FlutterResult) {
-        self.args = call.arguments as! [String: Any]
-        self.result = result
+    init() {
+        self.args = try! PluginProvider.call().arguments as! [String: Any]
+        self.result = try! PluginProvider.result()
     }
     
     // [IOS] has a different artwork system and you can "query" using normal "querySongs, .."

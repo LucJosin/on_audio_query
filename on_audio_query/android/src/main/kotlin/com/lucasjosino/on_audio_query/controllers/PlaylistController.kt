@@ -1,14 +1,12 @@
-package com.lucasjosino.on_audio_query.controller
+package com.lucasjosino.on_audio_query.controllers
 
 import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.ContentValues
-import android.content.Context
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
-import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
+import com.lucasjosino.on_audio_query.PluginProvider
 
 /** OnPlaylistsController */
 class PlaylistController {
@@ -24,8 +22,12 @@ class PlaylistController {
         "count(*)"
     )
 
+    private val context = PluginProvider.context()
+    private val result = PluginProvider.result()
+    private val call = PluginProvider.call()
+
     //
-    fun createPlaylist(context: Context, result: MethodChannel.Result, call: MethodCall) {
+    fun createPlaylist() {
         this.resolver = context.contentResolver
         val playlistName = call.argument<String>("playlistName")!!
 
@@ -37,7 +39,7 @@ class PlaylistController {
     }
 
     //
-    fun removePlaylist(context: Context, result: MethodChannel.Result, call: MethodCall) {
+    fun removePlaylist() {
         this.resolver = context.contentResolver
         val playlistId = call.argument<Int>("playlistId")!!
 
@@ -52,7 +54,7 @@ class PlaylistController {
 
     //TODO Add option to use a list
     //TODO Fix error on Android 10
-    fun addToPlaylist(context: Context, result: MethodChannel.Result, call: MethodCall) {
+    fun addToPlaylist() {
         this.resolver = context.contentResolver
         val playlistId = call.argument<Int>("playlistId")!!
         val audioId = call.argument<Int>("audioId")!!
@@ -84,7 +86,7 @@ class PlaylistController {
     }
 
     //TODO Add option to use a list
-    fun removeFromPlaylist(context: Context, result: MethodChannel.Result, call: MethodCall) {
+    fun removeFromPlaylist() {
         this.resolver = context.contentResolver
         val playlistId = call.argument<Int>("playlistId")!!
         val audioId = call.argument<Int>("audioId")!!
@@ -108,7 +110,7 @@ class PlaylistController {
     }
 
     //TODO("Need tests")
-    fun moveItemTo(context: Context, result: MethodChannel.Result, call: MethodCall) {
+    fun moveItemTo() {
         this.resolver = context.contentResolver
         val playlistId = call.argument<Int>("playlistId")!!
         val from = call.argument<Int>("from")!!
@@ -123,7 +125,7 @@ class PlaylistController {
     }
 
     //
-    fun renamePlaylist(context: Context, result: MethodChannel.Result, call: MethodCall) {
+    fun renamePlaylist() {
         this.resolver = context.contentResolver
         val playlistId = call.argument<Int>("playlistId")!!
         val newPlaylistName = call.argument<String>("newPlName")!!

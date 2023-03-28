@@ -24,6 +24,9 @@ public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         Log.type.debug("Started method call (\(call.method))")
         
+        // Init the plugin provider with current 'call' and 'result'.
+        PluginProvider.set(call, result)
+        
         Log.type.info("Method call: \(call.method)")
         switch call.method {
         // This is a basic permission handler, will return [true] if has permission and
@@ -57,7 +60,7 @@ public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
             Log.setLogLevel(dartLevel: level)
             result(true)
         default:
-            MethodController(call, result).find()
+            MethodController().find()
         }
         
         Log.type.debug("Ended method call (\(call.method))")

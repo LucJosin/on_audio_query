@@ -1,18 +1,15 @@
 package com.lucasjosino.on_audio_query.queries
 
-import android.annotation.SuppressLint
 import android.content.ContentResolver
-import android.content.Context
 import android.net.Uri
 import android.provider.MediaStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.lucasjosino.on_audio_query.controller.PermissionController
+import com.lucasjosino.on_audio_query.PluginProvider
+import com.lucasjosino.on_audio_query.controllers.PermissionController
 import com.lucasjosino.on_audio_query.queries.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.*
 import io.flutter.Log
-import io.flutter.plugin.common.MethodCall
-import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -29,16 +26,17 @@ class WithFiltersQuery : ViewModel() {
     private val helper = QueryHelper()
     private var projection: Array<String>? = arrayOf()
 
-    @SuppressLint("StaticFieldLeak")
-    private lateinit var context: Context
     private lateinit var resolver: ContentResolver
     private lateinit var withType: Uri
     private lateinit var argsVal: String
     private lateinit var argsKey: String
 
     //
-    fun queryWithFilters(context: Context, result: MethodChannel.Result, call: MethodCall) {
-        this.context = context; resolver = context.contentResolver
+    fun queryWithFilters() {
+        val call = PluginProvider.call()
+        val result = PluginProvider.result()
+        val context = PluginProvider.context()
+        this.resolver = context.contentResolver
 
         // Choose the type.
         //   * 0 -> Audios
@@ -74,7 +72,7 @@ class WithFiltersQuery : ViewModel() {
         Log.d(TAG, "\targsKey: $argsKey")
 
         // We cannot 'query' without permission.
-        val hasPermission: Boolean = PermissionController().permissionStatus(context)
+        val hasPermission: Boolean = PermissionController().permissionStatus()
         if (!hasPermission) {
             result.error(
                 "403",
@@ -86,7 +84,7 @@ class WithFiltersQuery : ViewModel() {
 
         // Query everything in background for a better performance.
         viewModelScope.launch {
-            val queryResult: ArrayList<MutableMap<String, Any?>> = loadWithFilters()
+            val queryResult = loadWithFilters()
             result.success(queryResult)
         }
     }

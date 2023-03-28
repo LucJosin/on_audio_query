@@ -4,7 +4,8 @@
 
 - **[Added]** `[LogType]`.
 - **[Added]** `[LogConfig]`.
-- **[Added]** `[PermissionController]`
+- **[Added]** `[PermissionController]` **(Native)**
+- **[Added]** `[PluginProvider]` **(Native)**
 - **[Added]** `[setLogConfig]` method.
 - **[Added]** `[checkAndRequest]` method.
 - **[Added]** `[controller]` to `[QueryArtworkWidget]`.
@@ -1085,6 +1086,9 @@ See all development [changes](https://github.com/LucJosin/on_audio_query/blob/ma
 - TODO
 
 ### Changes
+- TODO
+
+### Refactor
 - TODO
 
 ### ⚠ Important Changes
