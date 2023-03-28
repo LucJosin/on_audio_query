@@ -31,7 +31,7 @@ object PluginProvider {
      *
      * Should be defined once.
      */
-    fun init(activity: Activity) {
+    fun set(activity: Activity) {
         this.context = WeakReference(activity.applicationContext)
         this.activity = WeakReference(activity)
     }
@@ -41,7 +41,7 @@ object PluginProvider {
      *
      * Should be defined/redefined on every [MethodChannel.MethodCallHandler.onMethodCall] request.
      */
-    fun initCurrentMethod(call: MethodCall, result: MethodChannel.Result) {
+    fun setCurrentMethod(call: MethodCall, result: MethodChannel.Result) {
         this.call = WeakReference(call)
         this.result = WeakReference(result)
     }

@@ -65,7 +65,7 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         Log.d(TAG, "Started method call (${call.method})")
 
         // Init the plugin provider with current 'call' and 'result'.
-        PluginProvider.initCurrentMethod(call, result)
+        PluginProvider.setCurrentMethod(call, result)
 
         // If user deny permission request a pop up will immediately show up
         // If [retryRequest] is null, the message will only show when call method again
@@ -135,7 +135,7 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
         Log.i(TAG, "Attached to activity")
 
         // Init plugin provider with 'activity' and 'context'.
-        PluginProvider.init(binding.activity)
+        PluginProvider.set(binding.activity)
 
         // Add to controller the permission to listen to the request result.
         this.binding = binding
