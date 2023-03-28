@@ -6,10 +6,9 @@ class AudioFromQuery {
     var result: FlutterResult
     var type: Int = -1
     
-    init(_ call: FlutterMethodCall, _ result: @escaping FlutterResult) {
-        // To make life easy, add all arguments inside a map.
-        self.args = call.arguments as! [String: Any]
-        self.result = result
+    init() {
+        self.args = try! PluginProvider.call().arguments as! [String: Any]
+        self.result = try! PluginProvider.result()
     }
     
     func queryAudiosFrom() {
