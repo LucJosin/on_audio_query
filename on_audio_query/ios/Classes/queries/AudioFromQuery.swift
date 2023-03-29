@@ -13,7 +13,7 @@ class AudioFromQuery {
     
     func queryAudiosFrom() {
         //
-        self.type = args["type"] as! Int
+        type = args["type"] as! Int
         let wh3re = args["where"] as Any
         // The sortType.
         let sortType = args["sortType"] as? Int ?? 0
@@ -26,37 +26,29 @@ class AudioFromQuery {
         // send to Dart.
         cursor?.groupingType = checkSongSortType(sortType: sortType)
         
-        // We cannot "query" without permission so, just return a empty list.
-        let hasPermission = PermissionController.checkPermission()
-        if hasPermission {
-            // Here we'll check if the request is to [Playlist] or other.
-            if self.type != 6 && cursor != nil {
+        // Here we'll check if the request is to [Playlist] or other.
+        if type != 6, cursor != nil {
+            // This filter will avoid audios/songs outside phone library(cloud).
+            let cloudFilter = MPMediaPropertyPredicate(
+                value: false,
+                forProperty: MPMediaItemPropertyIsCloudItem
+            )
+            cursor?.addFilterPredicate(cloudFilter)
                 
-                // This filter will avoid audios/songs outside phone library(cloud).
-                let cloudFilter = MPMediaPropertyPredicate.init(
-                    value: false,
-                    forProperty: MPMediaItemPropertyIsCloudItem
-                )
-                cursor?.addFilterPredicate(cloudFilter)
-                
-                // Query everything in background for a better performance.
-                loadQueryAudiosFrom(cursor: cursor!)
-            } else {
-                // Query everything in background for a better performance.
-                cursor = MPMediaQuery.playlists()
-                
-                // This filter will avoid audios/songs outside phone library(cloud).
-                let cloudFilter = MPMediaPropertyPredicate.init(
-                    value: false,
-                    forProperty: MPMediaItemPropertyIsCloudItem
-                )
-                cursor?.addFilterPredicate(cloudFilter)
-                
-                loadSongsFromPlaylist(cursor: cursor!.collections)
-            }
+            // Query everything in background for a better performance.
+            loadQueryAudiosFrom(cursor: cursor!)
         } else {
-            // There's no permission so, return empty to avoid crashes.
-            result([])
+            // Query everything in background for a better performance.
+            cursor = MPMediaQuery.playlists()
+                
+            // This filter will avoid audios/songs outside phone library(cloud).
+            let cloudFilter = MPMediaPropertyPredicate(
+                value: false,
+                forProperty: MPMediaItemPropertyIsCloudItem
+            )
+            cursor?.addFilterPredicate(cloudFilter)
+                
+            loadSongsFromPlaylist(cursor: cursor!.collections)
         }
     }
     
@@ -69,7 +61,7 @@ class AudioFromQuery {
             // platforms so, if you change some key, will have to change the [Android] too.
             for song in cursor.items! {
                 // If the song file don't has a assetURL, is a Cloud item.
-                if !song.isCloudItem && song.assetURL != nil {
+                if !song.isCloudItem, song.assetURL != nil {
                     let songData = loadSongItem(song: song)
                     listOfSongs.append(songData)
                 }
@@ -85,7 +77,7 @@ class AudioFromQuery {
         }
     }
     
-    //Add a better code
+    // Add a better code
     private func loadSongsFromPlaylist(cursor: [MPMediaItemCollection]!) {
         DispatchQueue.global(qos: .userInitiated).async {
             var listOfSongs: [[String: Any?]] = Array()
@@ -101,26 +93,26 @@ class AudioFromQuery {
             for playlist in cursor {
                 let iPlaylist = playlist as! MPMediaPlaylist
                 let iWhere = self.args["where"] as Any
-                //Using this check we can define if [where] is the [Playlist] name or id
+                // Using this check we can define if [where] is the [Playlist] name or id
                 if iWhere is String {
-                    //Check if playlist name is equal to defined name
+                    // Check if playlist name is equal to defined name
                     if iPlaylist.name == iWhere as? String {
-                        //For each song, format and add to the list
+                        // For each song, format and add to the list
                         for song in playlist.items {
                             // If the song file don't has a assetURL, is a Cloud item.
-                            if !song.isCloudItem && song.assetURL != nil {
+                            if !song.isCloudItem, song.assetURL != nil {
                                 let songData = loadSongItem(song: song)
                                 listOfSongs.append(songData)
                             }
                         }
                     }
                 } else {
-                    //Check if playlist id is equal to defined id
+                    // Check if playlist id is equal to defined id
                     if iPlaylist.persistentID == iWhere as! Int {
-                        //For each song, format and add to the list
+                        // For each song, format and add to the list
                         for song in playlist.items {
                             // If the song file don't has a assetURL, is a Cloud item.
-                            if !song.isCloudItem && song.assetURL != nil {
+                            if !song.isCloudItem, song.assetURL != nil {
                                 let songData = loadSongItem(song: song)
                                 listOfSongs.append(songData)
                             }

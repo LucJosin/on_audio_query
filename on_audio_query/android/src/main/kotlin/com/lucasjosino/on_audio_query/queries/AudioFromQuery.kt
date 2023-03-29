@@ -70,17 +70,6 @@ class AudioFromQuery : ViewModel() {
         Log.d(TAG, "\ttype: $type")
         Log.d(TAG, "\turi: $URI")
 
-        // We cannot 'query' without permission.
-        val hasPermission: Boolean = PermissionController().permissionStatus()
-        if (!hasPermission) {
-            result.error(
-                "403",
-                "The app doesn't have permission to read files.",
-                "Call the [permissionsRequest] method or install a external plugin to handle the app permission."
-            )
-            return
-        }
-
         // TODO: Add a better way to handle this query
         // This will fix (for now) the problem between Android < 30 && Android > 30
         // The method used to query genres on Android >= 30 don't work properly on Android < 30 so,

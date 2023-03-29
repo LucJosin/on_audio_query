@@ -6,7 +6,6 @@ import android.provider.MediaStore
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lucasjosino.on_audio_query.PluginProvider
-import com.lucasjosino.on_audio_query.controllers.PermissionController
 import com.lucasjosino.on_audio_query.queries.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.*
 import io.flutter.Log
@@ -70,17 +69,6 @@ class WithFiltersQuery : ViewModel() {
         Log.d(TAG, "\twithType: $withType")
         Log.d(TAG, "\targsVal: $argsVal")
         Log.d(TAG, "\targsKey: $argsKey")
-
-        // We cannot 'query' without permission.
-        val hasPermission: Boolean = PermissionController().permissionStatus()
-        if (!hasPermission) {
-            result.error(
-                "403",
-                "The app doesn't have permission to read files.",
-                "Call the [permissionsRequest] method or install a external plugin to handle the app permission."
-            )
-            return
-        }
 
         // Query everything in background for a better performance.
         viewModelScope.launch {

@@ -18,21 +18,13 @@ class ArtistQuery {
         // [formatSongList] before send to Dart.
         
         // Filter to avoid audios/songs from cloud library.
-        let cloudFilter = MPMediaPropertyPredicate.init(
+        let cloudFilter = MPMediaPropertyPredicate(
             value: false,
             forProperty: MPMediaItemPropertyIsCloudItem
         )
         cursor.addFilterPredicate(cloudFilter)
-        
-        // We cannot "query" without permission so, just return a empty list.
-        let hasPermission = PermissionController.checkPermission()
-        if hasPermission {
-            // Query everything in background for a better performance.
-            loadArtists(cursor: cursor.collections)
-        } else {
-            // There's no permission so, return empty to avoid crashes.
-            result([])
-        }
+
+        loadArtists(cursor: cursor.collections)
     }
     
     private func loadArtists(cursor: [MPMediaItemCollection]!) {
@@ -43,7 +35,7 @@ class ArtistQuery {
             // into a [Map<String, dynamic>], all keys are based on [Android]
             // platforms.
             for artist in cursor {
-                if !artist.items[0].isCloudItem && artist.items[0].assetURL != nil {
+                if !artist.items[0].isCloudItem, artist.items[0].assetURL != nil {
                     let artistData = loadArtistItem(artist: artist)
                     listOfArtists.append(artistData)
                 }
