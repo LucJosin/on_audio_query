@@ -54,37 +54,30 @@ class WithFiltersQuery {
         Log.type.debug("\tcursor: \(String(describing: cursor))")
         Log.type.debug("\tfilter: \(String(describing: filter))")
         
-        // We cannot "query" without permission so, just return a empty list.
-        let hasPermission = PermissionController.checkPermission()
-        if hasPermission {
-            // Choose between query [Playlist] or others.
-            if filter != nil, withType != 2 {
-                // Add the filter.
-                cursor?.addFilterPredicate(filter!)
+        // Choose between query [Playlist] or others.
+        if filter != nil, withType != 2 {
+            // Add the filter.
+            cursor?.addFilterPredicate(filter!)
                 
-                // Ignore cloud items.
-                let cloudFilter = MPMediaPropertyPredicate(
-                    value: false,
-                    forProperty: MPMediaItemPropertyIsCloudItem
-                )
-                cursor?.addFilterPredicate(cloudFilter)
+            // Ignore cloud items.
+            let cloudFilter = MPMediaPropertyPredicate(
+                value: false,
+                forProperty: MPMediaItemPropertyIsCloudItem
+            )
+            cursor?.addFilterPredicate(cloudFilter)
                 
-                // Query everything in background for a better performance.
-                loadItemsWithFilter(cursor: cursor!, type: withType)
-            } else {
-                // Ignore cloud items.
-                let cloudFilter = MPMediaPropertyPredicate(
-                    value: false,
-                    forProperty: MPMediaItemPropertyIsCloudItem
-                )
-                cursor?.addFilterPredicate(cloudFilter)
-                
-                // Query everything in background for a better performance.
-                loadPlaylistsWithFilter(cursor: cursor!.collections, argVal: argVal)
-            }
+            // Query everything in background for a better performance.
+            loadItemsWithFilter(cursor: cursor!, type: withType)
         } else {
-            // There's no permission so, return empty to avoid crashes.
-            result([])
+            // Ignore cloud items.
+            let cloudFilter = MPMediaPropertyPredicate(
+                value: false,
+                forProperty: MPMediaItemPropertyIsCloudItem
+            )
+            cursor?.addFilterPredicate(cloudFilter)
+                
+            // Query everything in background for a better performance.
+            loadPlaylistsWithFilter(cursor: cursor!.collections, argVal: argVal)
         }
     }
     

@@ -60,6 +60,23 @@ public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
             Log.setLogLevel(dartLevel: level)
             result(true)
         default:
+            Log.type.debug("Checking permissions...")
+
+            let hasPermission = PermissionController.checkPermission()
+            Log.type.debug("Application has permissions: \(hasPermission)")
+
+            if !hasPermission {
+                Log.type.error("The application doesn't have access to the library")
+                result(
+                    FlutterError(
+                        code: "MissingPermissions",
+                        message: "Application doesn't have access to the library",
+                        details: "Call the [permissionsRequest] method or install a external plugin to handle the app permission."
+                    )
+                )
+                break
+            }
+
             MethodController().find()
         }
         

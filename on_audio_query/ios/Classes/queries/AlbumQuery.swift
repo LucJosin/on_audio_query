@@ -30,15 +30,8 @@ class AlbumQuery {
         Log.type.debug("Query config: ")
         Log.type.debug("\tsortType: \(sortType)")
         
-        // We cannot "query" without permission so, just return a empty list.
-        let hasPermission = PermissionController.checkPermission()
-        if hasPermission {
-            // Query everything in background for a better performance.
-            loadAlbums(cursor: cursor.collections)
-        } else {
-            // There's no permission so, return empty to avoid crashes.
-            result([])
-        }
+        // Query everything in background for a better performance.
+        loadAlbums(cursor: cursor.collections)
     }
     
     private func loadAlbums(cursor: [MPMediaItemCollection]!) {

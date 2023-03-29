@@ -63,6 +63,7 @@ class ArtworkQuery {
         if cursor == nil || filter == nil {
             Log.type.warning("Cursor or filter has null value!")
             result(nil)
+            return
         }
         
         Log.type.debug("Query config: ")
@@ -72,23 +73,18 @@ class ArtworkQuery {
         Log.type.debug("\tformat: \(format)")
         Log.type.debug("\turi: \(uri)")
         Log.type.debug("\tfilter: \(String(describing: filter))")
-        
-        let hasPermission = PermissionController.checkPermission()
-        if hasPermission {
-            cursor!.addFilterPredicate(filter!)
+
+        cursor!.addFilterPredicate(filter!)
             
-            // Filter to avoid audios/songs from cloud library.
-            let cloudFilter = MPMediaPropertyPredicate(
-                value: false,
-                forProperty: MPMediaItemPropertyIsCloudItem
-            )
-            cursor?.addFilterPredicate(cloudFilter)
+        // Filter to avoid audios/songs from cloud library.
+        let cloudFilter = MPMediaPropertyPredicate(
+            value: false,
+            forProperty: MPMediaItemPropertyIsCloudItem
+        )
+        cursor?.addFilterPredicate(cloudFilter)
             
-            // Query everything in background for a better performance.
-            loadArtwork(cursor: cursor, size: size, format: format, uri: uri, quality: quality)
-        } else {
-            result(nil)
-        }
+        // Query everything in background for a better performance.
+        loadArtwork(cursor: cursor, size: size, format: format, uri: uri, quality: quality)
     }
     
     private func loadArtwork(cursor: MPMediaQuery!, size: Int, format: Int, uri: Int, quality: Int) {
