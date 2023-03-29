@@ -120,7 +120,23 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             }
 
             // All others methods
-            else -> methodController.find()
+            else -> {
+                Log.d(TAG, "Checking permissions...")
+
+                val hasPermission = permissionController.permissionStatus()
+                Log.d(TAG, "Application has permissions: $hasPermission")
+
+                if (!hasPermission) {
+                    Log.w(TAG, "The application doesn't have access to the library")
+                    result.error(
+                        "MissingPermissions",
+                        "Application doesn't have access to the library",
+                        "Call the [permissionsRequest] method or install a external plugin to handle the app permission."
+                    )
+                }
+
+                methodController.find()
+            }
         }
 
         Log.d(TAG, "Ended method call (${call.method})\n ")

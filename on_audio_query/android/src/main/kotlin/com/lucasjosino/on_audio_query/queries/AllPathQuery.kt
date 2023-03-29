@@ -5,7 +5,6 @@ import android.content.ContentResolver
 import android.net.Uri
 import android.provider.MediaStore
 import com.lucasjosino.on_audio_query.PluginProvider
-import com.lucasjosino.on_audio_query.controllers.PermissionController
 import io.flutter.Log
 import java.io.File
 
@@ -27,19 +26,6 @@ class AllPathQuery {
         val result = PluginProvider.result()
         val context = PluginProvider.context()
         this.resolver = context.contentResolver
-
-        // Request permission status.
-        val hasPermission: Boolean = PermissionController().permissionStatus()
-
-        // We cannot 'query' without permission.
-        if (!hasPermission) {
-            result.error(
-                "403",
-                "The app doesn't have permission to read files.",
-                "Call the [permissionsRequest] method or install a external plugin to handle the app permission."
-            )
-            return
-        }
 
         val resultAllPath = loadAllPath()
         result.success(resultAllPath)

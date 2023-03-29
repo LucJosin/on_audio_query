@@ -11,7 +11,6 @@ import android.util.Size
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lucasjosino.on_audio_query.PluginProvider
-import com.lucasjosino.on_audio_query.controllers.PermissionController
 import com.lucasjosino.on_audio_query.queries.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkArtworkFormat
 import com.lucasjosino.on_audio_query.types.checkArtworkType
@@ -79,17 +78,6 @@ class ArtworkQuery : ViewModel() {
         Log.d(TAG, "\tformat: $format")
         Log.d(TAG, "\turi: $uri")
         Log.d(TAG, "\ttype: $type")
-
-        // We cannot 'query' without permission.
-        val hasPermission: Boolean = PermissionController().permissionStatus()
-        if (!hasPermission) {
-            result.error(
-                "403",
-                "The app doesn't have permission to read files.",
-                "Call the [permissionsRequest' method or install a external plugin to handle the app permission."
-            )
-            return
-        }
 
         // Query everything in background for a better performance.
         viewModelScope.launch {

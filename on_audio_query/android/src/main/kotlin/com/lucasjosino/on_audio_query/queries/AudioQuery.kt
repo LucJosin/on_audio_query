@@ -5,7 +5,6 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.lucasjosino.on_audio_query.PluginProvider
-import com.lucasjosino.on_audio_query.controllers.PermissionController
 import com.lucasjosino.on_audio_query.queries.helper.QueryHelper
 import com.lucasjosino.on_audio_query.types.checkAudiosUriType
 import com.lucasjosino.on_audio_query.types.sorttypes.checkSongSortType
@@ -62,17 +61,6 @@ class AudioQuery : ViewModel() {
         Log.d(TAG, "\tsortType: $sortType")
         Log.d(TAG, "\tselection: $selection")
         Log.d(TAG, "\turi: $uri")
-
-        // We cannot 'query' without permission.
-        val hasPermission: Boolean = PermissionController().permissionStatus()
-        if (!hasPermission) {
-            result.error(
-                "403",
-                "The app doesn't have permission to read files.",
-                "Call the [permissionsRequest] method or install a external plugin to handle the app permission."
-            )
-            return
-        }
 
         // Query everything in background for a better performance.
         viewModelScope.launch {

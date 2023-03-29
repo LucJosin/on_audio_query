@@ -55,17 +55,6 @@ class ArtistQuery : ViewModel() {
         Log.d(TAG, "\tsortType: $sortType")
         Log.d(TAG, "\turi: $uri")
 
-        // We cannot 'query' without permission.
-        val hasPermission: Boolean = PermissionController().permissionStatus()
-        if (!hasPermission) {
-            result.error(
-                "403",
-                "The app doesn't have permission to read files.",
-                "Call the [permissionsRequest] method or install a external plugin to handle the app permission."
-            )
-            return
-        }
-
         // Query everything in background for a better performance.
         viewModelScope.launch {
             val queryResult = loadArtists()
