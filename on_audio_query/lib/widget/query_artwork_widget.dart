@@ -18,6 +18,11 @@ part of on_audio_query;
 ///
 /// A simple example on how you can use the [queryArtwork].
 ///
+/// Important:
+///
+/// * If [controller] is null, will be create a new instance.
+/// * Log set with [setLogConfig] will only work if [controller] is not null.
+///
 /// See more: [QueryArtworkWidget](https://pub.dev/documentation/on_audio_query/latest/on_audio_query/QueryArtworkWidget-class.html)
 class QueryArtworkWidget extends StatelessWidget {
   /// Used to find and get image.
@@ -44,23 +49,23 @@ class QueryArtworkWidget extends StatelessWidget {
   ///
   /// Important:
   ///
-  /// * If [format] is null, will be set to [JPEG].
-  final ArtworkFormat? format;
+  /// * If [format] is not defined, will be set to [JPEG].
+  final ArtworkFormat format;
 
   /// Used to define artwork [size].
   ///
   /// Important:
   ///
-  /// * If [size] is null, will be set to [200].
+  /// * If [size] is not defined, will be set to [200].
   /// * This value have a directly influence to image quality.
-  final int? size;
+  final int size;
 
   /// Used to define artwork [quality].
   ///
   /// Important:
   ///
-  /// * If [quality] is null, will be set to [100].
-  final int? quality;
+  /// * If [quality] is not defined, will be set to [100].
+  final int quality;
 
   /// Used to define the artwork [border radius].
   ///
@@ -73,51 +78,51 @@ class QueryArtworkWidget extends StatelessWidget {
   ///
   /// Important:
   ///
-  /// * If [artworkQuality] is null, will be set to [low].
-  /// * This value [don't] have a directly influence to image quality.
-  final FilterQuality? artworkQuality;
+  /// * If [artworkQuality] is not defined, will be set to [low].
+  /// * This value doesn't have a directly influence to image quality.
+  final FilterQuality artworkQuality;
 
   /// Used to define artwork [width].
   ///
   /// Important:
   ///
-  /// * If [artworkWidth] is null, will be set to [50].
-  final double? artworkWidth;
+  /// * If [artworkWidth] is not defined, will be set to [50].
+  final double artworkWidth;
 
   /// Used to define artwork [height].
   ///
   /// Important:
   ///
-  /// * If [artworkHeight] is null, will be set to [50].
-  final double? artworkHeight;
+  /// * If [artworkHeight] is not defined, will be set to [50].
+  final double artworkHeight;
 
   /// Used to define artwork [fit].
   ///
   /// Important:
   ///
-  /// * If [artworkFit] is null, will be set to [cover].
-  final BoxFit? artworkFit;
+  /// * If [artworkFit] is not defined, will be set to [cover].
+  final BoxFit artworkFit;
 
   /// Used to define artwork [clip].
   ///
   /// Important:
   ///
-  /// * If [artworkClipBehavior] is null, will be set to [antiAlias].
-  final Clip? artworkClipBehavior;
+  /// * If [artworkClipBehavior] is not defined, will be set to [antiAlias].
+  final Clip artworkClipBehavior;
 
   /// Used to define artwork [scale].
   ///
   /// Important:
   ///
-  /// * If [artworkScale] is null, will be set to [1.0].
-  final double? artworkScale;
+  /// * If [artworkScale] is not defined, will be set to [1.0].
+  final double artworkScale;
 
   /// Used to define if artwork should [repeat].
   ///
   /// Important:
   ///
-  /// * If [artworkRepeat] is null, will be set to [false].
-  final ImageRepeat? artworkRepeat;
+  /// * If [artworkRepeat] is not defined, will be set to [false].
+  final ImageRepeat artworkRepeat;
 
   /// Used to define artwork [color].
   ///
@@ -157,8 +162,8 @@ class QueryArtworkWidget extends StatelessWidget {
   ///
   /// Important:
   ///
-  /// * If [keepOldArtwork] is null, will be set to [false].
-  final bool? keepOldArtwork;
+  /// * If [keepOldArtwork] is not defined, will be set to [false].
+  final bool keepOldArtwork;
 
   /// Used to define a Widget when audio/song don't return any artwork.
   ///
@@ -259,25 +264,25 @@ class QueryArtworkWidget extends StatelessWidget {
     Key? key,
     required this.id,
     required this.type,
+    this.quality = 50,
     this.controller,
-    this.format,
-    this.size,
-    this.quality,
-    this.artworkQuality,
+    this.format = ArtworkFormat.JPEG,
+    this.size = 200,
+    this.artworkQuality = FilterQuality.low,
     this.artworkBorder,
-    this.artworkWidth,
-    this.artworkHeight,
-    this.artworkFit,
-    this.artworkClipBehavior,
-    this.artworkScale,
-    this.artworkRepeat,
+    this.artworkWidth = 50,
+    this.artworkHeight = 50,
+    this.artworkFit = BoxFit.cover,
+    this.artworkClipBehavior = Clip.antiAlias,
+    this.artworkScale = 1.0,
+    this.artworkRepeat = ImageRepeat.noRepeat,
     this.artworkColor,
     this.artworkBlendMode,
-    this.keepOldArtwork,
+    this.keepOldArtwork = false,
     this.nullArtworkWidget,
     this.errorBuilder,
     this.frameBuilder,
-  })  : assert(quality != null && quality > 100),
+  })  : assert(quality <= 100),
         super(key: key);
 
   @override
@@ -286,26 +291,26 @@ class QueryArtworkWidget extends StatelessWidget {
       future: (controller ?? OnAudioQuery()).queryArtwork(
         id,
         type,
-        format: format ?? ArtworkFormat.JPEG,
-        size: size ?? 200,
-        quality: quality ?? 100,
+        format: format,
+        size: size,
+        quality: quality,
       ),
       builder: (context, item) {
         if (item.data != null && item.data!.isNotEmpty) {
           return ClipRRect(
             borderRadius: artworkBorder ?? BorderRadius.circular(50),
-            clipBehavior: artworkClipBehavior ?? Clip.antiAlias,
+            clipBehavior: artworkClipBehavior,
             child: Image.memory(
               item.data!,
-              gaplessPlayback: keepOldArtwork ?? false,
-              repeat: artworkRepeat ?? ImageRepeat.noRepeat,
-              scale: artworkScale ?? 1.0,
-              width: artworkWidth ?? 50,
-              height: artworkHeight ?? 50,
-              fit: artworkFit ?? BoxFit.cover,
+              gaplessPlayback: keepOldArtwork,
+              repeat: artworkRepeat,
+              scale: artworkScale,
+              width: artworkWidth,
+              height: artworkHeight,
+              fit: artworkFit,
               color: artworkColor,
               colorBlendMode: artworkBlendMode,
-              filterQuality: artworkQuality ?? FilterQuality.low,
+              filterQuality: artworkQuality,
               frameBuilder: frameBuilder,
               errorBuilder: errorBuilder ??
                   (context, exception, stackTrace) {

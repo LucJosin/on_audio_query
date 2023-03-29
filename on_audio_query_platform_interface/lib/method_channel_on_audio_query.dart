@@ -200,7 +200,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "id": id,
         "format": format != null ? format.index : ArtworkFormat.JPEG.index,
         "size": size ?? 200,
-        "quality": (quality != null && quality <= 100) ? size : 100,
+        "quality": (quality != null && quality <= 100) ? quality : 50,
         "detailedErrors": _logConfig.detailedLog,
       },
     );

@@ -111,7 +111,6 @@ class _SongsState extends State<Songs> {
                           controller: _audioQuery,
                           id: item.data![index].id,
                           type: ArtworkType.AUDIO,
-                          quality: 105,
                         ),
                       );
                     },
