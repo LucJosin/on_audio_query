@@ -18,7 +18,6 @@ library on_audio_query_web;
 import 'dart:async';
 import 'dart:convert';
 import 'dart:html' as html;
-import 'dart:typed_data';
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 import 'package:on_audio_query_platform_interface/details/on_audio_query_helper.dart';

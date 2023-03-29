@@ -14,7 +14,6 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 
 import 'package:flutter/material.dart';
 import 'package:on_audio_query/on_audio_query.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
 
 void main() {
   runApp(
