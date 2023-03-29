@@ -35,7 +35,7 @@ class _SongsState extends State<Songs> {
   // Main method.
   final OnAudioQuery _audioQuery = OnAudioQuery();
 
-  // Indicates if application has permission to the library.
+  // Indicate if application has permission to the library.
   bool _hasPermission = false;
 
   @override
@@ -54,8 +54,11 @@ class _SongsState extends State<Songs> {
     checkAndRequestPermissions();
   }
 
-  checkAndRequestPermissions() async {
-    _hasPermission = await _audioQuery.checkAndRequest();
+  checkAndRequestPermissions({bool retry = false}) async {
+    // The param 'retryRequest' is false, by default.
+    _hasPermission = await _audioQuery.checkAndRequest(
+      retryRequest: retry,
+    );
 
     // Only call update the UI if application has all required permissions.
     _hasPermission ? setState(() {}) : null;
@@ -70,7 +73,7 @@ class _SongsState extends State<Songs> {
       ),
       body: Center(
         child: !_hasPermission
-            ? const Text("Application doesn't have access to the library")
+            ? noAccessToLibraryWidget()
             : FutureBuilder<List<SongModel>>(
                 // Default values:
                 future: _audioQuery.querySongs(
@@ -80,6 +83,11 @@ class _SongsState extends State<Songs> {
                   ignoreCase: true,
                 ),
                 builder: (context, item) {
+                  // Display error, if any.
+                  if (item.hasError) {
+                    return Text(item.error.toString());
+                  }
+
                   // Waiting content.
                   if (item.data == null) {
                     return const CircularProgressIndicator();
@@ -103,12 +111,34 @@ class _SongsState extends State<Songs> {
                           controller: _audioQuery,
                           id: item.data![index].id,
                           type: ArtworkType.AUDIO,
+                          quality: 105,
                         ),
                       );
                     },
                   );
                 },
               ),
+      ),
+    );
+  }
+
+  Widget noAccessToLibraryWidget() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.redAccent.withOpacity(0.5),
+      ),
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Text("Application doesn't have access to the library"),
+          const SizedBox(height: 10),
+          ElevatedButton(
+            onPressed: () => checkAndRequestPermissions(retry: true),
+            child: const Text("Allow"),
+          ),
+        ],
       ),
     );
   }

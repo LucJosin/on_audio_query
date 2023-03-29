@@ -321,9 +321,12 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   }
 
   @override
-  Future<bool> permissionsRequest() async {
+  Future<bool> permissionsRequest({bool retryRequest = false}) async {
     final bool resultRequest = await _channel.invokeMethod(
       "permissionsRequest",
+      {
+        "retryRequest": retryRequest,
+      },
     );
     return resultRequest;
   }

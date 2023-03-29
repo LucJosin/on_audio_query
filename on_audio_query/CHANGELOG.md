@@ -9,6 +9,7 @@
 - **[Added]** `[setLogConfig]` method.
 - **[Added]** `[checkAndRequest]` method.
 - **[Added]** `[controller]` to `[QueryArtworkWidget]`.
+- **[Added]** `[retryRequest]` param to `[checkAndRequest]` and `[permissionsRequest]`.
 
 ### Fixes
 

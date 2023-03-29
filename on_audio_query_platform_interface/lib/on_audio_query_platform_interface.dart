@@ -539,7 +539,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Future<bool> permissionsRequest() {
+  Future<bool> permissionsRequest({bool retryRequest = false}) {
     throw UnimplementedError('permissionsRequest() has not been implemented.');
   }
 
