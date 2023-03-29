@@ -1,4 +1,4 @@
-## [[2.7.0](https://github.com/LucJosin/on_audio_query/releases/tag/2.7.0)] - [XX.XX.2023]
+## [[2.7.0](https://github.com/LucJosin/on_audio_query/releases/tag/2.7.0)] - [29.03.2023]
 
 ### Features
 
@@ -32,6 +32,8 @@
   - If application doesn't have permission to access the library, will throw a PlatformException.
 - **Updated** `quality` param from `[QueryArtworkWidget]`.
   - This param cannot be defined as null anymore and, by default, will be set to `50`.
+- **Updated** minimum supported **Dart** version.
+  - Increase minimum version from `2.12` to `2.17`.
 
 ## [2.6.2] - [03.03.2023]
 

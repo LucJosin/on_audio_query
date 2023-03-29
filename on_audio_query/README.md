@@ -1,3 +1,5 @@
+<div align=center>
+
 # on_audio_query
 [![Pub.dev](https://img.shields.io/pub/v/on_audio_query?color=9cf&label=Pub.dev&style=flat-square)](https://pub.dev/packages/on_audio_query)
 [![Platforms](https://img.shields.io/badge/Platforms-Android%20%7C%20IOS%20%7C%20Web-9cf?&style=flat-square)]()
@@ -5,16 +7,16 @@
 
 `on_audio_query` is a [Flutter](https://flutter.dev/) Plugin used to query audios/songs 🎶 infos [title, artist, album, etc..] from device storage. <br>
 
-## Help:
-
 **Any problem? [Issues](https://github.com/LucJosin/on_audio_query/issues)** <br>
 **Any suggestion? [Pull request](https://github.com/LucJosin/on_audio_query/pulls)**
 
+</div>
+
 ### Topics:
 
-* [How to Install](#how-to-install)
+* [Installation](#installation)
 * [Platforms](#platforms)
-* [How to use](#how-to-use)
+* [Overview](#overview)
 * [Examples](#examples)
 * [Gif Examples](#gif-examples)
 * [License](#license)
@@ -48,7 +50,8 @@
 
 **[See all platforms methods support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)**
 
-## How to Install:
+## Installation:
+
 Add the following code to your `pubspec.yaml`:
 ```yaml
 dependencies:
@@ -56,8 +59,9 @@ dependencies:
 ```
 
 ### Request Permission:
+
 #### Android:
-To use this plugin add the following code to your `AndroidManifest.xml`
+To use this plugin add the following code to your [AndroidManifest.xml](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/example/android/app/src/main/AndroidManifest.xml)
 ```xml
 <manifest>
   
@@ -74,10 +78,16 @@ To use this plugin add the following code to your `AndroidManifest.xml`
 ```
 
 #### IOS:
-To use this plugin add the following code to your `Info.plist`
-```
+To use this plugin add the following code to your [Info.plist](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/example/ios/Runner/Info.plist)
+```plist
+<dict>
+  ...
+
 	<key>NSAppleMusicUsageDescription</key>
-	<string>..Add a reason..</string>
+	<string>$(PROJECT_NAME) requires access to media library</string>
+
+  ...
+</dict>
 ```
 
 #### Web:
@@ -107,63 +117,16 @@ Since Web Browsers **don't** offer direct access to their user's `file system`, 
 * Add/Remove/Move specific audios to playlists.
 * Specific sort types for all query methods.
 
-## TODO:
+## Overview:
 
-* Add better performance for all plugin.
-* Add support to Windows/MacOs/Linux.
-* Option to remove songs.
-* Fix bugs.
-
-## How to use:
-
-```dart
-OnAudioQuery() // The main method to start using the plugin.
-```
 All types of methods on this plugin:
-
-### Query methods
-
-|  Methods  |   Parameters   |   Return   |
-|--------------|-----------------|-----------------|
-| [`querySongs`](#querysongs) | `(SortType, OrderType, UriType, RequestPermission)` | `List<SongModel>` | <br>
-| [`queryAlbums`](#queryalbums) | `(SortType, OrderType, UriType, RequestPermission)` | `List<AlbumModel>` | <br>
-| [`queryArtists`](#queryartists) | `(SortType, OrderType, UriType, RequestPermission)` | `List<ArtistModel>` | <br>
-| [`queryPlaylists`](#queryplaylists) | `(SortType, OrderType, UriType, RequestPermission)` | `List<PlaylistModel>` | <br>
-| [`queryGenres`](#querygenres) | `(SortType, OrderType, UriType, RequestPermission)` | `List<GenreModel>` | <br>
-| [`queryAudiosFrom`](#queryaudiosfrom) | `(Type, Where, RequestPermission)` | `List<SongModel>` | <br>
-| [`queryWithFilters`](#querywithfilters) | `(ArgsVal, WithFiltersType, Args, RequestPermission)` | `List<dynamic>` | <br>
-| [`queryArtwork`](#queryArtwork) | `(Id, Type, Format, Size, RequestPermission)` | `Uint8List?` | <br>
-
-### Playlist methods
-
-|  Methods  |   Parameters   |   Return   |
-|--------------|-----------------|-----------------|
-| [`createPlaylist`]() | `(PlaylistName, RequestPermission)` | `bool` | <br>
-| [`removePlaylist`]() | `(PlaylistId, RequestPermission)` | `bool` | <br>
-| [`addToPlaylist`]() | **[BG]**`(PlaylistId, AudioId, RequestPermission)` | `bool` | <br>
-| [`removeFromPlaylist`]() | `(PlaylistId, AudioId, RequestPermission)` | `bool` | <br>
-| [`renamePlaylist`]() | `(PlaylistId, NewName, RequestPermission)` | `bool` | <br>
-| [`moveItemTo`]() | **[NT]**`(PlaylistId, From, To, RequestPermission)` | `bool` | <br>
-
-### Permissions/Device methods
-
-|  Methods  |   Parameters   |   Return   |
-|--------------|-----------------|-----------------|
-| [`permissionsRequest`]() | `(retryRequest)` | `bool` | <br>
-| [`permissionsStatus`]() |  | `bool` | <br>
-| [`queryDeviceInfo`]() |  | `DeviceModel` | <br>
-
-### Others methods
-|  Methods  |   Parameters   |   Return   |
-|--------------|-----------------|-----------------|
-| [`scanMedia`](#scanmedia) | `(Path)` | `bool` | <br>
 
 ### Artwork Widget
 
 ```dart
   Widget someOtherName() async {
     return QueryArtworkWidget(
-      id: SongId, 
+      id: <audioId>,
       type: ArtworkType.AUDIO,
     );
   }
@@ -171,72 +134,37 @@ All types of methods on this plugin:
 
 **See more: [QueryArtworkWidget](https://pub.dev/documentation/on_audio_query/latest/on_audio_query/QueryArtworkWidget-class.html)**
 
-### Abbreviations
-
-**[NT]** -> Need Tests <br>
-**[BG]** -> Bug on Android 10/Q
-
 ## Examples:
 
 #### OnAudioQuery
+
 ```dart
-  final OnAudioQuery _audioQuery = OnAudioQuery();
+final OnAudioQuery _audioQuery = OnAudioQuery();
 ```
 
-#### querySongs
-```dart
-  someName() async {
-    // DEFAULT: 
-    // SongSortType.TITLE, 
-    // OrderType.ASC_OR_SMALLER,
-    // UriType.EXTERNAL, 
-    List<SongModel> something = await _audioQuery.querySongs();
-  }
-```
+#### Query methods:
 
-#### queryAlbums
-```dart
-  someName() async {
-    // DEFAULT: 
-    // AlbumSortType.ALBUM, 
-    // OrderType.ASC_OR_SMALLER 
-    List<AlbumModel> something = await _audioQuery.queryAlbums();
-  }
-```
+- queryAudios();
+- queryAlbums();
+- queryArtists();
+- queryPlaylists();
+- queryGenres().
 
-#### queryArtists
 ```dart
   someName() async {
-    // DEFAULT: 
-    // ArtistSortType.ARTIST, 
-    // OrderType.ASC_OR_SMALLER 
-    List<ArtistModel> something = await _audioQuery.queryArtists();
-  }
-```
+    // Query Audios
+    List<AudioModel> audios = await _audioQuery.queryAudios();
 
-#### queryPlaylists
-```dart
-  someName() async {
-    // DEFAULT: 
-    // PlaylistSortType.NAME, 
-    // OrderType.ASC_OR_SMALLER 
-    List<PlaylistModel> something = await _audioQuery.queryPlaylists();
-  }
-```
-
-#### queryGenres
-```dart
-  someName() async {
-    // DEFAULT: 
-    // GenreSortType.NAME, 
-    // OrderType.ASC_OR_SMALLER 
-    List<GenreModel> something = await _audioQuery.queryGenres();
+    // Query Albums
+    List<AlbumModel> albums = await _audioQuery.queryAlbums();
   }
 ```
 
 #### scanMedia
+
 You'll use this method when updating a media from storage. This method will update the media 'state' and
 Android `MediaStore` will be able to know this 'state'.
+
 ```dart
   someName() async {
     OnAudioQuery _audioQuery = OnAudioQuery();
@@ -253,12 +181,13 @@ Android `MediaStore` will be able to know this 'state'.
 ```
 
 #### queryArtwork
+
 ```dart
   someName() async {
     // DEFAULT: ArtworkFormat.JPEG, 200 and false
     Uint8List something = await _audioQuery.queryArtwork(
-        SongId, 
-        ArtworkType.AUDIO, 
+        <audioId>,
+        ArtworkType.AUDIO,
         ...,
       );
   }
@@ -266,71 +195,6 @@ Android `MediaStore` will be able to know this 'state'.
 
 Or you can use a basic and custom Widget.
 **See example [QueryArtworkWidget](#artwork-widget)**
-
-#### queryAudiosFrom
-You can use this method to 'query' the songs from any section(Album, Artist, Playlist or Genre). 
-```dart
-  someName() async {
-    List<SongModel> something = await _audioQuery.queryAudiosFrom(
-        AudiosFromType.ALBUM_ID, 
-        albumId,
-        // You can also define a sortType
-        sortType: SongSortType.TITLE, // Default
-        orderType: OrderType.ASC_OR_SMALLER, // Default
-    );
-  }
-```
-
-#### queryWithFilters
-```dart
-  someName() async {
-    // Here we'll search for a [song](WithFiltersType.AUDIOS) using his 
-    // [artist](AudiosArgs.ARTIST)
-    List<dynamic> something = await _audioQuery.queryWithFilters(
-        // The [text] to search
-        "Sam Smith", 
-        // The type of search you want.
-        // All types:
-        //   * WithFiltersType.AUDIOS
-        //   * WithFiltersType.ALBUMS
-        //   * WithFiltersType.PLAYLISTS
-        //   * WithFiltersType.ARTISTS
-        //   * WithFiltersType.GENRES
-        WithFiltersType.AUDIOS,
-        // This method has [args] as parameter. With this value you can create
-        // a more 'advanced' search.
-        args: AudiosArgs.ARTIST,
-    );
-
-    // Other example:
-
-    // Here we'll search for a [song](WithFiltersType.AUDIOS) using his 
-    // [album](AudiosArgs.ALBUM)
-    List<dynamic> something = await _audioQuery.queryWithFilters(
-        // The [text] to search
-        "In the Lonely Hour", 
-        // The type of search you want.
-        // All types:
-        //   * WithFiltersType.AUDIOS
-        //   * WithFiltersType.ALBUMS
-        //   * WithFiltersType.PLAYLISTS
-        //   * WithFiltersType.ARTISTS
-        //   * WithFiltersType.GENRES
-        WithFiltersType.AUDIOS,
-        // This method has [args] as parameter. With this value you can create
-        // a more 'advanced' search.
-        args: AudiosArgs.ALBUM,
-    );
-
-    // After getting the result from [queryWithFilters], convert this list using:
-    List<TypeModel> convertedList = something.toTypeModel();
-
-    // Example:
-    List<SongModel> convertedSongs = something.toSongModel(); 
-  }
-```
-
-ArgsTypes: [AudiosArgs](https://pub.dev/documentation/on_audio_query_platform_interface/latest/on_audio_query_helper/AudiosArgs-class.html), [AlbumsArgs](https://pub.dev/documentation/on_audio_query_platform_interface/latest/on_audio_query_helper/AlbumsArgs-class.html), [PlaylistsArgs](https://pub.dev/documentation/on_audio_query_platform_interface/latest/on_audio_query_helper/PlaylistsArgs-class.html), [ArtistsArgs](https://pub.dev/documentation/on_audio_query_platform_interface/latest/on_audio_query_helper/ArtistsArgs-class.html) and [GenresArgs](https://pub.dev/documentation/on_audio_query_platform_interface/latest/on_audio_query_helper/GenresArgs-class.html)
 
 ## Gif Examples:
 | <img src="https://user-images.githubusercontent.com/76869974/129740857-33f38b27-06a3-4959-bb31-2ae97d6b66ff.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129741012-1215b292-d700-466f-9c41-552df0ad5e89.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129741188-e6803432-24d7-4e39-bfde-cc6765e13663.gif"/> | <img src="https://user-images.githubusercontent.com/76869974/129741151-b820edc9-ddbf-4446-b67a-6e254cb5a46d.gif"/> |
