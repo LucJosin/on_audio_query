@@ -36,6 +36,40 @@ class OnAudioQuery {
     }
   }
 
+  /// Simplified version of [permissionsStatus] and [permissionsRequest].
+  ///
+  /// Will check and request, if necessary, all required permissions.
+  ///
+  /// **OBS: Will always return true on web platform.**
+  Future<bool> checkAndRequest({bool retryRequest = false}) async {
+    if (kIsWeb) return true;
+
+    bool hasPermission = await platform.permissionsStatus();
+    if (!hasPermission) {
+      hasPermission = await platform.permissionsRequest(
+        retryRequest: retryRequest,
+      );
+    }
+
+    return hasPermission;
+  }
+
+  /// Used to set the logging behavior.
+  ///
+  /// Parameters:
+  ///
+  /// * [logType] is used to define the logging level. [LogType].
+  /// * [detailedLog] is used to define if detailed log will be shown
+  /// (Disable by default to avoid spam).
+  ///
+  /// Important:
+  ///
+  /// * If [logType] is null, will be set to [WARN].
+  /// * If [detailedLog] is null, will be set to [false].
+  Future<void> setLogConfig(LogConfig? logConfig) async {
+    return platform.setLogConfig(logConfig);
+  }
+
   /// Used to return Songs Info based in [SongModel].
   ///
   /// Parameters:
@@ -535,7 +569,8 @@ class OnAudioQuery {
   /// Important:
   ///
   /// * This method will always return a bool.
-  /// * If return true `[READ]` and `[WRITE]` permissions is Granted, else `[READ]` and `[WRITE]` is Denied.
+  /// * If return true `[READ]` and `[WRITE]` permissions is Granted,
+  /// else `[READ]` and `[WRITE]` is Denied.
   ///
   /// Platforms:
   ///
@@ -553,7 +588,8 @@ class OnAudioQuery {
   /// Important:
   ///
   /// * This method will always return a bool.
-  /// * If return true `[READ]` and `[WRITE]` permissions is Granted, else `[READ]` and `[WRITE]` is Denied.
+  /// * If return true `[READ]` and `[WRITE]` permissions is Granted,
+  /// else `[READ]` and `[WRITE]` is Denied.
   ///
   /// Platforms:
   ///
@@ -562,8 +598,8 @@ class OnAudioQuery {
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/PLATFORMS.md)
-  Future<bool> permissionsRequest() async {
-    return platform.permissionsRequest();
+  Future<bool> permissionsRequest({bool retryRequest = false}) async {
+    return platform.permissionsRequest(retryRequest: retryRequest);
   }
 
   // Device Information

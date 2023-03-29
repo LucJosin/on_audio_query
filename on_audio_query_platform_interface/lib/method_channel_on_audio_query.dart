@@ -14,7 +14,6 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 */
 
 import 'dart:async';
-import 'dart:typed_data';
 
 import 'package:flutter/services.dart';
 
@@ -28,6 +27,18 @@ const MethodChannel _channel = MethodChannel('com.lucasjosino.on_audio_query');
 class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   /// The MethodChannel that is being used by this implementation of the plugin.
   MethodChannel get channel => _channel;
+
+  LogConfig _logConfig = LogConfig();
+
+  @override
+  Future<void> setLogConfig(LogConfig? logConfig) async {
+    // Override log configuration
+    if (logConfig != null) _logConfig = logConfig;
+
+    await _channel.invokeMethod("setLogConfig", {
+      "level": _logConfig.logType.value,
+    });
+  }
 
   @override
   Future<List<SongModel>> querySongs({
@@ -189,7 +200,8 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "id": id,
         "format": format != null ? format.index : ArtworkFormat.JPEG.index,
         "size": size ?? 200,
-        "quality": (quality != null && quality <= 100) ? size : 100,
+        "quality": (quality != null && quality <= 100) ? quality : 50,
+        "detailedErrors": _logConfig.detailedLog,
       },
     );
     return finalArtworks;
@@ -309,9 +321,12 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
   }
 
   @override
-  Future<bool> permissionsRequest() async {
+  Future<bool> permissionsRequest({bool retryRequest = false}) async {
     final bool resultRequest = await _channel.invokeMethod(
       "permissionsRequest",
+      {
+        "retryRequest": retryRequest,
+      },
     );
     return resultRequest;
   }

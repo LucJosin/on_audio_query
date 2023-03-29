@@ -4,10 +4,10 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'on_audio_query'
-  s.version          = '2.5.0'
-  s.summary          = 'Flutter Plugin used to query audios/songs infos [title, artist, album, etc..] from device storage.'
+  s.version          = '0.0.1'
+  s.summary          = 'Audio query plugin for flutter.'
   s.description      = <<-DESC
-A new flutter plugin project.
+  Flutter Plugin used to query audios/songs infos [title, artist, album, etc..] from device storage.
                        DESC
   s.homepage         = 'https://github.com/LucasPJS/on_audio_query'
   s.license          = { :file => '../LICENSE' }
@@ -15,6 +15,7 @@ A new flutter plugin project.
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
+  s.dependency 'SwiftyBeaver'
   s.platform = :ios, '10.0'
 
   # Flutter.framework does not contain a i386 slice.

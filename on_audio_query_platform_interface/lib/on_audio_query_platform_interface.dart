@@ -48,6 +48,22 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
     _instance = instance;
   }
 
+  /// Used to set the logging behavior.
+  ///
+  /// Parameters:
+  ///
+  /// * [logType] is used to define the logging level. [LogType].
+  /// * [detailedLog] is used to define if detailed log will be shown
+  /// (Disable by default to avoid spam).
+  ///
+  /// Important:
+  ///
+  /// * If [logType] is null, will be set to [WARN].
+  /// * If [detailedLog] is null, will be set to [false].
+  Future<void> setLogConfig(LogConfig? logConfig) {
+    throw UnimplementedError('setLogConfig() has not been implemented.');
+  }
+
   /// Used to return Songs Info based in [SongModel].
   ///
   /// Parameters:
@@ -523,7 +539,7 @@ abstract class OnAudioQueryPlatform extends PlatformInterface {
   /// | `✔️` | `✔️` | `❌` | <br>
   ///
   /// See more about [platforms support](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/PLATFORMS.md)
-  Future<bool> permissionsRequest() {
+  Future<bool> permissionsRequest({bool retryRequest = false}) {
     throw UnimplementedError('permissionsRequest() has not been implemented.');
   }
 
