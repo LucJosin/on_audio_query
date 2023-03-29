@@ -23,6 +23,11 @@
 - **[Reduced]** the default `artwork` resolution.
 - **[Updated]** quality check on `[QueryArtworkWidget]`.
 
+### ⚠ Important Changes
+
+- **[Updated]** application permission check.
+  - If application doesn't have permission to access the library, will throw a PlatformException.
+
 ## [2.6.2] - [03.03.2023]
 
 ### Fixes
