@@ -1,0 +1,4 @@
+name: on_audio_query
+
+packages:
+  - packages/*
