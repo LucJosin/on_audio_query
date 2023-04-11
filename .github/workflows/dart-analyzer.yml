@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: dart-lang/setup-dart@v1
         with:
-          sdk: "2.17.0"
+          sdk: "2.18.0"
       - name: Install dependencies
         run: dart pub get
       - uses: invertase/github-action-dart-analyzer@v1
