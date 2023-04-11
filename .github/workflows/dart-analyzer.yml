@@ -17,7 +17,11 @@ jobs:
           sdk: "2.18.0"
       - name: Install dependencies
         run: dart pub get
-      - name: "Bootstrap workspace"
+      # fluttercommunity/plus_plugins/.github/workflows/scripts/install-tools.sh
+      - name: "Install tools"
+        run: |
+          ./.github/workflows/scripts/install-tools.sh
+      - name: "Bootstrap workspace (Melos)"
         run: melos bootstrap
       - name: "Run Dart Analyze"
         uses: invertase/github-action-dart-analyzer@v1
