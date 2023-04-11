@@ -17,7 +17,10 @@ jobs:
           sdk: "2.18.0"
       - name: Install dependencies
         run: dart pub get
-      - uses: invertase/github-action-dart-analyzer@v1
+      - name: "Bootstrap workspace"
+        run: melos bootstrap
+      - name: "Run Dart Analyze"
+        uses: invertase/github-action-dart-analyzer@v1
         with:
           fatal-infos: false
           fatal-warnings: true
