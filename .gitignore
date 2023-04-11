@@ -18,7 +18,6 @@ pubspec.lock
 
 .atom/
 .idea/
-.vscode/
 
 .packages
 .pub/
