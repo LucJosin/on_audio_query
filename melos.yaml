@@ -1,0 +1,23 @@
+name: on_audio_query
+repository: https://github.com/LucJosin/on_audio_query
+
+packages:
+  - packages/*
+
+command:
+  bootstrap:
+    # It seems so that running "pub get" in parallel has some issues (like
+    # https://github.com/dart-lang/pub/issues/3404). Disabling this feature
+    # makes the CI much more stable.
+    runPubGetInParallel: false
+
+scripts:
+  reset:
+    run: melos clean && melos bootstrap
+    description: Useful to give your workspace a 'fresh start'
+  analyze:
+    exec: flutter analyze --no-fatal-infos
+    description: Analyze code
+  format:
+    run: melos exec dart format . --fix
+    description: Run `dart format` for all packages.

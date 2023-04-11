@@ -1,3 +1,7 @@
+# Scripts:
+#  * fluttercommunity/plus_plugins/.github/workflows/scripts/install-tools.sh
+#  * fluttercommunity/plus_plugins/.github/workflows/scripts/install-flutter.sh
+
 name: Dart Analyzer
 on:
   push:
@@ -8,23 +12,27 @@ on:
       - main
 
 jobs:
-  package-analysis:
+  analyze:
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v2
-      - uses: axel-op/dart-package-analyzer@v3
-        id: dart_analysis
+      - uses: dart-lang/setup-dart@v1
         with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-          relativePath: on_audio_query/
-      - name: Check Scores
-        env:
-          TOTAL: ${{ steps.dart_analysis.outputs.total }}
-          TOTAL_MAX: ${{ steps.dart_analysis.outputs.total_max }}
-        run: |
-          SCORES=$(( $TOTAL + 10 / $TOTAL_MAX + 10 ))
-          if (( $SCORES < 1 ))
-          then
-            echo Score too low!
-            exit 1
-          fi
+          sdk: "2.18.0"
+      - name: Install dependencies
+        run: dart pub get
+      - name: "Install flutter"
+        run: ./.github/workflows/scripts/install-flutter.sh
+      - name: "Install tools"
+        run: ./.github/workflows/scripts/install-tools.sh
+      - name: "Bootstrap workspace (Melos)"
+        run: melos bootstrap
+      - name: "Run Dart Analyze"
+        uses: invertase/github-action-dart-analyzer@v1
+        with:
+          fatal-infos: false
+          fatal-warnings: true
+          annotate: true
+          annotate-only: false
+          working-directory: ./packages
