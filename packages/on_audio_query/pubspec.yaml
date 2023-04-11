@@ -17,6 +17,10 @@ dependencies:
   # on_audio_query
   on_audio_query_platform_interface: ^1.5.0
   on_audio_query_web: ^1.4.0
+  on_audio_query_ios:
+    path: ../on_audio_query_ios
+  on_audio_query_android:
+    path: ../on_audio_query_android
 
   # Flutter
   flutter:
@@ -35,9 +39,8 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.lucasjosino.on_audio_query
-        pluginClass: OnAudioQueryPlugin
+        default_package: on_audio_query_android
       ios:
-        pluginClass: OnAudioQueryPlugin
+        default_package: on_audio_query_ios
       web:
         default_package: on_audio_query_web
