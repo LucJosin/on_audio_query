@@ -24,10 +24,10 @@ import 'package:on_audio_query_platform_interface/on_audio_query_platform_interf
 
 import 'package:flutter/services.dart';
 import 'package:id3/id3.dart';
-import 'details/extensions/format_extension.dart';
+import 'src/extensions/format_extension.dart';
 
-part 'details/on_audio_query_web_controller.dart';
-part 'details/types/with_filters_type.dart';
+part 'src/on_audio_query_web_controller.dart';
+part 'src/types/with_filters_type.dart';
 
 /// A web implementation of the OnAudioQueryWeb plugin.
 class OnAudioQueryPlugin extends OnAudioQueryPlatform {
