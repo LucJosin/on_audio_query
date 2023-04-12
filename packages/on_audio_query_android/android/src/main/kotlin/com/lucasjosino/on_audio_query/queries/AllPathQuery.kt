@@ -33,7 +33,6 @@ class AllPathQuery {
 
     // Ignore the '_data' deprecation because this plugin support older versions.
     @SuppressLint("Range")
-    @Suppress("DEPRECATION")
     private fun loadAllPath(): ArrayList<String> {
         val cursor = resolver.query(URI, null, null, null, null)
 

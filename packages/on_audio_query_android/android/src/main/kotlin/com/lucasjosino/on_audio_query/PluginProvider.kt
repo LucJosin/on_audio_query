@@ -18,6 +18,13 @@ object PluginProvider {
     private const val ERROR_MESSAGE =
         "Tried to get one of the methods but the 'PluginProvider' has not initialized"
 
+    /**
+    * Define if 'warn' level will show more detailed logging.
+    *
+    * Will be used when a query produce some error.
+    */
+    var showDetailedLog: Boolean = false
+
     private lateinit var context: WeakReference<Context>
 
     private lateinit var activity: WeakReference<Activity>

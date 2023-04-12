@@ -115,7 +115,12 @@ class OnAudioQueryPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
             // Logging
             Method.SET_LOG_CONFIG -> {
+                // Log level
                 Log.setLogLevel(call.argument<Int>("level")!!)
+
+                // Define if 'warn' level will show more detailed logging.
+                PluginProvider.showDetailedLog = call.argument<Boolean>("showDetailedLog")!!
+
                 result.success(true)
             }
 

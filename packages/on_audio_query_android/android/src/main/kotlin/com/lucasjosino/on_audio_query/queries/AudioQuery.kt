@@ -32,7 +32,6 @@ class AudioQuery : ViewModel() {
     /**
      * Method to "query" all songs.
      */
-    @Suppress("DEPRECATION")
     fun querySongs() {
         val call = PluginProvider.call()
         val result = PluginProvider.result()
