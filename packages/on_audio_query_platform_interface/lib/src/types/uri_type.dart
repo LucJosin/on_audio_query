@@ -1,7 +1,5 @@
 // ignore_for_file: constant_identifier_names
 
-part of on_audio_query_core;
-
 /// Defines if query method will be in [EXTERNAL] or [INTERNAL] storage.
 ///
 /// Normally [INTERNAL] return null.

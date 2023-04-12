@@ -1,4 +1,4 @@
-part of on_audio_query_core;
+import '../types/log_type.dart';
 
 /// Used to configure the logging behavior.
 class LogConfig {

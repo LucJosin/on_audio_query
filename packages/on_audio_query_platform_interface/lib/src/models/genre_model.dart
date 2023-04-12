@@ -1,5 +1,3 @@
-part of on_audio_query_core;
-
 /// [GenreModel] that contains all [Genre] Information.
 class GenreModel {
   GenreModel(this._info);

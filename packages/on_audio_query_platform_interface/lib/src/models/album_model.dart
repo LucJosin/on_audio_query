@@ -1,5 +1,3 @@
-part of on_audio_query_core;
-
 /// [AlbumModel] that contains all [Album] Information.
 class AlbumModel {
   AlbumModel(this._info);

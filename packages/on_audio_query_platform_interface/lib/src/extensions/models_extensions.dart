@@ -1,4 +1,8 @@
-part of on_audio_query_core;
+import '../models/album_model.dart';
+import '../models/artist_model.dart';
+import '../models/genre_model.dart';
+import '../models/playlist_model.dart';
+import '../models/song_model.dart';
 
 /// Used to convert a [List<dynamic>] into a Model.
 ///

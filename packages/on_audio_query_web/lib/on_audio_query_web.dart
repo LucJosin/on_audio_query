@@ -20,7 +20,6 @@ import 'dart:convert';
 import 'dart:html' as html;
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:on_audio_query_platform_interface/details/on_audio_query_core.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
 import 'package:flutter/services.dart';

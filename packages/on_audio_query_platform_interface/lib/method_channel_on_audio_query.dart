@@ -19,8 +19,6 @@ import 'package:flutter/services.dart';
 
 import 'on_audio_query_platform_interface.dart';
 
-import 'package:on_audio_query_platform_interface/details/on_audio_query_core.dart';
-
 const MethodChannel _channel = MethodChannel('com.lucasjosino.on_audio_query');
 
 /// An implementation of [OnAudioQueryPlatform] that uses method channels.
