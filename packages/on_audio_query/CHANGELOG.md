@@ -1,4 +1,4 @@
-## [[2.7.0](https://github.com/LucJosin/on_audio_query/releases/tag/2.7.0)] - [29.03.2023]
+## [[2.7.0](https://github.com/LucJosin/on_audio_query/releases/tag/2.7.0)] - [03.29.2023]
 
 ### Features
 
