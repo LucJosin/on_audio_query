@@ -1,7 +1,5 @@
 // ignore_for_file: constant_identifier_names
 
-part of on_audio_query_helper;
-
 /// Used to represent the various levels of logs.
 enum LogType {
   /// Show all logs.

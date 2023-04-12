@@ -2,9 +2,9 @@
 
 import 'dart:html';
 
-import 'package:on_audio_query_platform_interface/details/on_audio_query_helper.dart';
 import 'package:path/path.dart' as path_controller;
 import 'package:on_audio_query_web/on_audio_query_web.dart';
+import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
 extension OnAudioQueryFormat on Map {
   Map<String, dynamic> formatAudio(String data, int size) {

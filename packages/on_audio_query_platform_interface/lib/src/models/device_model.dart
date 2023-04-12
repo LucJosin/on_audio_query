@@ -1,5 +1,3 @@
-part of on_audio_query_helper;
-
 /// [DeviceModel] that contains all [Device] Information.
 class DeviceModel {
   DeviceModel(this._info);

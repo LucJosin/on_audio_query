@@ -14,7 +14,7 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 
 part of on_audio_query;
 
-///Interface and Main method for use on_audio_query
+/// Interface and Main method for use on_audio_query
 class OnAudioQuery {
   /// The platform interface that drives this plugin
   static OnAudioQueryPlatform get platform => OnAudioQueryPlatform.instance;

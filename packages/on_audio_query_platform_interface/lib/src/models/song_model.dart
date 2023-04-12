@@ -1,5 +1,3 @@
-part of on_audio_query_helper;
-
 /// [SongModel] that contains all [Song] Information.
 class SongModel {
   SongModel(this._info);
