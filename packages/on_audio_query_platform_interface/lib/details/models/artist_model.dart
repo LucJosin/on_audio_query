@@ -1,4 +1,4 @@
-part of on_audio_query_helper;
+part of on_audio_query_core;
 
 /// [ArtistModel] that contains all [Artist] Information.
 class ArtistModel {

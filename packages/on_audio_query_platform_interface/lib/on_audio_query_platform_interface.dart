@@ -17,7 +17,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
-import 'package:on_audio_query_platform_interface/details/on_audio_query_helper.dart';
+import 'package:on_audio_query_platform_interface/details/on_audio_query_core.dart';
 
 import 'method_channel_on_audio_query.dart';
 

@@ -22,14 +22,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 //Platform Interface
-import 'package:on_audio_query_platform_interface/details/on_audio_query_helper.dart';
+import 'package:on_audio_query_platform_interface/details/on_audio_query_core.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
 //
-export 'package:on_audio_query_platform_interface/details/on_audio_query_helper.dart';
+export 'package:on_audio_query_platform_interface/details/on_audio_query_core.dart';
 
 //Controller
-part 'details/on_audio_query_controller.dart';
+part 'src/on_audio_query_controller.dart';
 
 //Widget
 part 'widget/query_artwork_widget.dart';

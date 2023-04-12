@@ -1,4 +1,4 @@
-part of on_audio_query_helper;
+part of on_audio_query_core;
 
 /// Used to convert a [List<dynamic>] into a Model.
 ///

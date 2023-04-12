@@ -1,4 +1,4 @@
-library on_audio_query_helper;
+library on_audio_query_core;
 
 //Extensions
 part 'extensions/models_extensions.dart';

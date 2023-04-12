@@ -2,7 +2,7 @@
 
 import 'dart:html';
 
-import 'package:on_audio_query_platform_interface/details/on_audio_query_helper.dart';
+import 'package:on_audio_query_platform_interface/details/on_audio_query_core.dart';
 import 'package:path/path.dart' as path_controller;
 import 'package:on_audio_query_web/on_audio_query_web.dart';
 

@@ -1,4 +1,4 @@
-part of on_audio_query_helper;
+part of on_audio_query_core;
 
 /// Used to configure the logging behavior.
 class LogConfig {
