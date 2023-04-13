@@ -36,3 +36,5 @@ jobs:
           annotate: true
           annotate-only: false
           working-directory: ./packages
+      - name: "Dry run"
+        run: melos publish --dry-run
