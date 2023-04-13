@@ -19,8 +19,6 @@ import 'package:flutter/services.dart';
 
 import 'on_audio_query_platform_interface.dart';
 
-import 'package:on_audio_query_platform_interface/details/on_audio_query_helper.dart';
-
 const MethodChannel _channel = MethodChannel('com.lucasjosino.on_audio_query');
 
 /// An implementation of [OnAudioQueryPlatform] that uses method channels.
@@ -37,6 +35,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
 
     await _channel.invokeMethod("setLogConfig", {
       "level": _logConfig.logType.value,
+      "showDetailedLog": _logConfig.showDetailedLog,
     });
   }
 
@@ -201,7 +200,6 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "format": format != null ? format.index : ArtworkFormat.JPEG.index,
         "size": size ?? 200,
         "quality": (quality != null && quality <= 100) ? quality : 50,
-        "detailedErrors": _logConfig.detailedLog,
       },
     );
     return finalArtworks;

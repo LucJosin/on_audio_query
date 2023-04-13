@@ -1,6 +1,8 @@
 # on_audio_query
 on_audio_query/example/assets/
 
+.fuse*
+
 .DS_Store
 .dart_tool/
 

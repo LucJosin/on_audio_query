@@ -15,19 +15,36 @@ jobs:
   analyze:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    env:
+      melos-version: 3.0.1
     steps:
+      # Setup
       - uses: actions/checkout@v2
-      - uses: dart-lang/setup-dart@v1
+
+      # Setup flutter
+      - uses: subosito/flutter-action@v2
         with:
-          sdk: "2.18.0"
-      - name: Install dependencies
-        run: dart pub get
-      - name: "Install flutter"
-        run: ./.github/workflows/scripts/install-flutter.sh
+          channel: "stable"
+
+      # Install dependencies
+      - name: "Install dependencies"
+        run: flutter pub get
+
+      # Install tools
       - name: "Install tools"
-        run: ./.github/workflows/scripts/install-tools.sh
+        run: |
+          flutter config --no-analytics
+          flutter pub global activate melos ${{env.melos-version}}
+
+      # Melos bootstrap
       - name: "Bootstrap workspace (Melos)"
         run: melos bootstrap
+
+      # Run dart format to ensure formatting is valid
+      - name: "Run dart format"
+        run: melos exec dart format . --fix
+
+      # Run dart analyzer
       - name: "Run Dart Analyze"
         uses: invertase/github-action-dart-analyzer@v1
         with:

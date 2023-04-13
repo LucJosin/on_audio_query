@@ -20,15 +20,14 @@ import 'dart:convert';
 import 'dart:html' as html;
 
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
-import 'package:on_audio_query_platform_interface/details/on_audio_query_helper.dart';
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
 import 'package:flutter/services.dart';
 import 'package:id3/id3.dart';
-import 'details/extensions/format_extension.dart';
+import 'src/extensions/format_extension.dart';
 
-part 'details/on_audio_query_web_controller.dart';
-part 'details/types/with_filters_type.dart';
+part 'src/on_audio_query_web_controller.dart';
+part 'src/types/with_filters_type.dart';
 
 /// A web implementation of the OnAudioQueryWeb plugin.
 class OnAudioQueryPlugin extends OnAudioQueryPlatform {

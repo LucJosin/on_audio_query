@@ -14,22 +14,19 @@ Copyright: © 2021, Lucas Josino. All rights reserved.
 
 library on_audio_query;
 
-//
+// Dart
 import 'dart:async';
 
-//Dart/Flutter
+// Flutter
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-//Platform Interface
-import 'package:on_audio_query_platform_interface/details/on_audio_query_helper.dart';
+// Platform Interface
 import 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
+export 'package:on_audio_query_platform_interface/on_audio_query_platform_interface.dart';
 
-//
-export 'package:on_audio_query_platform_interface/details/on_audio_query_helper.dart';
+// Controllers
+part 'src/on_audio_query.dart';
 
-//Controller
-part 'details/on_audio_query_controller.dart';
-
-//Widget
+// Widgets
 part 'widget/query_artwork_widget.dart';

@@ -3,6 +3,7 @@ repository: https://github.com/LucJosin/on_audio_query
 
 packages:
   - packages/*
+  - packages/*/example
 
 command:
   bootstrap:
@@ -15,9 +16,11 @@ scripts:
   reset:
     run: melos clean && melos bootstrap
     description: Useful to give your workspace a 'fresh start'
+
   analyze:
     exec: flutter analyze --no-fatal-infos
     description: Analyze code
+
   format:
     run: melos exec dart format . --fix
     description: Run `dart format` for all packages.
