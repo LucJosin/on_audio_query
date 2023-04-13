@@ -56,8 +56,15 @@ public class SwiftOnAudioQueryPlugin: NSObject, FlutterPlugin {
         // Set logging level.
         case Method.SET_LOG_CONFIG:
             let args = call.arguments as! [String: Any]
+            
+            // Log level
             let level = args["level"] as! Int
             Log.setLogLevel(dartLevel: level)
+            
+            // Define if 'warn' level will show more detailed logging.
+            let showDetailedLog = args["showDetailedLog"] as! Bool
+            PluginProvider.showDetailedLog = showDetailedLog
+            
             result(true)
         default:
             Log.type.debug("Checking permissions...")
