@@ -1,4 +1,4 @@
-## 1.0.0 - [XX.XX.2022]
+## 1.0.0
 
 - See more [on_audio_query - CHANGELOG](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/CHANGELOG.md).
 
