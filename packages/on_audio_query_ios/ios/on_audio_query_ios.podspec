@@ -5,18 +5,18 @@
 Pod::Spec.new do |s|
   s.name             = 'on_audio_query'
   s.version          = '0.0.1'
-  s.summary          = 'Audio query plugin for flutter.'
+  s.summary          = 'on_audio_query flutter plugin for ios.'
   s.description      = <<-DESC
   Flutter Plugin used to query audios/songs infos [title, artist, album, etc..] from device storage.
                        DESC
-  s.homepage         = 'https://github.com/LucasPJS/on_audio_query'
+  s.homepage         = 'https://github.com/LucJosin/on_audio_query'
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Lucas Josino' => 'contact@lucasjosino.com' }
   s.source           = { :path => '.' }
   s.source_files = 'Classes/**/*'
   s.dependency 'Flutter'
   s.dependency 'SwiftyBeaver'
-  s.platform = :ios, '10.0'
+  s.platform = :ios, '11.0'
 
   # Flutter.framework does not contain a i386 slice.
   s.pod_target_xcconfig = { 'DEFINES_MODULE' => 'YES', 'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'i386' }

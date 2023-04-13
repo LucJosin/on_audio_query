@@ -21,32 +21,32 @@ import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
 import java.io.FileInputStream
 
-/** OnArtworksQuery */
 class ArtworkQuery : ViewModel() {
 
     companion object {
         private const val TAG = "OnArtworksQuery"
     }
 
-    //Main parameters
     private val helper = QueryHelper()
     private var type: Int = -1
     private var id: Number = 0
     private var quality: Int = 100
     private var size: Int = 200
+    private var showDetailedLog: Boolean = false
 
     private lateinit var uri: Uri
     private lateinit var resolver: ContentResolver
     private lateinit var format: Bitmap.CompressFormat
 
     /**
-     * Method to "query" all albums.
+     * Method to "query" artwork.
      */
     fun queryArtwork() {
         val call = PluginProvider.call()
         val result = PluginProvider.result()
         val context = PluginProvider.context()
         this.resolver = context.contentResolver
+        this.showDetailedLog = PluginProvider.showDetailedLog
 
         id = call.argument<Number>("id")!!
 
@@ -70,6 +70,7 @@ class ArtworkQuery : ViewModel() {
         //   * 4 -> Genre.
         uri = checkArtworkType(call.argument<Int>("type")!!)
 
+        // This query is 'universal' will work for multiple types (audio, album, artist, etc...).
         type = call.argument<Int>("type")!!
 
         Log.d(TAG, "Query config: ")
@@ -94,7 +95,6 @@ class ArtworkQuery : ViewModel() {
     }
 
     //Loading in Background
-    @Suppress("BlockingMethodInNonBlockingContext")
     private suspend fun loadArt(): ByteArray? = withContext(Dispatchers.IO) {
         var artData: ByteArray? = null
 
@@ -123,7 +123,9 @@ class ArtworkQuery : ViewModel() {
                 val bitmap = resolver.loadThumbnail(query, Size(size, size), null)
                 artData = convertOrResize(bitmap = bitmap)!!
             } catch (e: Exception) {
-                Log.w(TAG, "($id) Message: $e")
+                // This may produce a lot of logging on console so, will required a explicit request
+                // to show the errors.
+                if (showDetailedLog) Log.w(TAG, "($id) Message: $e")
             }
         } else {
             // If 'uri == Audio':
@@ -147,7 +149,9 @@ class ArtworkQuery : ViewModel() {
                 // 'close' can only be called using 'Android' >= 29/Q.
                 if (Build.VERSION.SDK_INT >= 29) metadata.close()
             } catch (e: Exception) {
-                Log.w(TAG, "($id) Message: $e")
+                // This may produce a lot of logging on console so, will required a explicit request
+                // to show the errors.
+                if (showDetailedLog) Log.w(TAG, "($id) Message: $e")
             }
         }
 
@@ -171,7 +175,9 @@ class ArtworkQuery : ViewModel() {
                 convertedBitmap.compress(format, quality, byteArrayBase)
             }
         } catch (e: Exception) {
-            Log.w(TAG, "($id) Message: $e")
+            // This may produce a lot of logging on console so, will required a explicit request
+            // to show the errors.
+            if (showDetailedLog) Log.w(TAG, "($id) Message: $e")
         }
 
         convertedBytes = byteArrayBase.toByteArray()

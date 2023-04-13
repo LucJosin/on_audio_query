@@ -5,12 +5,12 @@ class LogConfig {
   /// Used to configure the logging behavior.
   LogConfig({
     this.logType = LogType.WARN,
-    this.detailedLog = false,
+    this.showDetailedLog = false,
   });
 
   /// Define the logging level.
   final LogType logType;
 
   /// Define if detailed log will be shown (Disable by default to avoid spam).
-  final bool detailedLog;
+  final bool showDetailedLog;
 }

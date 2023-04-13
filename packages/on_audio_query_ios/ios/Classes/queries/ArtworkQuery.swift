@@ -116,7 +116,9 @@ class ArtworkQuery {
             DispatchQueue.main.async {
                 // Avoid "empty" or broken image.
                 if artwork != nil, artwork!.isEmpty {
-                    Log.type.info("Item (\(item?.persistentID ?? 0)) has a null or empty artwork")
+                    if PluginProvider.showDetailedLog {
+                        Log.type.warning("Item (\(item?.persistentID ?? 0)) has a null or empty artwork")
+                    }
                     artwork = nil
                 }
                 

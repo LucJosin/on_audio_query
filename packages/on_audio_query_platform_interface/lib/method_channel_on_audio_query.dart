@@ -35,6 +35,7 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
 
     await _channel.invokeMethod("setLogConfig", {
       "level": _logConfig.logType.value,
+      "showDetailedLog": _logConfig.showDetailedLog,
     });
   }
 
@@ -199,7 +200,6 @@ class MethodChannelOnAudioQuery extends OnAudioQueryPlatform {
         "format": format != null ? format.index : ArtworkFormat.JPEG.index,
         "size": size ?? 200,
         "quality": (quality != null && quality <= 100) ? quality : 50,
-        "detailedErrors": _logConfig.detailedLog,
       },
     );
     return finalArtworks;
