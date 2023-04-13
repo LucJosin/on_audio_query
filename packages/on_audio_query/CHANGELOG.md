@@ -2,19 +2,19 @@
 
 ### Features
 
-- **Added** `showDetailedLog`
+- **Added** `showDetailedLog`.
 
 ### Changes
 
-- **Moved** `android` and `ios` into separated folders
+- **Moved** `android` and `ios` into separated folders.
 - **Replaced** `/details` with `/src`.
 
 ### ⚠ Important Changes
 
 #### Android
 
-- **Updated** kotlin version from `1.4.32` to `1.6.10`
-- **Updated** kotlin coroutines version from `1.5.2-native-mt` to `1.6.4`
+- **Updated** kotlin version from `1.4.32` to `1.6.10`. - [#110](https://github.com/LucJosin/on_audio_query/issues/110)
+- **Updated** kotlin coroutines version from `1.5.2-native-mt` to `1.6.4`.
 
 ## [[2.7.0](https://github.com/LucJosin/on_audio_query/releases/tag/2.7.0)] - [03.29.2023]
 
