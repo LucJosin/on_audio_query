@@ -56,4 +56,4 @@ jobs:
 
       # Dry run
       - name: "Dry run"
-        run: melos publish --dry-run
+        run: flutter pub publish --dry-run
