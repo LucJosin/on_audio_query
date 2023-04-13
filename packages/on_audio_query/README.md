@@ -40,6 +40,7 @@
 | `removeFromPlaylist` | `✔️` | `❌` | `❌` | <br>
 | `renamePlaylist` | `✔️` | `❌` | `❌` | <br>
 | `moveItemTo` | `✔️` | `❌` | `❌` | <br>
+| `checkAndRequest` | `✔️` | `✔️` | `❌` | <br>
 | `permissionsRequest` | `✔️` | `✔️` | `❌` | <br>
 | `permissionsStatus` | `✔️` | `✔️` | `❌` | <br>
 | `queryDeviceInfo` | `✔️` | `✔️` | `✔️` | <br>
@@ -55,7 +56,7 @@
 Add the following code to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^2.7.0
+  on_audio_query: ^2.8.0
 ```
 
 ### Request Permission:
@@ -81,12 +82,10 @@ To use this plugin add the following code to your [AndroidManifest.xml](https://
 To use this plugin add the following code to your [Info.plist](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/example/ios/Runner/Info.plist)
 ```plist
 <dict>
-  ...
 
 	<key>NSAppleMusicUsageDescription</key>
 	<string>$(PROJECT_NAME) requires access to media library</string>
 
-  ...
 </dict>
 ```
 
