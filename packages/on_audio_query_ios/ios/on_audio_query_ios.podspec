@@ -3,7 +3,7 @@
 # Run `pod lib lint on_audio_query.podspec` to validate before publishing.
 #
 Pod::Spec.new do |s|
-  s.name             = 'on_audio_query'
+  s.name             = 'on_audio_query_ios'
   s.version          = '0.0.1'
   s.summary          = 'on_audio_query flutter plugin for ios.'
   s.description      = <<-DESC
