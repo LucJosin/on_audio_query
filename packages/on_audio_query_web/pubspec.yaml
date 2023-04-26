@@ -1,6 +1,6 @@
 name: on_audio_query_web
 description: The web implementation of [on_audio_query].
-version: 1.5.0
+version: 1.5.1
 homepage: https://github.com/LucJosin/on_audio_query/tree/main/packages/on_audio_query_web
 
 environment:
@@ -9,7 +9,7 @@ environment:
 
 dependencies:
   # on_audio_query
-  on_audio_query_platform_interface: ^1.6.0
+  on_audio_query_platform_interface: ^1.6.1
 
   # Others
   path: ^1.8.0
