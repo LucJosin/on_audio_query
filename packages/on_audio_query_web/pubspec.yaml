@@ -1,7 +1,7 @@
 name: on_audio_query_web
 description: The web implementation of [on_audio_query].
 version: 1.5.0
-homepage: https://github.com/LucJosin/on_audio_query/tree/master/on_audio_query_web
+homepage: https://github.com/LucJosin/on_audio_query/tree/main/packages/on_audio_query_web
 
 environment:
   sdk: ">=2.17.0 <3.0.0"

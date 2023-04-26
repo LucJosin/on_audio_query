@@ -1,7 +1,7 @@
 name: on_audio_query_android
 description: Android implementation of the on_audio_query plugin.
 version: 1.0.0
-homepage: https://github.com/LucJosin/on_audio_query/tree/main/on_audio_query_android
+homepage: https://github.com/LucJosin/on_audio_query/tree/main/packages/on_audio_query_android
 # pub.dev: https://pub.dev/packages/on_audio_query
 # pub.dev (Android): https://pub.dev/packages/on_audio_query_android
 # ========
