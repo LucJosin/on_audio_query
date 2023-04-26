@@ -1,3 +1,18 @@
+## [[2.8.1](https://github.com/LucJosin/on_audio_query/releases/tag/2.8.1)]
+
+### Fixes
+
+- **Fixed** broken pubspec links. - [#115](https://github.com/LucJosin/on_audio_query/issues/115)
+
+#### iOS
+
+- **Fixed** wrong name of podspec in iOS. - [#116](https://github.com/LucJosin/on_audio_query/issues/116)
+
+### Changes
+
+- **Updated** dart-analyzer to support cache
+- **Updated** README
+
 ## [[2.8.0](https://github.com/LucJosin/on_audio_query/releases/tag/2.8.0)]
 
 ### Features

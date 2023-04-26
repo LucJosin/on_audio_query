@@ -5,7 +5,7 @@
 [![Platforms](https://img.shields.io/badge/Platforms-Android%20%7C%20IOS%20%7C%20Web-9cf?&style=flat-square)]()
 [![Languages](https://img.shields.io/badge/Languages-Dart%20%7C%20Kotlin%20%7C%20Swift-9cf?&style=flat-square)]()
 
-`on_audio_query` is a [Flutter](https://flutter.dev/) Plugin used to query audios/songs 🎶 infos [title, artist, album, etc..] from device storage. <br>
+[Flutter](https://flutter.dev/) Plugin used to query audios/songs 🎶 infos [title, artist, album, etc..] from device storage. <br>
 
 **Any problem? [Issues](https://github.com/LucJosin/on_audio_query/issues)** <br>
 **Any suggestion? [Pull request](https://github.com/LucJosin/on_audio_query/pulls)**
