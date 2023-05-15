@@ -56,7 +56,7 @@
 Add the following code to your `pubspec.yaml`:
 ```yaml
 dependencies:
-  on_audio_query: ^2.8.0
+  on_audio_query: ^2.9.0
 ```
 
 ### Request Permission:
@@ -80,27 +80,13 @@ To use this plugin add the following code to your [AndroidManifest.xml](https://
 
 #### IOS:
 To use this plugin add the following code to your [Info.plist](https://github.com/LucJosin/on_audio_query/blob/main/on_audio_query/example/ios/Runner/Info.plist)
-```plist
+```
 <dict>
 
 	<key>NSAppleMusicUsageDescription</key>
 	<string>$(PROJECT_NAME) requires access to media library</string>
 
 </dict>
-```
-
-#### Web:
-Since Web Browsers **don't** offer direct access to their user's `file system`, this plugin will use the `assets` folder to "query" the audios files. So, will totally depend of the `developer`.
-
-```yaml
-  # You don't need add every audio file path, just define the folder.
-  assets:
-    - assets/
-    # If your files are in another folder inside the `assets`:
-    - assets/audios/
-    # - assets/audios/animals/
-    # - assets/audios/animals/cat/
-    # ...
 ```
 
 ## Some Features:
