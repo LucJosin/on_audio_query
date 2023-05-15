@@ -24,10 +24,10 @@ environment:
 
 dependencies:
   # on_audio_query
-  on_audio_query_platform_interface: ^1.6.1
-  on_audio_query_web: ^1.5.1
-  on_audio_query_ios: ^1.0.1
-  on_audio_query_android: ^1.0.1
+  on_audio_query_platform_interface: ^1.7.0
+  on_audio_query_web: ^1.6.0
+  on_audio_query_ios: ^1.1.0
+  on_audio_query_android: ^1.1.0
 
   # Flutter
   flutter:
