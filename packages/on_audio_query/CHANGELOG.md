@@ -1,3 +1,9 @@
+## [[2.9.0](https://github.com/LucJosin/on_audio_query/releases/tag/2.9.0)]
+
+### Features
+
+- **Added** support to Dart 3.
+
 ## [[2.8.1](https://github.com/LucJosin/on_audio_query/releases/tag/2.8.1)]
 
 ### Fixes
